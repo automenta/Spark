@@ -1,48 +1,21 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */ 
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package org.jivesoftware.spark.ui.conferences;
-
-import org.jivesoftware.resource.SparkRes;
-import org.jivesoftware.resource.Res;
-import org.jivesoftware.smack.XMPPException;
-import org.jivesoftware.smackx.ServiceDiscoveryManager;
-import org.jivesoftware.smackx.packet.DiscoverInfo;
-import org.jivesoftware.smackx.packet.DiscoverItems;
-import org.jivesoftware.smackx.packet.DiscoverItems.Item;
-import org.jivesoftware.spark.SparkManager;
-import org.jivesoftware.spark.component.RolloverButton;
-import org.jivesoftware.spark.component.TitlePanel;
-import org.jivesoftware.spark.util.ModelUtil;
-import org.jivesoftware.spark.util.ResourceUtils;
-import org.jivesoftware.spark.util.log.Log;
-
-import javax.swing.BorderFactory;
-import javax.swing.DefaultListModel;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -56,6 +29,29 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import org.jivesoftware.resource.Res;
+import org.jivesoftware.resource.SparkRes;
+import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smackx.ServiceDiscoveryManager;
+import org.jivesoftware.smackx.packet.DiscoverInfo;
+import org.jivesoftware.smackx.packet.DiscoverItems;
+import org.jivesoftware.smackx.packet.DiscoverItems.Item;
+import org.jivesoftware.spark.SparkManager;
+import org.jivesoftware.spark.component.RolloverButton;
+import org.jivesoftware.spark.component.TitlePanel;
+import org.jivesoftware.spark.util.ModelUtil;
+import org.jivesoftware.spark.util.ResourceUtils;
+import org.jivesoftware.spark.util.log.Log;
 
 public class ConferenceServiceBrowser {
 
@@ -94,8 +90,7 @@ public class ConferenceServiceBrowser {
                             String service = aCol;
                             model.addElement(service);
                         }
-                    }
-                    catch (Exception e1) {
+                    } catch (Exception e1) {
                         Log.error(e1);
                     }
 
@@ -126,13 +121,12 @@ public class ConferenceServiceBrowser {
 
         PropertyChangeListener changeListener = new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent e) {
-                String value = (String)pane.getValue();
+                String value = (String) pane.getValue();
                 if ("Close".equals(value)) {
                     list.clearSelection();
                     pane.removePropertyChangeListener(this);
                     dlg.dispose();
-                }
-                else if ("Ok".equals(value)) {
+                } else if ("Ok".equals(value)) {
                     pane.removePropertyChangeListener(this);
                     dlg.dispose();
                 }
@@ -144,8 +138,7 @@ public class ConferenceServiceBrowser {
         dlg.setVisible(true);
         dlg.toFront();
 
-
-        return (String)list.getSelectedValue();
+        return (String) list.getSelectedValue();
     }
 
     public Collection<String> getConferenceServices(String server) throws Exception {
@@ -156,15 +149,13 @@ public class ConferenceServiceBrowser {
             Item item = it.next();
             if (item.getEntityID().startsWith("conference") || item.getEntityID().startsWith("private")) {
                 answer.add(item.getEntityID());
-            }
-            else {
+            } else {
                 try {
                     DiscoverInfo info = discoManager.discoverInfo(item.getEntityID());
                     if (info.containsFeature("http://jabber.org/protocol/muc")) {
                         answer.add(item.getEntityID());
                     }
-                }
-                catch (XMPPException e) {
+                } catch (XMPPException e) {
                     // Nothing to do
                 }
             }

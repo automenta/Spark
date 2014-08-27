@@ -1,26 +1,21 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */ 
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package org.jivesoftware.spark.ui;
-
-import javax.swing.JPanel;
-import javax.swing.event.MouseInputAdapter;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -32,14 +27,17 @@ import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import javax.swing.JPanel;
+import javax.swing.event.MouseInputAdapter;
 
 /**
  * Allows for selection of panel images.
  */
 public class ImageSelectionPanel extends JPanel {
-	private static final long serialVersionUID = -2832575315956252059L;
-	private BufferedImage image;
-	private Rectangle clip;
+
+    private static final long serialVersionUID = -2832575315956252059L;
+    private BufferedImage image;
+    private Rectangle clip;
 
     public ImageSelectionPanel() {
     }
@@ -59,7 +57,7 @@ public class ImageSelectionPanel extends JPanel {
         }
 
         super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D)g;
+        Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
         int w = getWidth();
@@ -94,6 +92,7 @@ public class ImageSelectionPanel extends JPanel {
 }
 
 class Selector extends MouseInputAdapter {
+
     ImageSelectionPanel selectionPanel;
     Point start;
     boolean dragging,
@@ -106,12 +105,11 @@ class Selector extends MouseInputAdapter {
     }
 
     public void mousePressed(MouseEvent e) {
-        if (isClipSet)             // clear existing clip
+        if (isClipSet) // clear existing clip
         {
             selectionPanel.setClipFrame(start, start);
             isClipSet = false;
-        }
-        else                      // or start new clip
+        } else // or start new clip
         {
             start = e.getPoint();
             dragging = true;
@@ -124,9 +122,9 @@ class Selector extends MouseInputAdapter {
     }
 
     public void mouseDragged(MouseEvent e) {
-        if (dragging)
+        if (dragging) {
             selectionPanel.setClipFrame(start, e.getPoint());
+        }
     }
-
 
 }

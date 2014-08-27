@@ -1,9 +1,6 @@
 package org.jivesoftware.sparkimpl.plugin.privacy.list;
 
-
-
 import java.util.Collection;
-
 import org.jivesoftware.resource.SparkRes;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.packet.PrivacyItem;
@@ -12,37 +9,31 @@ import org.jivesoftware.spark.ui.ContactGroup;
 import org.jivesoftware.spark.ui.ContactItem;
 import org.jivesoftware.sparkimpl.plugin.privacy.PrivacyManager;
 
-
 /**
  *
  * @author Bergunde Holger
  */
-
 public class PrivacyPresenceHandler implements SparkPrivacyItemListener {
-
-  
 
     /**
      * Send Unavailable (offline status) to jid .
-     * 
-     * @param jid
-     *            JID to send offline status
+     *
+     * @param jid JID to send offline status
      */
     public void sendUnavailableTo(String jid) {
-        Presence pack = new Presence(Presence.Type.unavailable);                                                  
+        Presence pack = new Presence(Presence.Type.unavailable);
         pack.setTo(jid);
         SparkManager.getConnection().sendPacket(pack);
     }
 
     /**
      * Send my presence for user
-     * 
-     * @param jid
-     *            JID to send presence
+     *
+     * @param jid JID to send presence
      */
     public void sendRealPresenceTo(String jid) {
-        Presence presence = SparkManager.getWorkspace().getStatusBar().getPresence(); 
-        Presence pack = new Presence(presence.getType(), presence.getStatus(), 1, presence.getMode()); 
+        Presence presence = SparkManager.getWorkspace().getStatusBar().getPresence();
+        Presence pack = new Presence(presence.getType(), presence.getStatus(), 1, presence.getMode());
         pack.setTo(jid);
         SparkManager.getConnection().sendPacket(pack);
     }
@@ -104,7 +95,7 @@ public class PrivacyPresenceHandler implements SparkPrivacyItemListener {
     }
 
     private void removeBlockedIconFromContact(String jid) {
-        Collection<ContactItem> items = SparkManager.getWorkspace().getContactList().getContactItemsByJID(jid); 
+        Collection<ContactItem> items = SparkManager.getWorkspace().getContactList().getContactItemsByJID(jid);
         for (ContactItem item : items) {
             if (item != null) {
                 item.setSpecialIcon(null);

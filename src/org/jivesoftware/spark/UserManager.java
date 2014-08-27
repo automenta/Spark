@@ -1,47 +1,21 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.spark;
-
-import org.jivesoftware.resource.Res;
-import org.jivesoftware.smack.Roster;
-import org.jivesoftware.smack.packet.Presence;
-import org.jivesoftware.smack.util.StringUtils;
-import org.jivesoftware.smackx.muc.Occupant;
-import org.jivesoftware.smackx.packet.VCard;
-import org.jivesoftware.spark.component.JContactItemField;
-import org.jivesoftware.spark.ui.ChatRoom;
-import org.jivesoftware.spark.ui.ContactGroup;
-import org.jivesoftware.spark.ui.ContactItem;
-import org.jivesoftware.spark.ui.ContactList;
-import org.jivesoftware.spark.ui.rooms.GroupChatRoom;
-import org.jivesoftware.spark.util.ModelUtil;
-import org.jivesoftware.spark.util.SwingTimerTask;
-import org.jivesoftware.spark.util.TaskEngine;
-import org.jivesoftware.spark.util.log.Log;
-import org.jivesoftware.sparkimpl.profile.VCardManager;
-
-import javax.swing.BorderFactory;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -64,14 +38,37 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TimerTask;
+import javax.swing.BorderFactory;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import org.jivesoftware.resource.Res;
+import org.jivesoftware.smack.Roster;
+import org.jivesoftware.smack.packet.Presence;
+import org.jivesoftware.smack.util.StringUtils;
+import org.jivesoftware.smackx.muc.Occupant;
+import org.jivesoftware.smackx.packet.VCard;
+import org.jivesoftware.spark.component.JContactItemField;
+import org.jivesoftware.spark.ui.ChatRoom;
+import org.jivesoftware.spark.ui.ContactGroup;
+import org.jivesoftware.spark.ui.ContactItem;
+import org.jivesoftware.spark.ui.ContactList;
+import org.jivesoftware.spark.ui.rooms.GroupChatRoom;
+import org.jivesoftware.spark.util.ModelUtil;
+import org.jivesoftware.spark.util.SwingTimerTask;
+import org.jivesoftware.spark.util.TaskEngine;
+import org.jivesoftware.spark.util.log.Log;
+import org.jivesoftware.sparkimpl.profile.VCardManager;
 
 /**
- * Handles all users in the agent application. Each user or chatting user can be referenced from the User
- * Manager. You would use the UserManager to get visitors in a chat room or secondary agents.
+ * Handles all users in the agent application. Each user or chatting user can be
+ * referenced from the User Manager. You would use the UserManager to get
+ * visitors in a chat room or secondary agents.
  */
 public class UserManager {
 
-    private Map<JFrame,Component> parents = new HashMap<JFrame,Component>();
+    private Map<JFrame, Component> parents = new HashMap<JFrame, Component>();
 
     public UserManager() {
     }
@@ -81,13 +78,11 @@ public class UserManager {
         VCard vcard = vCardManager.getVCard();
         if (vcard == null) {
             return SparkManager.getSessionManager().getUsername();
-        }
-        else {
+        } else {
             String nickname = vcard.getNickName();
             if (ModelUtil.hasLength(nickname)) {
                 return nickname;
-            }
-            else {
+            } else {
                 String firstName = vcard.getFirstName();
                 if (ModelUtil.hasLength(firstName)) {
                     return firstName;
@@ -101,9 +96,9 @@ public class UserManager {
 
         return username;
     }
-    
+
     public String getNickname(String fullJID) {
-    	String vcardNickname = null;
+        String vcardNickname = null;
         VCard vCard = SparkManager.getVCardManager().getVCard(fullJID);
         if (vCard != null && vCard.getError() == null) {
             String firstName = vCard.getFirstName();
@@ -111,25 +106,22 @@ public class UserManager {
             String nickname = vCard.getNickName();
             if (ModelUtil.hasLength(nickname)) {
                 vcardNickname = nickname;
-            }
-            else if (ModelUtil.hasLength(firstName) && ModelUtil.hasLength(lastName)) {
+            } else if (ModelUtil.hasLength(firstName) && ModelUtil.hasLength(lastName)) {
                 vcardNickname = firstName + " " + lastName;
-            }
-            else if (ModelUtil.hasLength(firstName)) {
+            } else if (ModelUtil.hasLength(firstName)) {
                 vcardNickname = firstName;
             }
         }
-        
+
         return vcardNickname;
     }
-
 
     /**
      * Return a Collection of all user jids found in the specified room.
      *
-     * @param room    the name of the chatroom
-     * @param fullJID set to true if you wish to have the full jid with resource, otherwise false
-     *                for the bare jid.
+     * @param room the name of the chatroom
+     * @param fullJID set to true if you wish to have the full jid with
+     * resource, otherwise false for the bare jid.
      * @return a Collection of jids found in the room.
      */
     public Collection<String> getUserJidsInRoom(String room, boolean fullJID) {
@@ -140,7 +132,7 @@ public class UserManager {
      * Checks to see if the user is an owner of the specified room.
      *
      * @param groupChatRoom the group chat room.
-     * @param nickname      the user's nickname.
+     * @param nickname the user's nickname.
      * @return true if the user is an owner.
      */
     public boolean isOwner(GroupChatRoom groupChatRoom, String nickname) {
@@ -169,28 +161,30 @@ public class UserManager {
         }
         return false;
     }
+
     /**
      * Checks if the Occupant is a Member in this Room<br>
      * <b>admins and owners are also members!!!</b>
+     *
      * @param occupant
      * @return true if member, else false
      */
     public boolean isMember(Occupant occupant) {
-	if (occupant != null) {
-	    String affiliation = occupant.getAffiliation();
-	    if ("member".equals(affiliation) || affiliation.equals("owner")
-		    || affiliation.equals("admin")) {
-		return true;
-	    }
-	}
-	return false;
+        if (occupant != null) {
+            String affiliation = occupant.getAffiliation();
+            if ("member".equals(affiliation) || affiliation.equals("owner")
+                    || affiliation.equals("admin")) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
      * Checks to see if the Occupant is a moderator.
      *
      * @param groupChatRoom the group chat room.
-     * @param nickname      the nickname of the user.
+     * @param nickname the nickname of the user.
      * @return true if the user is a moderator.
      */
     public boolean isModerator(GroupChatRoom groupChatRoom, String nickname) {
@@ -224,7 +218,7 @@ public class UserManager {
      * Checks to see if the user is either an owner or admin of a room.
      *
      * @param groupChatRoom the group chat room.
-     * @param nickname      the user's nickname.
+     * @param nickname the user's nickname.
      * @return true if the user is either an owner or admin of the room.
      */
     public boolean isOwnerOrAdmin(GroupChatRoom groupChatRoom, String nickname) {
@@ -258,7 +252,7 @@ public class UserManager {
      * Returns the occupant of the room identified by their nickname.
      *
      * @param groupChatRoom the GroupChatRoom.
-     * @param nickname      the users nickname.
+     * @param nickname the users nickname.
      * @return the Occupant found.
      */
     public Occupant getOccupant(GroupChatRoom groupChatRoom, String nickname) {
@@ -266,8 +260,7 @@ public class UserManager {
         Occupant occ = null;
         try {
             occ = groupChatRoom.getMultiUserChat().getOccupant(userJID);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.error(e);
         }
         return occ;
@@ -278,9 +271,10 @@ public class UserManager {
      * administrator of the room.
      *
      * @param groupChatRoom the GroupChatRoom.
-     * @param nickname      the nickname of the user. Note: In MultiUserChats, users nicknames
-     *                      are defined by the resource(ex.theroom@conference.jivesoftware.com/derek) would have
-     *                      derek as a nickname.
+     * @param nickname the nickname of the user. Note: In MultiUserChats, users
+     * nicknames are defined by the
+     * resource(ex.theroom@conference.jivesoftware.com/derek) would have derek
+     * as a nickname.
      * @return true if the user is an admin.
      */
     public boolean isAdmin(GroupChatRoom groupChatRoom, String nickname) {
@@ -305,7 +299,6 @@ public class UserManager {
         return true;
     }
 
-
     /**
      * Returns a Collection of all <code>ChatUsers</code> in a ChatRoom.
      *
@@ -316,7 +309,6 @@ public class UserManager {
     public Collection<String> getAllParticipantsInRoom(ChatRoom chatRoom) {
         return new ArrayList<String>();
     }
-
 
     public String getUserNicknameFromJID(String jid) {
         ContactList contactList = SparkManager.getWorkspace().getContactList();
@@ -329,8 +321,8 @@ public class UserManager {
     }
 
     /**
-     * Escapes a complete JID by examing the Node itself and escaping
-     * when neccessary.
+     * Escapes a complete JID by examing the Node itself and escaping when
+     * neccessary.
      *
      * @param jid the users JID
      * @return the escaped JID.
@@ -349,7 +341,8 @@ public class UserManager {
     }
 
     /**
-     * Unescapes a complete JID by examing the node itself and unescaping when necessary.
+     * Unescapes a complete JID by examing the node itself and unescaping when
+     * necessary.
      *
      * @param jid the users jid.
      * @return the unescaped JID.
@@ -368,8 +361,8 @@ public class UserManager {
     }
 
     /**
-     * Returns the full jid w/ resource of a user by their display name
-     * in the ContactList.
+     * Returns the full jid w/ resource of a user by their display name in the
+     * ContactList.
      *
      * @param displayName the displayed name of the user.
      * @return the full jid w/ resource of the user.
@@ -395,10 +388,9 @@ public class UserManager {
         return presence.getFrom();
     }
 
-
     public void searchContacts(String contact, final JFrame parent) {
-        if (parents.get(parent) == null && parent.getGlassPane() !=null) {
-        	parents.put(parent, parent.getGlassPane());
+        if (parents.get(parent) == null && parent.getGlassPane() != null) {
+            parents.put(parent, parent.getGlassPane());
         }
 
         // Make sure we are using the default glass pane
@@ -425,7 +417,6 @@ public class UserManager {
 
         final JContactItemField contactField = new JContactItemField(new ArrayList<ContactItem>(contacts));
 
-
         JPanel layoutPanel = new JPanel();
         layoutPanel.setLayout(new GridBagLayout());
         JLabel enterLabel = new JLabel(Res.getString("label.contact.to.find"));
@@ -433,7 +424,7 @@ public class UserManager {
         layoutPanel.add(enterLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 0, 5), 0, 0));
         layoutPanel.add(contactField, new GridBagConstraints(0, 1, 1, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 50, 0));
         layoutPanel.setBorder(BorderFactory.createBevelBorder(0));
-        
+
         contactField.addKeyListener(new KeyAdapter() {
             public void keyReleased(KeyEvent keyEvent) {
                 if (keyEvent.getKeyChar() == KeyEvent.VK_ENTER) {
@@ -450,8 +441,7 @@ public class UserManager {
                         }
                     }
 
-                }
-                else if (keyEvent.getKeyChar() == KeyEvent.VK_ESCAPE) {
+                } else if (keyEvent.getKeyChar() == KeyEvent.VK_ESCAPE) {
                     parent.setGlassPane(glassPane);
                     parent.getGlassPane().setVisible(false);
                     contactField.dispose();
@@ -461,15 +451,14 @@ public class UserManager {
 
         contactField.getList().addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-        	if(SwingUtilities.isRightMouseButton(e))
-        	{
-        	    contactField.setSelectetIndex(e);
-        	    ContactItem item = contactField.getSelectedContactItem();
-        	    MouseEvent exx = new MouseEvent((Component) e.getSource(),e.getID(), e.getWhen(),e.getModifiers(),e.getX()+20, e.getY(), e.getClickCount(), false);
-        	    SparkManager.getContactList().setSelectedUser(item.getJID());
-        	    SparkManager.getContactList().showPopup(contactField.getPopup(),exx,item);
-        	}
-        	
+                if (SwingUtilities.isRightMouseButton(e)) {
+                    contactField.setSelectetIndex(e);
+                    ContactItem item = contactField.getSelectedContactItem();
+                    MouseEvent exx = new MouseEvent((Component) e.getSource(), e.getID(), e.getWhen(), e.getModifiers(), e.getX() + 20, e.getY(), e.getClickCount(), false);
+                    SparkManager.getContactList().setSelectedUser(item.getJID());
+                    SparkManager.getContactList().showPopup(contactField.getPopup(), exx, item);
+                }
+
                 if (e.getClickCount() == 2) {
                     if (ModelUtil.hasLength(contactField.getText())) {
                         ContactItem item = contactMap.get(contactField.getText());
@@ -486,7 +475,6 @@ public class UserManager {
                 }
             }
         });
-
 
         final JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setLayout(new GridBagLayout());
@@ -546,12 +534,10 @@ public class UserManager {
 
         if (count == 1 && p != null) {
             return p.getFrom();
-        }
-        else {
+        } else {
             return jid;
         }
     }
-
 
     /**
      * Sorts ContactItems.
@@ -563,6 +549,3 @@ public class UserManager {
     };
 
 }
-
-
-

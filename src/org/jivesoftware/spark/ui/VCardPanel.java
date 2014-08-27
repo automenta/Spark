@@ -1,21 +1,19 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.spark.ui;
 
@@ -34,7 +32,6 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -42,7 +39,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JWindow;
 import javax.swing.Timer;
-
 import org.jivesoftware.resource.SparkRes;
 import org.jivesoftware.smackx.packet.VCard;
 import org.jivesoftware.spark.SparkManager;
@@ -52,14 +48,15 @@ import org.jivesoftware.spark.util.ModelUtil;
 import org.jivesoftware.spark.util.log.Log;
 
 /**
- * UI to display VCard Information in Wizards, Dialogs, Chat Rooms and any other container.
+ * UI to display VCard Information in Wizards, Dialogs, Chat Rooms and any other
+ * container.
  *
  * @author Derek DeMoro
  */
 public class VCardPanel extends JPanel {
 
-	private static final long serialVersionUID = -5810110243694315630L;
-	private Cursor DEFAULT_CURSOR = new Cursor(Cursor.DEFAULT_CURSOR);
+    private static final long serialVersionUID = -5810110243694315630L;
+    private Cursor DEFAULT_CURSOR = new Cursor(Cursor.DEFAULT_CURSOR);
     private Cursor LINK_CURSOR = new Cursor(Cursor.HAND_CURSOR);
 
     private JWindow _avatarHoverWindow = new JWindow();
@@ -88,9 +85,7 @@ public class VCardPanel extends JPanel {
 
         avatarImage.setIcon(ico);
 
-
         VCard vcard = SparkManager.getVCardManager().getVCard(jid);
-
 
         if (vcard == null) {
             // Do nothing.
@@ -105,15 +100,13 @@ public class VCardPanel extends JPanel {
                 icon = new ImageIcon(bytes);
                 Image newImage = icon.getImage();
                 if (icon.getIconHeight() > 48 || icon.getIconWidth() > 48) {
-                newImage = newImage.getScaledInstance(-1, 48, Image.SCALE_SMOOTH);
+                    newImage = newImage.getScaledInstance(-1, 48, Image.SCALE_SMOOTH);
                 }
                 icon = new ImageIcon(newImage);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 Log.error(e);
             }
-        }
-        else {
+        } else {
             icon = SparkRes.getImageIcon(SparkRes.DEFAULT_AVATAR_32x32_IMAGE);
         }
 
@@ -125,22 +118,24 @@ public class VCardPanel extends JPanel {
         vcard.setJabberId(jid);
         buildUI(vcard);
     }
-    
-    
+
     private void buildAvatarHover() {
         _avatarHoverWindow.addMouseListener(new MouseAdapter() {
             public void mouseExited(MouseEvent e) {
                 showAvatarBig(false, null);
 
-            };
-        });
+            }
+        ;
+    }
+
+    );
 
     }
 
     private void showAvatarBig(boolean bool, VCard vcard) {
         if (bool && !_avatarHoverWindow.isVisible()) {
 
-            _avatarHoverWindow.setLocation(avatarImage.getLocationOnScreen().x+2,avatarImage.getLocationOnScreen().y+2);
+            _avatarHoverWindow.setLocation(avatarImage.getLocationOnScreen().x + 2, avatarImage.getLocationOnScreen().y + 2);
             _avatarHoverWindow.setVisible(true);
             ImageIcon icon = null;
             JLabel label = new JLabel();
@@ -152,7 +147,7 @@ public class VCardPanel extends JPanel {
                     icon = new ImageIcon(bytes);
                     newImage = icon.getImage();
                     if (icon.getIconHeight() > 128 || icon.getIconWidth() > 128) {
-                    newImage = newImage.getScaledInstance(-1, 128, Image.SCALE_SMOOTH);
+                        newImage = newImage.getScaledInstance(-1, 128, Image.SCALE_SMOOTH);
                     }
                     icon = new ImageIcon(newImage);
 
@@ -216,7 +211,6 @@ public class VCardPanel extends JPanel {
             lastName = "";
         }
 
-
         final JLabel usernameLabel = new JLabel();
         usernameLabel.setHorizontalTextPosition(JLabel.LEFT);
         usernameLabel.setFont(new Font("Dialog", Font.BOLD, 15));
@@ -224,18 +218,15 @@ public class VCardPanel extends JPanel {
         usernameLabel.setForeground(Color.GRAY);
         if (ModelUtil.hasLength(firstName) && ModelUtil.hasLength(lastName)) {
             usernameLabel.setText(firstName + " " + lastName);
-        }
-        else {
+        } else {
             String nickname = SparkManager.getUserManager().getUserNicknameFromJID(jid);
             usernameLabel.setText(UserManager.unescapeJID(nickname));
         }
-
 
         final Icon icon = SparkManager.getChatManager().getIconForContactHandler(vcard.getJabberId());
         if (icon != null) {
             usernameLabel.setIcon(icon);
         }
-
 
         add(usernameLabel, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 0, 0), 0, 0));
 
@@ -271,21 +262,18 @@ public class VCardPanel extends JPanel {
             }
         });
 
-
         add(emailTime, new GridBagConstraints(1, 2, 1, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(0, 7, 5, 0), 0, 0));
     }
 
     private void startEmailClient(String emailAddress) {
-   		try {
-			Desktop.getDesktop().mail(new URI("mailto:" + emailAddress));
-		} catch (IOException e) {
-			Log.error("Can't open Mailer", e);
-		} catch (URISyntaxException e) {
-			Log.error("URI Wrong", e);
-		}
-
+        try {
+            Desktop.getDesktop().mail(new URI("mailto:" + emailAddress));
+        } catch (IOException e) {
+            Log.error("Can't open Mailer", e);
+        } catch (URISyntaxException e) {
+            Log.error("URI Wrong", e);
+        }
 
     }
-
 
 }

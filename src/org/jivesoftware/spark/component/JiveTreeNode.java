@@ -1,43 +1,39 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.spark.component;
-
-import org.jivesoftware.resource.SparkRes;
-
-import javax.swing.Icon;
-import javax.swing.tree.DefaultMutableTreeNode;
 
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
+import javax.swing.Icon;
+import javax.swing.tree.DefaultMutableTreeNode;
+import org.jivesoftware.resource.SparkRes;
 
 /**
  * <code>JiveTreeNode</code> class is a better implementation than using the
- * DefaultMutableTree node. This allows better searching of children/parents as well
- * as handling of icons and drag and drop events.
+ * DefaultMutableTree node. This allows better searching of children/parents as
+ * well as handling of icons and drag and drop events.
  *
  * @author Derek DeMoro
  */
-
 public class JiveTreeNode extends DefaultMutableTreeNode implements Transferable {
+
     private static final long serialVersionUID = 7643497519304035084L;
     private Icon closedImage = null;
     private Icon openImage = null;
@@ -49,11 +45,11 @@ public class JiveTreeNode extends DefaultMutableTreeNode implements Transferable
     private Object associatedObject;
 
     /*
-    * Create node with closedImage.
-    * @param userObject  Name to display
-    * @param allowsChildren Specify if node allows children
-    * @param img Specify closedImage to use.
-    */
+     * Create node with closedImage.
+     * @param userObject  Name to display
+     * @param allowsChildren Specify if node allows children
+     * @param img Specify closedImage to use.
+     */
     public JiveTreeNode(TreeFolder folder) {
         super(folder.getDisplayName(), true);
         closedImage = SparkRes.getImageIcon(SparkRes.FOLDER_CLOSED);
@@ -64,7 +60,7 @@ public class JiveTreeNode extends DefaultMutableTreeNode implements Transferable
     /**
      * Create parent node.
      *
-     * @param name           the name of the node.
+     * @param name the name of the node.
      * @param allowsChildren true if the node allows children.
      */
     public JiveTreeNode(String name, boolean allowsChildren) {
@@ -78,7 +74,7 @@ public class JiveTreeNode extends DefaultMutableTreeNode implements Transferable
     /**
      * Creates a new JiveTreeNode.
      *
-     * @param o              the object to use.
+     * @param o the object to use.
      * @param allowsChildren true if it allows children.
      */
     public JiveTreeNode(Object o, boolean allowsChildren) {
@@ -99,7 +95,7 @@ public class JiveTreeNode extends DefaultMutableTreeNode implements Transferable
      * Creates a new JiveTreeNode from a TreeFolder.
      *
      * @param folder the <code>TreeFolder</code>.
-     * @param img    the image to use in the node.
+     * @param img the image to use in the node.
      */
     public JiveTreeNode(TreeFolder folder, Icon img) {
         this(folder);
@@ -110,7 +106,7 @@ public class JiveTreeNode extends DefaultMutableTreeNode implements Transferable
      * Createa new JiveTreeNode from a TreeItem and Image.
      *
      * @param item the <code>TreeItem</code> to use.
-     * @param img  the image to use in the node.
+     * @param img the image to use in the node.
      */
     public JiveTreeNode(TreeItem item, Icon img) {
         this(item);
@@ -120,8 +116,8 @@ public class JiveTreeNode extends DefaultMutableTreeNode implements Transferable
     /**
      * Creates a new JiveTreeNode.
      *
-     * @param userobject the object to use in the node. Note: By default, the node
-     *                   will not allow children.
+     * @param userobject the object to use in the node. Note: By default, the
+     * node will not allow children.
      */
     public JiveTreeNode(String userobject) {
         super(userobject);
@@ -130,9 +126,9 @@ public class JiveTreeNode extends DefaultMutableTreeNode implements Transferable
     /**
      * Creates a new JiveTreeNode.
      *
-     * @param userObject    the userObject to use.
+     * @param userObject the userObject to use.
      * @param allowChildren true if it allows children.
-     * @param icon          the image to use in the node.
+     * @param icon the image to use in the node.
      */
     public JiveTreeNode(String userObject, boolean allowChildren, Icon icon) {
         super(userObject, allowChildren);
@@ -177,8 +173,8 @@ public class JiveTreeNode extends DefaultMutableTreeNode implements Transferable
     }
 
     /**
-     * Returns the associated object used. The associated object is used to store associated data objects
-     * along with the node.
+     * Returns the associated object used. The associated object is used to
+     * store associated data objects along with the node.
      *
      * @return the object.
      */
@@ -202,20 +198,19 @@ public class JiveTreeNode extends DefaultMutableTreeNode implements Transferable
      * @return true if parent found.
      */
     public final boolean hasParent(String parentName) {
-        JiveTreeNode parent = (JiveTreeNode)getParent();
+        JiveTreeNode parent = (JiveTreeNode) getParent();
         while (true) {
             if (parent.getAssociatedObject() == null) {
                 break;
             }
-            final TreeFolder folder = (TreeFolder)parent.getAssociatedObject();
+            final TreeFolder folder = (TreeFolder) parent.getAssociatedObject();
             if (folder.getDisplayName().equals(parentName)) {
                 return true;
             }
-            parent = (JiveTreeNode)parent.getParent();
+            parent = (JiveTreeNode) parent.getParent();
         }
         return false;
     }
-
 
     /**
      * Transferable implementation
@@ -238,8 +233,4 @@ public class JiveTreeNode extends DefaultMutableTreeNode implements Transferable
         throw new UnsupportedFlavorException(flavor);
     }
 
-
 }
-
-
-

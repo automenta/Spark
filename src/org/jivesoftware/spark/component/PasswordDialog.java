@@ -1,54 +1,51 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.spark.component;
 
-import org.jivesoftware.resource.Res;
-import org.jivesoftware.spark.SparkManager;
-
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import javax.swing.JLabel;
-
+import org.jivesoftware.resource.Res;
+import org.jivesoftware.spark.SparkManager;
 
 /**
- * <code>PasswordDialog</code> class is used to retrieve information from a user.
+ * <code>PasswordDialog</code> class is used to retrieve information from a
+ * user.
  *
  * @author Derek DeMoro
  */
 public final class PasswordDialog implements PropertyChangeListener {
+
     private JPasswordField passwordField;
     private JOptionPane optionPane;
     private JDialog dialog;
@@ -66,11 +63,11 @@ public final class PasswordDialog implements PropertyChangeListener {
     /**
      * Returns the input from a user.
      *
-     * @param title       the title of the dialog.
+     * @param title the title of the dialog.
      * @param description the dialog description.
-     * @param icon        the icon to use.
-     * @param width       the dialog width
-     * @param height      the dialog height
+     * @param icon the icon to use.
+     * @param width the dialog width
+     * @param height the dialog height
      * @return the users input.
      */
     public String getInput(String title, String description, Icon icon, int width, int height) {
@@ -83,10 +80,10 @@ public final class PasswordDialog implements PropertyChangeListener {
     /**
      * Prompt and return input.
      *
-     * @param title       the title of the dialog.
+     * @param title the title of the dialog.
      * @param description the dialog description.
-     * @param icon        the icon to use.
-     * @param parent      the parent to use.
+     * @param icon the icon to use.
+     * @param parent the parent to use.
      * @return the user input.
      */
     public String getPassword(String title, String description, Icon icon, Component parent) {
@@ -104,11 +101,10 @@ public final class PasswordDialog implements PropertyChangeListener {
         passwordPanel.add(passwordLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0));
         passwordPanel.add(passwordField, new GridBagConstraints(1, 0, 1, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 0, 0));
 
-
         // The user should only be able to close this dialog.
         final Object[] options = {Res.getString("ok"), Res.getString("cancel")};
         optionPane = new JOptionPane(passwordPanel, JOptionPane.PLAIN_MESSAGE,
-            JOptionPane.OK_CANCEL_OPTION, null, options, options[0]);
+                JOptionPane.OK_CANCEL_OPTION, null, options, options[0]);
 
         mainPanel.add(optionPane, BorderLayout.CENTER);
 
@@ -128,15 +124,13 @@ public final class PasswordDialog implements PropertyChangeListener {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyChar() == KeyEvent.VK_TAB) {
                     optionPane.requestFocus();
-                }
-                else if (e.getKeyChar() == KeyEvent.VK_ESCAPE) {
+                } else if (e.getKeyChar() == KeyEvent.VK_ESCAPE) {
                     dialog.dispose();
                 }
             }
         });
 
         passwordField.requestFocus();
-
 
         dialog.setVisible(true);
         return stringValue;
@@ -146,10 +140,10 @@ public final class PasswordDialog implements PropertyChangeListener {
      * Move to focus forward action.
      */
     public Action nextFocusAction = new AbstractAction(Res.getString("label.move.focus.forwards")) {
-		private static final long serialVersionUID = 6465350147231073505L;
+        private static final long serialVersionUID = 6465350147231073505L;
 
-		public void actionPerformed(ActionEvent evt) {
-            ((Component)evt.getSource()).transferFocus();
+        public void actionPerformed(ActionEvent evt) {
+            ((Component) evt.getSource()).transferFocus();
         }
     };
 
@@ -157,25 +151,23 @@ public final class PasswordDialog implements PropertyChangeListener {
      * Moves the focus backwards in the dialog.
      */
     public Action prevFocusAction = new AbstractAction(Res.getString("label.move.focus.backwards")) {
-		private static final long serialVersionUID = -91177056113094990L;
+        private static final long serialVersionUID = -91177056113094990L;
 
-		public void actionPerformed(ActionEvent evt) {
-            ((Component)evt.getSource()).transferFocusBackward();
+        public void actionPerformed(ActionEvent evt) {
+            ((Component) evt.getSource()).transferFocusBackward();
         }
     };
 
     public void propertyChange(PropertyChangeEvent e) {
-        String value = (String)optionPane.getValue();
+        String value = (String) optionPane.getValue();
         if (Res.getString("cancel").equals(value)) {
             stringValue = null;
             dialog.setVisible(false);
-        }
-        else if (Res.getString("ok").equals(value)) {
+        } else if (Res.getString("ok").equals(value)) {
             stringValue = String.valueOf(passwordField.getPassword());
             if (stringValue.trim().length() == 0) {
                 stringValue = null;
-            }
-            else {
+            } else {
                 stringValue = stringValue.trim();
             }
             dialog.setVisible(false);

@@ -1,42 +1,40 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.spark.util;
-
-
 
 import javax.swing.SwingUtilities;
 
 /**
- * Improvement version of the javax SwingWorker class to avoid deadlocks. This gives user
- * multi-threaded abilities within their swing apps.
+ * Improvement version of the javax SwingWorker class to avoid deadlocks. This
+ * gives user multi-threaded abilities within their swing apps.
  *
  * @author Derek DeMoro
  */
 public abstract class SwingWorker {
+
     private Object value;  // see getValue(), setValue()
 
     /**
-     * Class to maintain reference to current worker thread
-     * under separate synchronization control.
+     * Class to maintain reference to current worker thread under separate
+     * synchronization control.
      */
     private static class ThreadVar {
+
         private Thread thread;
 
         ThreadVar(Thread t) {
@@ -55,8 +53,8 @@ public abstract class SwingWorker {
     private ThreadVar threadVar;
 
     /**
-     * Get the value produced by the worker thread, or null if it
-     * hasn't been constructed yet.
+     * Get the value produced by the worker thread, or null if it hasn't been
+     * constructed yet.
      *
      * @return Object produced by worker thread.
      */
@@ -81,15 +79,15 @@ public abstract class SwingWorker {
     public abstract Object construct();
 
     /**
-     * Called on the event dispatching thread (not on the worker thread)
-     * after the <code>construct</code> method has returned.
+     * Called on the event dispatching thread (not on the worker thread) after
+     * the <code>construct</code> method has returned.
      */
     public void finished() {
     }
 
     /**
-     * A new method that interrupts the worker thread.  Call this method
-     * to force the worker to stop what it's doing.
+     * A new method that interrupts the worker thread. Call this method to force
+     * the worker to stop what it's doing.
      */
     public void interrupt() {
         Thread t = threadVar.get();
@@ -99,11 +97,10 @@ public abstract class SwingWorker {
         threadVar.clear();
     }
 
-
     /**
-     * Return the value created by the <code>construct</code> method.
-     * Returns null if either the constructing thread or the current
-     * thread was interrupted before a value was produced.
+     * Return the value created by the <code>construct</code> method. Returns
+     * null if either the constructing thread or the current thread was
+     * interrupted before a value was produced.
      *
      * @return the value created by the <code>construct</code> method
      */
@@ -115,18 +112,16 @@ public abstract class SwingWorker {
             }
             try {
                 t.join();
-            }
-            catch (InterruptedException e) {
+            } catch (InterruptedException e) {
                 Thread.currentThread().interrupt(); // propagate
                 return null;
             }
         }
     }
 
-
     /**
-     * Start a thread that will call the <code>construct</code> method
-     * and then exit.
+     * Start a thread that will call the <code>construct</code> method and then
+     * exit.
      */
     public SwingWorker() {
         new Runnable() {
@@ -138,9 +133,8 @@ public abstract class SwingWorker {
         Runnable doConstruct = new Runnable() {
             public void run() {
                 try {
-							setValue(construct());
-                }
-                finally {
+                    setValue(construct());
+                } finally {
                     threadVar.clear();
                 }
                 SwingUtilities.invokeLater(new Runnable() {
@@ -166,4 +160,3 @@ public abstract class SwingWorker {
         }
     }
 }
-

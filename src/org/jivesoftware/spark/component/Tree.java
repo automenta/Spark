@@ -1,24 +1,25 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.spark.component;
 
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
+import java.util.Enumeration;
 import javax.swing.JComponent;
 import javax.swing.JTree;
 import javax.swing.TransferHandler;
@@ -27,10 +28,6 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
-
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
-import java.util.Enumeration;
 
 /**
  * Creates a new Tree UI to allow for easier manipulation of tree nodes.
@@ -60,10 +57,11 @@ public class Tree extends JTree implements TreeSelectionListener, MouseMotionLis
      * @param e - the TreeSelectionEvent notifying of a valueChange.
      */
     public void valueChanged(TreeSelectionEvent e) {
-        JiveTreeNode node = (JiveTreeNode)getLastSelectedPathComponent();
+        JiveTreeNode node = (JiveTreeNode) getLastSelectedPathComponent();
 
-        if (node == null) return;
-
+        if (node == null) {
+            return;
+        }
 
         if (node.isLeaf()) {
             setTransferHandler(new TransferHandler("text"));
@@ -76,7 +74,7 @@ public class Tree extends JTree implements TreeSelectionListener, MouseMotionLis
      * @return the last selected node in the tree.
      */
     public JiveTreeNode getTreeNode() {
-        return (JiveTreeNode)getLastSelectedPathComponent();
+        return (JiveTreeNode) getLastSelectedPathComponent();
     }
 
     /**
@@ -85,8 +83,8 @@ public class Tree extends JTree implements TreeSelectionListener, MouseMotionLis
      * @param e - the mousedragged event to handle drag and drop from.
      */
     public void mouseDragged(MouseEvent e) {
-        final JComponent c = (JComponent)e.getSource();
-        JiveTreeNode node = (JiveTreeNode)getLastSelectedPathComponent();
+        final JComponent c = (JComponent) e.getSource();
+        JiveTreeNode node = (JiveTreeNode) getLastSelectedPathComponent();
         if (node == null) {
             return;
         }
@@ -99,31 +97,32 @@ public class Tree extends JTree implements TreeSelectionListener, MouseMotionLis
     /**
      * Finds the correct tree path.
      *
-     * @param tree  the tree to search.
+     * @param tree the tree to search.
      * @param nodes the nodes to find in the tree.
      * @return the treepath.
      */
     public TreePath find(Tree tree, Object[] nodes) {
-        TreeNode root = (TreeNode)tree.getModel().getRoot();
+        TreeNode root = (TreeNode) tree.getModel().getRoot();
         return find2(tree, new TreePath(root), nodes, 0, false);
     }
 
     /**
-     * Finds the path in tree as specified by the array of names. The names array is a
-     * sequence of names where names[0] is the root and names[i] is a child of names[i-1].
-     * Comparison is done using String.equals(). Returns null if not found.
+     * Finds the path in tree as specified by the array of names. The names
+     * array is a sequence of names where names[0] is the root and names[i] is a
+     * child of names[i-1]. Comparison is done using String.equals(). Returns
+     * null if not found.
      *
-     * @param tree  the tree to search.
+     * @param tree the tree to search.
      * @param names a list of names to find.
      * @return the treepath found.
      */
     public TreePath findByName(Tree tree, String[] names) {
-        TreeNode root = (TreeNode)tree.getModel().getRoot();
+        TreeNode root = (TreeNode) tree.getModel().getRoot();
         return find2(tree, new TreePath(root), names, 0, true);
     }
 
     private TreePath find2(Tree tree, TreePath parent, Object[] nodes, int depth, boolean byName) {
-        TreeNode node = (TreeNode)parent.getLastPathComponent();
+        TreeNode node = (TreeNode) parent.getLastPathComponent();
         Object o = node;
 
         // If by name, convert node to a string

@@ -1,21 +1,19 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.spark.component;
 
@@ -25,7 +23,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Enumeration;
-
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTree;
@@ -40,6 +37,7 @@ import javax.swing.tree.TreeSelectionModel;
  * @author Derek DeMoro
  */
 public class CheckTree extends JPanel {
+
     private static final long serialVersionUID = 8452107824029515678L;
     private JTree tree;
 
@@ -61,8 +59,8 @@ public class CheckTree extends JPanel {
         add(tree, BorderLayout.CENTER);
     }
 
-
     class NodeSelectionListener extends MouseAdapter {
+
         JTree tree;
 
         NodeSelectionListener(JTree tree) {
@@ -75,18 +73,17 @@ public class CheckTree extends JPanel {
             int row = tree.getRowForLocation(x, y);
             TreePath path = tree.getPathForRow(row);
             if (path != null) {
-                CheckNode node = (CheckNode)path.getLastPathComponent();
+                CheckNode node = (CheckNode) path.getLastPathComponent();
                 boolean isSelected = !node.isSelected();
                 node.setSelected(isSelected);
                 if (node.getSelectionMode() == CheckNode.DIG_IN_SELECTION) {
                     if (isSelected) {
                         //tree.expandPath(path);
-                    }
-                    else {
+                    } else {
                         //tree.collapsePath(path);
                     }
                 }
-                ((DefaultTreeModel)tree.getModel()).nodeChanged(node);
+                ((DefaultTreeModel) tree.getModel()).nodeChanged(node);
                 // I need revalidate if node is root.  but why?
 
                 tree.revalidate();
@@ -102,8 +99,8 @@ public class CheckTree extends JPanel {
     public void close() {
     }
 
-
     class ButtonActionListener implements ActionListener {
+
         CheckNode root;
         JTextArea textArea;
 
@@ -141,4 +138,3 @@ public class CheckTree extends JPanel {
     }
 
 }
-

@@ -1,24 +1,23 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
+ * $RCSfile: ,v $ $Revision: $ $Date: $
  *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.spark.ui.status;
 
+import com.thoughtworks.xstream.XStream;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -37,7 +36,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
@@ -52,7 +50,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
-
 import org.jivesoftware.resource.Res;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.spark.PresenceManager;
@@ -65,9 +62,8 @@ import org.jivesoftware.spark.util.ModelUtil;
 import org.jivesoftware.spark.util.ResourceUtils;
 import org.jivesoftware.spark.util.log.Log;
 
-import com.thoughtworks.xstream.XStream;
-
 public class CustomMessages {
+
     private static File customMessages = new File(SparkManager.getUserDirectory(), "custom_messages.xml");
     private static XStream xstream = new XStream();
 
@@ -80,22 +76,19 @@ public class CustomMessages {
         xstream.alias("custom-status", CustomStatusItem.class);
     }
 
-
     // Handle Custom Messages
     public static List<CustomStatusItem> load() {
         List<CustomStatusItem> list = null;
 
         if (customMessages.exists()) {
             try {
-                list = (List<CustomStatusItem>)xstream.fromXML(new FileReader(customMessages));
-            }
-            catch (Exception e) {
+                list = (List<CustomStatusItem>) xstream.fromXML(new FileReader(customMessages));
+            } catch (Exception e) {
                 xstream.alias("list", List.class);
                 xstream.alias("com.jivesoftware.workspaces.CustomStatusItem", CustomStatusItem.class);
                 try {
-                    list = (List<CustomStatusItem>)xstream.fromXML(new FileReader(customMessages));
-                }
-                catch (Exception e1) {
+                    list = (List<CustomStatusItem>) xstream.fromXML(new FileReader(customMessages));
+                } catch (Exception e1) {
                     Log.error(e1);
                 }
             }
@@ -106,13 +99,11 @@ public class CustomMessages {
         }
 
         // Sort Custom Messages
-        Collections.sort( list, new Comparator<CustomStatusItem>()
-        {
-        	public int compare( final CustomStatusItem a, final CustomStatusItem b )
-        	{
-        		return( a.getStatus().compareToIgnoreCase( b.getStatus() ) );
-        	}
-        } );
+        Collections.sort(list, new Comparator<CustomStatusItem>() {
+            public int compare(final CustomStatusItem a, final CustomStatusItem b) {
+                return (a.getStatus().compareToIgnoreCase(b.getStatus()));
+            }
+        });
 
         return list;
     }
@@ -123,8 +114,7 @@ public class CustomMessages {
 
         try {
             xstream.toXML(list, new FileWriter(customMessages));
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Log.error("Could not save custom messages.", e);
         }
     }
@@ -159,7 +149,6 @@ public class CustomMessages {
                 }
             }
 
-
             rootNode.add(node);
 
         }
@@ -181,7 +170,7 @@ public class CustomMessages {
 
         optionPane.addPropertyChangeListener(new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
-                String value = (String)optionPane.getValue();
+                String value = (String) optionPane.getValue();
                 if (Res.getString("close").equals(value)) {
                     optionsDialog.setVisible(false);
                 }
@@ -211,19 +200,18 @@ public class CustomMessages {
                     tree.setSelectionPath(path);
                 }
 
-                final JiveTreeNode selectedNode = (JiveTreeNode)tree.getLastSelectedPathComponent();
+                final JiveTreeNode selectedNode = (JiveTreeNode) tree.getLastSelectedPathComponent();
 
                 if (selectedNode == null || selectedNode.getParent() == null) {
                     return;
-                }
-                else if (selectedNode.getParent() == rootNode) {
+                } else if (selectedNode.getParent() == rootNode) {
                     JPopupMenu popup = new JPopupMenu();
                     Action addAction = new AbstractAction() {
-						private static final long serialVersionUID = 2187174931315380754L;
+                        private static final long serialVersionUID = 2187174931315380754L;
 
-						public void actionPerformed(ActionEvent actionEvent) {
+                        public void actionPerformed(ActionEvent actionEvent) {
                             CustomStatus status = new CustomStatus();
-                            String type = (String)selectedNode.getUserObject();
+                            String type = (String) selectedNode.getUserObject();
                             status.invoke(type);
                             reloadTree(rootNode, tree);
                         }
@@ -235,17 +223,16 @@ public class CustomMessages {
                     return;
                 }
 
-
-                final JiveTreeNode parentNode = (JiveTreeNode)selectedNode.getParent();
-                final String messageStatus = (String)selectedNode.getUserObject();
-                final String messageType = (String)parentNode.getUserObject();
+                final JiveTreeNode parentNode = (JiveTreeNode) selectedNode.getParent();
+                final String messageStatus = (String) selectedNode.getUserObject();
+                final String messageType = (String) parentNode.getUserObject();
 
                 if (event.isPopupTrigger()) {
                     JPopupMenu popup = new JPopupMenu();
                     Action deleteAction = new AbstractAction() {
-						private static final long serialVersionUID = -4421868467918912876L;
+                        private static final long serialVersionUID = -4421868467918912876L;
 
-						public void actionPerformed(ActionEvent actionEvent) {
+                        public void actionPerformed(ActionEvent actionEvent) {
                             List<CustomStatusItem> list = new ArrayList<CustomStatusItem>();
                             //Refresh customItems list
                             List<CustomStatusItem> customItems = load();
@@ -254,14 +241,13 @@ public class CustomMessages {
                                 CustomStatusItem item = iter.next();
                                 if (item.getType().equals(messageType) && item.getStatus().equals(messageStatus)) {
 
-                                }
-                                else {
+                                } else {
                                     list.add(item);
                                 }
                             }
 
                             parentNode.remove(selectedNode);
-                            DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
+                            DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
                             model.nodeStructureChanged(parentNode);
                             save(list);
                         }
@@ -269,11 +255,10 @@ public class CustomMessages {
                     deleteAction.putValue(Action.NAME, Res.getString("menuitem.delete"));
                     popup.add(deleteAction);
 
-
                     Action editAction = new AbstractAction() {
-						private static final long serialVersionUID = 39916149252596354L;
+                        private static final long serialVersionUID = 39916149252596354L;
 
-						public void actionPerformed(ActionEvent actionEvent) {
+                        public void actionPerformed(ActionEvent actionEvent) {
                             List<CustomStatusItem> newItems = load();
                             Iterator<CustomStatusItem> iter = newItems.iterator();
                             while (iter.hasNext()) {
@@ -326,18 +311,18 @@ public class CustomMessages {
                 }
             }
 
-
             rootNode.add(node);
         }
 
-        DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
+        DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
         model.nodeStructureChanged(rootNode);
         tree.expandTree();
     }
 
     private static class CustomStatus extends JPanel {
-		private static final long serialVersionUID = 1117350001209641469L;
-		private JLabel typeLabel = new JLabel();
+
+        private static final long serialVersionUID = 1117350001209641469L;
+        private JLabel typeLabel = new JLabel();
         private JComboBox typeBox = new JComboBox();
 
         private JLabel statusLabel = new JLabel();
@@ -377,12 +362,12 @@ public class CustomMessages {
             while (statusIterator.hasNext()) {
                 final StatusItem statusItem = statusIterator.next();
                 if (!PresenceManager.isOnPhone(statusItem.getPresence())) {
-	                ImageIcon icon = (ImageIcon)statusItem.getIcon();
+                    ImageIcon icon = (ImageIcon) statusItem.getIcon();
 
-	                ImageIcon newIcon = new ImageIcon(icon.getImage());
-	                newIcon.setDescription(statusItem.getText());
+                    ImageIcon newIcon = new ImageIcon(icon.getImage());
+                    newIcon.setDescription(statusItem.getText());
 
-	                typeBox.addItem(newIcon);
+                    typeBox.addItem(newIcon);
                 }
             }
 
@@ -392,7 +377,7 @@ public class CustomMessages {
         }
 
         public String getType() {
-            ImageIcon icon = (ImageIcon)typeBox.getSelectedItem();
+            ImageIcon icon = (ImageIcon) typeBox.getSelectedItem();
             return icon.getDescription();
         }
 
@@ -403,8 +388,7 @@ public class CustomMessages {
         public int getPriority() {
             try {
                 return Integer.parseInt(priorityField.getText());
-            }
-            catch (NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 return 1;
             }
         }
@@ -433,7 +417,7 @@ public class CustomMessages {
             String type = item.getType();
             int count = typeBox.getItemCount();
             for (int i = 0; i < count; i++) {
-                ImageIcon icon = (ImageIcon)typeBox.getItemAt(i);
+                ImageIcon icon = (ImageIcon) typeBox.getItemAt(i);
                 if (icon.getDescription().equals(type)) {
                     typeBox.setSelectedIndex(i);
                     break;
@@ -443,26 +427,24 @@ public class CustomMessages {
             optionsDialog.setLocationRelativeTo(SparkManager.getMainWindow());
             optionPane.addPropertyChangeListener(new PropertyChangeListener() {
                 public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
-                    String value = (String)optionPane.getValue();
+                    String value = (String) optionPane.getValue();
                     if (Res.getString("cancel").equals(value)) {
                         optionsDialog.setVisible(false);
-                    }
-                    else if (Res.getString("ok").equals(value)) {
+                    } else if (Res.getString("ok").equals(value)) {
                         List<CustomStatusItem> list = load();
                         Iterator<CustomStatusItem> iter = list.iterator();
 
                         CustomStatusItem changeItem = null;
                         while (iter.hasNext()) {
                             CustomStatusItem customItem = iter.next();
-                            if (customItem.getType().equals(item.getType()) &&
-                                    customItem.getStatus().equals(item.getStatus()) &&
-                                    customItem.getPriority() == item.getPriority() ) {
+                            if (customItem.getType().equals(item.getType())
+                                    && customItem.getStatus().equals(item.getStatus())
+                                    && customItem.getPriority() == item.getPriority()) {
 
                                 changeItem = customItem;
                                 break;
                             }
                         }
-
 
                         Iterator<CustomStatusItem> customListIterator = list.iterator();
                         boolean exists = false;
@@ -498,7 +480,6 @@ public class CustomMessages {
             optionsDialog.requestFocus();
         }
 
-
         public void invoke(String selectedType) {
             final StatusBar statusBar = SparkManager.getWorkspace().getStatusBar();
 
@@ -520,7 +501,7 @@ public class CustomMessages {
             if (selectedType != null) {
                 int count = typeBox.getItemCount();
                 for (int i = 0; i < count; i++) {
-                    ImageIcon icon = (ImageIcon)typeBox.getItemAt(i);
+                    ImageIcon icon = (ImageIcon) typeBox.getItemAt(i);
                     if (icon.getDescription().equals(selectedType)) {
                         typeBox.setSelectedIndex(i);
                         break;
@@ -529,22 +510,19 @@ public class CustomMessages {
                 persistBox.setSelected(true);
             }
 
-
             optionsDialog.setLocationRelativeTo(SparkManager.getMainWindow());
             optionPane.addPropertyChangeListener(new PropertyChangeListener() {
                 public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
-                    String value = (String)optionPane.getValue();
+                    String value = (String) optionPane.getValue();
                     if (Res.getString("cancel").equals(value)) {
                         optionsDialog.setVisible(false);
-                    }
-                    else if (Res.getString("ok").equals(value)) {
+                    } else if (Res.getString("ok").equals(value)) {
 
                         if (!ModelUtil.hasLength(getStatus())) {
                             JOptionPane.showMessageDialog(optionsDialog, Res.getString("message.invalid.status"));
                             optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
                             return;
                         }
-
 
                         if (!persistBox.isSelected()) {
                             // Change presence and quit.
@@ -568,7 +546,6 @@ public class CustomMessages {
                         customStatusItem.setPriority(getPriority());
                         customStatusItem.setStatus(getStatus());
                         customStatusItem.setType(getType());
-
 
                         Iterator<CustomStatusItem> customListIterator = list.iterator();
                         boolean exists = false;
@@ -609,6 +586,5 @@ public class CustomMessages {
             optionsDialog.requestFocus();
         }
     }
-
 
 }

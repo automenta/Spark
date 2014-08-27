@@ -1,21 +1,19 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
+ * $RCSfile: ,v $ $Revision: $ $Date: $
  *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.spark;
 
@@ -26,7 +24,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.util.TimerTask;
-
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
@@ -34,7 +31,6 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
-
 import org.jivesoftware.MainWindow;
 import org.jivesoftware.MainWindowListener;
 import org.jivesoftware.Spark;
@@ -70,28 +66,26 @@ import org.jivesoftware.sparkimpl.plugin.bookmarks.BookmarkPlugin;
 import org.jivesoftware.sparkimpl.plugin.gateways.GatewayPlugin;
 import org.jivesoftware.sparkimpl.plugin.manager.Enterprise;
 import org.jivesoftware.sparkimpl.plugin.transcripts.ChatTranscriptPlugin;
-import org.jivesoftware.sparkimpl.settings.local.SettingsManager;
-import org.jivesoftware.sparkimpl.plugin.privacy.PrivacyManager;
 
 /**
- * The inner Container for Spark. The Workspace is the container for all plugins into the Spark
- * install. Plugins would use this for the following:
+ * The inner Container for Spark. The Workspace is the container for all plugins
+ * into the Spark install. Plugins would use this for the following:
  * <p/>
  * <ul>
  * <li>Add own tab to the main tabbed pane. ex.
  * <p/>
  * <p/>
- * Workspace workspace = SparkManager.getWorkspace();
- * JButton button = new JButton("HELLO SPARK USERS");
- * workspace.getWorkspacePane().addTab("MyPlugin", button);
+ * Workspace workspace = SparkManager.getWorkspace(); JButton button = new
+ * JButton("HELLO SPARK USERS"); workspace.getWorkspacePane().addTab("MyPlugin",
+ * button);
  * </p>
  * <p/>
  * <li>Retrieve the ContactList.
  */
 public class Workspace extends JPanel implements PacketListener {
 
-	private static final long serialVersionUID = 7076407890063933765L;
-	private SparkTabbedPane workspacePane;
+    private static final long serialVersionUID = 7076407890063933765L;
+    private SparkTabbedPane workspacePane;
     private StatusBar statusBox;
 
     private ContactList contactList;
@@ -109,10 +103,9 @@ public class Workspace extends JPanel implements PacketListener {
 
     public static final String WORKSPACE_PANE = "WORKSPACE_PANE";
 
-
     /**
-     * Returns the singleton instance of <CODE>Workspace</CODE>,
-     * creating it if necessary.
+     * Returns the singleton instance of <CODE>Workspace</CODE>, creating it if
+     * necessary.
      * <p/>
      *
      * @return the singleton instance of <Code>Workspace</CODE>
@@ -130,41 +123,39 @@ public class Workspace extends JPanel implements PacketListener {
         return singleton;
     }
 
-
     /**
      * Creates the instance of the SupportChatWorkspace.
      */
     private Workspace() {
         final MainWindow mainWindow = SparkManager.getMainWindow();
 
-	        // Add MainWindow listener
-	        mainWindow.addMainWindowListener(new MainWindowListener() {
-	            public void shutdown() {
-	                final ChatContainer container = SparkManager.getChatManager().getChatContainer();
-	                // Close all Chats.
-	                for (ChatRoom chatRoom : container.getChatRooms()) {
-	                    // Leave ChatRoom
-	                    container.leaveChatRoom(chatRoom);
-	                }
+        // Add MainWindow listener
+        mainWindow.addMainWindowListener(new MainWindowListener() {
+            public void shutdown() {
+                final ChatContainer container = SparkManager.getChatManager().getChatContainer();
+                // Close all Chats.
+                for (ChatRoom chatRoom : container.getChatRooms()) {
+                    // Leave ChatRoom
+                    container.leaveChatRoom(chatRoom);
+                }
 
-	                conferences.shutdown();
-	                gatewayPlugin.shutdown();
-	                bookmarkPlugin.shutdown();
-	                broadcastPlugin.shutdown();
-	            }
+                conferences.shutdown();
+                gatewayPlugin.shutdown();
+                bookmarkPlugin.shutdown();
+                broadcastPlugin.shutdown();
+            }
 
-	            public void mainWindowActivated() {
+            public void mainWindowActivated() {
 
-	            }
+            }
 
-	            public void mainWindowDeactivated() {
+            public void mainWindowDeactivated() {
 
-	            }
-	        });
-
+            }
+        });
 
         // Initialize workspace pane, defaulting the tabs to the bottom.
-	    boolean top = Default.getBoolean(Default.TABS_PLACEMENT_TOP);
+        boolean top = Default.getBoolean(Default.TABS_PLACEMENT_TOP);
         workspacePane = UIComponentRegistry.createWorkspaceTabPanel(top ? JTabbedPane.TOP : JTabbedPane.BOTTOM);
         workspacePane.setBorder(BorderFactory.createEmptyBorder());
         // Add Panels.
@@ -180,12 +171,11 @@ public class Workspace extends JPanel implements PacketListener {
         add(workspacePane, new GridBagConstraints(0, 9, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
         add(statusBox, new GridBagConstraints(0, 0, 1, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 
-
         this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("F12"), "showDebugger");
         this.getActionMap().put("showDebugger", new AbstractAction("showDebugger") {
-			private static final long serialVersionUID = 4066886679016416923L;
+            private static final long serialVersionUID = 4066886679016416923L;
 
-			public void actionPerformed(ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 EnhancedDebuggerWindow window = EnhancedDebuggerWindow.getInstance();
                 window.setVisible(true);
             }
@@ -219,10 +209,10 @@ public class Workspace extends JPanel implements PacketListener {
      * Starts the Loading of all Spark Plugins.
      */
     public void loadPlugins() {
-    
+
         // Send Available status
         SparkManager.getSessionManager().changePresence(statusBox.getPresence());
-        
+
         // Add presence and message listeners
         // we listen for these to force open a 1-1 peer chat window from other operators if
         // one isn't already open
@@ -234,7 +224,7 @@ public class Workspace extends JPanel implements PacketListener {
         // Make presence available to anonymous requests, if from anonymous user in the system.
         PacketListener workspacePresenceListener = new PacketListener() {
             public void processPacket(Packet packet) {
-                Presence presence = (Presence)packet;
+                Presence presence = (Presence) packet;
                 if (presence.getProperty("anonymous") != null) {
                     boolean isAvailable = statusBox.getPresence().getMode() == Presence.Mode.available;
                     Presence reply = new Presence(Presence.Type.available);
@@ -284,7 +274,6 @@ public class Workspace extends JPanel implements PacketListener {
         SparkManager.getChatManager().handleURIMapping(Spark.ARGUMENTS);
     }
 
-
     /**
      * Returns the status box for the User.
      *
@@ -307,11 +296,10 @@ public class Workspace extends JPanel implements PacketListener {
         });
     }
 
-
     private void handleIncomingPacket(Packet packet) {
         // We only handle message packets here.
         if (packet instanceof Message) {
-            final Message message = (Message)packet;
+            final Message message = (Message) packet;
             boolean isGroupChat = message.getType() == Message.Type.groupchat;
 
             // Check if Conference invite. If so, do not handle here.
@@ -323,18 +311,18 @@ public class Workspace extends JPanel implements PacketListener {
             boolean broadcast = message.getProperty("broadcast") != null;
 
             // Handle offline message.
-            DelayInformation offlineInformation = (DelayInformation)message.getExtension("x", "jabber:x:delay");
-            if (offlineInformation != null && (Message.Type.chat == message.getType() ||
-                Message.Type.normal == message.getType())) {
+            DelayInformation offlineInformation = (DelayInformation) message.getExtension("x", "jabber:x:delay");
+            if (offlineInformation != null && (Message.Type.chat == message.getType()
+                    || Message.Type.normal == message.getType())) {
                 handleOfflineMessage(message);
             }
 
-            if (body == null ||
-                isGroupChat ||
-                broadcast ||
-                message.getType() == Message.Type.normal ||
-                message.getType() == Message.Type.headline ||
-                message.getType() == Message.Type.error) {
+            if (body == null
+                    || isGroupChat
+                    || broadcast
+                    || message.getType() == Message.Type.normal
+                    || message.getType() == Message.Type.headline
+                    || message.getType() == Message.Type.error) {
                 return;
             }
 
@@ -348,12 +336,10 @@ public class Workspace extends JPanel implements PacketListener {
                 return;
             }
 
-
             ChatRoom room = null;
             try {
                 room = SparkManager.getChatManager().getChatContainer().getChatRoom(bareJID);
-            }
-            catch (ChatRoomNotFoundException e) {
+            } catch (ChatRoomNotFoundException e) {
                 // Ignore
             }
 
@@ -370,7 +356,7 @@ public class Workspace extends JPanel implements PacketListener {
      * @param message The Offline message.
      */
     private void handleOfflineMessage(Message message) {
-        if(!ModelUtil.hasLength(message.getBody())){
+        if (!ModelUtil.hasLength(message.getBody())) {
             return;
         }
 
@@ -383,8 +369,7 @@ public class Workspace extends JPanel implements PacketListener {
 
         // Create the room if it does not exist.
         ChatRoom room = SparkManager.getChatManager().createChatRoom(bareJID, nickname, nickname);
-        if(!SparkManager.getChatManager().getChatContainer().getChatFrame().isVisible())
-        {
+        if (!SparkManager.getChatManager().getChatContainer().getChatFrame().isVisible()) {
             SparkManager.getChatManager().getChatContainer().getChatFrame().setVisible(true);
         }
 
@@ -408,8 +393,7 @@ public class Workspace extends JPanel implements PacketListener {
         String nickname = StringUtils.parseName(bareJID);
         if (contact != null) {
             nickname = contact.getDisplayName();
-        }
-        else {
+        } else {
             // Attempt to load VCard from users who we are not subscribed to.
             VCard vCard = SparkManager.getVCardManager().getVCard(bareJID);
             if (vCard != null && vCard.getError() == null) {
@@ -418,11 +402,9 @@ public class Workspace extends JPanel implements PacketListener {
                 String userNickname = vCard.getNickName();
                 if (ModelUtil.hasLength(userNickname)) {
                     nickname = userNickname;
-                }
-                else if (ModelUtil.hasLength(firstName) && ModelUtil.hasLength(lastName)) {
+                } else if (ModelUtil.hasLength(firstName) && ModelUtil.hasLength(lastName)) {
                     nickname = firstName + " " + lastName;
-                }
-                else if (ModelUtil.hasLength(firstName)) {
+                } else if (ModelUtil.hasLength(firstName)) {
                     nickname = firstName;
                 }
             }
@@ -431,12 +413,10 @@ public class Workspace extends JPanel implements PacketListener {
         SparkManager.getChatManager().createChatRoom(bareJID, nickname, nickname);
         try {
             insertMessage(bareJID, message);
-        }
-        catch (ChatRoomNotFoundException e) {
+        } catch (ChatRoomNotFoundException e) {
             Log.error("Could not find chat room.", e);
         }
     }
-
 
     private void insertMessage(final String bareJID, final Message message) throws ChatRoomNotFoundException {
         ChatRoom chatRoom = SparkManager.getChatManager().getChatContainer().getChatRoom(bareJID);
@@ -446,17 +426,15 @@ public class Workspace extends JPanel implements PacketListener {
         chatRoom.getChatInputEditor().requestFocusInWindow();
     }
 
-
     /**
-     * Returns the Workspace TabbedPane. If you wish to add your
-     * component, simply use addTab( name, icon, component ) call.
+     * Returns the Workspace TabbedPane. If you wish to add your component,
+     * simply use addTab( name, icon, component ) call.
      *
      * @return the workspace JideTabbedPane
      */
     public SparkTabbedPane getWorkspacePane() {
         return workspacePane;
     }
-
 
     /**
      * Returns the <code>ContactList</code> associated with this workspace.

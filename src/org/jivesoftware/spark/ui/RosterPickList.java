@@ -1,24 +1,40 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */ 
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package org.jivesoftware.spark.ui;
 
+import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import javax.swing.DefaultListModel;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import org.jivesoftware.resource.Res;
 import org.jivesoftware.resource.SparkRes;
 import org.jivesoftware.smack.Roster;
@@ -32,20 +48,14 @@ import org.jivesoftware.spark.util.ResourceUtils;
 import org.jivesoftware.spark.util.UIComponentRegistry;
 import org.jivesoftware.spark.util.log.Log;
 
-import javax.swing.*;
-
-import java.awt.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.*;
-import java.util.List;
-
 /**
- * The <code>RosterPickList</code> is used as a pick list of users within ones Roster.
+ * The <code>RosterPickList</code> is used as a pick list of users within ones
+ * Roster.
  */
 public class RosterPickList extends JPanel {
-	private static final long serialVersionUID = -7725304880236329893L;
-	private DefaultListModel model = new DefaultListModel();
+
+    private static final long serialVersionUID = -7725304880236329893L;
+    private DefaultListModel model = new DefaultListModel();
     private JList rosterList = new JList(model);
 
     /**
@@ -92,7 +102,6 @@ public class RosterPickList extends JPanel {
 
         final JOptionPane pane;
 
-
         TitlePanel titlePanel;
 
         // Create the title panel for this dialog
@@ -122,13 +131,12 @@ public class RosterPickList extends JPanel {
 
         PropertyChangeListener changeListener = new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent e) {
-                String value = (String)pane.getValue();
+                String value = (String) pane.getValue();
                 if (Res.getString("cancel").equals(value)) {
                     rosterList.clearSelection();
                     pane.setValue(JOptionPane.UNINITIALIZED_VALUE);
                     dlg.dispose();
-                }
-                else if (Res.getString("ok").equals(value)) {
+                } else if (Res.getString("ok").equals(value)) {
                     pane.setValue(JOptionPane.UNINITIALIZED_VALUE);
                     dlg.dispose();
                 }
@@ -147,17 +155,15 @@ public class RosterPickList extends JPanel {
         final int no = values != null ? values.length : 0;
         for (int i = 0; i < no; i++) {
             try {
-                ContactItem item = (ContactItem)values[i];
+                ContactItem item = (ContactItem) values[i];
                 selectedContacts.add(item.getJID());
-            }
-            catch (NullPointerException e) {
+            } catch (NullPointerException e) {
                 Log.error(e);
             }
         }
 
         return selectedContacts;
     }
-
 
     /**
      * Sorts ContactItems.

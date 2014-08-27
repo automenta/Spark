@@ -14,14 +14,14 @@ import net.java.otr4j.OtrPolicyImpl;
 import net.java.otr4j.session.SessionID;
 import net.java.otr4j.session.SessionStatus;
 import org.jivesoftware.smack.packet.Message;
-import org.jivesoftware.sparkimpl.plugin.otr.OTRManager;
-import org.jivesoftware.sparkimpl.plugin.otr.ui.OTRConnectionPanel;
-import org.jivesoftware.sparkimpl.plugin.otr.util.OTRProperties;
-import org.jivesoftware.sparkimpl.plugin.otr.util.OTRResources;
 import org.jivesoftware.spark.ui.ChatRoomButton;
 import org.jivesoftware.spark.ui.MessageEventListener;
 import org.jivesoftware.spark.ui.rooms.ChatRoomImpl;
 import org.jivesoftware.spark.util.UIComponentRegistry;
+import org.jivesoftware.sparkimpl.plugin.otr.OTRManager;
+import org.jivesoftware.sparkimpl.plugin.otr.ui.OTRConnectionPanel;
+import org.jivesoftware.sparkimpl.plugin.otr.util.OTRProperties;
+import org.jivesoftware.sparkimpl.plugin.otr.util.OTRResources;
 
 /**
  * OTRSession are unique for every conversation. It handles the otrEngine for
@@ -151,10 +151,10 @@ public class OTRSession {
 
             ImageIcon otricon = null;
             if (_engine.getSessionStatus(_mySession).equals(SessionStatus.ENCRYPTED)) {
-                otricon = new ImageIcon(cl.getResource("otr_on.png"));
+                otricon = OTRResources.getIcon("otr_on.png");
                 _conPanel.successfullyCon();
             } else {
-                otricon = new ImageIcon(cl.getResource("otr_off.png"));
+                otricon = OTRResources.getIcon("otr_off.png");
             }
 
             _otrButton.setIcon(otricon);
@@ -186,12 +186,12 @@ public class OTRSession {
                             }
 
                         }
-                        _otrButton.setIcon(new ImageIcon(cl.getResource("otr_on.png")));
+                        _otrButton.setIcon(OTRResources.getIcon("otr_on.png"));
                     } else if (_engine.getSessionStatus(_mySession).equals(SessionStatus.FINISHED)) {
-                        _otrButton.setIcon(new ImageIcon(cl.getResource("otr_off.png")));
+                        _otrButton.setIcon(OTRResources.getIcon("otr_off.png"));
                         stopSession();
                     } else if (_engine.getSessionStatus(_mySession).equals(SessionStatus.PLAINTEXT)) {
-                        _otrButton.setIcon(new ImageIcon(cl.getResource("otr_off.png")));
+                        _otrButton.setIcon(OTRResources.getIcon("otr_off.png"));
                         stopSession();
                     }
 
@@ -216,7 +216,7 @@ public class OTRSession {
         _conPanel.connectionClosed();
         if (_engine.getSessionStatus(_mySession).equals(SessionStatus.ENCRYPTED)) {
             final ClassLoader cl = getClass().getClassLoader();
-            _otrButton.setIcon(new ImageIcon(cl.getResource("otr_off.png")));
+            _otrButton.setIcon(OTRResources.getIcon("otr_off.png"));
             _engine.endSession(_mySession);
         }
     }

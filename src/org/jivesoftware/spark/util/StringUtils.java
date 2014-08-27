@@ -1,25 +1,21 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.spark.util;
-
-import javax.swing.KeyStroke;
 
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -39,11 +35,11 @@ import java.util.Locale;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.KeyStroke;
 
 /**
  * Utility class to peform common String manipulation algorithms.
  */
-
 public class StringUtils {
 
     // Constants used by escapeHTMLTags
@@ -61,329 +57,310 @@ public class StringUtils {
 
     // prepare the patterns
     static {
-	// constants used in the parsing of email addresses
-	String basicAddress = "^([\\w\\.-]+)@([\\w\\.-]+)$";
-	String specialChars = "\\(\\)><@,;:\\\\\\\"\\.\\[\\]";
-	String validChars = "[^ \f\n\r\t" + specialChars + "]";
-	String atom = validChars + "+";
-	String quotedUser = "(\"[^\"]+\")";
-	String word = "(" + atom + "|" + quotedUser + ")";
-	String validUser = "^" + word + "(\\." + word + ")*$";
-	String domain = "^" + atom + "(\\." + atom + ")+$";
-	String ipDomain = "^(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})$";
+        // constants used in the parsing of email addresses
+        String basicAddress = "^([\\w\\.-]+)@([\\w\\.-]+)$";
+        String specialChars = "\\(\\)><@,;:\\\\\\\"\\.\\[\\]";
+        String validChars = "[^ \f\n\r\t" + specialChars + "]";
+        String atom = validChars + "+";
+        String quotedUser = "(\"[^\"]+\")";
+        String word = "(" + atom + "|" + quotedUser + ")";
+        String validUser = "^" + word + "(\\." + word + ")*$";
+        String domain = "^" + atom + "(\\." + atom + ")+$";
+        String ipDomain = "^(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})$";
 
-	// from http://www.icann.org/tlds/
-	String knownTLDs = "^\\.(com|net|org|edu|int|mil|gov|arpa|biz|aero|name|coop|info|pro|museum)$";
+        // from http://www.icann.org/tlds/
+        String knownTLDs = "^\\.(com|net|org|edu|int|mil|gov|arpa|biz|aero|name|coop|info|pro|museum)$";
 
-	basicAddressPattern = Pattern.compile(basicAddress,
-		Pattern.CASE_INSENSITIVE);
-	validUserPattern = Pattern.compile(validUser, Pattern.CASE_INSENSITIVE);
-	domainPattern = Pattern.compile(domain, Pattern.CASE_INSENSITIVE);
-	ipDomainPattern = Pattern.compile(ipDomain, Pattern.CASE_INSENSITIVE);
-	tldPattern = Pattern.compile(knownTLDs, Pattern.CASE_INSENSITIVE);
+        basicAddressPattern = Pattern.compile(basicAddress,
+                Pattern.CASE_INSENSITIVE);
+        validUserPattern = Pattern.compile(validUser, Pattern.CASE_INSENSITIVE);
+        domainPattern = Pattern.compile(domain, Pattern.CASE_INSENSITIVE);
+        ipDomainPattern = Pattern.compile(ipDomain, Pattern.CASE_INSENSITIVE);
+        tldPattern = Pattern.compile(knownTLDs, Pattern.CASE_INSENSITIVE);
     }
 
     /**
      * Replaces all instances of oldString with newString in string.
-     * 
-     * @param string
-     *            the String to search to perform replacements on
-     * @param oldString
-     *            the String that should be replaced by newString
-     * @param newString
-     *            the String that will replace all instances of oldString
+     *
+     * @param string the String to search to perform replacements on
+     * @param oldString the String that should be replaced by newString
+     * @param newString the String that will replace all instances of oldString
      * @return a String will all instances of oldString replaced by newString
      */
     public static String replace(String string, String oldString,
-	    String newString) {
-	if (string == null) {
-	    return null;
-	}
+            String newString) {
+        if (string == null) {
+            return null;
+        }
 
-	// If the newString is null or zero length, just return the string since
-	// there's nothing
-	// to replace.
-	if (newString == null) {
-	    return string;
-	}
+        // If the newString is null or zero length, just return the string since
+        // there's nothing
+        // to replace.
+        if (newString == null) {
+            return string;
+        }
 
-	int i = 0;
+        int i = 0;
 
-	// Make sure that oldString appears at least once before doing any
-	// processing.
-	if ((i = string.indexOf(oldString, i)) >= 0) {
-	    // Use char []'s, as they are more efficient to deal with.
-	    char[] string2 = string.toCharArray();
-	    char[] newString2 = newString.toCharArray();
-	    int oLength = oldString.length();
-	    StringBuffer buf = new StringBuffer(string2.length);
-	    buf.append(string2, 0, i).append(newString2);
-	    i += oLength;
-	    int j = i;
+        // Make sure that oldString appears at least once before doing any
+        // processing.
+        if ((i = string.indexOf(oldString, i)) >= 0) {
+            // Use char []'s, as they are more efficient to deal with.
+            char[] string2 = string.toCharArray();
+            char[] newString2 = newString.toCharArray();
+            int oLength = oldString.length();
+            StringBuffer buf = new StringBuffer(string2.length);
+            buf.append(string2, 0, i).append(newString2);
+            i += oLength;
+            int j = i;
 
-	    // Replace all remaining instances of oldString with newString.
-	    while ((i = string.indexOf(oldString, i)) > 0) {
-		buf.append(string2, j, i - j).append(newString2);
-		i += oLength;
-		j = i;
-	    }
+            // Replace all remaining instances of oldString with newString.
+            while ((i = string.indexOf(oldString, i)) > 0) {
+                buf.append(string2, j, i - j).append(newString2);
+                i += oLength;
+                j = i;
+            }
 
-	    buf.append(string2, j, string2.length - j);
-	    return buf.toString();
-	}
+            buf.append(string2, j, string2.length - j);
+            return buf.toString();
+        }
 
-	return string;
+        return string;
     }
 
     /**
      * Replaces all instances of oldString with newString in line with the added
      * feature that matches of newString in oldString ignore case.
-     * 
-     * @param line
-     *            the String to search to perform replacements on
-     * @param oldString
-     *            the String that should be replaced by newString
-     * @param newString
-     *            the String that will replace all instances of oldString
+     *
+     * @param line the String to search to perform replacements on
+     * @param oldString the String that should be replaced by newString
+     * @param newString the String that will replace all instances of oldString
      * @return a String will all instances of oldString replaced by newString
      */
     public static String replaceIgnoreCase(String line, String oldString,
-	    String newString) {
-	if (line == null) {
-	    return null;
-	}
+            String newString) {
+        if (line == null) {
+            return null;
+        }
 
-	String lcLine = line.toLowerCase();
-	String lcOldString = oldString.toLowerCase();
-	int i = 0;
-	if ((i = lcLine.indexOf(lcOldString, i)) >= 0) {
-	    char[] line2 = line.toCharArray();
-	    char[] newString2 = newString.toCharArray();
-	    int oLength = oldString.length();
-	    StringBuffer buf = new StringBuffer(line2.length);
-	    buf.append(line2, 0, i).append(newString2);
-	    i += oLength;
-	    int j = i;
-	    while ((i = lcLine.indexOf(lcOldString, i)) > 0) {
-		buf.append(line2, j, i - j).append(newString2);
-		i += oLength;
-		j = i;
-	    }
-	    buf.append(line2, j, line2.length - j);
-	    return buf.toString();
-	}
-	return line;
+        String lcLine = line.toLowerCase();
+        String lcOldString = oldString.toLowerCase();
+        int i = 0;
+        if ((i = lcLine.indexOf(lcOldString, i)) >= 0) {
+            char[] line2 = line.toCharArray();
+            char[] newString2 = newString.toCharArray();
+            int oLength = oldString.length();
+            StringBuffer buf = new StringBuffer(line2.length);
+            buf.append(line2, 0, i).append(newString2);
+            i += oLength;
+            int j = i;
+            while ((i = lcLine.indexOf(lcOldString, i)) > 0) {
+                buf.append(line2, j, i - j).append(newString2);
+                i += oLength;
+                j = i;
+            }
+            buf.append(line2, j, line2.length - j);
+            return buf.toString();
+        }
+        return line;
     }
 
     /**
      * Replaces all instances of oldString with newString in line with the added
      * feature that matches of newString in oldString ignore case. </p> The
      * count paramater is set to the number of replaces performed.
-     * 
-     * @param line
-     *            the String to search to perform replacements on
-     * @param oldString
-     *            the String that should be replaced by newString
-     * @param newString
-     *            the String that will replace all instances of oldString
-     * @param count
-     *            a value that will be updated with the number of replaces
-     *            <p/>
-     *            performed.
+     *
+     * @param line the String to search to perform replacements on
+     * @param oldString the String that should be replaced by newString
+     * @param newString the String that will replace all instances of oldString
+     * @param count a value that will be updated with the number of replaces
+     * <p/>
+     * performed.
      * @return a String will all instances of oldString replaced by newString
      */
-
     public static String replaceIgnoreCase(String line, String oldString,
-	    String newString, int[] count) {
-	if (line == null) {
-	    return null;
-	}
-	String lcLine = line.toLowerCase();
-	String lcOldString = oldString.toLowerCase();
-	int i = 0;
-	if ((i = lcLine.indexOf(lcOldString, i)) >= 0) {
-	    int counter = 1;
-	    char[] line2 = line.toCharArray();
-	    char[] newString2 = newString.toCharArray();
-	    int oLength = oldString.length();
-	    StringBuffer buf = new StringBuffer(line2.length);
-	    buf.append(line2, 0, i).append(newString2);
-	    i += oLength;
-	    int j = i;
-	    while ((i = lcLine.indexOf(lcOldString, i)) > 0) {
-		counter++;
-		buf.append(line2, j, i - j).append(newString2);
-		i += oLength;
-		j = i;
-	    }
-	    buf.append(line2, j, line2.length - j);
-	    count[0] = counter;
-	    return buf.toString();
-	}
-	return line;
+            String newString, int[] count) {
+        if (line == null) {
+            return null;
+        }
+        String lcLine = line.toLowerCase();
+        String lcOldString = oldString.toLowerCase();
+        int i = 0;
+        if ((i = lcLine.indexOf(lcOldString, i)) >= 0) {
+            int counter = 1;
+            char[] line2 = line.toCharArray();
+            char[] newString2 = newString.toCharArray();
+            int oLength = oldString.length();
+            StringBuffer buf = new StringBuffer(line2.length);
+            buf.append(line2, 0, i).append(newString2);
+            i += oLength;
+            int j = i;
+            while ((i = lcLine.indexOf(lcOldString, i)) > 0) {
+                counter++;
+                buf.append(line2, j, i - j).append(newString2);
+                i += oLength;
+                j = i;
+            }
+            buf.append(line2, j, line2.length - j);
+            count[0] = counter;
+            return buf.toString();
+        }
+        return line;
     }
 
     /**
      * Replaces all instances of oldString with newString in line.
      * <p/>
      * The count Integer is updated with number of replaces.
-     * 
-     * @param line
-     *            the String to search to perform replacements on
-     * @param oldString
-     *            the String that should be replaced by newString
-     * @param newString
-     *            the String that will replace all instances of oldString
-     * @param count
-     *            Number of replaces.
+     *
+     * @param line the String to search to perform replacements on
+     * @param oldString the String that should be replaced by newString
+     * @param newString the String that will replace all instances of oldString
+     * @param count Number of replaces.
      * @return a String will all instances of oldString replaced by newString
      */
     public static String replace(String line, String oldString,
-	    String newString, int[] count) {
-	if (line == null) {
-	    return null;
-	}
-	int i = 0;
-	if ((i = line.indexOf(oldString, i)) >= 0) {
-	    int counter = 1;
-	    char[] line2 = line.toCharArray();
-	    char[] newString2 = newString.toCharArray();
-	    int oLength = oldString.length();
-	    StringBuffer buf = new StringBuffer(line2.length);
-	    buf.append(line2, 0, i).append(newString2);
-	    i += oLength;
-	    int j = i;
-	    while ((i = line.indexOf(oldString, i)) > 0) {
-		counter++;
-		buf.append(line2, j, i - j).append(newString2);
-		i += oLength;
-		j = i;
-	    }
-	    buf.append(line2, j, line2.length - j);
-	    count[0] = counter;
-	    return buf.toString();
-	}
-	return line;
+            String newString, int[] count) {
+        if (line == null) {
+            return null;
+        }
+        int i = 0;
+        if ((i = line.indexOf(oldString, i)) >= 0) {
+            int counter = 1;
+            char[] line2 = line.toCharArray();
+            char[] newString2 = newString.toCharArray();
+            int oLength = oldString.length();
+            StringBuffer buf = new StringBuffer(line2.length);
+            buf.append(line2, 0, i).append(newString2);
+            i += oLength;
+            int j = i;
+            while ((i = line.indexOf(oldString, i)) > 0) {
+                counter++;
+                buf.append(line2, j, i - j).append(newString2);
+                i += oLength;
+                j = i;
+            }
+            buf.append(line2, j, line2.length - j);
+            count[0] = counter;
+            return buf.toString();
+        }
+        return line;
     }
 
     /**
      * This method takes a string and strips out all tags except <br>
      * tags while still leaving the tag body intact.
-     * 
-     * @param in
-     *            the text to be converted.
+     *
+     * @param in the text to be converted.
      * @return the input string with all tags removed.
      */
     public static String stripTags(String in) {
-	if (in == null) {
-	    return null;
-	}
+        if (in == null) {
+            return null;
+        }
 
-	return stripTags(in, false);
+        return stripTags(in, false);
     }
 
     /**
      * This method takes a string and strips out all tags while still leaving
      * the tag body intact.
-     * 
-     * @param in
-     *            the text to be converted.
-     * @param stripBRTag
-     *            Remove BR tags.
+     *
+     * @param in the text to be converted.
+     * @param stripBRTag Remove BR tags.
      * @return the input string with all tags removed.
      */
     public static String stripTags(String in, boolean stripBRTag) {
-	if (in == null) {
-	    return null;
-	}
+        if (in == null) {
+            return null;
+        }
 
-	char ch;
-	int i = 0;
-	int last = 0;
-	char[] input = in.toCharArray();
-	int len = input.length;
-	StringBuffer out = new StringBuffer((int) (len * 1.3));
-	for (; i < len; i++) {
-	    ch = input[i];
-	    if (ch > '>') {
-		// Nothing to do
-	    } else if (ch == '<') {
-		if (!stripBRTag && i + 3 < len && input[i + 1] == 'b'
-			&& input[i + 2] == 'r' && input[i + 3] == '>') {
-		    i += 3;
-		    continue;
-		}
-		if (i > last) {
-		    if (last > 0) {
-			out.append(" ");
-		    }
-		    out.append(input, last, i - last);
-		}
-		last = i + 1;
-	    } else if (ch == '>') {
-		last = i + 1;
-	    }
-	}
-	if (last == 0) {
-	    return in;
-	}
-	if (i > last) {
-	    out.append(input, last, i - last);
-	}
-	return out.toString();
+        char ch;
+        int i = 0;
+        int last = 0;
+        char[] input = in.toCharArray();
+        int len = input.length;
+        StringBuffer out = new StringBuffer((int) (len * 1.3));
+        for (; i < len; i++) {
+            ch = input[i];
+            if (ch > '>') {
+                // Nothing to do
+            } else if (ch == '<') {
+                if (!stripBRTag && i + 3 < len && input[i + 1] == 'b'
+                        && input[i + 2] == 'r' && input[i + 3] == '>') {
+                    i += 3;
+                    continue;
+                }
+                if (i > last) {
+                    if (last > 0) {
+                        out.append(" ");
+                    }
+                    out.append(input, last, i - last);
+                }
+                last = i + 1;
+            } else if (ch == '>') {
+                last = i + 1;
+            }
+        }
+        if (last == 0) {
+            return in;
+        }
+        if (i > last) {
+            out.append(input, last, i - last);
+        }
+        return out.toString();
     }
 
     /**
      * This method takes a string which may contain HTML tags (ie, &lt;b&gt;,
      * &lt;table&gt;, etc) and converts the '&lt' and '&gt;' characters to their
      * HTML escape sequences.
-     * 
-     * @param in
-     *            the text to be converted.
+     *
+     * @param in the text to be converted.
      * @return the input string with the characters '&lt;' and '&gt;' replaced
-     *         with their HTML escape sequences.
+     * with their HTML escape sequences.
      */
     public static String escapeHTMLTags(String in) {
-	if (in == null) {
-	    return null;
-	}
-	char ch;
-	int i = 0;
-	int last = 0;
-	char[] input = in.toCharArray();
-	int len = input.length;
-	StringBuffer out = new StringBuffer((int) (len * 1.3));
-	for (; i < len; i++) {
-	    ch = input[i];
-	    if (ch > '>') {
-		// Nothing to do
-	    } else if (ch == '<') {
-		if (i > last) {
-		    out.append(input, last, i - last);
-		}
-		last = i + 1;
-		out.append(LT_ENCODE);
-	    } else if (ch == '>') {
-		if (i > last) {
-		    out.append(input, last, i - last);
-		}
-		last = i + 1;
-		out.append(GT_ENCODE);
-	    } else if (ch == '"') {
-		if (i > last) {
-		    out.append(input, last, i - last);
-		}
-		last = i + 1;
-		out.append(QUOTE_ENCODE);
-	    }
-	}
-	if (last == 0) {
-	    return in;
-	}
-	if (i > last) {
-	    out.append(input, last, i - last);
-	}
-	return out.toString();
+        if (in == null) {
+            return null;
+        }
+        char ch;
+        int i = 0;
+        int last = 0;
+        char[] input = in.toCharArray();
+        int len = input.length;
+        StringBuffer out = new StringBuffer((int) (len * 1.3));
+        for (; i < len; i++) {
+            ch = input[i];
+            if (ch > '>') {
+                // Nothing to do
+            } else if (ch == '<') {
+                if (i > last) {
+                    out.append(input, last, i - last);
+                }
+                last = i + 1;
+                out.append(LT_ENCODE);
+            } else if (ch == '>') {
+                if (i > last) {
+                    out.append(input, last, i - last);
+                }
+                last = i + 1;
+                out.append(GT_ENCODE);
+            } else if (ch == '"') {
+                if (i > last) {
+                    out.append(input, last, i - last);
+                }
+                last = i + 1;
+                out.append(QUOTE_ENCODE);
+            }
+        }
+        if (last == 0) {
+            return in;
+        }
+        if (i > last) {
+            out.append(input, last, i - last);
+        }
+        return out.toString();
     }
 
     /**
@@ -410,129 +387,125 @@ public class StringUtils {
      * same hash, we know if the user gave us the correct password or not. The
      * only negative to this system is that password recovery is basically
      * impossible. Therefore, a reset password method is used instead.
-     * 
-     * @param data
-     *            the String to compute the hash of.
+     *
+     * @param data the String to compute the hash of.
      * @return a hashed version of the passed-in String
      */
     public synchronized static String hash(String data) {
-	if (digest == null) {
-	    try {
-		digest = MessageDigest.getInstance("MD5");
-	    } catch (NoSuchAlgorithmException nsae) {
-		// Nothing to do
-	    }
-	}
-	// Now, compute hash.
-	try {
-	    digest.update(data.getBytes("utf-8"));
-	} catch (UnsupportedEncodingException e) {
-	    // Nothing to do
-	}
-	return encodeHex(digest.digest());
+        if (digest == null) {
+            try {
+                digest = MessageDigest.getInstance("MD5");
+            } catch (NoSuchAlgorithmException nsae) {
+                // Nothing to do
+            }
+        }
+        // Now, compute hash.
+        try {
+            digest.update(data.getBytes("utf-8"));
+        } catch (UnsupportedEncodingException e) {
+            // Nothing to do
+        }
+        return encodeHex(digest.digest());
     }
 
     public synchronized static String hash(byte[] data) {
-	if (digest == null) {
-	    try {
-		digest = MessageDigest.getInstance("MD5");
-	    } catch (NoSuchAlgorithmException nsae) {
-		// Nothing to do
-	    }
-	}
-	// Now, compute hash.
-	digest.update(data);
-	return encodeHex(digest.digest());
+        if (digest == null) {
+            try {
+                digest = MessageDigest.getInstance("MD5");
+            } catch (NoSuchAlgorithmException nsae) {
+                // Nothing to do
+            }
+        }
+        // Now, compute hash.
+        digest.update(data);
+        return encodeHex(digest.digest());
     }
 
     /**
      * Turns an array of bytes into a String representing each byte as an
      * unsigned hex number.
-     * 
-     * @param bytes
-     *            an array of bytes to convert to a hex-string
+     *
+     * @param bytes an array of bytes to convert to a hex-string
      * @return generated hex string
      */
     public static String encodeHex(byte[] bytes) {
-	StringBuffer buf = new StringBuffer(bytes.length * 2);
-	int i;
+        StringBuffer buf = new StringBuffer(bytes.length * 2);
+        int i;
 
-	for (i = 0; i < bytes.length; i++) {
-	    if (((int) bytes[i] & 0xff) < 0x10) {
-		buf.append("0");
-	    }
-	    buf.append(Long.toString((int) bytes[i] & 0xff, 16));
-	}
-	return buf.toString();
+        for (i = 0; i < bytes.length; i++) {
+            if (((int) bytes[i] & 0xff) < 0x10) {
+                buf.append("0");
+            }
+            buf.append(Long.toString((int) bytes[i] & 0xff, 16));
+        }
+        return buf.toString();
     }
 
     /**
      * Turns a hex encoded string into a byte array. It is specifically meant to
      * "reverse" the toHex(byte[]) method.
-     * 
-     * @param hex
-     *            a hex encoded String to transform into a byte array.
+     *
+     * @param hex a hex encoded String to transform into a byte array.
      * @return a byte array representing the hex String[
      */
     public static byte[] decodeHex(String hex) {
-	char[] chars = hex.toCharArray();
-	byte[] bytes = new byte[chars.length / 2];
-	int byteCount = 0;
-	for (int i = 0; i < chars.length; i += 2) {
-	    int newByte = 0x00;
-	    newByte |= hexCharToByte(chars[i]);
-	    newByte <<= 4;
-	    newByte |= hexCharToByte(chars[i + 1]);
-	    bytes[byteCount] = (byte) newByte;
-	    byteCount++;
-	}
-	return bytes;
+        char[] chars = hex.toCharArray();
+        byte[] bytes = new byte[chars.length / 2];
+        int byteCount = 0;
+        for (int i = 0; i < chars.length; i += 2) {
+            int newByte = 0x00;
+            newByte |= hexCharToByte(chars[i]);
+            newByte <<= 4;
+            newByte |= hexCharToByte(chars[i + 1]);
+            bytes[byteCount] = (byte) newByte;
+            byteCount++;
+        }
+        return bytes;
     }
 
     /**
      * Returns the the byte value of a hexadecmical char (0-f). It's assumed
      * that the hexidecimal chars are lower case as appropriate.
-     * 
-     * @param ch
-     *            a hexedicmal character (0-f)
+     *
+     * @param ch a hexedicmal character (0-f)
      * @return the byte value of the character (0x00-0x0F)
      */
     private static byte hexCharToByte(char ch) {
-	switch (ch) {
-	case '0':
-	    return 0x00;
-	case '1':
-	    return 0x01;
-	case '2':
-	    return 0x02;
-	case '3':
-	    return 0x03;
-	case '4':
-	    return 0x04;
-	case '5':
-	    return 0x05;
-	case '6':
-	    return 0x06;
-	case '7':
-	    return 0x07;
-	case '8':
-	    return 0x08;
-	case '9':
-	    return 0x09;
-	case 'a':
-	    return 0x0A;
-	case 'b':
-	    return 0x0B;
-	case 'c':
-	    return 0x0C;
-	case 'd':
-	    return 0x0D;
-	case 'e':
-	    return 0x0E;
-	case 'f':
-	    return 0x0F;
-	}
-	return 0x00;
+        switch (ch) {
+            case '0':
+                return 0x00;
+            case '1':
+                return 0x01;
+            case '2':
+                return 0x02;
+            case '3':
+                return 0x03;
+            case '4':
+                return 0x04;
+            case '5':
+                return 0x05;
+            case '6':
+                return 0x06;
+            case '7':
+                return 0x07;
+            case '8':
+                return 0x08;
+            case '9':
+                return 0x09;
+            case 'a':
+                return 0x0A;
+            case 'b':
+                return 0x0B;
+            case 'c':
+                return 0x0C;
+            case 'd':
+                return 0x0D;
+            case 'e':
+                return 0x0E;
+            case 'f':
+                return 0x0F;
+        }
+        return 0x00;
     }
 
     // *********************************************************************
@@ -544,120 +517,118 @@ public class StringUtils {
     // * or commercial, provided the authors copyright notice remains
     // * intact.
     // *********************************************************************
-
     /**
      * Encodes a String as a base64 String.
-     * 
-     * @param data
-     *            a String to encode.
+     *
+     * @param data a String to encode.
      * @return a base64 encoded String.
      */
     public static String encodeBase64(String data) {
-	byte[] bytes = null;
-	try {
-	    bytes = data.getBytes("ISO-8859-1");
-	} catch (UnsupportedEncodingException uee) {
-	    // Nothing to do
-	}
-	return encodeBase64(bytes);
+        byte[] bytes = null;
+        try {
+            bytes = data.getBytes("ISO-8859-1");
+        } catch (UnsupportedEncodingException uee) {
+            // Nothing to do
+        }
+        return encodeBase64(bytes);
     }
 
     /**
      * Encodes a byte array into a base64 String.
-     * 
-     * @param data
-     *            a byte array to encode.
+     *
+     * @param data a byte array to encode.
      * @return a base64 encode String.
      */
     public static String encodeBase64(byte[] data) {
-	int c;
-	int len = data.length;
-	StringBuffer ret = new StringBuffer(((len / 3) + 1) * 4);
-	for (int i = 0; i < len; ++i) {
-	    c = (data[i] >> 2) & 0x3f;
-	    ret.append(cvt.charAt(c));
-	    c = (data[i] << 4) & 0x3f;
-	    if (++i < len)
-		c |= (data[i] >> 4) & 0x0f;
+        int c;
+        int len = data.length;
+        StringBuffer ret = new StringBuffer(((len / 3) + 1) * 4);
+        for (int i = 0; i < len; ++i) {
+            c = (data[i] >> 2) & 0x3f;
+            ret.append(cvt.charAt(c));
+            c = (data[i] << 4) & 0x3f;
+            if (++i < len) {
+                c |= (data[i] >> 4) & 0x0f;
+            }
 
-	    ret.append(cvt.charAt(c));
-	    if (i < len) {
-		c = (data[i] << 2) & 0x3f;
-		if (++i < len)
-		    c |= (data[i] >> 6) & 0x03;
+            ret.append(cvt.charAt(c));
+            if (i < len) {
+                c = (data[i] << 2) & 0x3f;
+                if (++i < len) {
+                    c |= (data[i] >> 6) & 0x03;
+                }
 
-		ret.append(cvt.charAt(c));
-	    } else {
-		++i;
-		ret.append((char) fillchar);
-	    }
+                ret.append(cvt.charAt(c));
+            } else {
+                ++i;
+                ret.append((char) fillchar);
+            }
 
-	    if (i < len) {
-		c = data[i] & 0x3f;
-		ret.append(cvt.charAt(c));
-	    } else {
-		ret.append((char) fillchar);
-	    }
-	}
-	return ret.toString();
+            if (i < len) {
+                c = data[i] & 0x3f;
+                ret.append(cvt.charAt(c));
+            } else {
+                ret.append((char) fillchar);
+            }
+        }
+        return ret.toString();
     }
 
     /**
      * Decodes a base64 String.
-     * 
-     * @param data
-     *            a base64 encoded String to decode.
+     *
+     * @param data a base64 encoded String to decode.
      * @return the decoded String.
      */
-
     public static String decodeBase64(String data) {
-	byte[] bytes = null;
-	try {
-	    bytes = data.getBytes("ISO-8859-1");
-	} catch (UnsupportedEncodingException uee) {
-	    // Nothing to do
-	}
-	return decodeBase64(bytes);
+        byte[] bytes = null;
+        try {
+            bytes = data.getBytes("ISO-8859-1");
+        } catch (UnsupportedEncodingException uee) {
+            // Nothing to do
+        }
+        return decodeBase64(bytes);
     }
 
     /**
      * Decodes a base64 aray of bytes.
-     * 
-     * @param data
-     *            a base64 encode byte array to decode.
+     *
+     * @param data a base64 encode byte array to decode.
      * @return the decoded String.
      */
     public static String decodeBase64(byte[] data) {
-	int c, c1;
-	int len = data.length;
-	StringBuffer ret = new StringBuffer((len * 3) / 4);
-	for (int i = 0; i < len; ++i) {
-	    c = cvt.indexOf(data[i]);
-	    ++i;
-	    c1 = cvt.indexOf(data[i]);
-	    c = ((c << 2) | ((c1 >> 4) & 0x3));
-	    ret.append((char) c);
-	    if (++i < len) {
-		c = data[i];
-		if (fillchar == c)
-		    break;
+        int c, c1;
+        int len = data.length;
+        StringBuffer ret = new StringBuffer((len * 3) / 4);
+        for (int i = 0; i < len; ++i) {
+            c = cvt.indexOf(data[i]);
+            ++i;
+            c1 = cvt.indexOf(data[i]);
+            c = ((c << 2) | ((c1 >> 4) & 0x3));
+            ret.append((char) c);
+            if (++i < len) {
+                c = data[i];
+                if (fillchar == c) {
+                    break;
+                }
 
-		c = cvt.indexOf(c);
-		c1 = ((c1 << 4) & 0xf0) | ((c >> 2) & 0xf);
-		ret.append((char) c1);
-	    }
+                c = cvt.indexOf(c);
+                c1 = ((c1 << 4) & 0xf0) | ((c >> 2) & 0xf);
+                ret.append((char) c1);
+            }
 
-	    if (++i < len) {
-		c1 = data[i];
-		if (fillchar == c1)
-		    break;
+            if (++i < len) {
+                c1 = data[i];
+                if (fillchar == c1) {
+                    break;
+                }
 
-		c1 = cvt.indexOf(c1);
-		c = ((c << 6) & 0xc0) | c1;
-		ret.append((char) c);
-	    }
-	}
-	return ret.toString();
+                c1 = cvt.indexOf(c1);
+                c = ((c << 6) & 0xc0) | c1;
+                ret.append((char) c);
+            }
+        }
+        return ret.toString();
     }
 
     /**
@@ -774,117 +745,113 @@ public class StringUtils {
     private static final BitSet allowed_query = new BitSet(256);
 
     static {
-	for (int i = '0'; i <= '9'; i++) {
-	    allowed_query.set(i);
-	}
+        for (int i = '0'; i <= '9'; i++) {
+            allowed_query.set(i);
+        }
 
-	for (int i = 'a'; i <= 'z'; i++) {
-	    allowed_query.set(i);
-	}
+        for (int i = 'a'; i <= 'z'; i++) {
+            allowed_query.set(i);
+        }
 
-	for (int i = 'A'; i <= 'Z'; i++) {
-	    allowed_query.set(i);
-	}
+        for (int i = 'A'; i <= 'Z'; i++) {
+            allowed_query.set(i);
+        }
 
-	allowed_query.set('-');
-	allowed_query.set('_');
-	allowed_query.set('.');
-	allowed_query.set('!');
-	allowed_query.set('~');
-	allowed_query.set('*');
-	allowed_query.set('\'');
-	allowed_query.set('(');
-	allowed_query.set(')');
+        allowed_query.set('-');
+        allowed_query.set('_');
+        allowed_query.set('.');
+        allowed_query.set('!');
+        allowed_query.set('~');
+        allowed_query.set('*');
+        allowed_query.set('\'');
+        allowed_query.set('(');
+        allowed_query.set(')');
     }
 
     /**
      * Encodes URI string. This is a replacement for the
      * java.net.URLEncode#encode(String, String) class which is broken under JDK
      * 1.3.
-     * 
-     * @param original
-     *            the original character sequence
-     * @param charset
-     *            the protocol charset
+     *
+     * @param original the original character sequence
+     * @param charset the protocol charset
      * @return URI character sequence
-     * @throws UnsupportedEncodingException
-     *             unsupported character encoding
+     * @throws UnsupportedEncodingException unsupported character encoding
      */
     public static String URLEncode(String original, String charset)
-	    throws UnsupportedEncodingException {
-	// encode original to uri characters.
-	if (original == null) {
-	    return null;
-	}
-	// escape octet to uri characters.
-	byte[] octets;
+            throws UnsupportedEncodingException {
+        // encode original to uri characters.
+        if (original == null) {
+            return null;
+        }
+        // escape octet to uri characters.
+        byte[] octets;
 
-	try {
-	    octets = original.getBytes(charset);
-	} catch (UnsupportedEncodingException error) {
-	    throw new UnsupportedEncodingException();
-	}
+        try {
+            octets = original.getBytes(charset);
+        } catch (UnsupportedEncodingException error) {
+            throw new UnsupportedEncodingException();
+        }
 
-	StringBuffer buf = new StringBuffer(octets.length);
-	for (byte octet : octets) {
-	    char c = (char) octet;
-	    if (allowed_query.get(c)) {
-		buf.append(c);
-	    } else {
-		buf.append('%');
-		char hexadecimal = Character.forDigit((octet >> 4) & 0xF, 16);
-		buf.append(Character.toUpperCase(hexadecimal)); // high
-		hexadecimal = Character.forDigit(octet & 0xF, 16);
-		buf.append(Character.toUpperCase(hexadecimal)); // low
-	    }
-	}
+        StringBuffer buf = new StringBuffer(octets.length);
+        for (byte octet : octets) {
+            char c = (char) octet;
+            if (allowed_query.get(c)) {
+                buf.append(c);
+            } else {
+                buf.append('%');
+                char hexadecimal = Character.forDigit((octet >> 4) & 0xF, 16);
+                buf.append(Character.toUpperCase(hexadecimal)); // high
+                hexadecimal = Character.forDigit(octet & 0xF, 16);
+                buf.append(Character.toUpperCase(hexadecimal)); // low
+            }
+        }
 
-	return buf.toString();
+        return buf.toString();
     }
 
     private static final int fillchar = '=';
     private static final String cvt = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	    + "abcdefghijklmnopqrstuvwxyz" + "0123456789+/";
+            + "abcdefghijklmnopqrstuvwxyz" + "0123456789+/";
 
     /**
      * Converts a line of text into an array of lower case words using a
      * {@link BreakIterator}.wordInstance().
      * <p/>
      * This method is under the Jive Open Source Software License
-     * 
+     *
      * @author Mark Imbriaco.
-     * 
-     * @param text
-     *            a String of text to convert into an array of words
+     *
+     * @param text a String of text to convert into an array of words
      * @return text broken up into an array of words.
      */
     public static String[] toLowerCaseWordArray(String text) {
-	if (text == null || text.length() == 0) {
-	    return new String[0];
-	}
+        if (text == null || text.length() == 0) {
+            return new String[0];
+        }
 
-	ArrayList<String> wordList = new ArrayList<String>();
-	BreakIterator boundary = BreakIterator.getWordInstance();
-	boundary.setText(text);
-	int start = 0;
+        ArrayList<String> wordList = new ArrayList<String>();
+        BreakIterator boundary = BreakIterator.getWordInstance();
+        boundary.setText(text);
+        int start = 0;
 
-	for (int end = boundary.next(); end != BreakIterator.DONE; start = end, end = boundary
-		.next()) {
-	    String tmp = text.substring(start, end).trim();
-	    // Remove characters that are not needed.
-	    tmp = replace(tmp, "+", "");
-	    tmp = replace(tmp, "/", "");
-	    tmp = replace(tmp, "\\", "");
-	    tmp = replace(tmp, "#", "");
-	    tmp = replace(tmp, "*", "");
-	    tmp = replace(tmp, ")", "");
-	    tmp = replace(tmp, "(", "");
-	    tmp = replace(tmp, "&", "");
-	    if (tmp.length() > 0) {
-		wordList.add(tmp);
-	    }
-	}
-	return wordList.toArray(new String[wordList.size()]);
+        for (int end = boundary.next(); end != BreakIterator.DONE; start = end, end = boundary
+                .next()) {
+            String tmp = text.substring(start, end).trim();
+            // Remove characters that are not needed.
+            tmp = replace(tmp, "+", "");
+            tmp = replace(tmp, "/", "");
+            tmp = replace(tmp, "\\", "");
+            tmp = replace(tmp, "#", "");
+            tmp = replace(tmp, "*", "");
+            tmp = replace(tmp, ")", "");
+            tmp = replace(tmp, "(", "");
+            tmp = replace(tmp, "&", "");
+            if (tmp.length() > 0) {
+                wordList.add(tmp);
+            }
+        }
+        return wordList.toArray(new String[wordList.size()]);
     }
 
     /**
@@ -901,7 +868,7 @@ public class StringUtils {
      * array index.
      */
     private static char[] numbersAndLetters = ("0123456789abcdefghijklmnopqrstuvwxyz"
-	    + "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ").toCharArray();
+            + "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ").toCharArray();
 
     /**
      * Returns a random String of numbers and letters (lower and upper case) of
@@ -914,21 +881,20 @@ public class StringUtils {
      * <p/>
      * The specified length must be at least one. If not, the method will return
      * <code>null</code>.
-     * 
-     * @param length
-     *            the desired length of the random String to return.
+     *
+     * @param length the desired length of the random String to return.
      * @return a random String of numbers and letters of the specified length.
      */
     public static String randomString(int length) {
-	if (length < 1) {
-	    return null;
-	}
-	// Create a char buffer to put random letters and numbers in.
-	char[] randBuffer = new char[length];
-	for (int i = 0; i < randBuffer.length; i++) {
-	    randBuffer[i] = numbersAndLetters[randGen.nextInt(71)];
-	}
-	return new String(randBuffer);
+        if (length < 1) {
+            return null;
+        }
+        // Create a char buffer to put random letters and numbers in.
+        char[] randBuffer = new char[length];
+        for (int i = 0; i < randBuffer.length; i++) {
+            randBuffer[i] = numbersAndLetters[randGen.nextInt(71)];
+        }
+        return new String(randBuffer);
     }
 
     /**
@@ -943,100 +909,93 @@ public class StringUtils {
      * <p/>
      * "This is a" which is the first word boundary less than or equal to 10
      * characters into the original String.
-     * 
-     * @param string
-     *            the String to chop.
-     * @param length
-     *            the index in <code>string</code> to start looking for a
-     *            <p/>
-     *            whitespace boundary at.
-     * @param minLength
-     *            the minimum length the word should be chopped at. This is
-     *            helpful
-     *            <p/>
-     *            for words with no natural boundaries, ie:
-     *            "thisisareallylonglonglongword".
-     *            <p/>
-     *            This must be smaller than length and can be -1 if no minLength
-     *            is wanted
+     *
+     * @param string the String to chop.
+     * @param length the index in <code>string</code> to start looking for a
+     * <p/>
+     * whitespace boundary at.
+     * @param minLength the minimum length the word should be chopped at. This
+     * is helpful
+     * <p/>
+     * for words with no natural boundaries, ie:
+     * "thisisareallylonglonglongword".
+     * <p/>
+     * This must be smaller than length and can be -1 if no minLength is wanted
      * @return a substring of <code>string</code> whose length is less than or
-     *         <p/>
-     *         equal to <code>length</code>, and that is chopped at whitespace.
+     * <p/>
+     * equal to <code>length</code>, and that is chopped at whitespace.
      */
     public static String chopAtWord(String string, int length, int minLength) {
-	// guard clauses
-	if (length < 2) {
-	    throw new IllegalArgumentException("Length specified (" + length
-		    + ") must be > 2");
-	} else if (minLength >= length) {
-	    throw new IllegalArgumentException(
-		    "minLength must be smaller than length");
-	}
+        // guard clauses
+        if (length < 2) {
+            throw new IllegalArgumentException("Length specified (" + length
+                    + ") must be > 2");
+        } else if (minLength >= length) {
+            throw new IllegalArgumentException(
+                    "minLength must be smaller than length");
+        }
 
-	int sLength = (string == null) ? -1 : string.length();
-	// shortcircuit clauses
-	if (sLength < 1) {
-	    return string;
-	}
-	// minLength specified, string is smaller than the minLength, return the
-	// string
-	else if (minLength != -1 && sLength < minLength) {
-	    return string;
-	}
-	// no minLength specified, string is smaller than length
-	else if (minLength == -1 && sLength < length) {
-	    return string;
-	}
+        int sLength = (string == null) ? -1 : string.length();
+        // shortcircuit clauses
+        if (sLength < 1) {
+            return string;
+        } // minLength specified, string is smaller than the minLength, return the
+        // string
+        else if (minLength != -1 && sLength < minLength) {
+            return string;
+        } // no minLength specified, string is smaller than length
+        else if (minLength == -1 && sLength < length) {
+            return string;
+        }
 
-	if (string == null)
-	    return null;
-	char[] charArray = string.toCharArray();
-	// String is longer than the length specified, attempt to find a newline
-	// or a space
-	if (sLength > length) {
-	    sLength = length;
-	    // First check if there is a newline character before length; if so,
-	    // chop word there.
-	    for (int i = 0; i < sLength - 1; i++) {
-		// Windows
-		if (charArray[i] == '\r' && charArray[i + 1] == '\n') {
-		    return string.substring(0, i + 1);
-		}
-		// Unix
-		else if (charArray[i] == '\n') {
-		    return string.substring(0, i);
-		}
-	    }
-	    // Also check boundary case of Unix newline
-	    if (charArray[sLength - 1] == '\n') {
-		return string.substring(0, sLength - 1);
-	    }
-	    // No newline, so chop at the first whitespace.
-	    for (int i = sLength - 1; i > 0; i--) {
-		if (charArray[i] == ' ') {
-		    return string.substring(0, i).trim();
-		}
-	    }
-	}
-	// String is shorter than length but longer than minLength,
-	// make sure there is a space in the string before minLength
-	else if (minLength != -1 && sLength > minLength) {
-	    for (int i = 0; i < minLength; i++) {
-		if (charArray[i] == ' ') {
-		    return string;
-		}
-	    }
-	}
-	// Did not find a word boundary, so return a string at the min length,
-	// if a min
-	// length was specified:
-	if (minLength > -1 && minLength <= string.length()) {
-	    return string.substring(0, minLength);
-	}
-	// Did not find word boundary or min length so return original String
-	// chopped at
-	// specified length.
-	return string.substring(0, length);
+        if (string == null) {
+            return null;
+        }
+        char[] charArray = string.toCharArray();
+        // String is longer than the length specified, attempt to find a newline
+        // or a space
+        if (sLength > length) {
+            sLength = length;
+            // First check if there is a newline character before length; if so,
+            // chop word there.
+            for (int i = 0; i < sLength - 1; i++) {
+                // Windows
+                if (charArray[i] == '\r' && charArray[i + 1] == '\n') {
+                    return string.substring(0, i + 1);
+                } // Unix
+                else if (charArray[i] == '\n') {
+                    return string.substring(0, i);
+                }
+            }
+            // Also check boundary case of Unix newline
+            if (charArray[sLength - 1] == '\n') {
+                return string.substring(0, sLength - 1);
+            }
+            // No newline, so chop at the first whitespace.
+            for (int i = sLength - 1; i > 0; i--) {
+                if (charArray[i] == ' ') {
+                    return string.substring(0, i).trim();
+                }
+            }
+        } // String is shorter than length but longer than minLength,
+        // make sure there is a space in the string before minLength
+        else if (minLength != -1 && sLength > minLength) {
+            for (int i = 0; i < minLength; i++) {
+                if (charArray[i] == ' ') {
+                    return string;
+                }
+            }
+        }
+        // Did not find a word boundary, so return a string at the min length,
+        // if a min
+        // length was specified:
+        if (minLength > -1 && minLength <= string.length()) {
+            return string.substring(0, minLength);
+        }
+        // Did not find word boundary or min length so return original String
+        // chopped at
+        // specified length.
+        return string.substring(0, length);
     }
 
     /**
@@ -1058,19 +1017,17 @@ public class StringUtils {
      * "This is a" which is the first word boundary less than or equal to 10
      * <p/>
      * characters into the original String.
-     * 
-     * @param string
-     *            the String to chop.
-     * @param length
-     *            the index in <code>string</code> to start looking for a
-     *            <p/>
-     *            whitespace boundary at.
+     *
+     * @param string the String to chop.
+     * @param length the index in <code>string</code> to start looking for a
+     * <p/>
+     * whitespace boundary at.
      * @return a substring of <code>string</code> whose length is less than or
-     *         <p/>
-     *         equal to <code>length</code>, and that is chopped at whitespace.
+     * <p/>
+     * equal to <code>length</code>, and that is chopped at whitespace.
      */
     public static String chopAtWord(String string, int length) {
-	return chopAtWord(string, length, -1);
+        return chopAtWord(string, length, -1);
     }
 
     /**
@@ -1095,54 +1052,51 @@ public class StringUtils {
      * <p/>
      * <p/>
      * Note: The wordList passed in should be lowercase.
-     * 
-     * @param input
-     *            The string to parse.
-     * @param wordList
-     *            The words to look for - the first one found in the string is
-     *            used.
-     * @param numChars
-     *            The number of characters on either side to include in the
-     *            chop.
+     *
+     * @param input The string to parse.
+     * @param wordList The words to look for - the first one found in the string
+     * is used.
+     * @param numChars The number of characters on either side to include in the
+     * chop.
      * @return a substring of the given string matching the criteria, otherwise
-     *         "".
+     * "".
      */
     public static String chopAtWordsAround(String input, String[] wordList,
-	    int numChars) {
-	if (input == null || "".equals(input.trim()) || wordList == null
-		|| wordList.length == 0 || numChars == 0) {
-	    return "";
-	}
-	String lc = input.toLowerCase();
-	for (String aWordList : wordList) {
-	    int pos = lc.indexOf(aWordList);
-	    if (pos > -1) {
-		int beginIdx = pos - numChars;
-		if (beginIdx < 0) {
-		    beginIdx = 0;
-		}
+            int numChars) {
+        if (input == null || "".equals(input.trim()) || wordList == null
+                || wordList.length == 0 || numChars == 0) {
+            return "";
+        }
+        String lc = input.toLowerCase();
+        for (String aWordList : wordList) {
+            int pos = lc.indexOf(aWordList);
+            if (pos > -1) {
+                int beginIdx = pos - numChars;
+                if (beginIdx < 0) {
+                    beginIdx = 0;
+                }
 
-		int endIdx = pos + numChars;
+                int endIdx = pos + numChars;
 
-		if (endIdx > input.length() - 1) {
-		    endIdx = input.length() - 1;
-		}
+                if (endIdx > input.length() - 1) {
+                    endIdx = input.length() - 1;
+                }
 
-		char[] chars = input.toCharArray();
+                char[] chars = input.toCharArray();
 
-		while (beginIdx > 0 && chars[beginIdx] != ' '
-			&& chars[beginIdx] != '\n' && chars[beginIdx] != '\r') {
-		    beginIdx--;
-		}
-		while (endIdx < input.length() && chars[endIdx] != ' '
-			&& chars[endIdx] != '\n' && chars[endIdx] != '\r') {
-		    endIdx++;
-		}
-		return input.substring(beginIdx, endIdx);
-	    }
-	}
-	return input.substring(0,
-		(input.length() >= 200) ? 200 : input.length());
+                while (beginIdx > 0 && chars[beginIdx] != ' '
+                        && chars[beginIdx] != '\n' && chars[beginIdx] != '\r') {
+                    beginIdx--;
+                }
+                while (endIdx < input.length() && chars[endIdx] != ' '
+                        && chars[endIdx] != '\n' && chars[endIdx] != '\r') {
+                    endIdx++;
+                }
+                return input.substring(beginIdx, endIdx);
+            }
+        }
+        return input.substring(0,
+                (input.length() >= 200) ? 200 : input.length());
     }
 
     /**
@@ -1159,73 +1113,69 @@ public class StringUtils {
      * Please note that this method can be lossy - trailing spaces on wrapped
      * <p/>
      * lines may be trimmed.
-     * 
-     * @param input
-     *            the String to reformat.
-     * @param width
-     *            the maximum length of any one line.
-     * @param locale
-     *            of the string to be wrapped.
+     *
+     * @param input the String to reformat.
+     * @param width the maximum length of any one line.
+     * @param locale of the string to be wrapped.
      * @return a new String with reformatted as needed.
      */
     public static String wordWrap(String input, int width, Locale locale) {
-	// protect ourselves
-	if (input == null) {
-	    return "";
-	} else if (width < 5) {
-	    return input;
-	} else if (width >= input.length()) {
-	    return input;
-	}
+        // protect ourselves
+        if (input == null) {
+            return "";
+        } else if (width < 5) {
+            return input;
+        } else if (width >= input.length()) {
+            return input;
+        }
 
-	StringBuffer buf = new StringBuffer(input);
-	boolean endOfLine = false;
-	int lineStart = 0;
+        StringBuffer buf = new StringBuffer(input);
+        boolean endOfLine = false;
+        int lineStart = 0;
 
-	for (int i = 0; i < buf.length(); i++) {
-	    if (buf.charAt(i) == '\n') {
-		lineStart = i + 1;
-		endOfLine = true;
-	    }
-	    // handle splitting at width character
-	    if (i > lineStart + width - 1) {
-		if (!endOfLine) {
-		    int limit = i - lineStart - 1;
-		    BreakIterator breaks = BreakIterator
-			    .getLineInstance(locale);
-		    breaks.setText(buf.substring(lineStart, i));
-		    int end = breaks.last();
-		    // if the last character in the search string isn't a space,
-		    // we can't split on it (looks bad). Search for a previous
-		    // break character
-		    if (end == limit + 1) {
-			if (!Character
-				.isWhitespace(buf.charAt(lineStart + end))) {
-			    end = breaks.preceding(end - 1);
-			}
-		    }
-		    // if the last character is a space, replace it with a \n
-		    if (end != BreakIterator.DONE && end == limit + 1) {
-			buf.replace(lineStart + end, lineStart + end + 1, "\n");
-			lineStart = lineStart + end;
-		    }
-		    // otherwise, just insert a \n
-		    else if (end != BreakIterator.DONE && end != 0) {
-			buf.insert(lineStart + end, '\n');
-			lineStart = lineStart + end + 1;
-		    } else {
-			buf.insert(i, '\n');
-			lineStart = i + 1;
-		    }
-		} else {
-		    buf.insert(i, '\n');
-		    lineStart = i + 1;
-		    endOfLine = false;
-		}
-	    }
-	}
+        for (int i = 0; i < buf.length(); i++) {
+            if (buf.charAt(i) == '\n') {
+                lineStart = i + 1;
+                endOfLine = true;
+            }
+            // handle splitting at width character
+            if (i > lineStart + width - 1) {
+                if (!endOfLine) {
+                    int limit = i - lineStart - 1;
+                    BreakIterator breaks = BreakIterator
+                            .getLineInstance(locale);
+                    breaks.setText(buf.substring(lineStart, i));
+                    int end = breaks.last();
+                    // if the last character in the search string isn't a space,
+                    // we can't split on it (looks bad). Search for a previous
+                    // break character
+                    if (end == limit + 1) {
+                        if (!Character
+                                .isWhitespace(buf.charAt(lineStart + end))) {
+                            end = breaks.preceding(end - 1);
+                        }
+                    }
+                    // if the last character is a space, replace it with a \n
+                    if (end != BreakIterator.DONE && end == limit + 1) {
+                        buf.replace(lineStart + end, lineStart + end + 1, "\n");
+                        lineStart = lineStart + end;
+                    } // otherwise, just insert a \n
+                    else if (end != BreakIterator.DONE && end != 0) {
+                        buf.insert(lineStart + end, '\n');
+                        lineStart = lineStart + end + 1;
+                    } else {
+                        buf.insert(i, '\n');
+                        lineStart = i + 1;
+                    }
+                } else {
+                    buf.insert(i, '\n');
+                    lineStart = i + 1;
+                    endOfLine = false;
+                }
+            }
+        }
 
-	return buf.toString();
+        return buf.toString();
     }
 
     /**
@@ -1234,123 +1184,118 @@ public class StringUtils {
      * Those might be beginning and ending HTML bold tags, or anything else.
      * This method is under the Jive Open Source Software License and was
      * written by Mark Imbriaco.
-     * 
-     * @param string
-     *            the String to highlight words in.
-     * @param words
-     *            an array of words that should be highlighted in the string.
-     * @param startHighlight
-     *            the tag that should be inserted to start highlighting.
-     * @param endHighlight
-     *            the tag that should be inserted to end highlighting.
+     *
+     * @param string the String to highlight words in.
+     * @param words an array of words that should be highlighted in the string.
+     * @param startHighlight the tag that should be inserted to start
+     * highlighting.
+     * @param endHighlight the tag that should be inserted to end highlighting.
      * @return a new String with the specified words highlighted.
      */
     public static String highlightWords(String string, String[] words,
-	    String startHighlight, String endHighlight) {
-	if (string == null || words == null || startHighlight == null
-		|| endHighlight == null) {
-	    return null;
-	}
+            String startHighlight, String endHighlight) {
+        if (string == null || words == null || startHighlight == null
+                || endHighlight == null) {
+            return null;
+        }
 
-	StringBuffer regexp = new StringBuffer();
-	regexp.append("(?i)\\b(");
-	// Iterate through each word and generate a word list for the regexp.
-	for (int x = 0; x < words.length; x++) {
-	    // Escape "$", "|", ".", "/", and "?" to keep us out of trouble in
-	    // our regexp.
-	    words[x] = words[x].replaceAll("([\\$\\?\\|\\/\\.])", "\\\\$1");
-	    regexp.append(words[x]);
+        StringBuffer regexp = new StringBuffer();
+        regexp.append("(?i)\\b(");
+        // Iterate through each word and generate a word list for the regexp.
+        for (int x = 0; x < words.length; x++) {
+            // Escape "$", "|", ".", "/", and "?" to keep us out of trouble in
+            // our regexp.
+            words[x] = words[x].replaceAll("([\\$\\?\\|\\/\\.])", "\\\\$1");
+            regexp.append(words[x]);
 
-	    if (x != words.length - 1) {
-		regexp.append("|");
-	    }
-	}
-	regexp.append(")");
+            if (x != words.length - 1) {
+                regexp.append("|");
+            }
+        }
+        regexp.append(")");
 
-	return string.replaceAll(regexp.toString(), startHighlight + "$1"
-		+ endHighlight);
+        return string.replaceAll(regexp.toString(), startHighlight + "$1"
+                + endHighlight);
     }
 
     /**
      * Escapes all necessary characters in the String so that it can be used
      * <p/>
      * in an XML doc.
-     * 
-     * @param string
-     *            the string to escape.
+     *
+     * @param string the string to escape.
      * @return the string with appropriate characters escaped.
      */
     public static String escapeForXML(String string) {
-	if (string == null) {
-	    return null;
-	}
-	char ch;
-	int i = 0;
-	int last = 0;
-	char[] input = string.toCharArray();
-	int len = input.length;
-	StringBuffer out = new StringBuffer((int) (len * 1.3));
-	for (; i < len; i++) {
-	    ch = input[i];
+        if (string == null) {
+            return null;
+        }
+        char ch;
+        int i = 0;
+        int last = 0;
+        char[] input = string.toCharArray();
+        int len = input.length;
+        StringBuffer out = new StringBuffer((int) (len * 1.3));
+        for (; i < len; i++) {
+            ch = input[i];
 
-	    if (ch > '>') {
-		// Nothing to do
-	    } else if (ch == '<') {
-		if (i > last) {
-		    out.append(input, last, i - last);
-		}
-		last = i + 1;
-		out.append(LT_ENCODE);
-	    } else if (ch == '&') {
-		if (i > last) {
-		    out.append(input, last, i - last);
-		}
-		last = i + 1;
-		out.append(AMP_ENCODE);
-	    } else if (ch == '"') {
-		if (i > last) {
-		    out.append(input, last, i - last);
-		}
-		last = i + 1;
-		out.append(QUOTE_ENCODE);
-	    } else if (ch == 10 || ch == 13 || ch == 9) {
-		// Nothing to do
-	    } else if (ch < 32) {
-		// Disallow all ASCII control characters, except space,
-		// enter characters and tabs:
-		if (i > last) {
-		    out.append(input, last, i - last);
-		}
-		last = i + 1;
-	    }
-	}
-	if (last == 0) {
-	    return string;
-	}
-	if (i > last) {
-	    out.append(input, last, i - last);
-	}
-	return out.toString();
+            if (ch > '>') {
+                // Nothing to do
+            } else if (ch == '<') {
+                if (i > last) {
+                    out.append(input, last, i - last);
+                }
+                last = i + 1;
+                out.append(LT_ENCODE);
+            } else if (ch == '&') {
+                if (i > last) {
+                    out.append(input, last, i - last);
+                }
+                last = i + 1;
+                out.append(AMP_ENCODE);
+            } else if (ch == '"') {
+                if (i > last) {
+                    out.append(input, last, i - last);
+                }
+                last = i + 1;
+                out.append(QUOTE_ENCODE);
+            } else if (ch == 10 || ch == 13 || ch == 9) {
+                // Nothing to do
+            } else if (ch < 32) {
+                // Disallow all ASCII control characters, except space,
+                // enter characters and tabs:
+                if (i > last) {
+                    out.append(input, last, i - last);
+                }
+                last = i + 1;
+            }
+        }
+        if (last == 0) {
+            return string;
+        }
+        if (i > last) {
+            out.append(input, last, i - last);
+        }
+        return out.toString();
     }
 
     /**
      * Unescapes the String by converting XML escape sequences back into normal
      * <p/>
      * characters.
-     * 
-     * @param string
-     *            the string to unescape.
+     *
+     * @param string the string to unescape.
      * @return the string with appropriate characters unescaped.
      */
     public static String unescapeFromXML(String string) {
-	string = replace(string, "&lt;", "<");
-	string = replace(string, "&gt;", ">");
-	string = replace(string, "&quot;", "\"");
-	return replace(string, "&amp;", "&");
+        string = replace(string, "&lt;", "<");
+        string = replace(string, "&gt;", ">");
+        string = replace(string, "&quot;", "\"");
+        return replace(string, "&amp;", "&");
     }
 
     private static final char[] zeroArray = "0000000000000000000000000000000000000000000000000000000000000000"
-	    .toCharArray();
+            .toCharArray();
 
     /**
      * Pads the supplied String with 0's to the specified length and returns
@@ -1366,20 +1311,18 @@ public class StringUtils {
      * implementation of this method allows for a maximum <tt>length</tt> of
      * <p/>
      * 64.
-     * 
-     * @param string
-     *            the original String to pad.
-     * @param length
-     *            the desired length of the new padded String.
+     *
+     * @param string the original String to pad.
+     * @param length the desired length of the new padded String.
      * @return a new String padded with the required number of 0's.
      */
     public static String zeroPadString(String string, int length) {
-	if (string == null || string.length() > length) {
-	    return string;
-	}
-	StringBuffer buf = new StringBuffer(length);
-	buf.append(zeroArray, 0, length - string.length()).append(string);
-	return buf.toString();
+        if (string == null || string.length() > length) {
+            return string;
+        }
+        StringBuffer buf = new StringBuffer(length);
+        buf.append(zeroArray, 0, length - string.length()).append(string);
+        return buf.toString();
     }
 
     /**
@@ -1391,13 +1334,12 @@ public class StringUtils {
      * <p/>
      * made up of the Date's padded millisecond value, or will simply be the
      * Date's millesecond value.
-     * 
-     * @param date
-     *            Date to convert to milliseconds.
+     *
+     * @param date Date to convert to milliseconds.
      * @return a Date encoded as a String.
      */
     public static String dateToMillis(Date date) {
-	return Long.toString(date.getTime());
+        return Long.toString(date.getTime());
     }
 
     /**
@@ -1405,67 +1347,66 @@ public class StringUtils {
      * about everything
      * <p/>
      * that is in common use.
-     * 
-     * @param addr
-     *            the email address to validate
+     *
+     * @param addr the email address to validate
      * @return true if the address is valid, false otherwise
      */
     public static boolean isValidEmailAddress(String addr) {
-	if (addr == null) {
-	    return false;
-	}
+        if (addr == null) {
+            return false;
+        }
 
-	addr = addr.trim();
+        addr = addr.trim();
 
-	if (addr.length() == 0) {
-	    return false;
-	}
-	// basic address check
-	Matcher matcher = basicAddressPattern.matcher(addr);
-	if (!matcher.matches()) {
-	    return false;
-	}
-	String userPart = matcher.group(1);
-	String domainPart = matcher.group(2);
-	// user address check
-	matcher = validUserPattern.matcher(userPart);
-	if (!matcher.matches()) {
-	    return false;
-	}
-	// ip domain check
-	matcher = ipDomainPattern.matcher(domainPart);
-	if (matcher.matches()) {
-	    // if the pattern matched, check to make sure that the ip range is
-	    // valid
-	    for (int i = 1; i < 5; i++) {
-		String num = matcher.group(i);
+        if (addr.length() == 0) {
+            return false;
+        }
+        // basic address check
+        Matcher matcher = basicAddressPattern.matcher(addr);
+        if (!matcher.matches()) {
+            return false;
+        }
+        String userPart = matcher.group(1);
+        String domainPart = matcher.group(2);
+        // user address check
+        matcher = validUserPattern.matcher(userPart);
+        if (!matcher.matches()) {
+            return false;
+        }
+        // ip domain check
+        matcher = ipDomainPattern.matcher(domainPart);
+        if (matcher.matches()) {
+            // if the pattern matched, check to make sure that the ip range is
+            // valid
+            for (int i = 1; i < 5; i++) {
+                String num = matcher.group(i);
 
-		if (num == null) {
-		    return false;
-		}
+                if (num == null) {
+                    return false;
+                }
 
-		if (Integer.parseInt(num) > 254) {
-		    return false;
-		}
-	    }
-	    return true;
-	}
-	// symbolic domain check
-	matcher = domainPattern.matcher(domainPart);
-	if (matcher.matches()) {
-	    String tld = matcher.group(matcher.groupCount());
-	    // Permit top-level-domains of 3 (includes dot separator) because
-	    // these could be
-	    // country codes which we are not going to check for.
-	    matcher = tldPattern.matcher(tld);
-	    if (tld.length() != 3 && !matcher.matches()) {
-		return false;
-	    }
-	} else {
-	    return false;
-	}
-	// all tests passed
-	return true;
+                if (Integer.parseInt(num) > 254) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        // symbolic domain check
+        matcher = domainPattern.matcher(domainPart);
+        if (matcher.matches()) {
+            String tld = matcher.group(matcher.groupCount());
+            // Permit top-level-domains of 3 (includes dot separator) because
+            // these could be
+            // country codes which we are not going to check for.
+            matcher = tldPattern.matcher(tld);
+            if (tld.length() != 3 && !matcher.matches()) {
+                return false;
+            }
+        } else {
+            return false;
+        }
+        // all tests passed
+        return true;
     }
 
     // Testing method
@@ -1566,373 +1507,373 @@ public class StringUtils {
      * chopAtWord(test4, length, min); System.err.println("result: " + result);
      * } }
      */
-
     public static String keyStroke2String(KeyStroke key) {
-	StringBuffer s = new StringBuffer(50);
-	int m = key.getModifiers();
+        StringBuffer s = new StringBuffer(50);
+        int m = key.getModifiers();
 
-	if ((m & (InputEvent.SHIFT_DOWN_MASK | InputEvent.SHIFT_MASK)) != 0) {
-	    s.append("shift ");
-	}
-	if ((m & (InputEvent.CTRL_DOWN_MASK | InputEvent.CTRL_MASK)) != 0) {
-	    s.append("ctrl ");
-	}
-	if ((m & (InputEvent.META_DOWN_MASK | InputEvent.META_MASK)) != 0) {
-	    s.append("meta ");
-	}
-	if ((m & (InputEvent.ALT_DOWN_MASK | InputEvent.ALT_MASK)) != 0) {
-	    s.append("alt ");
-	}
-	if ((m & (InputEvent.BUTTON1_DOWN_MASK | InputEvent.BUTTON1_MASK)) != 0) {
-	    s.append("button1 ");
-	}
-	if ((m & (InputEvent.BUTTON2_DOWN_MASK | InputEvent.BUTTON2_MASK)) != 0) {
-	    s.append("button2 ");
-	}
-	if ((m & (InputEvent.BUTTON3_DOWN_MASK | InputEvent.BUTTON3_MASK)) != 0) {
-	    s.append("button3 ");
-	}
+        if ((m & (InputEvent.SHIFT_DOWN_MASK | InputEvent.SHIFT_MASK)) != 0) {
+            s.append("shift ");
+        }
+        if ((m & (InputEvent.CTRL_DOWN_MASK | InputEvent.CTRL_MASK)) != 0) {
+            s.append("ctrl ");
+        }
+        if ((m & (InputEvent.META_DOWN_MASK | InputEvent.META_MASK)) != 0) {
+            s.append("meta ");
+        }
+        if ((m & (InputEvent.ALT_DOWN_MASK | InputEvent.ALT_MASK)) != 0) {
+            s.append("alt ");
+        }
+        if ((m & (InputEvent.BUTTON1_DOWN_MASK | InputEvent.BUTTON1_MASK)) != 0) {
+            s.append("button1 ");
+        }
+        if ((m & (InputEvent.BUTTON2_DOWN_MASK | InputEvent.BUTTON2_MASK)) != 0) {
+            s.append("button2 ");
+        }
+        if ((m & (InputEvent.BUTTON3_DOWN_MASK | InputEvent.BUTTON3_MASK)) != 0) {
+            s.append("button3 ");
+        }
 
-	switch (key.getKeyEventType()) {
-	case KeyEvent.KEY_TYPED:
-	    s.append("typed ");
-	    s.append(key.getKeyChar()).append(" ");
-	    break;
-	case KeyEvent.KEY_PRESSED:
-	    s.append("pressed ");
-	    s.append(getKeyText(key.getKeyCode())).append(" ");
-	    break;
-	case KeyEvent.KEY_RELEASED:
-	    s.append("released ");
-	    s.append(getKeyText(key.getKeyCode())).append(" ");
-	    break;
-	default:
-	    s.append("unknown-event-type ");
-	    break;
-	}
+        switch (key.getKeyEventType()) {
+            case KeyEvent.KEY_TYPED:
+                s.append("typed ");
+                s.append(key.getKeyChar()).append(" ");
+                break;
+            case KeyEvent.KEY_PRESSED:
+                s.append("pressed ");
+                s.append(getKeyText(key.getKeyCode())).append(" ");
+                break;
+            case KeyEvent.KEY_RELEASED:
+                s.append("released ");
+                s.append(getKeyText(key.getKeyCode())).append(" ");
+                break;
+            default:
+                s.append("unknown-event-type ");
+                break;
+        }
 
-	return s.toString();
+        return s.toString();
     }
 
     public static String getKeyText(int keyCode) {
-	if (keyCode >= KeyEvent.VK_0 && keyCode <= KeyEvent.VK_9
-		|| keyCode >= KeyEvent.VK_A && keyCode <= KeyEvent.VK_Z) {
-	    return String.valueOf((char) keyCode);
-	}
+        if (keyCode >= KeyEvent.VK_0 && keyCode <= KeyEvent.VK_9
+                || keyCode >= KeyEvent.VK_A && keyCode <= KeyEvent.VK_Z) {
+            return String.valueOf((char) keyCode);
+        }
 
-	switch (keyCode) {
-	case KeyEvent.VK_COMMA:
-	    return "COMMA";
-	case KeyEvent.VK_PERIOD:
-	    return "PERIOD";
-	case KeyEvent.VK_SLASH:
-	    return "SLASH";
-	case KeyEvent.VK_SEMICOLON:
-	    return "SEMICOLON";
-	case KeyEvent.VK_EQUALS:
-	    return "EQUALS";
-	case KeyEvent.VK_OPEN_BRACKET:
-	    return "OPEN_BRACKET";
-	case KeyEvent.VK_BACK_SLASH:
-	    return "BACK_SLASH";
-	case KeyEvent.VK_CLOSE_BRACKET:
-	    return "CLOSE_BRACKET";
+        switch (keyCode) {
+            case KeyEvent.VK_COMMA:
+                return "COMMA";
+            case KeyEvent.VK_PERIOD:
+                return "PERIOD";
+            case KeyEvent.VK_SLASH:
+                return "SLASH";
+            case KeyEvent.VK_SEMICOLON:
+                return "SEMICOLON";
+            case KeyEvent.VK_EQUALS:
+                return "EQUALS";
+            case KeyEvent.VK_OPEN_BRACKET:
+                return "OPEN_BRACKET";
+            case KeyEvent.VK_BACK_SLASH:
+                return "BACK_SLASH";
+            case KeyEvent.VK_CLOSE_BRACKET:
+                return "CLOSE_BRACKET";
 
-	case KeyEvent.VK_ENTER:
-	    return "ENTER";
-	case KeyEvent.VK_BACK_SPACE:
-	    return "BACK_SPACE";
-	case KeyEvent.VK_TAB:
-	    return "TAB";
-	case KeyEvent.VK_CANCEL:
-	    return "CANCEL";
-	case KeyEvent.VK_CLEAR:
-	    return "CLEAR";
-	case KeyEvent.VK_SHIFT:
-	    return "SHIFT";
-	case KeyEvent.VK_CONTROL:
-	    return "CONTROL";
-	case KeyEvent.VK_ALT:
-	    return "ALT";
-	case KeyEvent.VK_PAUSE:
-	    return "PAUSE";
-	case KeyEvent.VK_CAPS_LOCK:
-	    return "CAPS_LOCK";
-	case KeyEvent.VK_ESCAPE:
-	    return "ESCAPE";
-	case KeyEvent.VK_SPACE:
-	    return "SPACE";
-	case KeyEvent.VK_PAGE_UP:
-	    return "PAGE_UP";
-	case KeyEvent.VK_PAGE_DOWN:
-	    return "PAGE_DOWN";
-	case KeyEvent.VK_END:
-	    return "END";
-	case KeyEvent.VK_HOME:
-	    return "HOME";
-	case KeyEvent.VK_LEFT:
-	    return "LEFT";
-	case KeyEvent.VK_UP:
-	    return "UP";
-	case KeyEvent.VK_RIGHT:
-	    return "RIGHT";
-	case KeyEvent.VK_DOWN:
-	    return "DOWN";
+            case KeyEvent.VK_ENTER:
+                return "ENTER";
+            case KeyEvent.VK_BACK_SPACE:
+                return "BACK_SPACE";
+            case KeyEvent.VK_TAB:
+                return "TAB";
+            case KeyEvent.VK_CANCEL:
+                return "CANCEL";
+            case KeyEvent.VK_CLEAR:
+                return "CLEAR";
+            case KeyEvent.VK_SHIFT:
+                return "SHIFT";
+            case KeyEvent.VK_CONTROL:
+                return "CONTROL";
+            case KeyEvent.VK_ALT:
+                return "ALT";
+            case KeyEvent.VK_PAUSE:
+                return "PAUSE";
+            case KeyEvent.VK_CAPS_LOCK:
+                return "CAPS_LOCK";
+            case KeyEvent.VK_ESCAPE:
+                return "ESCAPE";
+            case KeyEvent.VK_SPACE:
+                return "SPACE";
+            case KeyEvent.VK_PAGE_UP:
+                return "PAGE_UP";
+            case KeyEvent.VK_PAGE_DOWN:
+                return "PAGE_DOWN";
+            case KeyEvent.VK_END:
+                return "END";
+            case KeyEvent.VK_HOME:
+                return "HOME";
+            case KeyEvent.VK_LEFT:
+                return "LEFT";
+            case KeyEvent.VK_UP:
+                return "UP";
+            case KeyEvent.VK_RIGHT:
+                return "RIGHT";
+            case KeyEvent.VK_DOWN:
+                return "DOWN";
 
-	    // numpad numeric keys handled below
-	case KeyEvent.VK_MULTIPLY:
-	    return "MULTIPLY";
-	case KeyEvent.VK_ADD:
-	    return "ADD";
-	case KeyEvent.VK_SEPARATOR:
-	    return "SEPARATOR";
-	case KeyEvent.VK_SUBTRACT:
-	    return "SUBTRACT";
-	case KeyEvent.VK_DECIMAL:
-	    return "DECIMAL";
-	case KeyEvent.VK_DIVIDE:
-	    return "DIVIDE";
-	case KeyEvent.VK_DELETE:
-	    return "DELETE";
-	case KeyEvent.VK_NUM_LOCK:
-	    return "NUM_LOCK";
-	case KeyEvent.VK_SCROLL_LOCK:
-	    return "SCROLL_LOCK";
+            // numpad numeric keys handled below
+            case KeyEvent.VK_MULTIPLY:
+                return "MULTIPLY";
+            case KeyEvent.VK_ADD:
+                return "ADD";
+            case KeyEvent.VK_SEPARATOR:
+                return "SEPARATOR";
+            case KeyEvent.VK_SUBTRACT:
+                return "SUBTRACT";
+            case KeyEvent.VK_DECIMAL:
+                return "DECIMAL";
+            case KeyEvent.VK_DIVIDE:
+                return "DIVIDE";
+            case KeyEvent.VK_DELETE:
+                return "DELETE";
+            case KeyEvent.VK_NUM_LOCK:
+                return "NUM_LOCK";
+            case KeyEvent.VK_SCROLL_LOCK:
+                return "SCROLL_LOCK";
 
-	case KeyEvent.VK_F1:
-	    return "F1";
-	case KeyEvent.VK_F2:
-	    return "F2";
-	case KeyEvent.VK_F3:
-	    return "F3";
-	case KeyEvent.VK_F4:
-	    return "F4";
-	case KeyEvent.VK_F5:
-	    return "F5";
-	case KeyEvent.VK_F6:
-	    return "F6";
-	case KeyEvent.VK_F7:
-	    return "F7";
-	case KeyEvent.VK_F8:
-	    return "F8";
-	case KeyEvent.VK_F9:
-	    return "F9";
-	case KeyEvent.VK_F10:
-	    return "F10";
-	case KeyEvent.VK_F11:
-	    return "F11";
-	case KeyEvent.VK_F12:
-	    return "F12";
-	case KeyEvent.VK_F13:
-	    return "F13";
-	case KeyEvent.VK_F14:
-	    return "F14";
-	case KeyEvent.VK_F15:
-	    return "F15";
-	case KeyEvent.VK_F16:
-	    return "F16";
-	case KeyEvent.VK_F17:
-	    return "F17";
-	case KeyEvent.VK_F18:
-	    return "F18";
-	case KeyEvent.VK_F19:
-	    return "F19";
-	case KeyEvent.VK_F20:
-	    return "F20";
-	case KeyEvent.VK_F21:
-	    return "F21";
-	case KeyEvent.VK_F22:
-	    return "F22";
-	case KeyEvent.VK_F23:
-	    return "F23";
-	case KeyEvent.VK_F24:
-	    return "F24";
+            case KeyEvent.VK_F1:
+                return "F1";
+            case KeyEvent.VK_F2:
+                return "F2";
+            case KeyEvent.VK_F3:
+                return "F3";
+            case KeyEvent.VK_F4:
+                return "F4";
+            case KeyEvent.VK_F5:
+                return "F5";
+            case KeyEvent.VK_F6:
+                return "F6";
+            case KeyEvent.VK_F7:
+                return "F7";
+            case KeyEvent.VK_F8:
+                return "F8";
+            case KeyEvent.VK_F9:
+                return "F9";
+            case KeyEvent.VK_F10:
+                return "F10";
+            case KeyEvent.VK_F11:
+                return "F11";
+            case KeyEvent.VK_F12:
+                return "F12";
+            case KeyEvent.VK_F13:
+                return "F13";
+            case KeyEvent.VK_F14:
+                return "F14";
+            case KeyEvent.VK_F15:
+                return "F15";
+            case KeyEvent.VK_F16:
+                return "F16";
+            case KeyEvent.VK_F17:
+                return "F17";
+            case KeyEvent.VK_F18:
+                return "F18";
+            case KeyEvent.VK_F19:
+                return "F19";
+            case KeyEvent.VK_F20:
+                return "F20";
+            case KeyEvent.VK_F21:
+                return "F21";
+            case KeyEvent.VK_F22:
+                return "F22";
+            case KeyEvent.VK_F23:
+                return "F23";
+            case KeyEvent.VK_F24:
+                return "F24";
 
-	case KeyEvent.VK_PRINTSCREEN:
-	    return "PRINTSCREEN";
-	case KeyEvent.VK_INSERT:
-	    return "INSERT";
-	case KeyEvent.VK_HELP:
-	    return "HELP";
-	case KeyEvent.VK_META:
-	    return "META";
-	case KeyEvent.VK_BACK_QUOTE:
-	    return "BACK_QUOTE";
-	case KeyEvent.VK_QUOTE:
-	    return "QUOTE";
+            case KeyEvent.VK_PRINTSCREEN:
+                return "PRINTSCREEN";
+            case KeyEvent.VK_INSERT:
+                return "INSERT";
+            case KeyEvent.VK_HELP:
+                return "HELP";
+            case KeyEvent.VK_META:
+                return "META";
+            case KeyEvent.VK_BACK_QUOTE:
+                return "BACK_QUOTE";
+            case KeyEvent.VK_QUOTE:
+                return "QUOTE";
 
-	case KeyEvent.VK_KP_UP:
-	    return "KP_UP";
-	case KeyEvent.VK_KP_DOWN:
-	    return "KP_DOWN";
-	case KeyEvent.VK_KP_LEFT:
-	    return "KP_LEFT";
-	case KeyEvent.VK_KP_RIGHT:
-	    return "KP_RIGHT";
+            case KeyEvent.VK_KP_UP:
+                return "KP_UP";
+            case KeyEvent.VK_KP_DOWN:
+                return "KP_DOWN";
+            case KeyEvent.VK_KP_LEFT:
+                return "KP_LEFT";
+            case KeyEvent.VK_KP_RIGHT:
+                return "KP_RIGHT";
 
-	case KeyEvent.VK_DEAD_GRAVE:
-	    return "DEAD_GRAVE";
-	case KeyEvent.VK_DEAD_ACUTE:
-	    return "DEAD_ACUTE";
-	case KeyEvent.VK_DEAD_CIRCUMFLEX:
-	    return "DEAD_CIRCUMFLEX";
-	case KeyEvent.VK_DEAD_TILDE:
-	    return "DEAD_TILDE";
-	case KeyEvent.VK_DEAD_MACRON:
-	    return "DEAD_MACRON";
-	case KeyEvent.VK_DEAD_BREVE:
-	    return "DEAD_BREVE";
-	case KeyEvent.VK_DEAD_ABOVEDOT:
-	    return "DEAD_ABOVEDOT";
-	case KeyEvent.VK_DEAD_DIAERESIS:
-	    return "DEAD_DIAERESIS";
-	case KeyEvent.VK_DEAD_ABOVERING:
-	    return "DEAD_ABOVERING";
-	case KeyEvent.VK_DEAD_DOUBLEACUTE:
-	    return "DEAD_DOUBLEACUTE";
-	case KeyEvent.VK_DEAD_CARON:
-	    return "DEAD_CARON";
-	case KeyEvent.VK_DEAD_CEDILLA:
-	    return "DEAD_CEDILLA";
-	case KeyEvent.VK_DEAD_OGONEK:
-	    return "DEAD_OGONEK";
-	case KeyEvent.VK_DEAD_IOTA:
-	    return "DEAD_IOTA";
-	case KeyEvent.VK_DEAD_VOICED_SOUND:
-	    return "DEAD_VOICED_SOUND";
-	case KeyEvent.VK_DEAD_SEMIVOICED_SOUND:
-	    return "DEAD_SEMIVOICED_SOUND";
+            case KeyEvent.VK_DEAD_GRAVE:
+                return "DEAD_GRAVE";
+            case KeyEvent.VK_DEAD_ACUTE:
+                return "DEAD_ACUTE";
+            case KeyEvent.VK_DEAD_CIRCUMFLEX:
+                return "DEAD_CIRCUMFLEX";
+            case KeyEvent.VK_DEAD_TILDE:
+                return "DEAD_TILDE";
+            case KeyEvent.VK_DEAD_MACRON:
+                return "DEAD_MACRON";
+            case KeyEvent.VK_DEAD_BREVE:
+                return "DEAD_BREVE";
+            case KeyEvent.VK_DEAD_ABOVEDOT:
+                return "DEAD_ABOVEDOT";
+            case KeyEvent.VK_DEAD_DIAERESIS:
+                return "DEAD_DIAERESIS";
+            case KeyEvent.VK_DEAD_ABOVERING:
+                return "DEAD_ABOVERING";
+            case KeyEvent.VK_DEAD_DOUBLEACUTE:
+                return "DEAD_DOUBLEACUTE";
+            case KeyEvent.VK_DEAD_CARON:
+                return "DEAD_CARON";
+            case KeyEvent.VK_DEAD_CEDILLA:
+                return "DEAD_CEDILLA";
+            case KeyEvent.VK_DEAD_OGONEK:
+                return "DEAD_OGONEK";
+            case KeyEvent.VK_DEAD_IOTA:
+                return "DEAD_IOTA";
+            case KeyEvent.VK_DEAD_VOICED_SOUND:
+                return "DEAD_VOICED_SOUND";
+            case KeyEvent.VK_DEAD_SEMIVOICED_SOUND:
+                return "DEAD_SEMIVOICED_SOUND";
 
-	case KeyEvent.VK_AMPERSAND:
-	    return "AMPERSAND";
-	case KeyEvent.VK_ASTERISK:
-	    return "ASTERISK";
-	case KeyEvent.VK_QUOTEDBL:
-	    return "QUOTEDBL";
-	case KeyEvent.VK_LESS:
-	    return "LESS";
-	case KeyEvent.VK_GREATER:
-	    return "GREATER";
-	case KeyEvent.VK_BRACELEFT:
-	    return "BRACELEFT";
-	case KeyEvent.VK_BRACERIGHT:
-	    return "BRACERIGHT";
-	case KeyEvent.VK_AT:
-	    return "AT";
-	case KeyEvent.VK_COLON:
-	    return "COLON";
-	case KeyEvent.VK_CIRCUMFLEX:
-	    return "CIRCUMFLEX";
-	case KeyEvent.VK_DOLLAR:
-	    return "DOLLAR";
-	case KeyEvent.VK_EURO_SIGN:
-	    return "EURO_SIGN";
-	case KeyEvent.VK_EXCLAMATION_MARK:
-	    return "EXCLAMATION_MARK";
-	case KeyEvent.VK_INVERTED_EXCLAMATION_MARK:
-	    return "INVERTED_EXCLAMATION_MARK";
-	case KeyEvent.VK_LEFT_PARENTHESIS:
-	    return "LEFT_PARENTHESIS";
-	case KeyEvent.VK_NUMBER_SIGN:
-	    return "NUMBER_SIGN";
-	case KeyEvent.VK_MINUS:
-	    return "MINUS";
-	case KeyEvent.VK_PLUS:
-	    return "PLUS";
-	case KeyEvent.VK_RIGHT_PARENTHESIS:
-	    return "RIGHT_PARENTHESIS";
-	case KeyEvent.VK_UNDERSCORE:
-	    return "UNDERSCORE";
+            case KeyEvent.VK_AMPERSAND:
+                return "AMPERSAND";
+            case KeyEvent.VK_ASTERISK:
+                return "ASTERISK";
+            case KeyEvent.VK_QUOTEDBL:
+                return "QUOTEDBL";
+            case KeyEvent.VK_LESS:
+                return "LESS";
+            case KeyEvent.VK_GREATER:
+                return "GREATER";
+            case KeyEvent.VK_BRACELEFT:
+                return "BRACELEFT";
+            case KeyEvent.VK_BRACERIGHT:
+                return "BRACERIGHT";
+            case KeyEvent.VK_AT:
+                return "AT";
+            case KeyEvent.VK_COLON:
+                return "COLON";
+            case KeyEvent.VK_CIRCUMFLEX:
+                return "CIRCUMFLEX";
+            case KeyEvent.VK_DOLLAR:
+                return "DOLLAR";
+            case KeyEvent.VK_EURO_SIGN:
+                return "EURO_SIGN";
+            case KeyEvent.VK_EXCLAMATION_MARK:
+                return "EXCLAMATION_MARK";
+            case KeyEvent.VK_INVERTED_EXCLAMATION_MARK:
+                return "INVERTED_EXCLAMATION_MARK";
+            case KeyEvent.VK_LEFT_PARENTHESIS:
+                return "LEFT_PARENTHESIS";
+            case KeyEvent.VK_NUMBER_SIGN:
+                return "NUMBER_SIGN";
+            case KeyEvent.VK_MINUS:
+                return "MINUS";
+            case KeyEvent.VK_PLUS:
+                return "PLUS";
+            case KeyEvent.VK_RIGHT_PARENTHESIS:
+                return "RIGHT_PARENTHESIS";
+            case KeyEvent.VK_UNDERSCORE:
+                return "UNDERSCORE";
 
-	case KeyEvent.VK_FINAL:
-	    return "FINAL";
-	case KeyEvent.VK_CONVERT:
-	    return "CONVERT";
-	case KeyEvent.VK_NONCONVERT:
-	    return "NONCONVERT";
-	case KeyEvent.VK_ACCEPT:
-	    return "ACCEPT";
-	case KeyEvent.VK_MODECHANGE:
-	    return "MODECHANGE";
-	case KeyEvent.VK_KANA:
-	    return "KANA";
-	case KeyEvent.VK_KANJI:
-	    return "KANJI";
-	case KeyEvent.VK_ALPHANUMERIC:
-	    return "ALPHANUMERIC";
-	case KeyEvent.VK_KATAKANA:
-	    return "KATAKANA";
-	case KeyEvent.VK_HIRAGANA:
-	    return "HIRAGANA";
-	case KeyEvent.VK_FULL_WIDTH:
-	    return "FULL_WIDTH";
-	case KeyEvent.VK_HALF_WIDTH:
-	    return "HALF_WIDTH";
-	case KeyEvent.VK_ROMAN_CHARACTERS:
-	    return "ROMAN_CHARACTERS";
-	case KeyEvent.VK_ALL_CANDIDATES:
-	    return "ALL_CANDIDATES";
-	case KeyEvent.VK_PREVIOUS_CANDIDATE:
-	    return "PREVIOUS_CANDIDATE";
-	case KeyEvent.VK_CODE_INPUT:
-	    return "CODE_INPUT";
-	case KeyEvent.VK_JAPANESE_KATAKANA:
-	    return "JAPANESE_KATAKANA";
-	case KeyEvent.VK_JAPANESE_HIRAGANA:
-	    return "JAPANESE_HIRAGANA";
-	case KeyEvent.VK_JAPANESE_ROMAN:
-	    return "JAPANESE_ROMAN";
-	case KeyEvent.VK_KANA_LOCK:
-	    return "KANA_LOCK";
-	case KeyEvent.VK_INPUT_METHOD_ON_OFF:
-	    return "INPUT_METHOD_ON_OFF";
+            case KeyEvent.VK_FINAL:
+                return "FINAL";
+            case KeyEvent.VK_CONVERT:
+                return "CONVERT";
+            case KeyEvent.VK_NONCONVERT:
+                return "NONCONVERT";
+            case KeyEvent.VK_ACCEPT:
+                return "ACCEPT";
+            case KeyEvent.VK_MODECHANGE:
+                return "MODECHANGE";
+            case KeyEvent.VK_KANA:
+                return "KANA";
+            case KeyEvent.VK_KANJI:
+                return "KANJI";
+            case KeyEvent.VK_ALPHANUMERIC:
+                return "ALPHANUMERIC";
+            case KeyEvent.VK_KATAKANA:
+                return "KATAKANA";
+            case KeyEvent.VK_HIRAGANA:
+                return "HIRAGANA";
+            case KeyEvent.VK_FULL_WIDTH:
+                return "FULL_WIDTH";
+            case KeyEvent.VK_HALF_WIDTH:
+                return "HALF_WIDTH";
+            case KeyEvent.VK_ROMAN_CHARACTERS:
+                return "ROMAN_CHARACTERS";
+            case KeyEvent.VK_ALL_CANDIDATES:
+                return "ALL_CANDIDATES";
+            case KeyEvent.VK_PREVIOUS_CANDIDATE:
+                return "PREVIOUS_CANDIDATE";
+            case KeyEvent.VK_CODE_INPUT:
+                return "CODE_INPUT";
+            case KeyEvent.VK_JAPANESE_KATAKANA:
+                return "JAPANESE_KATAKANA";
+            case KeyEvent.VK_JAPANESE_HIRAGANA:
+                return "JAPANESE_HIRAGANA";
+            case KeyEvent.VK_JAPANESE_ROMAN:
+                return "JAPANESE_ROMAN";
+            case KeyEvent.VK_KANA_LOCK:
+                return "KANA_LOCK";
+            case KeyEvent.VK_INPUT_METHOD_ON_OFF:
+                return "INPUT_METHOD_ON_OFF";
 
-	case KeyEvent.VK_AGAIN:
-	    return "AGAIN";
-	case KeyEvent.VK_UNDO:
-	    return "UNDO";
-	case KeyEvent.VK_COPY:
-	    return "COPY";
-	case KeyEvent.VK_PASTE:
-	    return "PASTE";
-	case KeyEvent.VK_CUT:
-	    return "CUT";
-	case KeyEvent.VK_FIND:
-	    return "FIND";
-	case KeyEvent.VK_PROPS:
-	    return "PROPS";
-	case KeyEvent.VK_STOP:
-	    return "STOP";
+            case KeyEvent.VK_AGAIN:
+                return "AGAIN";
+            case KeyEvent.VK_UNDO:
+                return "UNDO";
+            case KeyEvent.VK_COPY:
+                return "COPY";
+            case KeyEvent.VK_PASTE:
+                return "PASTE";
+            case KeyEvent.VK_CUT:
+                return "CUT";
+            case KeyEvent.VK_FIND:
+                return "FIND";
+            case KeyEvent.VK_PROPS:
+                return "PROPS";
+            case KeyEvent.VK_STOP:
+                return "STOP";
 
-	case KeyEvent.VK_COMPOSE:
-	    return "COMPOSE";
-	case KeyEvent.VK_ALT_GRAPH:
-	    return "ALT_GRAPH";
-	}
+            case KeyEvent.VK_COMPOSE:
+                return "COMPOSE";
+            case KeyEvent.VK_ALT_GRAPH:
+                return "ALT_GRAPH";
+        }
 
-	if (keyCode >= KeyEvent.VK_NUMPAD0 && keyCode <= KeyEvent.VK_NUMPAD9) {
-	    char c = (char) (keyCode - KeyEvent.VK_NUMPAD0 + '0');
-	    return "NUMPAD" + c;
-	}
+        if (keyCode >= KeyEvent.VK_NUMPAD0 && keyCode <= KeyEvent.VK_NUMPAD9) {
+            char c = (char) (keyCode - KeyEvent.VK_NUMPAD0 + '0');
+            return "NUMPAD" + c;
+        }
 
-	return "unknown(0x" + Integer.toString(keyCode, 16) + ")";
+        return "unknown(0x" + Integer.toString(keyCode, 16) + ")";
     }
 
     /**
      * Converts the first Character of a String to its Uppercase Instance<br>
      * test -> Test
-     * @param word 
+     *
+     * @param word
      * @return String, with first char uppercased
      */
     public static String makeFirstWordCaptial(String word) {
-	if (word.length() < 2) {
-	    return word;
-	}
+        if (word.length() < 2) {
+            return word;
+        }
 
-	String firstWord = word.substring(0, 1);
-	String restOfWord = word.substring(1);
+        String firstWord = word.substring(0, 1);
+        String restOfWord = word.substring(1);
 
-	return firstWord.toUpperCase() + restOfWord;
+        return firstWord.toUpperCase() + restOfWord;
     }
 
     /**
@@ -1940,101 +1881,104 @@ public class StringUtils {
      * <b>%version%</b>,<b>%time%</b> into what they represent
      * <p>
      * for properties see System.getProperties()
-     * 
-     * @param resource
-     *            String to modify
+     *
+     * @param resource String to modify
      * @return modified String
      * @author wolf.posdorfer
      */
     public static String modifyWildcards(String resource) {
-	if(resource==null)
-	    return "";
-	
-	resource = resource.replace("%random%",
-		"" + Math.round((Math.random() * 1000)));
+        if (resource == null) {
+            return "";
+        }
 
-	resource = resource.replace("%system%", System.getProperty("os.name")
-		.replace(" ", ""));
+        resource = resource.replace("%random%",
+                "" + Math.round((Math.random() * 1000)));
 
-	resource = resource.replace("%version%",
-		System.getProperty("os.version").replace(" ", ""));
+        resource = resource.replace("%system%", System.getProperty("os.name")
+                .replace(" ", ""));
 
-	final String DATE_FORMAT_NOW = "HH:mm";
-	Calendar cal = Calendar.getInstance();
-	SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);
+        resource = resource.replace("%version%",
+                System.getProperty("os.version").replace(" ", ""));
 
-	resource = resource.replace("%time%", sdf.format(cal.getTime()));
+        final String DATE_FORMAT_NOW = "HH:mm";
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);
 
-	while (resource.contains("%property{")) {
-	    if (resource.contains("%property{") && resource.contains("}/%")) {
-		int indexofbeginning = resource.indexOf("%property{");
-		int indexofending = resource.indexOf("}/%");
+        resource = resource.replace("%time%", sdf.format(cal.getTime()));
 
-		String begin = resource.substring(0, indexofbeginning);
-		String middle = System.getProperty(resource.substring(
-			indexofbeginning+10, indexofending));
-		String end = resource.substring(indexofending + 3);
-		resource = begin + middle + end;
-	    }
-	}
+        while (resource.contains("%property{")) {
+            if (resource.contains("%property{") && resource.contains("}/%")) {
+                int indexofbeginning = resource.indexOf("%property{");
+                int indexofending = resource.indexOf("}/%");
 
-	return resource;
+                String begin = resource.substring(0, indexofbeginning);
+                String middle = System.getProperty(resource.substring(
+                        indexofbeginning + 10, indexofending));
+                String end = resource.substring(indexofending + 3);
+                resource = begin + middle + end;
+            }
+        }
+
+        return resource;
     }
-    
+
     /**
      * Creates an MD5 Checksum of a File, given the Filepath
+     *
      * @param filepath
      * @return md5 checksum
-     * @throws IOException 
-     * @throws NoSuchAlgorithmException 
+     * @throws IOException
+     * @throws NoSuchAlgorithmException
      * @throws Exception
      */
     public static String getMD5Checksum(String filepath) throws NoSuchAlgorithmException, IOException {
-	byte[] b = createChecksum(filepath);
-	String result = "";
-	for (int i = 0; i < b.length; i++) {
-	    result += Integer.toString((b[i] & 0xff) + 0x100, 16).substring(1);
-	}
-	return result;
+        byte[] b = createChecksum(filepath);
+        String result = "";
+        for (int i = 0; i < b.length; i++) {
+            result += Integer.toString((b[i] & 0xff) + 0x100, 16).substring(1);
+        }
+        return result;
     }
-    
+
     /**
      * creates an MD5 checksum of a File, given the Filepath
+     *
      * @param filename
      * @return byte[] md5 sum
-     * @throws NoSuchAlgorithmException 
-     * @throws IOException 
+     * @throws NoSuchAlgorithmException
+     * @throws IOException
      * @throws Exception
      */
     public static byte[] createChecksum(String filename) throws NoSuchAlgorithmException, IOException {
-	InputStream fis = new FileInputStream(filename);
+        InputStream fis = new FileInputStream(filename);
 
-	byte[] buffer = new byte[1024];
-	MessageDigest complete = MessageDigest.getInstance("MD5");
-	int numRead;
-	do {
-	    numRead = fis.read(buffer);
-	    if (numRead > 0) {
-		complete.update(buffer, 0, numRead);
-	    }
-	} while (numRead != -1);
-	fis.close();
-	return complete.digest();
+        byte[] buffer = new byte[1024];
+        MessageDigest complete = MessageDigest.getInstance("MD5");
+        int numRead;
+        do {
+            numRead = fis.read(buffer);
+            if (numRead > 0) {
+                complete.update(buffer, 0, numRead);
+            }
+        } while (numRead != -1);
+        fis.close();
+        return complete.digest();
     }
-    
+
     /**
      * Counts the Number of Occurences of a specified char c in string
-     * 
+     *
      * @param string
      * @param c
      * @return {@link Integer}
      */
     public static int countNumberOfOccurences(String string, char c) {
-	int result = 0;
-	for (int i = 0; i < string.length(); i++) {
-	    if (string.charAt(i) == c)
-		result++;
-	}
-	return result;
+        int result = 0;
+        for (int i = 0; i < string.length(); i++) {
+            if (string.charAt(i) == c) {
+                result++;
+            }
+        }
+        return result;
     }
 }

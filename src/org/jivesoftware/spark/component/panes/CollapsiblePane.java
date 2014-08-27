@@ -1,25 +1,21 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
+ * $RCSfile: ,v $ $Revision: $ $Date: $
  *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.spark.component.panes;
-
-import org.jivesoftware.spark.util.ModelUtil;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -28,14 +24,14 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import javax.swing.Icon;
 import javax.swing.JPanel;
+import org.jivesoftware.spark.util.ModelUtil;
 
 /**
- * CollapsiblePane provides a component which can collapse or expand its content area
- * with animation and fade in/fade out effects. It also acts as a standard container for
- * other Swing components.
+ * CollapsiblePane provides a component which can collapse or expand its content
+ * area with animation and fade in/fade out effects. It also acts as a standard
+ * container for other Swing components.
  *
  * @author Derek DeMoro
  */
@@ -44,8 +40,8 @@ import javax.swing.JPanel;
  */
 public class CollapsiblePane extends JPanel {
 
-	private static final long serialVersionUID = -6770924580102536726L;
-	private BaseCollapsibleTitlePane titlePane;
+    private static final long serialVersionUID = -6770924580102536726L;
+    private BaseCollapsibleTitlePane titlePane;
     private JPanel mainPanel;
 
     private List<CollapsiblePaneListener> listeners = new ArrayList<CollapsiblePaneListener>();
@@ -57,7 +53,6 @@ public class CollapsiblePane extends JPanel {
 
         titlePane = new CollapsibleTitlePane();
         mainPanel = new JPanel();
-
 
         add(titlePane, BorderLayout.NORTH);
         add(mainPanel, BorderLayout.CENTER);
@@ -77,6 +72,7 @@ public class CollapsiblePane extends JPanel {
 
     /**
      * Creates a CollapsiblePane.
+     *
      * @param title the title to use.
      */
     public CollapsiblePane(String title) {
@@ -86,6 +82,7 @@ public class CollapsiblePane extends JPanel {
 
     /**
      * Set the title of the Collapsible Pane.
+     *
      * @param title the collapsible pane title.
      */
     public void setTitle(String title) {
@@ -102,8 +99,7 @@ public class CollapsiblePane extends JPanel {
 
         if (collapsed) {
             firePaneCollapsed();
-        }
-        else {
+        } else {
             firePaneExpanded();
         }
     }
@@ -133,7 +129,6 @@ public class CollapsiblePane extends JPanel {
             (iter.next()).paneCollapsed();
         }
     }
-
 
     public BaseCollapsibleTitlePane getTitlePane() {
         return titlePane;

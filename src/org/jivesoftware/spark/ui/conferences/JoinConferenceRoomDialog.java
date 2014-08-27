@@ -1,32 +1,21 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */ 
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package org.jivesoftware.spark.ui.conferences;
-
-import org.jivesoftware.resource.SparkRes;
-import org.jivesoftware.resource.Res;
-import org.jivesoftware.spark.SparkManager;
-import org.jivesoftware.spark.component.TitlePanel;
-import org.jivesoftware.spark.util.ResourceUtils;
-import org.jivesoftware.spark.util.SwingWorker;
-import org.jivesoftware.sparkimpl.settings.local.LocalPreferences;
-import org.jivesoftware.sparkimpl.settings.local.SettingsManager;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -34,15 +23,23 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import org.jivesoftware.resource.Res;
+import org.jivesoftware.resource.SparkRes;
+import org.jivesoftware.spark.SparkManager;
+import org.jivesoftware.spark.component.TitlePanel;
+import org.jivesoftware.spark.util.ResourceUtils;
+import org.jivesoftware.spark.util.SwingWorker;
+import org.jivesoftware.sparkimpl.settings.local.LocalPreferences;
+import org.jivesoftware.sparkimpl.settings.local.SettingsManager;
 
 final class JoinConferenceRoomDialog extends JPanel {
+
     private static final long serialVersionUID = -6400555509113588047L;
     private JLabel roomNameLabel = new JLabel();
     private JLabel nicknameLabel = new JLabel();
@@ -66,7 +63,7 @@ final class JoinConferenceRoomDialog extends JPanel {
         ResourceUtils.resLabel(nicknameLabel, nicknameField, Res.getString("label.nickname") + ":");
         ResourceUtils.resLabel(passwordLabel, passwordField, Res.getString("label.password") + ":");
 
-        roomNameLabel.setText(Res.getString("room.name") +":");
+        roomNameLabel.setText(Res.getString("room.name") + ":");
     }
 
     public void joinRoom(final String roomJID, final String roomName) {
@@ -79,11 +76,9 @@ final class JoinConferenceRoomDialog extends JPanel {
         passwordField.setVisible(false);
         passwordLabel.setVisible(false);
 
-
         roomNameDescription.setText(roomName);
 
         final JOptionPane pane;
-
 
         TitlePanel titlePanel;
 
@@ -114,12 +109,11 @@ final class JoinConferenceRoomDialog extends JPanel {
 
         PropertyChangeListener changeListener = new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent e) {
-                String value = (String)pane.getValue();
+                String value = (String) pane.getValue();
                 if (Res.getString("cancel").equals(value)) {
                     pane.setValue(JOptionPane.UNINITIALIZED_VALUE);
                     dlg.dispose();
-                }
-                else if (Res.getString("join").equals(value)) {
+                } else if (Res.getString("join").equals(value)) {
                     pane.setValue(JOptionPane.UNINITIALIZED_VALUE);
                     dlg.dispose();
                     ConferenceUtils.joinConferenceOnSeperateThread(roomName, roomJID, null);

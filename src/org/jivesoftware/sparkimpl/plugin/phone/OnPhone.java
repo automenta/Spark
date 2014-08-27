@@ -1,30 +1,21 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.sparkimpl.plugin.phone;
-
-import org.jivesoftware.resource.SparkRes;
-import org.jivesoftware.resource.Res;
-import org.jivesoftware.spark.component.TimeTrackingLabel;
-
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -33,10 +24,16 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.Date;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import org.jivesoftware.resource.Res;
+import org.jivesoftware.resource.SparkRes;
+import org.jivesoftware.spark.component.TimeTrackingLabel;
 
 public class OnPhone extends JPanel {
-	private static final long serialVersionUID = -7344123390643812061L;
-	private JLabel iconLabel;
+
+    private static final long serialVersionUID = -7344123390643812061L;
+    private JLabel iconLabel;
     private TimeTrackingLabel timeLabel;
 
     public OnPhone() {
@@ -44,7 +41,6 @@ public class OnPhone extends JPanel {
 
         final JPanel imagePanel = new JPanel();
         imagePanel.setLayout(new GridBagLayout());
-
 
         imagePanel.setBackground(Color.white);
 
@@ -81,4 +77,3 @@ public class OnPhone extends JPanel {
     }
 
 }
-

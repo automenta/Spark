@@ -1,24 +1,34 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */ 
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package org.jivesoftware.spark.ui.conferences;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Iterator;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import org.jivesoftware.resource.Res;
 import org.jivesoftware.resource.SparkRes;
 import org.jivesoftware.smack.XMPPException;
@@ -34,21 +44,8 @@ import org.jivesoftware.spark.component.Tree;
 import org.jivesoftware.spark.util.SwingWorker;
 import org.jivesoftware.spark.util.log.Log;
 
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.Iterator;
-
 public class RoomBrowser extends JPanel {
+
     private static final long serialVersionUID = 8820670697089268423L;
     private JLabel descriptionLabel = new JLabel();
     private JLabel subjectLabel = new JLabel();
@@ -83,14 +80,12 @@ public class RoomBrowser extends JPanel {
         add(roomNameLabel, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0));
         add(roomNameValue, new GridBagConstraints(1, 3, 1, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 0, 0));
 
-
         rootNode = new JiveTreeNode(Res.getString("tree.users.in.room"), true);
         tree = new Tree(rootNode);
 
         add(tree, new GridBagConstraints(0, 4, 2, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 0, 0));
         setBackground(Color.white);
         tree.setCellRenderer(new JiveTreeCellRenderer());
-
 
     }
 
@@ -103,11 +98,9 @@ public class RoomBrowser extends JPanel {
                 try {
                     roomInfo = MultiUserChat.getRoomInfo(SparkManager.getConnection(), roomJID);
 
-
                     ServiceDiscoveryManager manager = ServiceDiscoveryManager.getInstanceFor(SparkManager.getConnection());
                     items = manager.discoverItems(roomJID);
-                }
-                catch (XMPPException e) {
+                } catch (XMPPException e) {
                     Log.error(e);
                 }
                 return "ok";
@@ -132,8 +125,7 @@ public class RoomBrowser extends JPanel {
 
             if (roomInfo.getOccupantsCount() == -1) {
                 occupantsValue.setText("n/a");
-            }
-            else {
+            } else {
                 occupantsValue.setText(Integer.toString(roomInfo.getOccupantsCount()));
             }
             roomNameValue.setText(roomInfo.getRoom());
@@ -145,8 +137,7 @@ public class RoomBrowser extends JPanel {
                 rootNode.add(new JiveTreeNode(jid, false, SparkRes.getImageIcon(SparkRes.SMALL_USER1_INFORMATION)));
             }
             tree.expandRow(0);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.error(e);
         }
 
@@ -179,7 +170,7 @@ public class RoomBrowser extends JPanel {
 
         PropertyChangeListener changeListener = new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent e) {
-                String value = (String)pane.getValue();
+                String value = (String) pane.getValue();
                 if (Res.getString("close").equals(value)) {
                     pane.setValue(JOptionPane.UNINITIALIZED_VALUE);
                     dlg.dispose();
@@ -193,6 +184,5 @@ public class RoomBrowser extends JPanel {
         dlg.toFront();
         dlg.requestFocus();
     }
-
 
 }

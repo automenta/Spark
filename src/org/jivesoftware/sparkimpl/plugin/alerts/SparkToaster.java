@@ -1,42 +1,37 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.sparkimpl.plugin.alerts;
 
 /**
- * SparkToaster is an improvement of Java Toaster which is a java utility class for your swing applications
- * that show an animate box coming from the bottom of your screen
- * with a notification message and/or an associated image
- * (like msn online/offline notifications).
+ * SparkToaster is an improvement of Java Toaster which is a java utility class
+ * for your swing applications that show an animate box coming from the bottom
+ * of your screen with a notification message and/or an associated image (like
+ * msn online/offline notifications).
  *
- * Toaster panel in windows system follow the taskbar; So if
- * the taskbar is into the bottom the panel coming from the bottom
- * and if the taskbar is on the top then the panel coming from the top.
+ * Toaster panel in windows system follow the taskbar; So if the taskbar is into
+ * the bottom the panel coming from the bottom and if the taskbar is on the top
+ * then the panel coming from the top.
  *
  * This is a simple example of utilization:
  *
- * import com.nitido.utils.toaster.*;
- * import javax.swing.*;
+ * import com.nitido.utils.toaster.*; import javax.swing.*;
  *
  */
-
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
@@ -131,7 +126,6 @@ public class SparkToaster {
 
     private Border border;
 
-
     private Action customAction;
 
     private Window window;
@@ -162,10 +156,10 @@ public class SparkToaster {
      * @author daniele piras
      */
     class SingleToaster extends javax.swing.JWindow {
+
         private static final long serialVersionUID = 1L;
 
         // Label to store Icon
-
         // Text area for the message
         private JTextArea message = new JTextArea();
 
@@ -181,7 +175,6 @@ public class SparkToaster {
          */
         private void initComponents() {
             message.setFont(getToasterMessageFont());
-
 
             mainPanel.setBackground(Color.white);
             message.setOpaque(false);
@@ -214,7 +207,6 @@ public class SparkToaster {
 
             getContentPane().add(mainPanel);
 
-
             mainPanel.addMouseListener(new PaneMouseListener());
             message.addMouseListener(new PaneMouseListener());
 
@@ -222,7 +214,6 @@ public class SparkToaster {
             setSize(toasterWidth, toasterHeight);
             mainPanel.setBorder(BorderFactory.createLineBorder(Color.lightGray));
         }
-
 
         /**
          * Start toaster animation...
@@ -256,21 +247,20 @@ public class SparkToaster {
         }
     }
 
-
     /**
      * Class that manage the animation
      */
     class Animation extends Thread {
+
         SingleToaster toaster;
 
         public Animation(SingleToaster toaster) {
             this.toaster = toaster;
         }
 
-
         /**
-         * Animate vertically the toaster. The toaster could be moved from bottom
-         * to upper or to upper to bottom
+         * Animate vertically the toaster. The toaster could be moved from
+         * bottom to upper or to upper to bottom
          *
          * @param posx X position for toaster.
          * @param fromY Y from position
@@ -285,8 +275,7 @@ public class SparkToaster {
                     toaster.setLocation(posx, i);
                     Thread.sleep(stepTime);
                 }
-            }
-            else {
+            } else {
                 for (int i = fromY; i < toY; i += step) {
                     toaster.setLocation(posx, i);
                     Thread.sleep(stepTime);
@@ -316,20 +305,17 @@ public class SparkToaster {
 
                 int maxToasterInSceen = screenHeight / toasterHeight;
 
-
                 int posx = screenRect.width - toasterWidth - 1;
 
                 toaster.setLocation(posx, screenHeight);
                 try {
-               	 EventQueue.invokeAndWait(new Runnable(){
-               		 public void run() {
-               			 toaster.setVisible(true);
-               		 }
-               	 });
-                }
-                catch(Exception e)
-                {
-               	 Log.error(e);
+                    EventQueue.invokeAndWait(new Runnable() {
+                        public void run() {
+                            toaster.setVisible(true);
+                        }
+                    });
+                } catch (Exception e) {
+                    Log.error(e);
                 }
                 if (useAlwaysOnTop) {
                     toaster.setAlwaysOnTop(true);
@@ -340,26 +326,22 @@ public class SparkToaster {
                     stopYPosition = startYPosition - toasterHeight - 1;
                     if (currentNumberOfToaster > 0) {
                         stopYPosition = stopYPosition - (maxToaster % maxToasterInSceen * toasterHeight);
-                    }
-                    else {
+                    } else {
                         maxToaster = 0;
                     }
-                }
-                else {
+                } else {
                     startYPosition = screenRect.y - toasterHeight;
                     stopYPosition = screenRect.y;
 
                     if (currentNumberOfToaster > 0) {
                         stopYPosition = stopYPosition + (maxToaster % maxToasterInSceen * toasterHeight);
-                    }
-                    else {
+                    } else {
                         maxToaster = 0;
                     }
                 }
 
                 currentNumberOfToaster++;
                 maxToaster++;
-
 
                 animateVertically(posx, startYPosition, stopYPosition);
                 Thread.sleep(displayTime);
@@ -368,13 +350,11 @@ public class SparkToaster {
                 currentNumberOfToaster--;
                 toaster.setVisible(false);
                 toaster.dispose();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 Log.error(e);
             }
         }
     }
-
 
     /**
      * Show a toaster with the specified message and the associated icon.
@@ -389,7 +369,6 @@ public class SparkToaster {
         pane.setBorder(BorderFactory.createEmptyBorder());
         pane.getViewport().setBackground(Color.white);
         mainPanel.add(pane, new GridBagConstraints(1, 2, 3, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(2, 5, 2, 5), 0, 0));
-
 
         if (icon != null) {
             titleLabel.setIcon(icon);
@@ -411,12 +390,12 @@ public class SparkToaster {
      * @param comp Component to add to toaster popup
      */
     public void showToaster(final String title, final Component comp) {
-			SingleToaster singleToaster = new SingleToaster();
-			mainPanel.add(comp, new GridBagConstraints(1, 2, 3, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(2, 0, 0, 0), 0, 0));
-			
-			titleLabel.setTitle(title);
-			singleToaster.animate();
-			window = singleToaster;
+        SingleToaster singleToaster = new SingleToaster();
+        mainPanel.add(comp, new GridBagConstraints(1, 2, 3, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(2, 0, 0, 0), 0, 0));
+
+        titleLabel.setTitle(title);
+        singleToaster.animate();
+        window = singleToaster;
     }
 
     public void showToaster(Icon icon) {
@@ -459,14 +438,12 @@ public class SparkToaster {
         font = f;
     }
 
-
     /**
      * @return Returns the borderColor.
      */
     public Color getBorderColor() {
         return borderColor;
     }
-
 
     /**
      * @param borderColor The borderColor to set.
@@ -475,14 +452,12 @@ public class SparkToaster {
         this.borderColor = borderColor;
     }
 
-
     /**
      * @return Returns the displayTime.
      */
     public int getDisplayTime() {
         return displayTime;
     }
-
 
     /**
      * @param displayTime The displayTime to set.
@@ -491,14 +466,12 @@ public class SparkToaster {
         this.displayTime = displayTime;
     }
 
-
     /**
      * @return Returns the margin.
      */
     public int getMargin() {
         return margin;
     }
-
 
     /**
      * @param margin The margin to set.
@@ -507,14 +480,12 @@ public class SparkToaster {
         this.margin = margin;
     }
 
-
     /**
      * @return Returns the messageColor.
      */
     public Color getMessageColor() {
         return messageColor;
     }
-
 
     /**
      * @param messageColor The messageColor to set.
@@ -523,14 +494,12 @@ public class SparkToaster {
         this.messageColor = messageColor;
     }
 
-
     /**
      * @return Returns the step.
      */
     public int getStep() {
         return step;
     }
-
 
     /**
      * @param step The step to set.
@@ -539,14 +508,12 @@ public class SparkToaster {
         this.step = step;
     }
 
-
     /**
      * @return Returns the stepTime.
      */
     public int getStepTime() {
         return stepTime;
     }
-
 
     /**
      * @param stepTime The stepTime to set.
@@ -555,14 +522,12 @@ public class SparkToaster {
         this.stepTime = stepTime;
     }
 
-
     /**
      * @return Returns the toasterColor.
      */
     public Color getToasterColor() {
         return toasterColor;
     }
-
 
     /**
      * @param toasterColor The toasterColor to set.
@@ -571,14 +536,12 @@ public class SparkToaster {
         this.toasterColor = toasterColor;
     }
 
-
     /**
      * @return Returns the toasterHeight.
      */
     public int getToasterHeight() {
         return toasterHeight;
     }
-
 
     /**
      * @param toasterHeight The toasterHeight to set.
@@ -587,14 +550,12 @@ public class SparkToaster {
         this.toasterHeight = toasterHeight;
     }
 
-
     /**
      * @return Returns the toasterWidth.
      */
     public int getToasterWidth() {
         return toasterWidth;
     }
-
 
     /**
      * @param toasterWidth The toasterWidth to set.
@@ -641,10 +602,10 @@ public class SparkToaster {
         titleLabel.setVisible(false);
     }
 
-
     class TitleLabel extends JPanel {
-		private static final long serialVersionUID = -5163519932953987400L;
-		private JLabel label;
+
+        private static final long serialVersionUID = -5163519932953987400L;
+        private JLabel label;
         private RolloverButton closeButton;
 
         public TitleLabel(String text, final boolean showCloseIcon) {
@@ -656,10 +617,10 @@ public class SparkToaster {
 
             add(label, new GridBagConstraints(0, 0, 1, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 0, 0));
 
-      		closeButton = new RolloverButton(SparkRes.getImageIcon(SparkRes.CLOSE_IMAGE));
-      		if (showCloseIcon) {
-      			add(closeButton, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0));
-      		}
+            closeButton = new RolloverButton(SparkRes.getImageIcon(SparkRes.CLOSE_IMAGE));
+            if (showCloseIcon) {
+                add(closeButton, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0));
+            }
 
             setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.lightGray));
         }
@@ -668,9 +629,8 @@ public class SparkToaster {
             if (icon.getIconHeight() > 64 || icon.getIconWidth() > 64) {
                 Image image = ImageCombiner.iconToImage(icon);
                 label.setIcon(new ImageIcon(image.getScaledInstance(-1, 64, Image.SCALE_SMOOTH)));
-            } else
-            {
-            label.setIcon(icon);
+            } else {
+                label.setIcon(icon);
             }
         }
 
@@ -706,4 +666,3 @@ public class SparkToaster {
     }
 
 }
-

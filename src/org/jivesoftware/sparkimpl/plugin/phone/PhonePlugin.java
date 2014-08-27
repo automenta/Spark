@@ -1,24 +1,34 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
+ * $RCSfile: ,v $ $Revision: $ $Date: $
  *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.sparkimpl.plugin.phone;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.util.TimerTask;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import org.jivesoftware.phone.client.BasePhoneEventListener;
 import org.jivesoftware.phone.client.HangUpEvent;
 import org.jivesoftware.phone.client.OnPhoneEvent;
@@ -51,21 +61,8 @@ import org.jivesoftware.spark.util.TaskEngine;
 import org.jivesoftware.spark.util.log.Log;
 import org.jivesoftware.sparkimpl.plugin.alerts.SparkToaster;
 
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.util.TimerTask;
-
 public class PhonePlugin implements Plugin {
+
     public static PhoneClient phoneClient;
     private DialPanel dialPanel;
     //    private Alert incomingDialog;
@@ -79,7 +76,6 @@ public class PhonePlugin implements Plugin {
 
         final XMPPConnection con = SparkManager.getConnection();
 
-
         SwingWorker worker = new SwingWorker() {
             public Object construct() {
                 try {
@@ -87,8 +83,7 @@ public class PhonePlugin implements Plugin {
 
                     // Add BaseListener
                     phoneClient.addEventListener(new PhoneListener());
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     // Ignore because the user does not have support.
                     //Log.debug(e);
                 }
@@ -143,8 +138,7 @@ public class PhonePlugin implements Plugin {
 
                                 }
                                 e.consume();
-                            }
-                            catch (Exception ex) {
+                            } catch (Exception ex) {
                                 Log.error(ex);
                             }
                         }
@@ -161,12 +155,11 @@ public class PhonePlugin implements Plugin {
                 if (room instanceof ChatRoomImpl) {
                     final ChatRoomButton callButton = new ChatRoomButton("", SparkRes.getImageIcon(SparkRes.TELEPHONE_24x24));
                     callButton.setToolTipText(Res.getString("tooltip.place.a.call"));
-                    final ChatRoomImpl chatRoom = (ChatRoomImpl)room;
+                    final ChatRoomImpl chatRoom = (ChatRoomImpl) room;
                     boolean phoneEnabled = false;
                     try {
                         phoneEnabled = phoneClient.isPhoneEnabled(StringUtils.parseBareAddress(chatRoom.getParticipantJID()));
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                         Log.error(e);
                     }
 
@@ -186,23 +179,21 @@ public class PhonePlugin implements Plugin {
         contactList.addContextMenuListener(new ContextMenuListener() {
             public void poppingUp(Object object, final JPopupMenu popup) {
                 if (object instanceof ContactItem) {
-                    final ContactItem item = (ContactItem)object;
+                    final ContactItem item = (ContactItem) object;
 
                     boolean phoneEnabled = false;
 
-
                     try {
                         phoneEnabled = phoneClient.isPhoneEnabled(item.getJID());
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                         Log.error("There was an error retrieving phone information.", e);
                     }
 
                     if (phoneEnabled) {
                         Action callAction = new AbstractAction() {
-							private static final long serialVersionUID = 7221741748743018431L;
+                            private static final long serialVersionUID = 7221741748743018431L;
 
-							public void actionPerformed(ActionEvent e) {
+                            public void actionPerformed(ActionEvent e) {
                                 callJID(item.getJID());
                             }
                         };
@@ -240,7 +231,6 @@ public class PhonePlugin implements Plugin {
                 SparkManager.getSessionManager().changePresence(onPhonePresence);
             }
 
-
         }
 
         public void handleHangUp(HangUpEvent event) {
@@ -253,8 +243,7 @@ public class PhonePlugin implements Plugin {
                 SparkManager.getSessionManager().changePresence(offPhonePresence);
 
                 offPhonePresence = null;
-            }
-            else {
+            } else {
                 // If no previous state available, set status to Available
                 Presence availablePresence = new Presence(Presence.Type.available, "Available", 1, Presence.Mode.available);
 
@@ -307,14 +296,12 @@ public class PhonePlugin implements Plugin {
 
     }
 
-
     public void callExtension(final String number) {
         final Runnable caller = new Runnable() {
             public void run() {
                 try {
                     phoneClient.dialByExtension(number);
-                }
-                catch (PhoneActionException e) {
+                } catch (PhoneActionException e) {
                     Log.error(e);
                 }
             }
@@ -328,8 +315,7 @@ public class PhonePlugin implements Plugin {
             public void run() {
                 try {
                     phoneClient.dialByJID(jid);
-                }
-                catch (PhoneActionException e) {
+                } catch (PhoneActionException e) {
                     Log.error(e);
                 }
             }
@@ -337,7 +323,6 @@ public class PhonePlugin implements Plugin {
 
         TaskEngine.getInstance().submit(caller);
     }
-
 
     public static PhoneClient getPhoneClient() {
         return phoneClient;
@@ -354,6 +339,5 @@ public class PhonePlugin implements Plugin {
     public void uninstall() {
         // Do nothing.
     }
-
 
 }

@@ -1,21 +1,19 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.sparkimpl.plugin.scratchpad;
 
@@ -40,7 +38,6 @@ public class PrivateNotes implements PrivateData {
     public PrivateNotes() {
     }
 
-
     public String getNotes() {
         return notes;
     }
@@ -48,7 +45,6 @@ public class PrivateNotes implements PrivateData {
     public void setNotes(String notes) {
         this.notes = notes;
     }
-
 
     /**
      * Returns the root element name.
@@ -107,14 +103,12 @@ public class PrivateNotes implements PrivateData {
                 int eventType = parser.next();
                 if (eventType == XmlPullParser.START_TAG && "text".equals(parser.getName())) {
                     notes.setNotes(parser.nextText());
-                }
-                else if (eventType == XmlPullParser.END_TAG) {
+                } else if (eventType == XmlPullParser.END_TAG) {
                     if ("scratchpad".equals(parser.getName())) {
                         done = true;
                     }
                 }
             }
-
 
             return notes;
         }
@@ -126,8 +120,7 @@ public class PrivateNotes implements PrivateData {
         PrivateDataManager.addPrivateDataProvider("scratchpad", "scratchpad:notes", new PrivateNotes.Provider());
         try {
             manager.setPrivateData(notes);
-        }
-        catch (XMPPException e) {
+        } catch (XMPPException e) {
             Log.error(e);
         }
     }
@@ -140,9 +133,8 @@ public class PrivateNotes implements PrivateData {
         PrivateNotes notes = null;
 
         try {
-            notes = (PrivateNotes)manager.getPrivateData("scratchpad", "scratchpad:notes");
-        }
-        catch (XMPPException e) {
+            notes = (PrivateNotes) manager.getPrivateData("scratchpad", "scratchpad:notes");
+        } catch (XMPPException e) {
             Log.error(e);
         }
 

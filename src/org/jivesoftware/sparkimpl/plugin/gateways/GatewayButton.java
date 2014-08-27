@@ -1,21 +1,19 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.sparkimpl.plugin.gateways;
 
@@ -25,13 +23,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-
 import org.jivesoftware.resource.Res;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Presence;
@@ -48,8 +44,9 @@ import org.jivesoftware.sparkimpl.plugin.gateways.transports.TransportUtils;
  *
  */
 public class GatewayButton extends JPanel implements GatewayItem {
-	private static final long serialVersionUID = -2692869826501622612L;
-	private final RolloverButton button = new RolloverButton();
+
+    private static final long serialVersionUID = -2692869826501622612L;
+    private final RolloverButton button = new RolloverButton();
     private Transport transport;
     private boolean signedIn;
 
@@ -64,8 +61,7 @@ public class GatewayButton extends JPanel implements GatewayItem {
 
         if (PresenceManager.isOnline(transport.getServiceName())) {
             button.setIcon(transport.getIcon());
-        }
-        else {
+        } else {
             button.setIcon(transport.getInactiveIcon());
         }
         button.setToolTipText(transport.getName());
@@ -152,8 +148,7 @@ public class GatewayButton extends JPanel implements GatewayItem {
                 if (confirm == JOptionPane.YES_OPTION) {
                     try {
                         TransportUtils.unregister(SparkManager.getConnection(), transport.getServiceName());
-                    }
-                    catch (XMPPException e1) {
+                    } catch (XMPPException e1) {
                         Log.error(e1);
                     }
                 }
@@ -169,14 +164,13 @@ public class GatewayButton extends JPanel implements GatewayItem {
             popupMenu.add(signInMenu);
             signInAtLoginMenu.setEnabled(false);
             popupMenu.add(signInAtLoginMenu);
-            popupMenu.show((Component)event.getSource(), event.getX(), event.getY());
+            popupMenu.show((Component) event.getSource(), event.getX(), event.getY());
             return;
         }
 
         if (signedIn) {
             popupMenu.add(signOutMenu);
-        }
-        else {
+        } else {
             popupMenu.add(signInMenu);
         }
 
@@ -186,14 +180,13 @@ public class GatewayButton extends JPanel implements GatewayItem {
         popupMenu.add(signInAtLoginMenu);
         popupMenu.addSeparator();
         popupMenu.add(unregisterMenu);
-        popupMenu.show((Component)event.getSource(), event.getX(), event.getY());
+        popupMenu.show((Component) event.getSource(), event.getX(), event.getY());
     }
 
     public void signedIn(boolean signedIn) {
         if (!signedIn) {
             button.setIcon(transport.getInactiveIcon());
-        }
-        else {
+        } else {
             button.setIcon(transport.getIcon());
         }
 
@@ -203,6 +196,5 @@ public class GatewayButton extends JPanel implements GatewayItem {
     public boolean isLoggedIn() {
         return signedIn;
     }
-
 
 }

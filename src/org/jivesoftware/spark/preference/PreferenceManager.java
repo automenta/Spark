@@ -1,22 +1,20 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */ 
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package org.jivesoftware.spark.preference;
 
 import java.util.ArrayList;
@@ -24,9 +22,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.swing.JDialog;
-
 import org.jivesoftware.MainWindowListener;
 import org.jivesoftware.spark.SparkManager;
 import org.jivesoftware.sparkimpl.plugin.privacy.ui.PrivacyPreferences;
@@ -43,6 +39,7 @@ import org.jivesoftware.sparkimpl.settings.local.LocalPreference;
  * @author Derek DeMoro
  */
 public class PreferenceManager {
+
     private Map<String, Preference> map = new LinkedHashMap<String, Preference>();
     private PreferenceDialog preferenceDialog;
 
@@ -51,15 +48,15 @@ public class PreferenceManager {
         ChatPreference chatPreferences = new ChatPreference();
         addPreference(chatPreferences);
         chatPreferences.load();
-        
+
         GroupChatPreference groupChatPreferences = new GroupChatPreference();
         addPreference(groupChatPreferences);
         groupChatPreferences.load();
-        
+
         MediaPreference preferenes = new MediaPreference();
         addPreference(preferenes);
         preferenes.load();
-        
+
         PrivacyPreferences privacy = new PrivacyPreferences();
         addPreference(privacy);
         privacy.load();
@@ -96,13 +93,12 @@ public class PreferenceManager {
 
         preferenceDialog.invoke(SparkManager.getMainWindow(), new PreferencesPanel(getPreferences(), selectedPref));
     }
-    
+
     public void showPreferences() {
         preferenceDialog = new PreferenceDialog();
 
         preferenceDialog.invoke(SparkManager.getMainWindow(), new PreferencesPanel(getPreferences()));
     }
-
 
     public void addPreference(Preference preference) {
         map.put(preference.getNamespace(), preference);

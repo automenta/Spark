@@ -1,24 +1,21 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.spark.util;
-
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -26,8 +23,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 /**
- * Utility methods frequently used by data classes and design-time
- * classes.
+ * Utility methods frequently used by data classes and design-time classes.
  */
 public final class ModelUtil {
 
@@ -36,13 +32,12 @@ public final class ModelUtil {
     }
 
     /**
-     * This is a utility method that compares two objects when one or
-     * both of the objects might be <CODE>null</CODE>  The result of
-     * this method is determined as follows:
+     * This is a utility method that compares two objects when one or both of
+     * the objects might be <CODE>null</CODE> The result of this method is
+     * determined as follows:
      * <OL>
-     * <LI>If <CODE>o1</CODE> and <CODE>o2</CODE> are the same object
-     * according to the <CODE>==</CODE> operator, return
-     * <CODE>true</CODE>.
+     * <LI>If <CODE>o1</CODE> and <CODE>o2</CODE> are the same object according
+     * to the <CODE>==</CODE> operator, return <CODE>true</CODE>.
      * <LI>Otherwise, if either <CODE>o1</CODE> or <CODE>o2</CODE> is
      * <CODE>null</CODE>, return <CODE>false</CODE>.
      * <LI>Otherwise, return <CODE>o1.equals(o2)</CODE>.
@@ -52,9 +47,9 @@ public final class ModelUtil {
      * {@link #areDifferent(Object, Object)} method.<P>
      * <p/>
      * For array types, one of the <CODE>equals</CODE> methods in
-     * {@link java.util.Arrays} should be used instead of this method.
-     * Note that arrays with more than one dimension will require some
-     * custom code in order to implement <CODE>equals</CODE> properly.
+     * {@link java.util.Arrays} should be used instead of this method. Note that
+     * arrays with more than one dimension will require some custom code in
+     * order to implement <CODE>equals</CODE> properly.
      *
      * @param o1 first object to compare
      * @param o2 second object to compare
@@ -63,23 +58,20 @@ public final class ModelUtil {
     public static boolean areEqual(Object o1, Object o2) {
         if (o1 == o2) {
             return true;
-        }
-        else if (o1 == null || o2 == null) {
+        } else if (o1 == null || o2 == null) {
             return false;
-        }
-        else {
+        } else {
             return o1.equals(o2);
         }
     }
 
     /**
-     * This is a utility method that compares two Booleans when one or
-     * both of the objects might be <CODE>null</CODE>  The result of
-     * this method is determined as follows:
+     * This is a utility method that compares two Booleans when one or both of
+     * the objects might be <CODE>null</CODE> The result of this method is
+     * determined as follows:
      * <OL>
-     * <LI>If <CODE>b1</CODE> and <CODE>b2</CODE> are both TRUE or
-     * neither <CODE>b1</CODE> nor <CODE>b2</CODE> is TRUE,
-     * return <CODE>true</CODE>.
+     * <LI>If <CODE>b1</CODE> and <CODE>b2</CODE> are both TRUE or neither
+     * <CODE>b1</CODE> nor <CODE>b2</CODE> is TRUE, return <CODE>true</CODE>.
      * <LI>Otherwise, return <CODE>false</CODE>.
      * </OL>
      * <p/>
@@ -92,18 +84,17 @@ public final class ModelUtil {
      */
     public static boolean areBooleansEqual(Boolean b1, Boolean b2) {
         // !jwetherb treat NULL the same as Boolean.FALSE
-        return (b1 == Boolean.TRUE && b2 == Boolean.TRUE) ||
-                (b1 != Boolean.TRUE && b2 != Boolean.TRUE);
+        return (b1 == Boolean.TRUE && b2 == Boolean.TRUE)
+                || (b1 != Boolean.TRUE && b2 != Boolean.TRUE);
     }
 
     /**
-     * This is a utility method that compares two objects when one or
-     * both of the objects might be <CODE>null</CODE>.  The result
-     * returned by this method is determined as follows:
+     * This is a utility method that compares two objects when one or both of
+     * the objects might be <CODE>null</CODE>. The result returned by this
+     * method is determined as follows:
      * <OL>
-     * <LI>If <CODE>o1</CODE> and <CODE>o2</CODE> are the same object
-     * according to the <CODE>==</CODE> operator, return
-     * <CODE>false</CODE>.
+     * <LI>If <CODE>o1</CODE> and <CODE>o2</CODE> are the same object according
+     * to the <CODE>==</CODE> operator, return <CODE>false</CODE>.
      * <LI>Otherwise, if either <CODE>o1</CODE> or <CODE>o2</CODE> is
      * <CODE>null</CODE>, return <CODE>true</CODE>.
      * <LI>Otherwise, return <CODE>!o1.equals(o2)</CODE>.
@@ -113,9 +104,9 @@ public final class ModelUtil {
      * {@link #areEqual(Object, Object)} method.<P>
      * <p/>
      * For array types, one of the <CODE>equals</CODE> methods in
-     * {@link java.util.Arrays} should be used instead of this method.
-     * Note that arrays with more than one dimension will require some
-     * custom code in order to implement <CODE>equals</CODE> properly.
+     * {@link java.util.Arrays} should be used instead of this method. Note that
+     * arrays with more than one dimension will require some custom code in
+     * order to implement <CODE>equals</CODE> properly.
      *
      * @param o1 First object to compare
      * @param o2 Second object to compare
@@ -125,15 +116,13 @@ public final class ModelUtil {
         return !areEqual(o1, o2);
     }
 
-
     /**
-     * This is a utility method that compares two Booleans when one or
-     * both of the objects might be <CODE>null</CODE>  The result of
-     * this method is determined as follows:
+     * This is a utility method that compares two Booleans when one or both of
+     * the objects might be <CODE>null</CODE> The result of this method is
+     * determined as follows:
      * <OL>
-     * <LI>If <CODE>b1</CODE> and <CODE>b2</CODE> are both TRUE or
-     * neither <CODE>b1</CODE> nor <CODE>b2</CODE> is TRUE,
-     * return <CODE>false</CODE>.
+     * <LI>If <CODE>b1</CODE> and <CODE>b2</CODE> are both TRUE or neither
+     * <CODE>b1</CODE> nor <CODE>b2</CODE> is TRUE, return <CODE>false</CODE>.
      * <LI>Otherwise, return <CODE>true</CODE>.
      * </OL>
      * <p/>
@@ -148,11 +137,10 @@ public final class ModelUtil {
         return !areBooleansEqual(b1, b2);
     }
 
-
     /**
-     * Returns <CODE>true</CODE> if the specified array is not null
-     * and contains a non-null element.  Returns <CODE>false</CODE>
-     * if the array is null or if all the array elements are null.
+     * Returns <CODE>true</CODE> if the specified array is not null and contains
+     * a non-null element. Returns <CODE>false</CODE> if the array is null or if
+     * all the array elements are null.
      *
      * @param array Array to scan.
      * @return True if there's a null element.
@@ -170,12 +158,11 @@ public final class ModelUtil {
     }
 
     /**
-     * Returns a single string that is the concatenation of all the
-     * strings in the specified string array.  A single space is
-     * put between each string array element.  Null array elements
-     * are skipped.  If the array itself is null, the empty string
-     * is returned.  This method is guaranteed to return a non-null
-     * value, if no expections are thrown.
+     * Returns a single string that is the concatenation of all the strings in
+     * the specified string array. A single space is put between each string
+     * array element. Null array elements are skipped. If the array itself is
+     * null, the empty string is returned. This method is guaranteed to return a
+     * non-null value, if no expections are thrown.
      *
      * @param strs Array of strings to concatenate.
      * @return Concatenated string.
@@ -185,12 +172,11 @@ public final class ModelUtil {
     }
 
     /**
-     * Returns a single string that is the concatenation of all the
-     * strings in the specified string array.  The strings are separated
-     * by the specified delimiter.  Null array elements are skipped.  If
-     * the array itself is null, the empty string is returned.  This
-     * method is guaranteed to return a non-null value, if no expections
-     * are thrown.
+     * Returns a single string that is the concatenation of all the strings in
+     * the specified string array. The strings are separated by the specified
+     * delimiter. Null array elements are skipped. If the array itself is null,
+     * the empty string is returned. This method is guaranteed to return a
+     * non-null value, if no expections are thrown.
      *
      * @param strs Array of strings to concatenate.
      * @param delim Delimeter to separate strings.
@@ -212,16 +198,15 @@ public final class ModelUtil {
                 buf.setLength(length - 1);
             }
             return buf.toString();
-        }
-        else {
+        } else {
             return ""; // NOTRANS
         }
     }
 
     /**
      * Returns <CODE>true</CODE> if the specified {@link String} is not
-     * <CODE>null</CODE> and has a length greater than zero.  This is
-     * a very frequently occurring check.
+     * <CODE>null</CODE> and has a length greater than zero. This is a very
+     * frequently occurring check.
      *
      * @param s String to check
      * @return True if string is null or empty
@@ -230,10 +215,9 @@ public final class ModelUtil {
         return (s != null && !s.trim().isEmpty());
     }
 
-
     /**
      * Returns <CODE>null</CODE> if the specified string is empty or
-     * <CODE>null</CODE>.  Otherwise the string itself is returned.
+     * <CODE>null</CODE>. Otherwise the string itself is returned.
      *
      * @param s String to check
      * @return Returns null string if string is empty, otherwise string itself.
@@ -243,13 +227,13 @@ public final class ModelUtil {
     }
 
     /**
-     * Returns <CODE>null</CODE> if the specified object is null
-     * or if its <CODE>toString()</CODE> representation is empty.
-     * Otherwise, the <CODE>toString()</CODE> representation of the
-     * object itself is returned.
+     * Returns <CODE>null</CODE> if the specified object is null or if its
+     * <CODE>toString()</CODE> representation is empty. Otherwise, the
+     * <CODE>toString()</CODE> representation of the object itself is returned.
      *
      * @param o Object to check
-     * @return Returns null string if string(object) is empty, otherwise string itself.
+     * @return Returns null string if string(object) is empty, otherwise string
+     * itself.
      */
     public static String nullifyingToString(Object o) {
         return o != null ? nullifyIfEmpty(o.toString()) : null;
@@ -260,17 +244,15 @@ public final class ModelUtil {
      *
      * @param oldString is the initial value of the String
      * @param newString is the new value of the String
-     * @return true If both oldString and newString are null or if they are
-     *         both not null and equal to each other.  Otherwise returns false.
+     * @return true If both oldString and newString are null or if they are both
+     * not null and equal to each other. Otherwise returns false.
      */
     public static boolean hasStringChanged(String oldString, String newString) {
         if (oldString == null && newString == null) {
             return false;
-        }
-        else if (oldString == null || newString == null) {
+        } else if (oldString == null || newString == null) {
             return true;
-        }
-        else {
+        } else {
             return !oldString.equals(newString);
         }
     }
@@ -296,7 +278,7 @@ public final class ModelUtil {
 
         StringBuffer buf = new StringBuffer();
 
-        if(numDays > 0){
+        if (numDays > 0) {
             buf.append(numDays).append(" d, ");
         }
 
@@ -309,7 +291,6 @@ public final class ModelUtil {
         }
 
         //buf.append(numSeconds + " " + SECONDS);
-
         String result = buf.toString();
 
         if (numMinutes < 1) {
@@ -318,7 +299,6 @@ public final class ModelUtil {
 
         return result;
     }
-
 
     /**
      * Build a List of all elements in an Iterator.
@@ -349,11 +329,14 @@ public final class ModelUtil {
  * An Iterator that is the reverse of a ListIterator.
  */
 class ReverseListIterator<T> implements Iterator<T> {
+
     private ListIterator<T> _i;
 
     public ReverseListIterator(ListIterator<T> i) {
         _i = i;
-        while (_i.hasNext()) _i.next();
+        while (_i.hasNext()) {
+            _i.next();
+        }
     }
 
     public boolean hasNext() {
@@ -368,13 +351,3 @@ class ReverseListIterator<T> implements Iterator<T> {
         _i.remove();
     }
 }
-
-
-
-
-
-
-
-
-
-

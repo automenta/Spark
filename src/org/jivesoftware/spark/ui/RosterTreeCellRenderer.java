@@ -1,41 +1,39 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */ 
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package org.jivesoftware.spark.ui;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.FlowLayout;
-import java.awt.Font;
-
 /**
  *
  */
 public class RosterTreeCellRenderer extends DefaultTreeCellRenderer {
-	private static final long serialVersionUID = 4645070076041138834L;
-	private Object value;
+
+    private static final long serialVersionUID = 4645070076041138834L;
+    private Object value;
     private boolean isExpanded;
 
     /**
@@ -54,7 +52,7 @@ public class RosterTreeCellRenderer extends DefaultTreeCellRenderer {
         setIcon(getCustomIcon());
 
         // Root Nodes are always bold
-        RosterNode node = (RosterNode)value;
+        RosterNode node = (RosterNode) value;
         if (node.isGroup()) {
             setFont(new Font("Dialog", Font.BOLD, 11));
             setText(node.getName() + " (" + node.getChildCount() + " online)");
@@ -83,8 +81,7 @@ public class RosterTreeCellRenderer extends DefaultTreeCellRenderer {
 
         if (selected) {
             panel.setBackground(getBackgroundSelectionColor());
-        }
-        else {
+        } else {
             panel.setBackground(getBackgroundNonSelectionColor());
         }
         return panel;
@@ -92,7 +89,7 @@ public class RosterTreeCellRenderer extends DefaultTreeCellRenderer {
 
     private Icon getCustomIcon() {
         if (value instanceof RosterNode) {
-            RosterNode node = (RosterNode)value;
+            RosterNode node = (RosterNode) value;
             if (isExpanded) {
                 return node.getOpenIcon();
             }
@@ -125,5 +122,3 @@ public class RosterTreeCellRenderer extends DefaultTreeCellRenderer {
         return getCustomIcon();
     }
 }
-
-

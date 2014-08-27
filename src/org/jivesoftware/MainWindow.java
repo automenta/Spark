@@ -1,23 +1,20 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
+ * $RCSfile: ,v $ $Revision: $ $Date: $
  *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
-
 package org.jivesoftware;
 
 import java.awt.BorderLayout;
@@ -72,15 +69,16 @@ import org.jivesoftware.sparkimpl.settings.local.SettingsManager;
 import org.jivesoftware.sparkimpl.updater.CheckUpdates;
 
 /**
- * The <code>MainWindow</code> class acts as both the DockableHolder and the proxy
- * to the Workspace in Spark.
+ * The <code>MainWindow</code> class acts as both the DockableHolder and the
+ * proxy to the Workspace in Spark.
  *
  * @version 1.0, 03/12/14
  */
 public final class MainWindow extends ChatFrame implements ActionListener {
-	private static final long serialVersionUID = -6062104959613603510L;
 
-	private final Set<MainWindowListener> listeners = new HashSet<MainWindowListener>();
+    private static final long serialVersionUID = -6062104959613603510L;
+
+    private final Set<MainWindowListener> listeners = new HashSet<MainWindowListener>();
 
     private final JMenu connectMenu = new JMenu();
     private final JMenu contactsMenu = new JMenu();
@@ -90,7 +88,6 @@ public final class MainWindow extends ChatFrame implements ActionListener {
 
     private JMenuItem preferenceMenuItem;
     private JCheckBoxMenuItem alwaysOnTopItem;
-
 
     private final JMenuBar mainWindowBar = new JMenuBar();
 
@@ -106,8 +103,8 @@ public final class MainWindow extends ChatFrame implements ActionListener {
     private static final Object LOCK = new Object();
 
     /**
-     * Returns the singleton instance of <CODE>MainWindow</CODE>,
-     * creating it if necessary.
+     * Returns the singleton instance of <CODE>MainWindow</CODE>, creating it if
+     * necessary.
      * <p/>
      *
      * @return the singleton instance of <Code>MainWindow</CODE>
@@ -116,31 +113,26 @@ public final class MainWindow extends ChatFrame implements ActionListener {
         // Synchronize on LOCK to ensure that we don't end up creating
         // two singletons.
 
-
         synchronized (LOCK) {
             if (null == singleton) {
-            	MainWindow controller = new MainWindow(Default.getString(Default.APPLICATION_NAME), SparkManager.getApplicationImage());
-            	singleton = controller;
+                MainWindow controller = new MainWindow(Default.getString(Default.APPLICATION_NAME), SparkManager.getApplicationImage());
+                singleton = controller;
             }
         }
         return singleton;
     }
 
-
     /**
-     * Constructs the UI for the MainWindow. The MainWindow UI is the container for the
-     * entire Spark application.
+     * Constructs the UI for the MainWindow. The MainWindow UI is the container
+     * for the entire Spark application.
      *
      * @param title the title of the frame.
-     * @param icon  the icon used in the frame.
+     * @param icon the icon used in the frame.
      */
     private MainWindow(String title, ImageIcon icon) {
 
-
         // Initialize and dock the menus
         buildMenu();
-
-
 
         // Add Workspace Container
         getContentPane().setLayout(new BorderLayout());
@@ -150,8 +142,7 @@ public final class MainWindow extends ChatFrame implements ActionListener {
             // Use default settings.
             setSize(300, 500);
             GraphicUtils.centerWindowOnScreen(this);
-        }
-        else {
+        } else {
             setBounds(settings.getMainWindowX(), settings.getMainWindowY(), settings.getMainWindowWidth(), settings.getMainWindowHeight());
         }
 
@@ -161,8 +152,6 @@ public final class MainWindow extends ChatFrame implements ActionListener {
 
         setTitle(title);
         setIconImage(icon.getImage());
-
-
 
         // Setup WindowListener to be the proxy to the actual window listener
         // which cannot normally be used outside of the Window component because
@@ -185,8 +174,8 @@ public final class MainWindow extends ChatFrame implements ActionListener {
             }
 
             /**
-             * This event fires whenever a user minimizes the window
-             * from the toolbar.
+             * This event fires whenever a user minimizes the window from the
+             * toolbar.
              *
              * @param e WindowEvent is not used.
              */
@@ -194,9 +183,8 @@ public final class MainWindow extends ChatFrame implements ActionListener {
             }
 
             /**
-             * This event fires when the application is closing.
-             * This allows Plugins to do any persistence or other
-             * work before exiting.
+             * This event fires when the application is closing. This allows
+             * Plugins to do any persistence or other work before exiting.
              *
              * @param e WindowEvent is never used.
              */
@@ -210,9 +198,9 @@ public final class MainWindow extends ChatFrame implements ActionListener {
     }
 
     /**
-     * Adds a MainWindow listener to {@link MainWindow}. The
-     * listener will be called when either the MainWindow has been minimized, maximized,
-     * or is shutting down.
+     * Adds a MainWindow listener to {@link MainWindow}. The listener will be
+     * called when either the MainWindow has been minimized, maximized, or is
+     * shutting down.
      *
      * @param listener the <code>MainWindowListener</code> to register
      */
@@ -265,8 +253,8 @@ public final class MainWindow extends ChatFrame implements ActionListener {
     }
 
     /**
-     * Prepares Spark for shutting down by first calling all {@link MainWindowListener}s and
-     * setting the Agent to be offline.
+     * Prepares Spark for shutting down by first calling all
+     * {@link MainWindowListener}s and setting the Agent to be offline.
      */
     public void shutdown() {
         final XMPPConnection con = SparkManager.getConnection();
@@ -279,21 +267,22 @@ public final class MainWindow extends ChatFrame implements ActionListener {
         // Notify all MainWindowListeners
         try {
             fireWindowShutdown();
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             Log.error(ex);
         }
         // Close application.
-        if(!Default.getBoolean("DISABLE_EXIT"))
+        if (!Default.getBoolean("DISABLE_EXIT")) {
             System.exit(1);
+        }
 
     }
 
     /**
-     * Prepares Spark for shutting down by first calling all {@link MainWindowListener}s and
-     * setting the Agent to be offline.
+     * Prepares Spark for shutting down by first calling all
+     * {@link MainWindowListener}s and setting the Agent to be offline.
      *
-     * @param sendStatus true if Spark should send a presence with a status message.
+     * @param sendStatus true if Spark should send a presence with a status
+     * message.
      */
     public void logout(boolean sendStatus) {
         final XMPPConnection con = SparkManager.getConnection();
@@ -302,30 +291,29 @@ public final class MainWindow extends ChatFrame implements ActionListener {
         if (con.isConnected() && sendStatus) {
             final InputTextAreaDialog inputTextDialog = new InputTextAreaDialog();
             status = inputTextDialog.getInput(Res.getString("title.status.message"), Res.getString("message.current.status"),
-                SparkRes.getImageIcon(SparkRes.USER1_MESSAGE_24x24), this);
+                    SparkRes.getImageIcon(SparkRes.USER1_MESSAGE_24x24), this);
         }
 
-        if (status != null || !sendStatus)
-        {
-	        // Notify all MainWindowListeners
-	        try {
-	            // Set auto-login to false;
-	            SettingsManager.getLocalPreferences().setAutoLogin(false);
-	            SettingsManager.saveSettings();
+        if (status != null || !sendStatus) {
+            // Notify all MainWindowListeners
+            try {
+                // Set auto-login to false;
+                SettingsManager.getLocalPreferences().setAutoLogin(false);
+                SettingsManager.saveSettings();
 
-	            fireWindowShutdown();
-	            setVisible(false);
-	        }
-	        finally {
-	            closeConnectionAndInvoke(status);
-	        }
+                fireWindowShutdown();
+                setVisible(false);
+            } finally {
+                closeConnectionAndInvoke(status);
+            }
         }
     }
 
     /**
      * Closes the current connection and restarts Spark.
      *
-     * @param reason the reason for logging out. This can be if user gave no reason.
+     * @param reason the reason for logging out. This can be if user gave no
+     * reason.
      */
     public void closeConnectionAndInvoke(String reason) {
         final XMPPConnection con = SparkManager.getConnection();
@@ -333,8 +321,7 @@ public final class MainWindow extends ChatFrame implements ActionListener {
             if (reason != null) {
                 Presence byePresence = new Presence(Presence.Type.unavailable, reason, -1, null);
                 con.disconnect(byePresence);
-            }
-            else {
+            } else {
                 con.disconnect();
             }
         }
@@ -342,23 +329,23 @@ public final class MainWindow extends ChatFrame implements ActionListener {
             restartApplicationWithJava();
         }
     }
-    
+
     private File getLibDirectory() throws IOException {
         File jarFile;
-        try{
+        try {
             jarFile = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-        } catch(Exception e) {
+        } catch (Exception e) {
             Log.error("Cannot get jar file containing the startup class", e);
             return null;
         }
-        if ( !jarFile.getName().endsWith(".jar") ) {
+        if (!jarFile.getName().endsWith(".jar")) {
             Log.error("The startup class is not packaged in a jar file");
             return null;
         }
         File libDir = jarFile.getParentFile();
         return libDir;
     }
-    
+
     private String getClasspath() throws IOException {
         File libDir = getLibDirectory();
         String libPath = libDir.getCanonicalPath();
@@ -372,10 +359,10 @@ public final class MainWindow extends ChatFrame implements ActionListener {
         return classpath.toString();
     }
 
-    private String getCommandPath() throws IOException{        
+    private String getCommandPath() throws IOException {
         return getLibDirectory().getParentFile().getCanonicalPath();
     }
-    
+
     public boolean restartApplicationWithScript() {
         String command = null;
         try {
@@ -390,7 +377,7 @@ public final class MainWindow extends ChatFrame implements ActionListener {
                     Log.warning("Starter EXE file does not exist");
                     return false;
                 }
-                command = starterExe + " \"" + sparkExe + "\""; 
+                command = starterExe + " \"" + sparkExe + "\"";
             } else if (Spark.isLinux()) {
                 command = getCommandPath() + File.separator + Default.getString(Default.SHORT_NAME);
                 if (!new File(command).exists()) {
@@ -409,12 +396,12 @@ public final class MainWindow extends ChatFrame implements ActionListener {
             return false;
         }
     }
-    
+
     public boolean restartApplicationWithJava() {
         String javaBin = System.getProperty("java.home") + File.separatorChar + "bin" + File.separatorChar + "java";
         try {
-            String toExec[] = new String[] {
-                    javaBin, "-cp", getClasspath(), "org.jivesoftware.launcher.Startup"};
+            String toExec[] = new String[]{
+                javaBin, "-cp", getClasspath(), "org.jivesoftware.launcher.Startup"};
             Runtime.getRuntime().exec(toExec);
         } catch (Exception e) {
             Log.error("Error trying to restart application with java", e);
@@ -447,49 +434,43 @@ public final class MainWindow extends ChatFrame implements ActionListener {
         //mainWindowBar.add(pluginsMenu);
         mainWindowBar.add(helpMenu);
 
-
         preferenceMenuItem = new JMenuItem(SparkRes.getImageIcon(SparkRes.PREFERENCES_IMAGE));
         preferenceMenuItem.setText(Res.getString("title.spark.preferences"));
         preferenceMenuItem.addActionListener(this);
         connectMenu.add(preferenceMenuItem);
 
-
         alwaysOnTopItem = new JCheckBoxMenuItem();
         ResourceUtils.resButton(alwaysOnTopItem, Res.getString("menuitem.always.on.top"));
         alwaysOnTopItem.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent actionEvent) {
-                	if (alwaysOnTopItem.isSelected())
-                	{
-                		SettingsManager.getLocalPreferences().setMainWindowAlwaysOnTop(true);
-                		MainWindow.getInstance().setAlwaysOnTop(true);
-                	}
-                	else
-                	{
-                		SettingsManager.getLocalPreferences().setMainWindowAlwaysOnTop(false);
-                		MainWindow.getInstance().setAlwaysOnTop(false);
-                	}
+            public void actionPerformed(ActionEvent actionEvent) {
+                if (alwaysOnTopItem.isSelected()) {
+                    SettingsManager.getLocalPreferences().setMainWindowAlwaysOnTop(true);
+                    MainWindow.getInstance().setAlwaysOnTop(true);
+                } else {
+                    SettingsManager.getLocalPreferences().setMainWindowAlwaysOnTop(false);
+                    MainWindow.getInstance().setAlwaysOnTop(false);
                 }
+            }
         });
 
-        if (SettingsManager.getLocalPreferences().isMainWindowAlwaysOnTop())
-        {
-        	alwaysOnTopItem.setSelected(true);
-        	this.setAlwaysOnTop(true);
+        if (SettingsManager.getLocalPreferences().isMainWindowAlwaysOnTop()) {
+            alwaysOnTopItem.setSelected(true);
+            this.setAlwaysOnTop(true);
         }
         connectMenu.add(alwaysOnTopItem);
 
-        if(!Default.getBoolean("DISABLE_EXIT"))
+        if (!Default.getBoolean("DISABLE_EXIT")) {
             connectMenu.addSeparator();
+        }
 
         //EventQueue.invokeLater(new Runnable() {
-   	   //	public void run() {
-
+        //	public void run() {
         JMenuItem logoutMenuItem = new JMenuItem();
         ResourceUtils.resButton(logoutMenuItem, Res.getString("menuitem.logout.no.status"));
         logoutMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 logout(false);
-           }
+            }
         });
 
         JMenuItem logoutWithStatus = new JMenuItem();
@@ -503,33 +484,32 @@ public final class MainWindow extends ChatFrame implements ActionListener {
         if ((Spark.isWindows() || Spark.isLinux() || Spark.isMac()) && !Default.getBoolean("DISABLE_EXIT")) {
             connectMenu.add(logoutMenuItem);
             connectMenu.add(logoutWithStatus);
-	    connectMenu.addSeparator();
-	}
+            connectMenu.addSeparator();
+        }
 
         if (!Default.getBoolean("DISABLE_EXIT")) {
             connectMenu.add(exitMenuItem);
         }
 
-        JMenuItem updateMenu= new JMenuItem("", SparkRes.getImageIcon(SparkRes.DOWNLOAD_16x16));
+        JMenuItem updateMenu = new JMenuItem("", SparkRes.getImageIcon(SparkRes.DOWNLOAD_16x16));
         ResourceUtils.resButton(updateMenu, Res.getString("menuitem.check.for.updates"));
         updateMenu.addActionListener(new ActionListener() {
-	    @Override
-	    public void actionPerformed(ActionEvent e) {
-		checkForUpdates(true);
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                checkForUpdates(true);
 
-	    }
-	});
+            }
+        });
 
         // Add Error Dialog Viewer
         final Action viewErrors = new AbstractAction() {
-			private static final long serialVersionUID = -420926784631340112L;
+            private static final long serialVersionUID = -420926784631340112L;
 
-			public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 File logDir = new File(Spark.getLogDirectory(), "errors.log");
                 if (!logDir.exists()) {
                     JOptionPane.showMessageDialog(SparkManager.getMainWindow(), "No error logs found.", "Error Log", JOptionPane.INFORMATION_MESSAGE);
-                }
-                else {
+                } else {
                     showErrorLog();
                 }
             }
@@ -539,43 +519,40 @@ public final class MainWindow extends ChatFrame implements ActionListener {
 
         final Action viewHelpGuideAction = new AbstractAction() {
 
-            	final String url = Default.getString(Default.HELP_USER_GUIDE);
-			private static final long serialVersionUID = 2680369963282231348L;
+            final String url = Default.getString(Default.HELP_USER_GUIDE);
+            private static final long serialVersionUID = 2680369963282231348L;
 
-			public void actionPerformed(ActionEvent actionEvent) {
+            public void actionPerformed(ActionEvent actionEvent) {
                 try {
 
                     BrowserLauncher.openURL(url);
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     Log.error("Unable to load online help.", e);
                 }
             }
         };
 
-
-	if (!Default.getBoolean("HELP_USER_GUIDE_DISABLED")) {
-	    viewHelpGuideAction.putValue(Action.NAME,
-		    Res.getString("menuitem.user.guide"));
-	    viewHelpGuideAction.putValue(Action.SMALL_ICON,
-		    SparkRes.getImageIcon(SparkRes.SMALL_QUESTION));
-	    helpMenu.add(viewHelpGuideAction);
-	}
-	if (!Default.getBoolean("HELP_FORUM_DISABLED")) {
-	    //helpMenu.add(sparkforumItem);
-	}
+        if (!Default.getBoolean("HELP_USER_GUIDE_DISABLED")) {
+            viewHelpGuideAction.putValue(Action.NAME,
+                    Res.getString("menuitem.user.guide"));
+            viewHelpGuideAction.putValue(Action.SMALL_ICON,
+                    SparkRes.getImageIcon(SparkRes.SMALL_QUESTION));
+            helpMenu.add(viewHelpGuideAction);
+        }
+        if (!Default.getBoolean("HELP_FORUM_DISABLED")) {
+            //helpMenu.add(sparkforumItem);
+        }
 
         // Build Help Menu
-	if(!Default.getBoolean(Default.DISABLE_UPDATES)){
-	    helpMenu.add(updateMenu);
-	}
+        if (!Default.getBoolean(Default.DISABLE_UPDATES)) {
+            helpMenu.add(updateMenu);
+        }
         helpMenu.addSeparator();
         helpMenu.add(viewErrors);
 
         // ResourceUtils - Adds mnemonics
         ResourceUtils.resButton(preferenceMenuItem, Res.getString("menuitem.preferences"));
         ResourceUtils.resButton(helpMenu, Res.getString("menuitem.help"));
-        
 
 //	if (Default.getString("HELP_FORUM_TEXT").length() > 0) {
 //	    ResourceUtils.resButton(sparkforumItem, Default.getString("HELP_FORUM_TEXT"));
@@ -583,62 +560,60 @@ public final class MainWindow extends ChatFrame implements ActionListener {
 //	    ResourceUtils.resButton(sparkforumItem, Res.getString("menuitem.online.help"));
 //	}
         // Register shutdown with the exit menu.
-	exitMenuItem.addActionListener(new AbstractAction() {
-	    private static final long serialVersionUID = -2301236575241532698L;
+        exitMenuItem.addActionListener(new AbstractAction() {
+            private static final long serialVersionUID = -2301236575241532698L;
 
-	    public void actionPerformed(ActionEvent e) {
-		shutdown();
-	    }
-	});
+            public void actionPerformed(ActionEvent e) {
+                shutdown();
+            }
+        });
 
         /*
-	sparkforumItem.addActionListener(new AbstractAction() {
-	    private static final long serialVersionUID = -1423433460333010339L;
+         sparkforumItem.addActionListener(new AbstractAction() {
+         private static final long serialVersionUID = -1423433460333010339L;
 
-	    final String url = Default.getString("HELP_FORUM");
+         final String url = Default.getString("HELP_FORUM");
 
-	    public void actionPerformed(ActionEvent e) {
-		try {
-		    BrowserLauncher.openURL(url);
-		} catch (Exception browserException) {
-		    Log.error("Error launching browser:", browserException);
-		}
-	    }
-	});
-        */
+         public void actionPerformed(ActionEvent e) {
+         try {
+         BrowserLauncher.openURL(url);
+         } catch (Exception browserException) {
+         Log.error("Error launching browser:", browserException);
+         }
+         }
+         });
+         */
+        if (!Default.getBoolean("DISABLE_UPDATES")) {
+            // Execute spark update checker after one minute.
+            final TimerTask task = new SwingTimerTask() {
+                public void doRun() {
+                    checkForUpdates(false);
+                }
+            };
 
+            TaskEngine.getInstance().schedule(task, 60000);
+        }
 
-	if (!Default.getBoolean("DISABLE_UPDATES")) {
-	    // Execute spark update checker after one minute.
-	    final TimerTask task = new SwingTimerTask() {
-		public void doRun() {
-		    checkForUpdates(false);
-		}
-	    };
+        if (SettingsManager.getLocalPreferences().isDebuggerEnabled()) {
+            JMenuItem rawPackets = new JMenuItem(SparkRes.getImageIcon(SparkRes.TRAY_IMAGE));
+            rawPackets.setText("Send Packets");
+            rawPackets.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    new RawPacketSender();
 
-	    TaskEngine.getInstance().schedule(task, 60000);
-	}
+                }
+            });
 
-	if(SettingsManager.getLocalPreferences().isDebuggerEnabled())
-	{
-	    JMenuItem rawPackets = new JMenuItem(SparkRes.getImageIcon(SparkRes.TRAY_IMAGE));
-	    rawPackets.setText("Send Packets");
-	    rawPackets.addActionListener(new ActionListener() {
-	        @Override
-	        public void actionPerformed(ActionEvent e) {
-	    		new RawPacketSender();
-
-	        }
-	    });
-
-	    connectMenu.add(rawPackets,2);
-	}
+            connectMenu.add(rawPackets, 2);
+        }
 
     }
 
     /**
      * Returns the JMenuBar for the MainWindow. You would call this if you
-     * wished to add or remove menu items to the main menubar. (File | Tools | Help)
+     * wished to add or remove menu items to the main menubar. (File | Tools |
+     * Help)
      *
      * @return the Jive Talker Main Window MenuBar
      */
@@ -647,8 +622,10 @@ public final class MainWindow extends ChatFrame implements ActionListener {
     }
 
     /**
-     * Returns the Menu in the JMenuBar by it's name. For example:<p>
-     * <pre>
+     * Returns the Menu in the JMenuBar by it's name. For example:
+     * <p>
+     * <
+     * pre>
      * JMenu toolsMenu = getMenuByName("Tools");
      * </pre>
      * </p>
@@ -707,8 +684,7 @@ public final class MainWindow extends ChatFrame implements ActionListener {
                 public Object construct() {
                     try {
                         Thread.sleep(50);
-                    }
-                    catch (InterruptedException e) {
+                    } catch (InterruptedException e) {
                         Log.error(e);
                     }
                     return "ok";
@@ -717,8 +693,7 @@ public final class MainWindow extends ChatFrame implements ActionListener {
                 public void finished() {
                     try {
                         updater.checkForUpdate(forced);
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                         Log.error("There was an error while checking for a new update.", e);
                     }
                 }
@@ -726,13 +701,10 @@ public final class MainWindow extends ChatFrame implements ActionListener {
 
             updateThread.start();
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.warning("Error updating.", e);
         }
     }
-
-
 
     /**
      * Displays the Spark error log.
@@ -783,8 +755,7 @@ public final class MainWindow extends ChatFrame implements ActionListener {
             settings.setMainWindowX(getX());
             settings.setMainWindowY(getY());
             LayoutSettingsManager.saveLayoutSettings();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             // Don't let this cause a real problem shutting down.
         }
     }

@@ -1,21 +1,19 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware;
 
@@ -32,8 +30,8 @@ import java.util.jar.Pack200;
 
 /**
  *
- import org.jivesoftware.launcher.JiveClassLoader;
-*/
+ * import org.jivesoftware.launcher.JiveClassLoader;
+ */
 public class Main {
 
     /**
@@ -46,9 +44,9 @@ public class Main {
     }
 
     /**
-     * Starts the server by loading and instantiating the bootstrap
-     * container. Once the start method is called, the server is
-     * started and the server starter should not be used again.
+     * Starts the server by loading and instantiating the bootstrap container.
+     * Once the start method is called, the server is started and the server
+     * starter should not be used again.
      *
      * @param args the arguments passed into this initial instance of Spark.
      */
@@ -62,11 +60,10 @@ public class Main {
             final String workingDirectory = System.getProperty("appdir");
             if (workingDirectory == null) {
                 libDir = new File(DEFAULT_LIB_DIR);
-            }
-            else {
+            } else {
                 libDir = new File(new File(workingDirectory), "lib");
             }
-            
+
             File pluginDir = new File(libDir.getParentFile(), "plugins");
 
             // Unpack any pack files in lib.
@@ -93,8 +90,7 @@ public class Main {
 
             Method startupMethod = sparkClass.getMethod("startup");
             startupMethod.invoke(instanceOfSpark);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -116,12 +112,13 @@ public class Main {
     }
 
     /**
-     * Converts any pack files in a directory into standard JAR files. Each
-     * pack file will be deleted after being converted to a JAR. If no
-     * pack files are found, this method does nothing.
+     * Converts any pack files in a directory into standard JAR files. Each pack
+     * file will be deleted after being converted to a JAR. If no pack files are
+     * found, this method does nothing.
      *
-     * @param libDir      the directory containing pack files.
-     * @param printStatus true if status ellipses should be printed when unpacking.
+     * @param libDir the directory containing pack files.
+     * @param printStatus true if status ellipses should be printed when
+     * unpacking.
      */
     private void unpackArchives(File libDir, boolean printStatus) {
         // Get a list of all packed files in the lib directory.
@@ -141,7 +138,7 @@ public class Main {
         for (File packedFile : packedFiles) {
             try {
                 String jarName = packedFile.getName().substring(0,
-                    packedFile.getName().length() - ".pack".length());
+                        packedFile.getName().length() - ".pack".length());
                 // Delete JAR file with same name if it exists (could be due to upgrade
                 // from old Wildfire release).
                 File jarFile = new File(libDir, jarName);
@@ -151,7 +148,7 @@ public class Main {
 
                 InputStream in = new BufferedInputStream(new FileInputStream(packedFile));
                 JarOutputStream out = new JarOutputStream(new BufferedOutputStream(
-                    new FileOutputStream(new File(libDir, jarName))));
+                        new FileOutputStream(new File(libDir, jarName))));
                 Pack200.Unpacker unpacker = Pack200.newUnpacker();
                 // Print something so the user knows something is happening.
                 if (printStatus) {
@@ -164,8 +161,7 @@ public class Main {
                 out.close();
                 packedFile.delete();
                 unpacked = true;
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -174,4 +170,4 @@ public class Main {
             System.out.println();
         }
     }
-}     
+}

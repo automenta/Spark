@@ -1,26 +1,23 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
+ * $RCSfile: ,v $ $Revision: $ $Date: $
  *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.sparkimpl.plugin.layout;
 
 import java.awt.Toolkit;
-
 
 public class LayoutSettings {
 
@@ -57,13 +54,13 @@ public class LayoutSettings {
     }
 
     public int getMainWindowWidth() {
-	if (mainWindowWidth < 100) {
-	    mainWindowWidth = 100;
-	} else if (mainWindowWidth > Toolkit.getDefaultToolkit()
-		.getScreenSize().width) {
-	    mainWindowWidth = Toolkit.getDefaultToolkit().getScreenSize().width - 50;
-	}
-	return mainWindowWidth;
+        if (mainWindowWidth < 100) {
+            mainWindowWidth = 100;
+        } else if (mainWindowWidth > Toolkit.getDefaultToolkit()
+                .getScreenSize().width) {
+            mainWindowWidth = Toolkit.getDefaultToolkit().getScreenSize().width - 50;
+        }
+        return mainWindowWidth;
     }
 
     public void setMainWindowWidth(int mainWindowWidth) {
@@ -71,13 +68,13 @@ public class LayoutSettings {
     }
 
     public int getMainWindowHeight() {
-	if (mainWindowHeight < 200) {
-	    mainWindowHeight = 500;
-	} else if (mainWindowHeight > Toolkit.getDefaultToolkit()
-		.getScreenSize().height) {
-	    mainWindowHeight = Toolkit.getDefaultToolkit().getScreenSize().height - 50;
-	}
-	return mainWindowHeight;
+        if (mainWindowHeight < 200) {
+            mainWindowHeight = 500;
+        } else if (mainWindowHeight > Toolkit.getDefaultToolkit()
+                .getScreenSize().height) {
+            mainWindowHeight = Toolkit.getDefaultToolkit().getScreenSize().height - 50;
+        }
+        return mainWindowHeight;
     }
 
     public void setMainWindowHeight(int mainWindowHeight) {
@@ -122,40 +119,39 @@ public class LayoutSettings {
     }
 
     public int getPreferencesFrameX() {
-	return preferencesFrameX;
+        return preferencesFrameX;
     }
 
     public void setPreferencesFrameX(int preferencesFrameX) {
-	this.preferencesFrameX = preferencesFrameX;
+        this.preferencesFrameX = preferencesFrameX;
     }
 
     public int getPreferencesFrameY() {
-	return preferencesFrameY;
+        return preferencesFrameY;
     }
 
     public void setPreferencesFrameY(int preferencesFrameY) {
-	this.preferencesFrameY = preferencesFrameY;
+        this.preferencesFrameY = preferencesFrameY;
     }
 
     public int getPreferencesFrameWidth() {
-	return preferencesFrameWidth < 600 ? 600 : preferencesFrameWidth;
+        return preferencesFrameWidth < 600 ? 600 : preferencesFrameWidth;
     }
 
     public void setPreferencesFrameWidth(int preferencesFrameWidth) {
-	this.preferencesFrameWidth = preferencesFrameWidth;
+        this.preferencesFrameWidth = preferencesFrameWidth;
     }
 
     public int getPreferencesFrameHeight() {
-	return preferencesFrameHeight < 600 ? 600 : preferencesFrameHeight;
+        return preferencesFrameHeight < 600 ? 600 : preferencesFrameHeight;
     }
 
     public void setPreferencesFrameHeight(int preferencesFrameHeight) {
-	this.preferencesFrameHeight = preferencesFrameHeight;
+        this.preferencesFrameHeight = preferencesFrameHeight;
     }
 
     public int getSplitPaneDividerLocation() {
-	return dividerLocation;
-   }
-
+        return dividerLocation;
+    }
 
 }

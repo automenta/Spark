@@ -1,43 +1,40 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.spark.component;
 
-import org.jivesoftware.resource.SparkRes;
-
+import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
-
-import java.awt.Color;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import org.jivesoftware.resource.SparkRes;
 
 /**
- * Creates a Firefox Search type box that allows for icons inside of a textfield. This
- * could be used to build out your own search objects.
+ * Creates a Firefox Search type box that allows for icons inside of a
+ * textfield. This could be used to build out your own search objects.
  */
 public class IconTextField extends JPanel {
+
     private static final long serialVersionUID = -7000758637988415370L;
     private JTextField textField;
     private JLabel imageComponent;
@@ -50,7 +47,7 @@ public class IconTextField extends JPanel {
      */
     public IconTextField(Icon icon) {
         setLayout(new GridBagLayout());
-        setBackground((Color)UIManager.get("TextField.background"));
+        setBackground((Color) UIManager.get("TextField.background"));
 
         textField = new JTextField();
         textField.setBorder(null);
@@ -124,9 +121,3 @@ public class IconTextField extends JPanel {
         return textField;
     }
 }
-
-
-
-
-
-

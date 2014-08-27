@@ -1,21 +1,19 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- *  
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2011 eZuce Inc. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.spark.util;
 
@@ -48,6 +46,7 @@ import org.jivesoftware.spark.util.log.Log;
  *
  */
 public final class UIComponentRegistry {
+
     // use Spark defaults, so without any plugins we still have Spark's
     // functionality
     private static Class<? extends ContactItem> contactItemClass = ContactItem.class;
@@ -62,12 +61,10 @@ public final class UIComponentRegistry {
     private static Class<? extends ConferenceServices> conferenceServicesClass = ConferenceServices.class;
     private static Class<? extends TranscriptWindow> transcriptWindowClass = TranscriptWindow.class;
     private static Class<? extends ChatRoom> chatRoomClass = ChatRoomImpl.class;
-        private static Class<? extends GroupChatRoom> groupChatRoomClass=GroupChatRoom.class;
-        private static Class<? extends GroupChatParticipantList> groupChatParticipantListClass=GroupChatParticipantList.class;
+    private static Class<? extends GroupChatRoom> groupChatRoomClass = GroupChatRoom.class;
+    private static Class<? extends GroupChatParticipantList> groupChatParticipantListClass = GroupChatParticipantList.class;
     private static Class<? extends ChatContainer> chatContainerClass = ChatContainer.class;
     private static Class<? extends ButtonFactory> buttonFactoryClass = ButtonFactory.class;
-
-
 
     private UIComponentRegistry() {
         // disable instantiation
@@ -249,23 +246,23 @@ public final class UIComponentRegistry {
         }
     }
 
-        public static void registerGroupChatRoom(Class<? extends GroupChatRoom> clazz) {
-                if (groupChatRoomClass != clazz){
-                    Log.debug("Registering new group chat room class: " + clazz.getName());
-                    groupChatRoomClass = clazz;
-                } else {
-                    Log.warning("Class " + clazz.getName() + " already registered.");
-                }
+    public static void registerGroupChatRoom(Class<? extends GroupChatRoom> clazz) {
+        if (groupChatRoomClass != clazz) {
+            Log.debug("Registering new group chat room class: " + clazz.getName());
+            groupChatRoomClass = clazz;
+        } else {
+            Log.warning("Class " + clazz.getName() + " already registered.");
         }
+    }
 
-        public static void registerGroupChatParticipantList(Class<? extends GroupChatParticipantList> clazz) {
-                if (groupChatParticipantListClass != clazz){
-                    Log.debug("Registering new group chat participant list class: " + clazz.getName());
-                    groupChatParticipantListClass = clazz;
-                } else {
-                    Log.warning("Class " + clazz.getName() + " already registered.");
-                }
+    public static void registerGroupChatParticipantList(Class<? extends GroupChatParticipantList> clazz) {
+        if (groupChatParticipantListClass != clazz) {
+            Log.debug("Registering new group chat participant list class: " + clazz.getName());
+            groupChatParticipantListClass = clazz;
+        } else {
+            Log.warning("Class " + clazz.getName() + " already registered.");
         }
+    }
 
     /**
      * Registers a new class implementing a chat room.
@@ -319,7 +316,7 @@ public final class UIComponentRegistry {
      * singleton).
      *
      * @return The instance of the class currently registered as contact info
-     *         window.
+     * window.
      */
     public static ContactInfoWindow getContactInfoWindow() {
         ContactInfoWindow instance = null;
@@ -331,7 +328,7 @@ public final class UIComponentRegistry {
             // not pretty but we're catching 5 exceptions we can do little about
             Log.error(
                     "Error calling getInstance for "
-                            + contactInfoWindowClass.getName(), e);
+                    + contactInfoWindowClass.getName(), e);
         }
 
         return instance;
@@ -343,7 +340,7 @@ public final class UIComponentRegistry {
      * @param name
      *
      * @return A new instance of the class currently registered as contact
-     *         group.
+     * group.
      */
     public static ContactGroup createContactGroup(String name) {
         return instantiate(contactGroupClass, name);
@@ -415,7 +412,7 @@ public final class UIComponentRegistry {
      * Creates a new conference services object.
      *
      * @return A new instance of the class currently registered as conference
-     *         services.
+     * services.
      */
     public static ConferenceServices createConferenceServices() {
         return instantiate(conferenceServicesClass);
@@ -425,7 +422,7 @@ public final class UIComponentRegistry {
      * Creates a new transcript window object.
      *
      * @return A new instance of the class currently registered as transcript
-     *         window.
+     * window.
      */
     public static TranscriptWindow createTranscriptWindow() {
         return instantiate(transcriptWindowClass);
@@ -440,19 +437,19 @@ public final class UIComponentRegistry {
         return instantiate(chatRoomClass, participantJID, participantNickname, title);
     }
 
-        public static GroupChatRoom createGroupChatRoom(MultiUserChat muc) {
+    public static GroupChatRoom createGroupChatRoom(MultiUserChat muc) {
         return instantiate(groupChatRoomClass, muc);
     }
 
-        public static GroupChatParticipantList createGroupChatParticipantList(){
-            return instantiate(groupChatParticipantListClass);
-        }
+    public static GroupChatParticipantList createGroupChatParticipantList() {
+        return instantiate(groupChatParticipantListClass);
+    }
 
     /**
      * Creates a new chat container object.
      *
      * @return A new instance of the class currently registered as chat
-     *         container.
+     * container.
      */
     public static ChatContainer createChatContainer() {
         return instantiate(chatContainerClass);
@@ -481,10 +478,8 @@ public final class UIComponentRegistry {
     /**
      * Instantiate a given class.
      *
-     * @param currentClass
-     *            Class to instantiate.
-     * @param args
-     *            Arguments for the class constructor.
+     * @param currentClass Class to instantiate.
+     * @param args Arguments for the class constructor.
      * @return New instance, what else?
      */
     private static <T> T instantiate(Class<? extends T> currentClass, Object... args) {

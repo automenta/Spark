@@ -274,7 +274,7 @@ public final class SparkSystemTray implements ActionListener, MainWindowListener
         }
     }
 
-    public void shutdown() {        
+    public void shutdown() {
         systemTray.remove(trayIcon);
     }
 
@@ -339,7 +339,7 @@ public final class SparkSystemTray implements ActionListener, MainWindowListener
         });
     }
 
-    private void setTrayIcon(ImageIcon icon) {        
+    private void setTrayIcon(ImageIcon icon) {
         trayIcon.setImage(new ImageIcon(icon.getImage()).getImage());
     }
 

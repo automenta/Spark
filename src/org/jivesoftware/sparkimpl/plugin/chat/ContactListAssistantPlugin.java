@@ -1,24 +1,34 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.sparkimpl.plugin.chat;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 import org.jivesoftware.resource.Res;
 import org.jivesoftware.smack.Roster;
 import org.jivesoftware.smack.RosterEntry;
@@ -38,36 +48,23 @@ import org.jivesoftware.sparkimpl.settings.local.LocalPreferences;
 import org.jivesoftware.sparkimpl.settings.local.PreferenceListener;
 import org.jivesoftware.sparkimpl.settings.local.SettingsManager;
 
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseEvent;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
 /**
- * Adds extra functionallity to the <code>ContactList</code>. This includes copying and moving of <code>ContactItem</code>.
+ * Adds extra functionallity to the <code>ContactList</code>. This includes
+ * copying and moving of <code>ContactItem</code>.
  */
 public class ContactListAssistantPlugin implements Plugin {
 
     private JMenu moveToMenu;
     private JMenu copyToMenu;
     private LocalPreferences localPreferences;
-    
+
     @Override
     public void initialize() {
 
         moveToMenu = new JMenu(Res.getString("menuitem.move.to"));
         copyToMenu = new JMenu(Res.getString("menuitem.copy.to"));
         localPreferences = new LocalPreferences();
-        
+
         final ContactList contactList = SparkManager.getContactList();
         contactList.addContextMenuListener(new ContextMenuListener() {
             @Override
@@ -82,21 +79,21 @@ public class ContactListAssistantPlugin implements Plugin {
                             continue;
                         }
                         if (isContactItemInGroup(contactItems, group)) {
-                        	continue;
+                            continue;
                         }
                         final Action moveAction = new AbstractAction() {
-			    private static final long serialVersionUID = 6542011870221162331L;
+                            private static final long serialVersionUID = 6542011870221162331L;
 
-			    @Override
+                            @Override
                             public void actionPerformed(ActionEvent actionEvent) {
                                 moveItems(contactItems, group.getGroupName());
                             }
                         };
 
                         final Action copyAction = new AbstractAction() {
-   			    private static final long serialVersionUID = 2232885525630977329L;
+                            private static final long serialVersionUID = 2232885525630977329L;
 
-			    @Override
+                            @Override
                             public void actionPerformed(ActionEvent actionEvent) {
                                 copyItems(contactItems, group.getGroupName());
                             }
@@ -132,7 +129,7 @@ public class ContactListAssistantPlugin implements Plugin {
                     int index = -1;
                     for (int i = 0; i < popup.getComponentCount(); i++) {
                         Object o = popup.getComponent(i);
-                        if (o instanceof JMenuItem && ((JMenuItem)o).getText().equals(Res.getString("menuitem.rename"))) {
+                        if (o instanceof JMenuItem && ((JMenuItem) o).getText().equals(Res.getString("menuitem.rename"))) {
                             index = i;
                             break;
                         }
@@ -143,14 +140,12 @@ public class ContactListAssistantPlugin implements Plugin {
                             popup.add(moveToMenu, index + 1);
                             popup.add(copyToMenu, index + 2);
                         }
-                    }
-                    else if (contactItems.size() > 1) {
+                    } else if (contactItems.size() > 1) {
                         popup.addSeparator();
                         popup.add(moveToMenu);
                         popup.add(copyToMenu);
                         popup.addSeparator();
                     }
-
 
                 }
             }
@@ -175,32 +170,32 @@ public class ContactListAssistantPlugin implements Plugin {
             }
         });
     }
-    
-	private boolean isContactItemInGroup(Collection<ContactItem> contactItems, ContactGroup group) {
-		boolean contactInGroup = false;
-		for (ContactItem ci : contactItems) {
-			if (group.getContactItemByJID(ci.getJID(), true) != null) {
-				contactInGroup = true;
-				break;
-			}
-		}
-		return contactInGroup;
-	}
+
+    private boolean isContactItemInGroup(Collection<ContactItem> contactItems, ContactGroup group) {
+        boolean contactInGroup = false;
+        for (ContactItem ci : contactItems) {
+            if (group.getContactItemByJID(ci.getJID(), true) != null) {
+                contactInGroup = true;
+                break;
+            }
+        }
+        return contactInGroup;
+    }
 
     /**
      * Moves a collection of <code>ContactItem</code>s to the specified group.
      *
      * @param contactItems the contact items to move.
-     * @param groupName    the name of the group to move to.
+     * @param groupName the name of the group to move to.
      */
     private void moveItems(Collection<ContactItem> contactItems, String groupName) {
         final ContactGroup contactGroup = getContactGroup(groupName);
         ContactGroup oldGroup = null;
         for (ContactItem contactItem : contactItems) {
-        	oldGroup = getContactGroup(contactItem.getGroupName());
-        	if (oldGroup.isSharedGroup()) {
-        		continue;
-        	}
+            oldGroup = getContactGroup(contactItem.getGroupName());
+            if (oldGroup.isSharedGroup()) {
+                continue;
+            }
             addContactItem(contactGroup, contactItem, true);
         }
     }
@@ -209,7 +204,7 @@ public class ContactListAssistantPlugin implements Plugin {
      * Copies a collection of <code>ContactItem</code>s to a specified group.
      *
      * @param contactItems the collection of contact items.
-     * @param groupName    the name of the group to move to.
+     * @param groupName the name of the group to move to.
      */
     private void copyItems(Collection<ContactItem> contactItems, String groupName) {
         final ContactGroup contactGroup = getContactGroup(groupName);
@@ -249,11 +244,12 @@ public class ContactListAssistantPlugin implements Plugin {
     }
 
     /**
-     * Copies or moves a new <code>ContactItem</code> into the <code>ContactGroup</code>.
+     * Copies or moves a new <code>ContactItem</code> into the
+     * <code>ContactGroup</code>.
      *
      * @param contactGroup the ContactGroup.
-     * @param item         the ContactItem to move.
-     * @param move         true if the ContactItem should be moved, otherwise false.
+     * @param item the ContactItem to move.
+     * @param move true if the ContactItem should be moved, otherwise false.
      */
     private void addContactItem(final ContactGroup contactGroup, final ContactItem item, final boolean move) {
         ContactItem newContact = UIComponentRegistry.createContactItem(item.getAlias(), item.getNickname(), item.getJID());
@@ -261,7 +257,7 @@ public class ContactListAssistantPlugin implements Plugin {
         newContact.setIcon(item.getIcon());
         newContact.getNicknameLabel().setFont(item.getNicknameLabel().getFont());
         boolean groupHadAvailableContacts = false;
-        
+
         // Do not copy/move a contact item only if it is not already in the Group.
         if (contactGroup.getContactItemByJID(item.getJID(), true) != null) {
             return;
@@ -269,8 +265,7 @@ public class ContactListAssistantPlugin implements Plugin {
 
         if (!PresenceManager.isOnline(item.getJID())) {
             contactGroup.addOfflineContactItem(item.getAlias(), item.getNickname(), item.getJID(), null);
-        }
-        else {
+        } else {
             groupHadAvailableContacts = contactGroup.hasAvailableContacts();
             contactGroup.addContactItem(newContact);
         }
@@ -279,7 +274,6 @@ public class ContactListAssistantPlugin implements Plugin {
 
         final ContactGroup oldGroup = getContactGroup(item.getGroupName());
 
-        
         final boolean groupAvailableContacts = groupHadAvailableContacts;
         SwingWorker worker = new SwingWorker() {
             @Override
@@ -293,13 +287,11 @@ public class ContactListAssistantPlugin implements Plugin {
                     if (group.getName().equals(contactGroup.getGroupName())) {
                         try {
                             groupFound = group;
-                            if (!groupAvailableContacts)
-                            {
-                        	SparkManager.getContactList().toggleGroupVisibility(groupFound.getName(), true);
+                            if (!groupAvailableContacts) {
+                                SparkManager.getContactList().toggleGroupVisibility(groupFound.getName(), true);
                             }
                             group.addEntry(entry);
-                        }
-                        catch (XMPPException e1) {
+                        } catch (XMPPException e1) {
                             Log.error(e1);
                             return false;
                         }
@@ -310,13 +302,11 @@ public class ContactListAssistantPlugin implements Plugin {
                 if (groupFound == null) {
                     groupFound = roster.createGroup(contactGroup.getGroupName());
                     try {
-                	groupFound.addEntry(entry);
-                        if (!groupAvailableContacts)
-                        {
-                    	SparkManager.getContactList().toggleGroupVisibility(groupFound.getName(), true);
-                        }  
-                    }
-                    catch (XMPPException e) {
+                        groupFound.addEntry(entry);
+                        if (!groupAvailableContacts) {
+                            SparkManager.getContactList().toggleGroupVisibility(groupFound.getName(), true);
+                        }
+                    } catch (XMPPException e) {
                         Log.error(e);
                     }
                 }
@@ -325,13 +315,12 @@ public class ContactListAssistantPlugin implements Plugin {
 
             @Override
             public void finished() {
-                if ((Boolean)get()) {
+                if ((Boolean) get()) {
                     // Now try and remove the group from the old one.
                     if (move) {
                         removeContactItem(oldGroup, item);
-                       if (!localPreferences.isEmptyGroupsShown() && !oldGroup.hasAvailableContacts())
-                        {
-                          SparkManager.getContactList().toggleGroupVisibility(oldGroup.getGroupName(),false);
+                        if (!localPreferences.isEmptyGroupsShown() && !oldGroup.hasAvailableContacts()) {
+                            SparkManager.getContactList().toggleGroupVisibility(oldGroup.getGroupName(), false);
                         }
                     }
                 }
@@ -341,7 +330,6 @@ public class ContactListAssistantPlugin implements Plugin {
 
         worker.start();
     }
-
 
     public boolean removeContactItem(ContactGroup contactGroup, ContactItem item) {
         if (contactGroup.isSharedGroup()) {
@@ -365,8 +353,7 @@ public class ContactListAssistantPlugin implements Plugin {
                 try {
                     rosterGroup = group;
                     group.removeEntry(entry);
-                }
-                catch (XMPPException e1) {
+                } catch (XMPPException e1) {
                     return false;
                 }
             }

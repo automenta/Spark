@@ -1,33 +1,21 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */ 
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package org.jivesoftware.spark.plugin;
-
-import org.jivesoftware.smack.packet.IQ;
-import org.jivesoftware.smack.packet.PacketExtension;
-import org.jivesoftware.smack.provider.IQProvider;
-import org.jivesoftware.smack.provider.PacketExtensionProvider;
-import org.jivesoftware.smack.provider.ProviderManager;
-import org.jivesoftware.spark.util.URLFileSystem;
-import org.jivesoftware.spark.util.log.Log;
-import org.xmlpull.mxp1.MXParser;
-import org.xmlpull.v1.XmlPullParser;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -38,10 +26,19 @@ import java.net.URLClassLoader;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import org.jivesoftware.smack.packet.IQ;
+import org.jivesoftware.smack.packet.PacketExtension;
+import org.jivesoftware.smack.provider.IQProvider;
+import org.jivesoftware.smack.provider.PacketExtensionProvider;
+import org.jivesoftware.smack.provider.ProviderManager;
+import org.jivesoftware.spark.util.URLFileSystem;
+import org.jivesoftware.spark.util.log.Log;
+import org.xmlpull.mxp1.MXParser;
+import org.xmlpull.v1.XmlPullParser;
 
 /**
- * A simple classloader to extend the classpath to
- * include all jars in a lib directory.<p>
+ * A simple classloader to extend the classpath to include all jars in a lib
+ * directory.<p>
  * <p/>
  * The new classpath includes all <tt>*.jar files.
  *
@@ -75,8 +72,7 @@ public class PluginClassLoader extends URLClassLoader {
                 String smallName = name.toLowerCase();
                 if (smallName.endsWith(".jar")) {
                     accept = true;
-                }
-                else if (smallName.endsWith(".zip")) {
+                } else if (smallName.endsWith(".zip")) {
                     accept = true;
                 }
                 return accept;
@@ -94,8 +90,7 @@ public class PluginClassLoader extends URLClassLoader {
                 addURL(url);
                 try {
                     checkForSmackProviders(url);
-                }
-                catch (Throwable e) {
+                } catch (Throwable e) {
                     Log.error(e);
                 }
             }
@@ -116,7 +111,6 @@ public class PluginClassLoader extends URLClassLoader {
     private void loadSmackProvider(InputStream providerStream) throws Exception {
 
         // Get an array of class loaders to try loading the providers files from.
-
         try {
             XmlPullParser parser = new MXParser();
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
@@ -146,17 +140,14 @@ public class PluginClassLoader extends URLClassLoader {
                             Class<?> provider = this.loadClass(className);
                             if (IQProvider.class.isAssignableFrom(provider)) {
                                 ProviderManager.getInstance().addIQProvider(elementName, namespace, provider.newInstance());
-                            }
-                            else if (IQ.class.isAssignableFrom(provider)) {
+                            } else if (IQ.class.isAssignableFrom(provider)) {
                                 ProviderManager.getInstance().addIQProvider(elementName, namespace, provider.newInstance());
                             }
-                        }
-                        catch (ClassNotFoundException cnfe) {
+                        } catch (ClassNotFoundException cnfe) {
                             cnfe.printStackTrace();
                         }
 
-                    }
-                    else if (parser.getName().equals("extensionProvider")) {
+                    } else if (parser.getName().equals("extensionProvider")) {
                         parser.next();
                         parser.next();
                         String elementName = parser.nextText();
@@ -179,26 +170,21 @@ public class PluginClassLoader extends URLClassLoader {
                             if (PacketExtensionProvider.class.isAssignableFrom(
                                     provider)) {
                                 ProviderManager.getInstance().addExtensionProvider(elementName, namespace, provider.newInstance());
-                            }
-                            else if (PacketExtension.class.isAssignableFrom(
+                            } else if (PacketExtension.class.isAssignableFrom(
                                     provider)) {
                                 ProviderManager.getInstance().addExtensionProvider(elementName, namespace, provider.newInstance());
                             }
-                        }
-                        catch (ClassNotFoundException cnfe) {
+                        } catch (ClassNotFoundException cnfe) {
                             cnfe.printStackTrace();
                         }
                     }
                 }
                 eventType = parser.next();
-            }
-            while (eventType != XmlPullParser.END_DOCUMENT);
-        }
-        finally {
+            } while (eventType != XmlPullParser.END_DOCUMENT);
+        } finally {
             try {
                 providerStream.close();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 // Nothing to do
             }
         }

@@ -1,25 +1,21 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.spark.util;
-
-import org.jivesoftware.spark.util.log.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,6 +28,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.channels.FileChannel;
+import org.jivesoftware.spark.util.log.Log;
 
 /**
  * <code>URLFileSystem</code> class handles some of the most common
@@ -39,16 +36,15 @@ import java.nio.channels.FileChannel;
  *
  * @version 1.0, 03/12/14
  */
-
 public class URLFileSystem {
+
     public static void main(String args[]) {
     }
 
     public static String getContents(URL url) {
         try {
             return getContents(url.openStream());
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             return null;
         }
     }
@@ -62,8 +58,7 @@ public class URLFileSystem {
                 sb.append(new String(buffer, 0, length));
             }
             return sb.toString();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             return null;
         }
     }
@@ -71,8 +66,7 @@ public class URLFileSystem {
     public static String getContents(File file) {
         try {
             return getContents(file.toURI().toURL());
-        }
-        catch (MalformedURLException e) {
+        } catch (MalformedURLException e) {
             return "";
         }
     }
@@ -92,27 +86,28 @@ public class URLFileSystem {
             out = new FileOutputStream(dst);
             dst.mkdirs();
             copy(in, out);
-        }
-        finally {
+        } finally {
             try {
-                if (in != null) in.close();
-            }
-            catch (IOException e) {
+                if (in != null) {
+                    in.close();
+                }
+            } catch (IOException e) {
                 // Nothing to do
             }
             try {
-                if (out != null) out.close();
-            }
-            catch (IOException e) {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
                 // Nothing to do
             }
         }
     }
 
     /**
-     * Common code for copy routines.  By convention, the streams are
-     * closed in the same method in which they were opened.  Thus,
-     * this method does not close the streams when the copying is done.
+     * Common code for copy routines. By convention, the streams are closed in
+     * the same method in which they were opened. Thus, this method does not
+     * close the streams when the copying is done.
      *
      * @param in Source stream
      * @param out Destination stream
@@ -132,11 +127,11 @@ public class URLFileSystem {
     }
 
     /**
-     * If a dot ('.') occurs in the path portion of the {@link URL}, then
-     * all of the text starting at the last dot is returned, including
-     * the dot.  If the last dot is also the last character in the path,
-     * then the dot by itself is returned.  If there is no dot in the
-     * path, then the empty string is returned.
+     * If a dot ('.') occurs in the path portion of the {@link URL}, then all of
+     * the text starting at the last dot is returned, including the dot. If the
+     * last dot is also the last character in the path, then the dot by itself
+     * is returned. If there is no dot in the path, then the empty string is
+     * returned.
      *
      * @param url the URL.
      * @return suffix of url path
@@ -149,11 +144,11 @@ public class URLFileSystem {
     }
 
     /**
-     * If a dot ('.') occurs in the path portion of the {@link File}, then
-     * all of the text starting at the last dot is returned, including
-     * the dot.  If the last dot is also the last character in the path,
-     * then the dot by itself is returned.  If there is no dot in the
-     * path, then the empty string is returned.
+     * If a dot ('.') occurs in the path portion of the {@link File}, then all
+     * of the text starting at the last dot is returned, including the dot. If
+     * the last dot is also the last character in the path, then the dot by
+     * itself is returned. If there is no dot in the path, then the empty string
+     * is returned.
      *
      * @param file the File.
      * @return suffix of filename
@@ -168,13 +163,11 @@ public class URLFileSystem {
     //--------------------------------------------------------------------------
     //  URLFileSystemHelper public API...
     //--------------------------------------------------------------------------
-
     /**
      * Returns a canonical form of the {@link URL}, if one is available.
      * <p/>
      * <p/>
-     * The default implementation just returns the specified {@link URL}
-     * as-is.
+     * The default implementation just returns the specified {@link URL} as-is.
      *
      * @param url URL to convert.
      * @return Convert url.
@@ -184,12 +177,12 @@ public class URLFileSystem {
     }
 
     /**
-     * Tests whether the application can read the resource at the
-     * specified {@link URL}.
+     * Tests whether the application can read the resource at the specified
+     * {@link URL}.
      *
-     * @return <CODE>true</CODE> if and only if the specified
-     *         {@link URL} points to a resource that exists <EM>and</EM> can be
-     *         read by the application; <CODE>false</CODE> otherwise.
+     * @return <CODE>true</CODE> if and only if the specified {@link URL} points
+     * to a resource that exists <EM>and</EM> can be read by the application;
+     * <CODE>false</CODE> otherwise.
      *
      * @param url URL to check if we can read from it.
      */
@@ -197,21 +190,18 @@ public class URLFileSystem {
         try {
             final URLConnection urlConnection = url.openConnection();
             return urlConnection.getDoInput();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return false;
         }
     }
 
-
     /**
-     * Tests whether the application can modify the resource at the
-     * specified {@link URL}.
+     * Tests whether the application can modify the resource at the specified
+     * {@link URL}.
      *
-     * @return <CODE>true</CODE> if and only if the specified
-     *         {@link URL} points to a file that exists <EM>and</EM> the
-     *         application is allowed to write to the file; <CODE>false</CODE>
-     *         otherwise.
+     * @return <CODE>true</CODE> if and only if the specified {@link URL} points
+     * to a file that exists <EM>and</EM> the application is allowed to write to
+     * the file; <CODE>false</CODE> otherwise.
      *
      * @param url URL to check if we can write to.
      */
@@ -219,8 +209,7 @@ public class URLFileSystem {
         try {
             final URLConnection urlConnection = url.openConnection();
             return urlConnection.getDoOutput();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return false;
         }
     }
@@ -230,7 +219,7 @@ public class URLFileSystem {
      * {@link URL}.
      *
      * @return <CODE>true</CODE> if the resource at the specified {@link URL}
-     *         exists or can be created; <CODE>false</CODE> otherwise.
+     * exists or can be created; <CODE>false</CODE> otherwise.
      *
      * @param url URL to check if we can create things at.
      */
@@ -239,10 +228,10 @@ public class URLFileSystem {
     }
 
     /**
-     * Tests whether the specified {@link URL} is valid. If the resource
-     * pointed by the {@link URL} exists the method returns <CODE>true</CODE>.
-     * If the resource does not exist, the method tests that all components
-     * of the path can be created.
+     * Tests whether the specified {@link URL} is valid. If the resource pointed
+     * by the {@link URL} exists the method returns <CODE>true</CODE>. If the
+     * resource does not exist, the method tests that all components of the path
+     * can be created.
      *
      * @return <CODE>true</CODE> if the {@link URL} is valid.
      *
@@ -258,11 +247,10 @@ public class URLFileSystem {
 
     /**
      * Returns <CODE>true</CODE> if the specified {@link URL} points to a
-     * resource that currently exists; returns <CODE>false</CODE>
-     * otherwise.<P>
+     * resource that currently exists; returns <CODE>false</CODE> otherwise.<P>
      * <p/>
-     * The default implementation simply returns <CODE>false</CODE>
-     * without doing anything.
+     * The default implementation simply returns <CODE>false</CODE> without
+     * doing anything.
      *
      * @param url URL to test for existance
      * @return True if url exists
@@ -279,24 +267,22 @@ public class URLFileSystem {
         return true;
     }
 
-
     /**
-     * Returns the name of the file contained by the {@link URL}, not
-     * including any protocol, hostname authentication, directory path,
-     * anchor, or query.  This simply returns the simple filename.  For
-     * example, if you pass in an {@link URL} whose string representation
-     * is:
+     * Returns the name of the file contained by the {@link URL}, not including
+     * any protocol, hostname authentication, directory path, anchor, or query.
+     * This simply returns the simple filename. For example, if you pass in an
+     * {@link URL} whose string representation is:
      * <p/>
      * <BLOCKQUOTE><CODE>
      * protocol://host:1010/dir1/dir2/file.ext#anchor?query
      * </CODE></BLOCKQUOTE>
      * <p/>
-     * the returned value is "<CODE>file.ext</CODE>" (without the
-     * quotes).<P>
+     * the returned value is "<CODE>file.ext</CODE>" (without the quotes)
+     * .<P>
      * <p/>
-     * The returned file name should only be used for display purposes
-     * and not for opening streams or otherwise trying to locate the
-     * resource indicated by the {@link URL}.
+     * The returned file name should only be used for display purposes and not
+     * for opening streams or otherwise trying to locate the resource indicated
+     * by the {@link URL}.
      *
      * @param url URL of resource to get filename of
      * @return File name determined
@@ -314,22 +300,20 @@ public class URLFileSystem {
         if (lastSep == path.length() - 1) {
             final int lastSep2 = path.lastIndexOf('/', lastSep - 1);
             return path.substring(lastSep2 + 1, lastSep);
-        }
-        else {
+        } else {
             return path.substring(lastSep + 1);
         }
     }
 
-
     /**
-     * Returns the number of bytes contained in the resource that the
-     * specified {@link URL} points to.  If the length cannot be
-     * determined, <CODE>-1</CODE> is returned.<P>
+     * Returns the number of bytes contained in the resource that the specified
+     * {@link URL} points to. If the length cannot be determined,
+     * <CODE>-1</CODE> is returned.<P>
      * <p/>
-     * The default implementation attempts to get the content length from
-     * the {@link URLConnection} associated with the {@link URL}.  If that
-     * fails for some reason (e.g. the resource does not exist, there was
-     * some other an I/O exception, etc.), <CODE>-1</CODE> is returned.
+     * The default implementation attempts to get the content length from the
+     * {@link URLConnection} associated with the {@link URL}. If that fails for
+     * some reason (e.g. the resource does not exist, there was some other an
+     * I/O exception, etc.), <CODE>-1</CODE> is returned.
      *
      * @see URLConnection
      * @param url URL to get length of resource of
@@ -339,34 +323,32 @@ public class URLFileSystem {
         try {
             final URLConnection urlConnection = url.openConnection();
             return urlConnection.getContentLength();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return -1;
         }
     }
 
-
     /**
-     * Returns the name of the file contained by the {@link URL}, not
-     * including any protocol, hostname authentication, directory path,
-     * anchor, or query.  This simply returns the simple filename.  For
-     * example, if you pass in an {@link URL} whose string representation
-     * is:
+     * Returns the name of the file contained by the {@link URL}, not including
+     * any protocol, hostname authentication, directory path, anchor, or query.
+     * This simply returns the simple filename. For example, if you pass in an
+     * {@link URL} whose string representation is:
      * <p/>
      * <BLOCKQUOTE><CODE>
      * protocol://host:1010/dir1/dir2/file.ext1.ext2#anchor?query
      * </CODE></BLOCKQUOTE>
      * <p/>
-     * the returned value is "<CODE>file</CODE>" (without the quotes).<P>
+     * the returned value is "<CODE>file</CODE>" (without the quotes)
+     * .<P>
      * <p/>
-     * The returned file name should only be used for display purposes
-     * and not for opening streams or otherwise trying to locate the
-     * resource indicated by the {@link URL}.<P>
+     * The returned file name should only be used for display purposes and not
+     * for opening streams or otherwise trying to locate the resource indicated
+     * by the {@link URL}
+     * .<P>
      * <p/>
-     * The default implementation first calls {@link #getFileName(URL)} to
-     * get the file name part.  Then all characters starting with the
-     * first occurrence of '.' are removed.  The remaining string is then
-     * returned.
+     * The default implementation first calls {@link #getFileName(URL)} to get
+     * the file name part. Then all characters starting with the first
+     * occurrence of '.' are removed. The remaining string is then returned.
      *
      * @param url URL of resource
      * @return Name for URL
@@ -376,7 +358,6 @@ public class URLFileSystem {
         final int firstDot = fileName.lastIndexOf('.');
         return firstDot > 0 ? fileName.substring(0, firstDot) : fileName;
     }
-
 
     /**
      * Returns the path part of the {@link URL}.
@@ -390,17 +371,15 @@ public class URLFileSystem {
         return url.getPath();
     }
 
-
     /**
-     * Returns the path part of the {@link URL} without the last file
-     * extension.  To clarify, the following examples demonstrate the
-     * different cases that come up:
+     * Returns the path part of the {@link URL} without the last file extension.
+     * To clarify, the following examples demonstrate the different cases that
+     * come up:
      * <p/>
      * <TABLE BORDER COLS=2 WIDTH="100%">
      * <TR>
      * <TD><CENTER>Path part of input {@link URL}</CENTER></TD>
-     * <TD><CENTER>Output {@link String}</CENTER</TD>
-     * </TR>
+     * <TD><CENTER>Output {@link String}</CENTER</TD> < /TR>
      * <TR>
      * <TD><CODE>/dir/file.ext</CODE></TD>
      * <TD><CODE>/dir/file</CODE></TD>
@@ -436,11 +415,10 @@ public class URLFileSystem {
      * </TABLE>
      * <p/>
      * The default implementation gets the path from {@link
-     * #getPath(URL)} and then trims off all of the characters beginning
-     * with the last "." in the path, if and only if the last "." comes
-     * after the last "/" in the path.  If the last "." comes before
-     * the last "/" or if there is no "." at all, then the entire path
-     * is returned.
+     * #getPath(URL)} and then trims off all of the characters beginning with
+     * the last "." in the path, if and only if the last "." comes after the
+     * last "/" in the path. If the last "." comes before the last "/" or if
+     * there is no "." at all, then the entire path is returned.
      *
      * @param url URL of resource
      * @return Path without extension
@@ -465,27 +443,24 @@ public class URLFileSystem {
         return path.substring(0, lastDot);
     }
 
-
     /**
-     * Returns the platform-dependent String representation of the
-     * {@link URL}; the returned string should be considered acceptable
-     * for users to read.  In general, the returned string should omit
-     * as many parts of the {@link URL} as possible.  For the "file"
-     * protocol, therefore, the platform pathname should just be the
-     * pathname alone (no protocol) using the appropriate file separator
-     * character for the current platform.  For other protocols, it may
-     * be necessary to reformat the {@link URL} string into a more
-     * human-readable form.  That decision is left to each
+     * Returns the platform-dependent String representation of the {@link URL};
+     * the returned string should be considered acceptable for users to read. In
+     * general, the returned string should omit as many parts of the {@link URL}
+     * as possible. For the "file" protocol, therefore, the platform pathname
+     * should just be the pathname alone (no protocol) using the appropriate
+     * file separator character for the current platform. For other protocols,
+     * it may be necessary to reformat the {@link URL} string into a more
+     * human-readable form. That decision is left to each
      * <CODE>URLFileSystemHelper</CODE> implementor.
      * <p/>
-     * The default implementation returns <CODE>url.toString()</CODE>.
-     * If the {@link URL} is <CODE>null</CODE>, the empty string is
-     * returned.
+     * The default implementation returns <CODE>url.toString()</CODE>. If the
+     * {@link URL} is <CODE>null</CODE>, the empty string is returned.
      *
      * @return The path portion of the specified {@link URL} in
-     *         platform-dependent notation.  This value should only be used for
-     *         display purposes and not for opening streams or otherwise trying
-     *         to locate the document.
+     * platform-dependent notation. This value should only be used for display
+     * purposes and not for opening streams or otherwise trying to locate the
+     * document.
      *
      * @param url URL of resource
      */
@@ -512,9 +487,8 @@ public class URLFileSystem {
 
     /**
      * This "sanitizes" the specified string path by converting all
-     * {@link File#separatorChar} characters to forward slash ('/').
-     * Also, a leading forward slash is prepended if the path does
-     * not begin with one.
+     * {@link File#separatorChar} characters to forward slash ('/'). Also, a
+     * leading forward slash is prepended if the path does not begin with one.
      *
      * @param path Path to sanitize
      * @return Sanitized path
@@ -536,15 +510,13 @@ public class URLFileSystem {
     //--------------------------------------------------------------------------
     //  direct access factory methods...
     //--------------------------------------------------------------------------
-
     /**
-     * Creates a new {@link URL} whose parts have the exact values that
-     * are specified.  <EM>In general, you should avoid calling this
-     * method directly.</EM><P>
+     * Creates a new {@link URL} whose parts have the exact values that are
+     * specified. <EM>In general, you should avoid calling this method
+     * directly.</EM><P>
      * <p/>
      * This method is the ultimate place where all of the other
-     * <CODE>URLFactory</CODE> methods end up when creating an
-     * {@link URL}.
+     * <CODE>URLFactory</CODE> methods end up when creating an {@link URL}.
      * <p/>
      * Non-sanitizing.
      *
@@ -558,24 +530,21 @@ public class URLFileSystem {
      * @return URL constructed from args
      */
     public static URL newURL(String protocol, String userinfo,
-                             String host, int port,
-                             String path, String query, String ref) {
+            String host, int port,
+            String path, String query, String ref) {
         try {
             final URL seed = new URL(protocol, "", -1, "");
             final String authority = port < 0 ? host : host + ":" + port;
-            final Object[] args = new Object[]
-                    {
-                            protocol, host, port,
-                            authority, userinfo,
-                            path, query, ref,
-                    };
+            final Object[] args = new Object[]{
+                protocol, host, port,
+                authority, userinfo,
+                path, query, ref,};
 
             //  IMPORTANT -- this *MUST* be the only place in URLFactory where
             //  the URL.set(...) method is used.  --jdijamco
             urlSet.invoke(seed, args);
             return seed;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.error(e);
             return null;
         }
@@ -583,8 +552,8 @@ public class URLFileSystem {
 
     /**
      * This {@link Method} is used to work-around a bug in Sun's
-     * <CODE>java.net.URL</CODE> implementation.  The {@link Method}
-     * allows us to set the parts of an {@link URL} directly.
+     * <CODE>java.net.URL</CODE> implementation. The {@link Method} allows us to
+     * set the parts of an {@link URL} directly.
      */
     private static final Method urlSet;
 
@@ -615,8 +584,7 @@ public class URLFileSystem {
             //
             //  --jdijamco  March 14, 2001
             urlSet.setAccessible(true);
-        }
-        catch (NoSuchMethodException e) {
+        } catch (NoSuchMethodException e) {
             //!jdijamco -- Have some fallback option so that <clinit> doesn't
             //!jdijamco -- just totally barf and prevent the IDE from starting?
             throw new IllegalStateException();
@@ -634,8 +602,7 @@ public class URLFileSystem {
         if (parentFile != null && !file.equals(parentFile)) {
             try {
                 return parentFile.toURI().toURL();
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 return null;
             }
         }
@@ -674,6 +641,5 @@ public class URLFileSystem {
         in.close();
         out.close();
     }
-
 
 }

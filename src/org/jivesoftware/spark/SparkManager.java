@@ -1,24 +1,33 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.spark;
 
+import java.awt.Component;
+import java.awt.KeyboardFocusManager;
+import java.awt.Toolkit;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import javax.swing.ImageIcon;
 import org.jivesoftware.MainWindow;
 import org.jivesoftware.Spark;
 import org.jivesoftware.resource.Default;
@@ -36,28 +45,17 @@ import org.jivesoftware.spark.ui.TranscriptWindow;
 import org.jivesoftware.spark.util.log.Log;
 import org.jivesoftware.sparkimpl.profile.VCardManager;
 
-import java.awt.Component;
-import java.awt.KeyboardFocusManager;
-import java.awt.Toolkit;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.Transferable;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.File;
-import java.text.SimpleDateFormat;
-
-import javax.swing.ImageIcon;
-
 /**
- * Used as the System Manager for the Spark IM client. The SparkManager is responsible for
- * the loading of other system managers on an as needed basis to prevent too much upfront loading
- * of resources. Some of the Managers and components you can access from here are:
+ * Used as the System Manager for the Spark IM client. The SparkManager is
+ * responsible for the loading of other system managers on an as needed basis to
+ * prevent too much upfront loading of resources. Some of the Managers and
+ * components you can access from here are:
  * <p/>
  * <p/>
  * <p/>
  * <h3>Managers</h3>
- * ChatManager - Used for adding, removing and appending listeners to Chat Rooms.
+ * ChatManager - Used for adding, removing and appending listeners to Chat
+ * Rooms.
  * <br/>
  * PreferenceManager - Used for adding and removing Preferences.
  * <br/>
@@ -67,31 +65,32 @@ import javax.swing.ImageIcon;
  * <br/>
  * SparkTransferManager - Used for all file transfer operations within Spark.
  * <br/>
- * ChatAssistantManager - Used to add ChatRoom plugins. ChatRoomPlugins are installed in their own pane on the
- * right side of the ChatRoom.
+ * ChatAssistantManager - Used to add ChatRoom plugins. ChatRoomPlugins are
+ * installed in their own pane on the right side of the ChatRoom.
  * <br/>
- * VCardManager - Handles all profile handling within Spark. Use this to retrieve profile information on users.
+ * VCardManager - Handles all profile handling within Spark. Use this to
+ * retrieve profile information on users.
  * <br/>
  * <h3>Windows and Components</h3>
  * <br/>
- * MainWindow - The frame containing the Spark client. Use for updating menus, and referencing parent frames.
+ * MainWindow - The frame containing the Spark client. Use for updating menus,
+ * and referencing parent frames.
  * <br/>
- * Workspace - The inner pane of the Spark client. Use for adding or removing tabs to the main Spark panel.
+ * Workspace - The inner pane of the Spark client. Use for adding or removing
+ * tabs to the main Spark panel.
  * <br/>
- * Notifications - Use to display tray icon notifications (system specific), such as toaster popups or changing
- * the icon of the system tray.
+ * Notifications - Use to display tray icon notifications (system specific),
+ * such as toaster popups or changing the icon of the system tray.
  *
  * @author Derek DeMoro
  * @version 1.0, 03/12/14
  */
-
-
 public final class SparkManager {
 
     /**
      * The Date Formatter to use in Spark.
      */
-    private static final String dateFormat = ((SimpleDateFormat)SimpleDateFormat.getDateTimeInstance(SimpleDateFormat.FULL,SimpleDateFormat.MEDIUM)).toPattern();
+    private static final String dateFormat = ((SimpleDateFormat) SimpleDateFormat.getDateTimeInstance(SimpleDateFormat.FULL, SimpleDateFormat.MEDIUM)).toPattern();
     public static final SimpleDateFormat DATE_SECOND_FORMATTER = new SimpleDateFormat(dateFormat);
 
     private static SessionManager sessionManager;
@@ -105,7 +104,6 @@ public final class SparkManager {
 
     private static Component focusedComponent;
 
-
     private SparkManager() {
         // Do not allow initialization
     }
@@ -113,28 +111,27 @@ public final class SparkManager {
     static {
         KeyboardFocusManager focusManager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
         focusManager.addPropertyChangeListener(
-            new PropertyChangeListener() {
-                public void propertyChange(PropertyChangeEvent e) {
-                    String prop = e.getPropertyName();
-                    if (("focusOwner".equals(prop)) && (e.getNewValue() != null)) {
-                        focusedComponent = (Component)e.getNewValue();
+                new PropertyChangeListener() {
+                    public void propertyChange(PropertyChangeEvent e) {
+                        String prop = e.getPropertyName();
+                        if (("focusOwner".equals(prop)) && (e.getNewValue() != null)) {
+                            focusedComponent = (Component) e.getNewValue();
+                        }
                     }
                 }
-            }
         );
     }
 
-
     /**
-     * Gets the {@link MainWindow} instance. The MainWindow is the frame container used
-     * to hold the Workspace container and Menubar of the Spark Client.
+     * Gets the {@link MainWindow} instance. The MainWindow is the frame
+     * container used to hold the Workspace container and Menubar of the Spark
+     * Client.
      *
      * @return MainWindow instance.
      */
     public static MainWindow getMainWindow() {
         return MainWindow.getInstance();
     }
-
 
     /**
      * Gets the {@link SessionManager} instance.
@@ -194,10 +191,9 @@ public final class SparkManager {
         return userManager;
     }
 
-
     /**
-     * Returns the ChatManager. The ChatManager is responsible for creation and removal of
-     * chat rooms, transcripts, and transfers and room invitations.
+     * Returns the ChatManager. The ChatManager is responsible for creation and
+     * removal of chat rooms, transcripts, and transfers and room invitations.
      *
      * @return the <code>ChatManager</code> for this instance.
      */
@@ -209,15 +205,16 @@ public final class SparkManager {
     }
 
     /**
-     * Retrieves the inner container for Spark. The Workspace is the container for all plugins into the Spark
-     * install. Plugins would use this for the following:
+     * Retrieves the inner container for Spark. The Workspace is the container
+     * for all plugins into the Spark install. Plugins would use this for the
+     * following:
      * <p/>
      * <ul>
      * <li>Add own tab to the main tabbed pane. ex.
      * <p/>
      * <p/>
-     * Workspace workspace = SparkManager.getWorkspace();
-     * JButton button = new JButton("HELLO SPARK USERS");
+     * Workspace workspace = SparkManager.getWorkspace(); JButton button = new
+     * JButton("HELLO SPARK USERS");
      * workspace.getWorkspacePane().addTab("MyPlugin", button);
      * </p>
      * <p/>
@@ -226,14 +223,15 @@ public final class SparkManager {
      * @return Workspace the spark manager is associated with.
      */
     public static Workspace getWorkspace() {
-   	 
+
         return Workspace.getInstance();
     }
 
     /**
-     * Returns the <code>MessageEventManager</code> used in Spark. The MessageEventManager is responsible
-     * for XMPP specific operations such as notifying users that you have received their message or
-     * inform a users that you are typing a message to them.
+     * Returns the <code>MessageEventManager</code> used in Spark. The
+     * MessageEventManager is responsible for XMPP specific operations such as
+     * notifying users that you have received their message or inform a users
+     * that you are typing a message to them.
      *
      * @return the MessageEventManager used in Spark.
      */
@@ -245,8 +243,9 @@ public final class SparkManager {
     }
 
     /**
-     * Returns the VCardManager. The VCardManager is responsible for handling all users profiles and updates
-     * to their profiles. Use the VCardManager to access a users profile based on their Jabber User ID (JID).
+     * Returns the VCardManager. The VCardManager is responsible for handling
+     * all users profiles and updates to their profiles. Use the VCardManager to
+     * access a users profile based on their Jabber User ID (JID).
      *
      * @return the VCardManager.
      */
@@ -258,7 +257,8 @@ public final class SparkManager {
     }
 
     /**
-     * Returns the NativeManager. The NativeManager allows for native handling of Spark.
+     * Returns the NativeManager. The NativeManager allows for native handling
+     * of Spark.
      *
      * @return the NativeManager.
      */
@@ -269,7 +269,6 @@ public final class SparkManager {
 
         return nativeManager;
     }
-
 
     /**
      * Prints the transcript of a given chat room.
@@ -285,20 +284,20 @@ public final class SparkManager {
     }
 
     /**
-     * Returns the String in the system clipboard. If not string is found,
-     * null will be returned.
+     * Returns the String in the system clipboard. If not string is found, null
+     * will be returned.
      *
-     * @return the contents of the system clipboard. If none found, null is returned.
+     * @return the contents of the system clipboard. If none found, null is
+     * returned.
      */
     public static String getClipboard() {
         Transferable t = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
 
         try {
             if (t != null && t.isDataFlavorSupported(DataFlavor.stringFlavor)) {
-                return (String)t.getTransferData(DataFlavor.stringFlavor);
+                return (String) t.getTransferData(DataFlavor.stringFlavor);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.error("Could not retrieve info from clipboard.", e);
         }
         return null;
@@ -315,21 +314,22 @@ public final class SparkManager {
     }
 
     /**
-     * Displays a print dialog to print the transcript found in a <code>TranscriptWindow</code>
+     * Displays a print dialog to print the transcript found in a
+     * <code>TranscriptWindow</code>
      *
-     * @param transcriptWindow the <code>TranscriptWindow</code> containing the transcript.
+     * @param transcriptWindow the <code>TranscriptWindow</code> containing the
+     * transcript.
      */
     public static void printChatTranscript(TranscriptWindow transcriptWindow) {
         final ChatPrinter printer = new ChatPrinter();
         printer.print(transcriptWindow);
     }
 
-
     /**
-     * Returns the <code>SparkTransferManager</code>. This is used
-     * for any transfer operations within Spark. You may use the manager to
-     * intercept file transfers for filtering of transfers or own plugin operations
-     * with the File Transfer object.
+     * Returns the <code>SparkTransferManager</code>. This is used for any
+     * transfer operations within Spark. You may use the manager to intercept
+     * file transfers for filtering of transfers or own plugin operations with
+     * the File Transfer object.
      *
      * @return the SpartTransferManager.
      */
@@ -338,8 +338,8 @@ public final class SparkManager {
     }
 
     /**
-     * Returns the <code>SearchManager</code>. This is used to allow
-     * plugins to register their own search service.
+     * Returns the <code>SearchManager</code>. This is used to allow plugins to
+     * register their own search service.
      *
      * @return the SearchManager.
      */

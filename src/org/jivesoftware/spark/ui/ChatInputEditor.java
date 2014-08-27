@@ -1,28 +1,25 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */ 
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package org.jivesoftware.spark.ui;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
@@ -36,20 +33,20 @@ import javax.swing.text.Document;
 import javax.swing.text.StyleConstants;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
-
 import org.jivesoftware.spark.SparkManager;
 import org.jivesoftware.sparkimpl.settings.local.SettingsManager;
 
 /**
- * This is implementation of ChatArea that should be used as the sendField
- * in any chat room implementation.
+ * This is implementation of ChatArea that should be used as the sendField in
+ * any chat room implementation.
  */
 public class ChatInputEditor extends ChatArea implements DocumentListener {
-	private static final long serialVersionUID = -3085035737908538581L;
-	private final UndoManager undoManager;
-	private KeyStroke undoKeyStroke;
-	private KeyStroke ctrlbackspaceKeyStroke;
-	private KeyStroke escapeKeyStroke;
+
+    private static final long serialVersionUID = -3085035737908538581L;
+    private final UndoManager undoManager;
+    private KeyStroke undoKeyStroke;
+    private KeyStroke ctrlbackspaceKeyStroke;
+    private KeyStroke escapeKeyStroke;
 
     /**
      * Creates a new Default ChatSendField.
@@ -60,91 +57,92 @@ public class ChatInputEditor extends ChatArea implements DocumentListener {
         this.setDragEnabled(true);
         this.getDocument().addUndoableEditListener(undoManager);
         Action undo = new AbstractAction() {
-			private static final long serialVersionUID = -8897769620508545403L;
-			public void actionPerformed(ActionEvent e) {
-		try {
-		    undoManager.undo();
-		} catch (CannotUndoException cue) {
-		    // no more undoing for you
-		}
+            private static final long serialVersionUID = -8897769620508545403L;
+
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    undoManager.undo();
+                } catch (CannotUndoException cue) {
+                    // no more undoing for you
+                }
             }
         };
-        
+
         Action escape = new AbstractAction() {
-	    private static final long serialVersionUID = -2973535045376312313L;
-	    @Override
-	    public void actionPerformed(ActionEvent e) {
-		SparkManager.getChatManager().getChatContainer().closeActiveRoom();	
-	    }
-	};
-        
-	Action ctrlbackspace = new AbstractAction() {
-	    private static final long serialVersionUID = -2973535045376312313L;
+            private static final long serialVersionUID = -2973535045376312313L;
 
-	    @Override
-	    public void actionPerformed(ActionEvent e) {
-		
-		// We have Text selected, remove it
-		if (getSelectedText() != null && getSelectedText().length() > 0) {
-		   ChatInputEditor.this.removeWordInBetween(getSelectionStart(),
-			    getSelectionEnd());
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SparkManager.getChatManager().getChatContainer().closeActiveRoom();
+            }
+        };
 
-		    // We are somewhere in betwee 0 and str.length
-		} else if (getCaretPosition() < getText().length()) {
+        Action ctrlbackspace = new AbstractAction() {
+            private static final long serialVersionUID = -2973535045376312313L;
 
-		    String preCaret = getText()
-			    .substring(0, getCaretPosition());
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
-		    int lastSpace = preCaret.lastIndexOf(" ") != -1 ? preCaret
-			    .lastIndexOf(" ") : 0;
+                // We have Text selected, remove it
+                if (getSelectedText() != null && getSelectedText().length() > 0) {
+                    ChatInputEditor.this.removeWordInBetween(getSelectionStart(),
+                            getSelectionEnd());
 
-		    if (lastSpace != -1 && lastSpace!=0)
-		    {	
-			// Do we have anymore spaces before the current one?
-			for (int i = lastSpace; getText().charAt(i) == ' '; --i) {
-			    lastSpace--;
-			}
-			lastSpace++;
-		    }
-		    ChatInputEditor.this.removeWordInBetween(lastSpace,
-			    getCaretPosition());
+                    // We are somewhere in betwee 0 and str.length
+                } else if (getCaretPosition() < getText().length()) {
 
-		    if (lastSpace <= getText().length()) {
-			setCaretPosition(lastSpace);
-		    } else {
-			setCaretPosition(getText().length());
-		    }
+                    String preCaret = getText()
+                            .substring(0, getCaretPosition());
 
-		    // We are at the end and will remove until the next SPACE
-		} else if (getText().contains(" ")) {
-		    int untilhere = getText().lastIndexOf(" ");
+                    int lastSpace = preCaret.lastIndexOf(" ") != -1 ? preCaret
+                            .lastIndexOf(" ") : 0;
 
-		    // Do we have anymore spaces before the last one?
-		    for (int i = untilhere; getText().charAt(i) == ' '; --i) {
-			untilhere--;
-		    }
-		    untilhere++;
-		    ChatInputEditor.this.removeLastWord(getText().substring(
-			    untilhere));
-		} else {
-		    ChatInputEditor.this.removeLastWord(getText());
-		}
-	    }
-	};
+                    if (lastSpace != -1 && lastSpace != 0) {
+                        // Do we have anymore spaces before the current one?
+                        for (int i = lastSpace; getText().charAt(i) == ' '; --i) {
+                            lastSpace--;
+                        }
+                        lastSpace++;
+                    }
+                    ChatInputEditor.this.removeWordInBetween(lastSpace,
+                            getCaretPosition());
 
-        undoKeyStroke = KeyStroke.getKeyStroke('z', ActionEvent.CTRL_MASK);       
+                    if (lastSpace <= getText().length()) {
+                        setCaretPosition(lastSpace);
+                    } else {
+                        setCaretPosition(getText().length());
+                    }
+
+                    // We are at the end and will remove until the next SPACE
+                } else if (getText().contains(" ")) {
+                    int untilhere = getText().lastIndexOf(" ");
+
+                    // Do we have anymore spaces before the last one?
+                    for (int i = untilhere; getText().charAt(i) == ' '; --i) {
+                        untilhere--;
+                    }
+                    untilhere++;
+                    ChatInputEditor.this.removeLastWord(getText().substring(
+                            untilhere));
+                } else {
+                    ChatInputEditor.this.removeLastWord(getText());
+                }
+            }
+        };
+
+        undoKeyStroke = KeyStroke.getKeyStroke('z', ActionEvent.CTRL_MASK);
         ctrlbackspaceKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, KeyEvent.CTRL_MASK);
         escapeKeyStroke = KeyStroke.getKeyStroke("ESCAPE");
-        
+
         getInputMap().put(ctrlbackspaceKeyStroke, "ctrlbackspace");
         getInputMap().put(undoKeyStroke, "undo");
         getInputMap().put(escapeKeyStroke, "escape");
         getInputMap().put(KeyStroke.getKeyStroke("Ctrl W"), "escape");
-        
+
         registerKeyboardAction(undo, KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_MASK), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         registerKeyboardAction(ctrlbackspace, KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, KeyEvent.CTRL_MASK), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         registerKeyboardAction(escape, KeyStroke.getKeyStroke("ESCAPE"), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-        
+
         getDocument().addDocumentListener(this);
 
         addMouseListener(this);
@@ -182,8 +180,7 @@ public class ChatInputEditor extends ChatArea implements DocumentListener {
     }
 
     /**
-     * Disables the Chat Editor, rendering it to the system default
-     * color.
+     * Disables the Chat Editor, rendering it to the system default color.
      */
     public void showAsDisabled() {
         this.setEditable(false);
@@ -191,7 +188,7 @@ public class ChatInputEditor extends ChatArea implements DocumentListener {
 
         clear();
 
-        final Color disabledColor = (Color)UIManager.get("Button.disabled");
+        final Color disabledColor = (Color) UIManager.get("Button.disabled");
 
         this.setBackground(disabledColor);
     }
@@ -210,7 +207,8 @@ public class ChatInputEditor extends ChatArea implements DocumentListener {
      * Inserts text into the current document.
      *
      * @param text the text to insert
-     * @throws BadLocationException if the location is not available for insertion.
+     * @throws BadLocationException if the location is not available for
+     * insertion.
      */
     @Override
     public void insertText(String text) throws BadLocationException {
@@ -222,9 +220,10 @@ public class ChatInputEditor extends ChatArea implements DocumentListener {
     /**
      * Inserts text into the current document.
      *
-     * @param text  the text to insert
+     * @param text the text to insert
      * @param color the color of the text
-     * @throws BadLocationException if the location is not available for insertion.
+     * @throws BadLocationException if the location is not available for
+     * insertion.
      */
     @Override
     public void insertText(String text, Color color) throws BadLocationException {
@@ -237,39 +236,42 @@ public class ChatInputEditor extends ChatArea implements DocumentListener {
      * Inserts a link into the current document.
      *
      * @param link - the link to insert( ex. http://www.javasoft.com )
-     * @throws BadLocationException if the location is not available for insertion.
+     * @throws BadLocationException if the location is not available for
+     * insertion.
      */
     @Override
     public void insertLink(String link) throws BadLocationException {
         final Document doc = getDocument();
         styles.addAttribute("link", link);
 
-        StyleConstants.setForeground(styles, (Color)UIManager.get("Link.foreground"));
+        StyleConstants.setForeground(styles, (Color) UIManager.get("Link.foreground"));
         StyleConstants.setUnderline(styles, true);
         doc.insertString(this.getCaret().getDot(), link, styles);
         StyleConstants.setUnderline(styles, false);
-        StyleConstants.setForeground(styles, (Color)UIManager.get("TextPane.foreground"));
+        StyleConstants.setForeground(styles, (Color) UIManager.get("TextPane.foreground"));
         styles.removeAttribute("link");
         setCharacterAttributes(styles, false);
 
     }
-    
-     /**
-     * Inserts a network address into the current document. 
+
+    /**
+     * Inserts a network address into the current document.
      *
-     * @param address - the address to insert( ex. \superpc\etc\file\ OR http://localhost/ )
-     * @throws BadLocationException if the location is not available for insertion.
+     * @param address - the address to insert( ex. \superpc\etc\file\ OR
+     * http://localhost/ )
+     * @throws BadLocationException if the location is not available for
+     * insertion.
      */
     @Override
     public void insertAddress(String address) throws BadLocationException {
         final Document doc = getDocument();
         styles.addAttribute("link", address);
 
-        StyleConstants.setForeground(styles, (Color)UIManager.get("Address.foreground"));
+        StyleConstants.setForeground(styles, (Color) UIManager.get("Address.foreground"));
         StyleConstants.setUnderline(styles, true);
         doc.insertString(this.getCaret().getDot(), address, styles);
         StyleConstants.setUnderline(styles, false);
-        StyleConstants.setForeground(styles, (Color)UIManager.get("TextPane.foreground"));
+        StyleConstants.setForeground(styles, (Color) UIManager.get("TextPane.foreground"));
         styles.removeAttribute("link");
         setCharacterAttributes(styles, false);
 
@@ -283,8 +285,8 @@ public class ChatInputEditor extends ChatArea implements DocumentListener {
      */
     @Override
     public boolean insertImage(String imageKey) {
-    	
-        if(!forceEmoticons && !SettingsManager.getLocalPreferences().areEmoticonsEnabled() || !emoticonsAvailable){
+
+        if (!forceEmoticons && !SettingsManager.getLocalPreferences().areEmoticonsEnabled() || !emoticonsAvailable) {
             return false;
         }
         final Document doc = getDocument();
@@ -298,5 +300,5 @@ public class ChatInputEditor extends ChatArea implements DocumentListener {
 
         return true;
     }
-    
+
 }

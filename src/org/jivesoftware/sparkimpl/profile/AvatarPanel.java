@@ -1,39 +1,21 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.sparkimpl.profile;
-
-import org.jivesoftware.resource.Res;
-import org.jivesoftware.spark.util.GraphicUtils;
-import org.jivesoftware.spark.util.ResourceUtils;
-import org.jivesoftware.spark.util.SwingWorker;
-import org.jivesoftware.spark.util.URLFileSystem;
-import org.jivesoftware.spark.util.log.Log;
-
-import javax.swing.BorderFactory;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -48,11 +30,26 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import javax.swing.BorderFactory;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import org.jivesoftware.resource.Res;
+import org.jivesoftware.spark.util.GraphicUtils;
+import org.jivesoftware.spark.util.ResourceUtils;
+import org.jivesoftware.spark.util.SwingWorker;
+import org.jivesoftware.spark.util.URLFileSystem;
+import org.jivesoftware.spark.util.log.Log;
 
 /**
  * UI to view/edit avatar.
  */
 public class AvatarPanel extends JPanel implements ActionListener {
+
     private static final long serialVersionUID = -5526978906063691519L;
     private JLabel avatar;
     private byte[] bytes;
@@ -68,7 +65,6 @@ public class AvatarPanel extends JPanel implements ActionListener {
      */
     public AvatarPanel() {
         setLayout(new GridBagLayout());
-
 
         final JLabel photo = new JLabel("Avatar:");
 
@@ -118,8 +114,7 @@ public class AvatarPanel extends JPanel implements ActionListener {
         avatar.setBorder(BorderFactory.createBevelBorder(0, Color.white, Color.lightGray));
         if (icon.getIconHeight() > 128 || icon.getIconWidth() > 128) {
             avatar.setIcon(new ImageIcon(icon.getImage().getScaledInstance(-1, 128, Image.SCALE_SMOOTH)));
-        }
-        else {
+        } else {
             avatar.setIcon(icon);
         }
         avatar.setText("");
@@ -170,16 +165,14 @@ public class AvatarPanel extends JPanel implements ActionListener {
         if (fileChooser.getDirectory() != null && fileChooser.getFile() != null) {
             File file = new File(fileChooser.getDirectory(), fileChooser.getFile());
             String suffix = URLFileSystem.getSuffix(file);
-            if (suffix.toLowerCase().equals(".jpeg") ||
-                    suffix.toLowerCase().equals(".gif") ||
-                    suffix.toLowerCase().equals(".jpg") ||
-                    suffix.toLowerCase().equals(".png")) {
+            if (suffix.toLowerCase().equals(".jpeg")
+                    || suffix.toLowerCase().equals(".gif")
+                    || suffix.toLowerCase().equals(".jpg")
+                    || suffix.toLowerCase().equals(".png")) {
                 changeAvatar(file, this);
-            }
-            else {
+            } else {
                 JOptionPane.showMessageDialog(this, "Please choose a valid image file.", Res.getString("title.error"), JOptionPane.ERROR_MESSAGE);
             }
-
 
         }
     }
@@ -194,30 +187,29 @@ public class AvatarPanel extends JPanel implements ActionListener {
                         avatarImage = avatarImage.getScaledInstance(-1, 128, Image.SCALE_SMOOTH);
                     }
                     return avatarImage;
-                }
-                catch (IOException ex) {
+                } catch (IOException ex) {
                     Log.error(ex);
                 }
                 return null;
             }
 
             public void finished() {
-                Image avatarImage = (Image)get();
+                Image avatarImage = (Image) get();
 
                 /*
-                // Check size.
-                long length = GraphicUtils.getBytesFromImage(avatarImage).length * 8;
+                 // Check size.
+                 long length = GraphicUtils.getBytesFromImage(avatarImage).length * 8;
 
-                long k = 8192;
+                 long k = 8192;
 
-                long actualSize = (length / k) + 1;
+                 long actualSize = (length / k) + 1;
 
-                if (actualSize > 16) {
-                    // Do not allow
-                    JOptionPane.showMessageDialog(parent, Res.getString("message.image.too.large"));
-                    return;
-                }
-                */
+                 if (actualSize > 16) {
+                 // Do not allow
+                 JOptionPane.showMessageDialog(parent, Res.getString("message.image.too.large"));
+                 return;
+                 }
+                 */
                 setAvatar(new ImageIcon(avatarImage));
                 avatarFile = selectedFile;
             }
@@ -227,6 +219,7 @@ public class AvatarPanel extends JPanel implements ActionListener {
     }
 
     public class ImageFilter implements FilenameFilter {
+
         public final String jpeg = "jpeg";
         public final String jpg = "jpg";
         public final String gif = "gif";
@@ -240,10 +233,9 @@ public class AvatarPanel extends JPanel implements ActionListener {
 
             String extension = getExtension(f);
             if (extension != null) {
-                if (extension.equals(gif) || extension.equals(jpeg) ||extension.equals(jpg) || extension.equals(png)) {
+                if (extension.equals(gif) || extension.equals(jpeg) || extension.equals(jpg) || extension.equals(png)) {
                     return true;
-                }
-                else {
+                } else {
                     return false;
                 }
             }
@@ -252,8 +244,8 @@ public class AvatarPanel extends JPanel implements ActionListener {
         }
 
         /*
-        * Get the extension of a file.
-        */
+         * Get the extension of a file.
+         */
         public String getExtension(File f) {
             String ext = null;
             String s = f.getName();
@@ -278,7 +270,7 @@ public class AvatarPanel extends JPanel implements ActionListener {
             for (int i = 0; i < no; i++) {
                 Component comp = comps[i];
                 if (comp instanceof JTextField) {
-                    ((JTextField)comp).setEditable(allowEditing);
+                    ((JTextField) comp).setEditable(allowEditing);
                 }
             }
         }
@@ -295,7 +287,4 @@ public class AvatarPanel extends JPanel implements ActionListener {
         this.dlg = dialog;
     }
 
-
 }
-
-

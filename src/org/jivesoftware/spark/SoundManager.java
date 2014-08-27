@@ -1,27 +1,21 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.spark;
-
-import org.jivesoftware.resource.SoundsRes;
-import org.jivesoftware.spark.util.TaskEngine;
-import org.jivesoftware.spark.util.log.Log;
 
 import java.applet.Applet;
 import java.applet.AudioClip;
@@ -30,15 +24,19 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import org.jivesoftware.resource.SoundsRes;
+import org.jivesoftware.spark.util.TaskEngine;
+import org.jivesoftware.spark.util.log.Log;
 
 /**
- * This manager is responsible for the playing, stopping and caching of sounds within Spark.  You would
- * use this manager when you wish to play audio without adding too much memory overhead.
+ * This manager is responsible for the playing, stopping and caching of sounds
+ * within Spark. You would use this manager when you wish to play audio without
+ * adding too much memory overhead.
  */
 public class SoundManager {
 
-    private final Map<String,AudioClip> clipMap = new HashMap<String,AudioClip>();
-    private final Map<URL,AudioClip> fileMap = new HashMap<URL,AudioClip>();
+    private final Map<String, AudioClip> clipMap = new HashMap<String, AudioClip>();
+    private final Map<URL, AudioClip> fileMap = new HashMap<URL, AudioClip>();
 
     /**
      * Default constructor
@@ -75,8 +73,7 @@ public class SoundManager {
             public void run() {
                 try {
                     clip.play();
-                }
-                catch (Exception ex) {
+                } catch (Exception ex) {
                     System.err.println("Unable to load sound file");
                 }
             }
@@ -94,8 +91,7 @@ public class SoundManager {
         AudioClip clip = getClip(clipToPlay);
         try {
             clip.play();
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             System.err.println("Unable to load sound file");
         }
     }
@@ -116,8 +112,7 @@ public class SoundManager {
                         fileMap.put(url, ac);
                     }
                     ac.play();
-                }
-                catch (MalformedURLException e) {
+                } catch (MalformedURLException e) {
                     Log.error(e);
                 }
             }
@@ -129,8 +124,9 @@ public class SoundManager {
     /**
      * Creates an AudioClip from a URL.
      *
-     * @param clipOfURL the url of the AudioClip to play. We only support .wav files at the moment.
-     * @return the AudioFile found. If no audio file  was found,returns null.
+     * @param clipOfURL the url of the AudioClip to play. We only support .wav
+     * files at the moment.
+     * @return the AudioFile found. If no audio file was found,returns null.
      */
     private AudioClip loadClipForURL(String clipOfURL) {
         final URL url = SoundsRes.getURL(clipOfURL);
@@ -139,13 +135,11 @@ public class SoundManager {
         try {
             clip = Applet.newAudioClip(url);
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.error("Unable to load sound url: " + url + "\n\t: " + e);
         }
 
         return clip;
     }
-
 
 }

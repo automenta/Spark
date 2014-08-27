@@ -1,31 +1,21 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.resource;
-
-import org.jivesoftware.spark.PluginRes;
-import org.jivesoftware.spark.util.log.Log;
-
-import javax.swing.ImageIcon;
-import javax.swing.JEditorPane;
-import javax.swing.JFrame;
-import javax.swing.JScrollPane;
 
 import java.awt.BorderLayout;
 import java.io.File;
@@ -33,8 +23,15 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
+import javax.swing.ImageIcon;
+import javax.swing.JEditorPane;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import org.jivesoftware.spark.PluginRes;
+import org.jivesoftware.spark.util.log.Log;
 
 public class SparkRes {
+
     private static PropertyResourceBundle prb;
 
     public static final String ACCEPT_CHAT = "ACCEPT_CHAT";
@@ -285,7 +282,7 @@ public class SparkRes {
     public static final String STAR_BLUE_IMAGE = "STAR_BLUE_IMAGE";
     public static final String STAR_GREEN_IMAGE = "STAR_GREEN_IMAGE";
     public static final String STAR_GREY_IMAGE = "STAR_GREY_IMAGE";
-    public static final String STAR_MODERATOR ="STAR_MODERATOR";
+    public static final String STAR_MODERATOR = "STAR_MODERATOR";
     public static final String STAR_OWNER = "STAR_OWNER";
     public static final String STAR_RED_IMAGE = "STAR_RED_IMAGE";
     public static final String STAR_YELLOW_IMAGE = "STAR_YELLOW_IMAGE";
@@ -305,7 +302,7 @@ public class SparkRes {
     public static final String TRAY_AWAY = "TRAY_AWAY";
     public static final String TRAY_AWAY_LINUX = "TRAY_AWAY_LINUX";
     public static final String TRAY_CONNECTING = "TRAY_CONNECTING";
-    public static final String TRAY_CONNECTING_LINUX = "TRAY_CONNECTING_LINUX";    
+    public static final String TRAY_CONNECTING_LINUX = "TRAY_CONNECTING_LINUX";
     public static final String TRAY_DND = "TRAY_DND";
     public static final String TRAY_DND_LINUX = "TRAY_DND_LINUX";
     public static final String TRAY_IMAGE = "TRAY_IMAGE";
@@ -335,15 +332,14 @@ public class SparkRes {
     public static final String EXECUTABLE_NAME = "EXECUTABLE_NAME";
     public static final String INVISIBLE = "INVISIBLE";
 
-    
     static ClassLoader cl = SparkRes.class.getClassLoader();
 
     static {
-        prb = (PropertyResourceBundle)ResourceBundle.getBundle("org/jivesoftware/resource/spark");
+        prb = (PropertyResourceBundle) ResourceBundle.getBundle("org/jivesoftware/resource/spark");
     }
 
     public static String getString(String propertyName) {
-    	String pluginString = PluginRes.getSparkRes(propertyName);
+        String pluginString = PluginRes.getSparkRes(propertyName);
         return pluginString != null ? pluginString : prb.getString(propertyName);
     }
 
@@ -351,20 +347,19 @@ public class SparkRes {
         try {
             final URL imageURL = getURL(imageName);
             return new ImageIcon(imageURL);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             Log.error(imageName + " not found.");
         }
         return null;
     }
 
     public static URL getURL(String propertyName) {
-    	URL pluginUrl = PluginRes.getSparkURL(propertyName);
+        URL pluginUrl = PluginRes.getSparkURL(propertyName);
         return pluginUrl != null ? pluginUrl : cl.getResource(getString(propertyName));
     }
 
     public static void main(String args[]) {
-        
+
         JFrame frame = new JFrame();
         frame.getContentPane().setLayout(new BorderLayout());
 
@@ -401,7 +396,7 @@ public class SparkRes {
                 boolean exists = false;
                 Enumeration<String> enumeration = prb.getKeys();
                 while (enumeration.hasMoreElements()) {
-                    String token = (String)enumeration.nextElement();
+                    String token = (String) enumeration.nextElement();
                     String value = prb.getString(token);
                     if (value.endsWith(name)) {
                         exists = true;
@@ -411,8 +406,7 @@ public class SparkRes {
                 if (!exists) {
                     Log.error(imageFile.getAbsolutePath() + " is not used.");
                 }
-            }
-            catch (NullPointerException e) {
+            } catch (NullPointerException e) {
                 // TODO: Should we worry about this?
             }
         }
@@ -420,10 +414,9 @@ public class SparkRes {
 
     public static URL getURLWithoutException(String propertyName) {
         // Otherwise, load and add to cache.
-        try {            
+        try {
             return getURL(propertyName);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             Log.debug(propertyName + " not found.");
         }
         return null;

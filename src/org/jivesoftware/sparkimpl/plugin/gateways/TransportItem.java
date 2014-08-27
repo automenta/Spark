@@ -1,42 +1,39 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.sparkimpl.plugin.gateways;
-
-import org.jivesoftware.sparkimpl.plugin.gateways.transports.Transport;
-import org.jivesoftware.resource.Res;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import org.jivesoftware.resource.Res;
+import org.jivesoftware.sparkimpl.plugin.gateways.transports.Transport;
 
 /**
  *
  */
 public class TransportItem extends JPanel {
-	private static final long serialVersionUID = 6321253573105576262L;
-	private JLabel iconLabel;
+
+    private static final long serialVersionUID = 6321253573105576262L;
+    private JLabel iconLabel;
     private JLabel titleLabel;
     private JLabel descriptionLabel;
     private JLabel activeLabel;
@@ -69,8 +66,7 @@ public class TransportItem extends JPanel {
         if (active) {
             activeLabel.setText(Res.getString("active"));
             activeLabel.setForeground(Color.green);
-        }
-        else {
+        } else {
             activeLabel.setText(Res.getString("not.registered"));
             activeLabel.setForeground(Color.GRAY);
         }
@@ -98,7 +94,7 @@ public class TransportItem extends JPanel {
         this.transportAddress = transportAddress;
     }
 
-    public Transport getTransport(){
+    public Transport getTransport() {
         return transport;
     }
 }

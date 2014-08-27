@@ -1,26 +1,38 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
-
-
 package org.jivesoftware;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JProgressBar;
+import javax.swing.JTextField;
 import org.jivesoftware.resource.Res;
 import org.jivesoftware.smack.AccountManager;
 import org.jivesoftware.smack.ConnectionConfiguration;
@@ -36,30 +48,13 @@ import org.jivesoftware.spark.util.SwingWorker;
 import org.jivesoftware.sparkimpl.settings.local.LocalPreferences;
 import org.jivesoftware.sparkimpl.settings.local.SettingsManager;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JProgressBar;
-import javax.swing.JTextField;
-
 /**
  * Allows the creation of accounts on an XMPP server.
  */
 public class AccountCreationWizard extends JPanel {
-	private static final long serialVersionUID = -7808507939643878212L;
-	private JLabel usernameLabel = new JLabel();
+
+    private static final long serialVersionUID = -7808507939643878212L;
+    private JLabel usernameLabel = new JLabel();
     private JTextField usernameField = new JTextField();
 
     private JLabel passwordLabel = new JLabel();
@@ -108,15 +103,12 @@ public class AccountCreationWizard extends JPanel {
 
         progressBar = new JProgressBar();
 
-
         add(progressBar, new GridBagConstraints(1, 4, 3, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 0, 0));
         progressBar.setVisible(false);
         add(createAccountButton, new GridBagConstraints(2, 5, 1, 1, 1.0, 0.0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0));
 
-
         ResourceUtils.resButton(closeButton, Res.getString("button.close"));
         add(closeButton, new GridBagConstraints(3, 5, 1, 1, 0.0, 0.0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0));
-
 
         createAccountButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent actionEvent) {
@@ -148,7 +140,7 @@ public class AccountCreationWizard extends JPanel {
     public String getUsernameWithoutEscape() {
         return usernameField.getText();
     }
-    
+
     /**
      * Returns the password to use for the new account.
      *
@@ -196,20 +188,16 @@ public class AccountCreationWizard extends JPanel {
             errors = true;
             usernameField.requestFocus();
             errorMessage = Res.getString("message.username.error");
-        }
-        else if (!ModelUtil.hasLength(getPassword())) {
+        } else if (!ModelUtil.hasLength(getPassword())) {
             errors = true;
             errorMessage = Res.getString("message.password.error");
-        }
-        else if (!ModelUtil.hasLength(getConfirmPassword())) {
+        } else if (!ModelUtil.hasLength(getConfirmPassword())) {
             errors = true;
             errorMessage = Res.getString("message.confirmation.password.error");
-        }
-        else if (!ModelUtil.hasLength(getServer())) {
+        } else if (!ModelUtil.hasLength(getServer())) {
             errors = true;
             errorMessage = Res.getString("message.account.error");
-        }
-        else if (!isPasswordValid()) {
+        } else if (!isPasswordValid()) {
             errors = true;
             errorMessage = Res.getString("message.confirmation.password.error");
         }
@@ -228,25 +216,21 @@ public class AccountCreationWizard extends JPanel {
         final SwingWorker worker = new SwingWorker() {
             int errorCode;
 
-
             public Object construct() {
                 try {
                     createAccountButton.setEnabled(false);
                     connection = getConnection();
-                }
-                catch (XMPPException e) {
+                } catch (XMPPException e) {
                     return e;
                 }
                 try {
                     final AccountManager accountManager = new AccountManager(connection);
                     accountManager.createAccount(getUsername(), getPassword());
-                }
-                catch (XMPPException e) {
+                } catch (XMPPException e) {
                     XMPPError error = e.getXMPPError();
                     if (error != null) {
                         errorCode = error.getCode();
-                    }
-                    else {
+                    } else {
                         errorCode = 500;
                     }
 
@@ -267,8 +251,7 @@ public class AccountCreationWizard extends JPanel {
 
                 if (errorCode == 0) {
                     accountCreationSuccessful();
-                }
-                else {
+                } else {
                     accountCreationFailed(errorCode);
                 }
             }
@@ -324,14 +307,14 @@ public class AccountCreationWizard extends JPanel {
      * Creates an XMPPConnection based on the users settings.
      *
      * @return the XMPPConnection created.
-     * @throws XMPPException thrown if an exception occured creating the connection.
+     * @throws XMPPException thrown if an exception occured creating the
+     * connection.
      */
     private XMPPConnection getConnection() throws XMPPException {
         final LocalPreferences localPreferences = SettingsManager.getLocalPreferences();
         XMPPConnection connection = null;
 
         // Get connection
-
         int port = localPreferences.getXmppPort();
 
         String serverName = getServer();
@@ -354,20 +337,16 @@ public class AccountCreationWizard extends JPanel {
             if (!hostPortConfigured) {
                 config = new ConnectionConfiguration(serverName, 5223);
                 config.setSocketFactory(new DummySSLSocketFactory());
-            }
-            else {
+            } else {
                 config = new ConnectionConfiguration(localPreferences.getXmppHost(), port, serverName);
                 config.setSocketFactory(new DummySSLSocketFactory());
             }
-        }
-        else {
+        } else {
             if (!hostPortConfigured) {
                 config = new ConnectionConfiguration(serverName);
-            }
-            else {
+            } else {
                 config = new ConnectionConfiguration(localPreferences.getXmppHost(), port, serverName);
             }
-
 
         }
 
@@ -394,4 +373,3 @@ public class AccountCreationWizard extends JPanel {
         return registered;
     }
 }
-

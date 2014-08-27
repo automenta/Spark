@@ -1,25 +1,23 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
-
 package org.jivesoftware.sparkimpl.preference.sounds;
 
+import com.thoughtworks.xstream.XStream;
 import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -30,7 +28,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JButton;
@@ -39,7 +36,6 @@ import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
 import org.jivesoftware.Spark;
 import org.jivesoftware.resource.Res;
 import org.jivesoftware.resource.SparkRes;
@@ -48,8 +44,6 @@ import org.jivesoftware.spark.util.ResourceUtils;
 import org.jivesoftware.spark.util.SwingWorker;
 import org.jivesoftware.spark.util.WindowsFileSystemView;
 import org.jivesoftware.spark.util.log.Log;
-
-import com.thoughtworks.xstream.XStream;
 
 /**
  * Preferences to handle Sounds played within Spark.
@@ -67,7 +61,6 @@ public class SoundPreference implements Preference {
     public SoundPreference() {
 
     }
-
 
     public String getTitle() {
         return Res.getString("title.sound.preferences");
@@ -92,16 +85,15 @@ public class SoundPreference implements Preference {
     public JComponent getGUI() {
         if (soundPanel == null) {
             try {
-		EventQueue.invokeAndWait(new Runnable() {
-		public void run()
-		{
-		    soundPanel = new SoundPanel();
-		}
-		});
-	    } catch (Exception e) {
-		e.printStackTrace();
-	    }
-            
+                EventQueue.invokeAndWait(new Runnable() {
+                    public void run() {
+                        soundPanel = new SoundPanel();
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
         return soundPanel;
     }
@@ -113,16 +105,14 @@ public class SoundPreference implements Preference {
 
         if (!getSoundSettingsFile().exists()) {
             preferences = new SoundPreferences();
-        }
-        else {
+        } else {
 
             // Do Initial Load from FileSystem.
             File settingsFile = getSoundSettingsFile();
             try {
                 FileReader reader = new FileReader(settingsFile);
-                preferences = (SoundPreferences)getXStream().fromXML(reader);
-            }
-            catch (Exception e) {
+                preferences = (SoundPreferences) getXStream().fromXML(reader);
+            } catch (Exception e) {
                 Log.error("Error loading Sound Preferences.", e);
                 preferences = new SoundPreferences();
             }
@@ -186,26 +176,25 @@ public class SoundPreference implements Preference {
         return null;
     }
 
-
     private class SoundPanel extends JPanel {
-	private static final long serialVersionUID = 4332294589601051699L;
-	private final JCheckBox incomingMessageBox = new JCheckBox();
-	private final JTextField incomingMessageSound = new JTextField();
-	private final JButton incomingBrowseButton = new JButton("..");
 
-	private final JCheckBox outgoingMessageBox = new JCheckBox();
-	private final JTextField outgoingMessageSound = new JTextField();
-	private final JButton outgoingBrowseButton = new JButton("..");
+        private static final long serialVersionUID = 4332294589601051699L;
+        private final JCheckBox incomingMessageBox = new JCheckBox();
+        private final JTextField incomingMessageSound = new JTextField();
+        private final JButton incomingBrowseButton = new JButton("..");
 
-	private final JCheckBox userOfflineCheckbox = new JCheckBox();
-	private final JTextField userOfflineField = new JTextField();
-	private final JButton offlineBrowseButton = new JButton("..");
+        private final JCheckBox outgoingMessageBox = new JCheckBox();
+        private final JTextField outgoingMessageSound = new JTextField();
+        private final JButton outgoingBrowseButton = new JButton("..");
 
-	private final JCheckBox incomingInvitationBox = new JCheckBox();
-	private final JTextField incomingInvitationField = new JTextField();
-	private final JButton incomingInvitationBrowseButton = new JButton("..");
+        private final JCheckBox userOfflineCheckbox = new JCheckBox();
+        private final JTextField userOfflineField = new JTextField();
+        private final JButton offlineBrowseButton = new JButton("..");
+
+        private final JCheckBox incomingInvitationBox = new JCheckBox();
+        private final JTextField incomingInvitationField = new JTextField();
+        private final JButton incomingInvitationBrowseButton = new JButton("..");
         private JFileChooser fc;
-
 
         public SoundPanel() {
             setLayout(new GridBagLayout());
@@ -243,7 +232,6 @@ public class SoundPreference implements Preference {
                 }
             });
 
-
             outgoingBrowseButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     pickFile(Res.getString("title.choose.outgoing.sound"), outgoingMessageSound);
@@ -261,7 +249,6 @@ public class SoundPreference implements Preference {
                     pickFile(Res.getString("title.choose.incoming.sound"), incomingInvitationField);
                 }
             });
-
 
         }
 
@@ -288,7 +275,6 @@ public class SoundPreference implements Preference {
         public void playOfflineSound(boolean play) {
             userOfflineCheckbox.setSelected(play);
         }
-
 
         public String getIncomingSound() {
             return incomingMessageSound.getText();
@@ -330,7 +316,6 @@ public class SoundPreference implements Preference {
             return incomingInvitationBox.isSelected();
         }
 
-
         private void pickFile(String title, JTextField field) {
             if (fc == null) {
                 fc = new JFileChooser();
@@ -345,12 +330,10 @@ public class SoundPreference implements Preference {
                 File file = fc.getSelectedFile();
                 try {
                     field.setText(file.getCanonicalPath());
-                }
-                catch (IOException e) {
+                } catch (IOException e) {
                     Log.error(e);
                 }
-            }
-            else {
+            } else {
 
             }
         }
@@ -369,8 +352,7 @@ public class SoundPreference implements Preference {
         try {
             FileWriter writer = new FileWriter(getSoundSettingsFile());
             getXStream().toXML(preferences, writer);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.error("Error saving sound settings.", e);
         }
     }

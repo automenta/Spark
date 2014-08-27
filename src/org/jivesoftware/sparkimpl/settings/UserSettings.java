@@ -1,33 +1,31 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.sparkimpl.settings;
 
+import java.util.Map;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smackx.PrivateDataManager;
 import org.jivesoftware.spark.SparkManager;
 import org.jivesoftware.spark.util.ModelUtil;
 import org.jivesoftware.spark.util.log.Log;
 
-import java.util.Map;
-
 public class UserSettings {
+
     public static final String NAMESPACE = "jive:user:settings";
     public static final String ELEMENT_NAME = "personal_settings";
     private PrivateDataManager privateDataManager;
@@ -51,18 +49,16 @@ public class UserSettings {
         PrivateDataManager.addPrivateDataProvider("personal_settings", "jive:user:settings", new SettingsDataProvider());
 
         try {
-            settingsData = (SettingsData)privateDataManager.getPrivateData("personal_settings", "jive:user:settings");
-        }
-        catch (XMPPException e) {
+            settingsData = (SettingsData) privateDataManager.getPrivateData("personal_settings", "jive:user:settings");
+        } catch (XMPPException e) {
             Log.error("Error in User Settings", e);
         }
     }
 
-    public Map<String,String> getSettings() {
+    public Map<String, String> getSettings() {
         try {
             return settingsData.getMap();
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             Log.error("Error in User Settings.", ex);
         }
         return null;
@@ -91,11 +87,9 @@ public class UserSettings {
     public void save() {
         try {
             privateDataManager.setPrivateData(settingsData);
-        }
-        catch (XMPPException e) {
+        } catch (XMPPException e) {
             Log.error("Error in User Settings.", e);
         }
     }
-
 
 }

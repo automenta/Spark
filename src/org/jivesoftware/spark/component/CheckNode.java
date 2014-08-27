@@ -1,32 +1,30 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.spark.component;
 
 import java.util.Enumeration;
-
 import javax.swing.Icon;
 
 /**
  * Creates one tree node with a check box.
  */
 public class CheckNode extends JiveTreeNode {
+
     private static final long serialVersionUID = -5071520630042479195L;
 
     /**
@@ -63,9 +61,9 @@ public class CheckNode extends JiveTreeNode {
     /**
      * Constructs a new CheckNode.
      *
-     * @param userObject     the name to use.
+     * @param userObject the name to use.
      * @param allowsChildren true if it allows children.
-     * @param isSelected     true if it is to be selected.
+     * @param isSelected true if it is to be selected.
      */
     public CheckNode(Object userObject, boolean allowsChildren, boolean isSelected) {
         super(userObject, allowsChildren);
@@ -73,14 +71,14 @@ public class CheckNode extends JiveTreeNode {
         setSelectionMode(DIG_IN_SELECTION);
     }
 
-     /**
+    /**
      * Constructs a new CheckNode.
      *
-     * @param userObject     the name to use.
+     * @param userObject the name to use.
      * @param allowsChildren true if it allows children.
      * @param icon the icon to use.
      */
-    public CheckNode(String userObject, boolean allowsChildren, Icon icon){
+    public CheckNode(String userObject, boolean allowsChildren, Icon icon) {
         super(userObject, allowsChildren, icon);
         setSelectionMode(DIG_IN_SELECTION);
     }
@@ -88,10 +86,10 @@ public class CheckNode extends JiveTreeNode {
     /**
      * Constructs a new CheckNode.
      *
-     * @param userObject     the name to use.
+     * @param userObject the name to use.
      * @param allowsChildren true if it allows children.
-     * @param isSelected     true if it is selected.
-     * @param name           the identifier name.
+     * @param isSelected true if it is selected.
+     * @param name the identifier name.
      */
     public CheckNode(Object userObject, boolean allowsChildren, boolean isSelected, String name) {
         super(userObject, allowsChildren);
@@ -172,5 +170,3 @@ public class CheckNode extends JiveTreeNode {
         this.associatedObject = associatedObject;
     }
 }
-
-

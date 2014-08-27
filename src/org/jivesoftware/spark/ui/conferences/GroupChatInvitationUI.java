@@ -1,24 +1,39 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */ 
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package org.jivesoftware.spark.ui.conferences;
 
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimerTask;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextPane;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 import org.jivesoftware.resource.Res;
 import org.jivesoftware.resource.SparkRes;
 import org.jivesoftware.smack.util.StringUtils;
@@ -32,25 +47,6 @@ import org.jivesoftware.spark.util.ModelUtil;
 import org.jivesoftware.spark.util.SwingTimerTask;
 import org.jivesoftware.spark.util.TaskEngine;
 import org.jivesoftware.spark.util.log.Log;
-
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextPane;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
-
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimerTask;
 
 /**
  * Conference Invitation UI.
@@ -67,7 +63,7 @@ public class GroupChatInvitationUI extends JPanel implements ActionListener {
     private String inviter;
     private String password;
 
-    private String invitationDateFormat = ((SimpleDateFormat)SimpleDateFormat.getTimeInstance(SimpleDateFormat.MEDIUM)).toPattern();
+    private String invitationDateFormat = ((SimpleDateFormat) SimpleDateFormat.getTimeInstance(SimpleDateFormat.MEDIUM)).toPattern();
 
     public GroupChatInvitationUI(String room, String inviter, String password, String reason) {
         setLayout(new GridBagLayout());
@@ -86,7 +82,6 @@ public class GroupChatInvitationUI extends JPanel implements ActionListener {
         // Get users nickname, if there is one.
         String nickname = SparkManager.getUserManager().getUserNicknameFromJID(inviter);
 
-
         JLabel iconLabel = new JLabel(SparkRes.getImageIcon(SparkRes.CONFERENCE_IMAGE_48x48));
 
         JTextPane titleLabel = new JTextPane();
@@ -94,7 +89,7 @@ public class GroupChatInvitationUI extends JPanel implements ActionListener {
         titleLabel.setEditable(false);
         titleLabel.setBackground(new Color(230, 239, 249));
 
-        acceptButton = new RolloverButton(Res.getString("button.accept").replace("&",""), SparkRes.getImageIcon(SparkRes.ACCEPT_INVITE_IMAGE));
+        acceptButton = new RolloverButton(Res.getString("button.accept").replace("&", ""), SparkRes.getImageIcon(SparkRes.ACCEPT_INVITE_IMAGE));
         acceptButton.setForeground(new Color(63, 158, 61));
 
         RolloverButton rejectButton = new RolloverButton(Res.getString("button.reject"), SparkRes.getImageIcon(SparkRes.REJECT_INVITE_IMAGE));
@@ -113,15 +108,14 @@ public class GroupChatInvitationUI extends JPanel implements ActionListener {
         Document document = titleLabel.getDocument();
         try {
             document.insertString(0, "[" + invitationTime + "] ", styles);
-            StyleConstants.setBold(styles, true);            
-            document.insertString(document.getLength(), Res.getString("message.invite.to.groupchat",nickname) , styles);
+            StyleConstants.setBold(styles, true);
+            document.insertString(document.getLength(), Res.getString("message.invite.to.groupchat", nickname), styles);
 
             if (ModelUtil.hasLength(reason)) {
                 StyleConstants.setBold(styles, false);
                 document.insertString(document.getLength(), "\nMessage: " + reason, styles);
             }
-        }
-        catch (BadLocationException e) {
+        } catch (BadLocationException e) {
             Log.error(e);
         }
 
@@ -132,8 +126,7 @@ public class GroupChatInvitationUI extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent event) {
         if (event.getSource() == acceptButton) {
             acceptInvitation();
-        }
-        else {
+        } else {
             rejectInvitation();
         }
     }
@@ -155,7 +148,6 @@ public class GroupChatInvitationUI extends JPanel implements ActionListener {
         TaskEngine.getInstance().schedule(removeUITask, 2000);
     }
 
-
     /**
      * Action taking when a user clicks on the reject button.
      */
@@ -165,16 +157,14 @@ public class GroupChatInvitationUI extends JPanel implements ActionListener {
         try {
             ChatRoom chatRoom = SparkManager.getChatManager().getGroupChat(room);
             if (chatRoom instanceof GroupChatRoom) {
-                GroupChatRoom gcr = (GroupChatRoom)chatRoom;
+                GroupChatRoom gcr = (GroupChatRoom) chatRoom;
                 if (!gcr.getMultiUserChat().isJoined()) {
                     chatRoom.closeChatRoom();
                 }
             }
-        }
-        catch (ChatNotFoundException e) {
+        } catch (ChatNotFoundException e) {
             // Ignore
         }
-
 
         MultiUserChat.decline(SparkManager.getConnection(), room, inviter, "No thank you");
     }

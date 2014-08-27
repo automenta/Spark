@@ -1,21 +1,19 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
+ * $RCSfile: ,v $ $Revision: $ $Date: $
  *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.spark.ui.status;
 
@@ -76,73 +74,70 @@ import org.jivesoftware.sparkimpl.settings.local.SettingsManager;
 
 //TODO: I need to remove the presence logic from this class.
 public class StatusBar extends JPanel implements VCardListener {
-	private static final long serialVersionUID = -4322806442034868526L;
 
-	private List<StatusItem> statusList = new ArrayList<StatusItem>();
+    private static final long serialVersionUID = -4322806442034868526L;
+
+    private List<StatusItem> statusList = new ArrayList<StatusItem>();
 
     private JLabel imageLabel = new JLabel();
     private JLabel descriptiveLabel = new JLabel();
     private JLabel nicknameLabel = new JLabel();
     private StatusPanel statusPanel = new StatusPanel();
 
-    private CommandPanel commandPanel ;
+    private CommandPanel commandPanel;
     private Runnable changePresenceRunnable;
 
     private Presence currentPresence;
 
-	public StatusBar() {
-		this(true);
-	}
+    public StatusBar() {
+        this(true);
+    }
 
     public StatusBar(boolean doLayout) {
-		commandPanel = UIComponentRegistry.createCommandPanel();
-	if (doLayout) {
-		setLayout(new GridBagLayout());
+        commandPanel = UIComponentRegistry.createCommandPanel();
+        if (doLayout) {
+            setLayout(new GridBagLayout());
 
+            ImageIcon brandedImage = Default.getImageIcon(Default.BRANDED_IMAGE);
+            if (brandedImage != null && brandedImage.getIconWidth() > 1) {
+                final JLabel brandedLabel = new JLabel(brandedImage);
+                add(brandedLabel, new GridBagConstraints(3, 0, 1, 3, 1.0, 0.0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(2, 2, 2, 2), 0, 0));
+            }
 
+            add(imageLabel, new GridBagConstraints(0, 0, 1, 3, 0.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(2, 8, 2, 2), 0, 0));
 
-		ImageIcon brandedImage = Default.getImageIcon(Default.BRANDED_IMAGE);
-		if (brandedImage != null && brandedImage.getIconWidth() > 1) {
-			final JLabel brandedLabel = new JLabel(brandedImage);
-			add(brandedLabel, new GridBagConstraints(3, 0, 1, 3, 1.0, 0.0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(2, 2, 2, 2), 0, 0));
-		}
-
-
-        add(imageLabel, new GridBagConstraints(0, 0, 1, 3, 0.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(2, 8, 2, 2), 0, 0));
-
-        add(nicknameLabel, new GridBagConstraints(1, 0, 1, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(2, 12, 0, 0), 0, 0));
-        add(statusPanel, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(0, 7, 0, 0), 0, 0));
-        add(commandPanel, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0, GridBagConstraints.SOUTHWEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 0), 0, 0));
-        nicknameLabel.setToolTipText(SparkManager.getConnection().getUser());
-        nicknameLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 12));
-        setStatus(Res.getString("status.online"));
-	}
+            add(nicknameLabel, new GridBagConstraints(1, 0, 1, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(2, 12, 0, 0), 0, 0));
+            add(statusPanel, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(0, 7, 0, 0), 0, 0));
+            add(commandPanel, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0, GridBagConstraints.SOUTHWEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 0), 0, 0));
+            nicknameLabel.setToolTipText(SparkManager.getConnection().getUser());
+            nicknameLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 12));
+            setStatus(Res.getString("status.online"));
+        }
 
         buildStatusItemList();
-        
+
         // SPARK-1521, if we log in as invisible, default status should be "Invisible"
         currentPresence = getPresenceOnStart();
 
-	updatePresence();        
+        updatePresence();
 
         //setBorder(BorderFactory.createLineBorder(new Color(197, 213, 230), 1));
-
         SparkManager.getSessionManager().addPresenceListener(new PresenceListener() {
             public void presenceChanged(Presence presence) {
-        	presence.setStatus(StringUtils.modifyWildcards(presence.getStatus()));
+                presence.setStatus(StringUtils.modifyWildcards(presence.getStatus()));
                 changeAvailability(presence);
-                
+
                 // SPARK-1524: 
                 // after reconnected if we had the 'invisible' presence
                 // we should re-send it 
                 if (PresenceManager.isInvisible(currentPresence)) {
-	                TimerTask task = new SwingTimerTask() {
-	                    public void doRun() {
-	                    	PrivacyManager.getInstance().goToInvisible();
-	                    }
-	                };
-	                TaskEngine.getInstance().schedule(task, 500);
-            	}
+                    TimerTask task = new SwingTimerTask() {
+                        public void doRun() {
+                            PrivacyManager.getInstance().goToInvisible();
+                        }
+                    };
+                    TaskEngine.getInstance().schedule(task, 500);
+                }
             }
         });
 
@@ -172,13 +167,12 @@ public class StatusBar extends JPanel implements VCardListener {
         };
 
         TaskEngine.getInstance().schedule(task, 3000);
-		changePresenceRunnable = new Runnable() {
-			@Override
-			public void run() {
-				updatePresence();
-			}
-		};
-
+        changePresenceRunnable = new Runnable() {
+            @Override
+            public void run() {
+                updatePresence();
+            }
+        };
 
     }
 
@@ -193,9 +187,8 @@ public class StatusBar extends JPanel implements VCardListener {
         revalidate();
     }
 
-    public CommandPanel getCommandPanel()
-    {
-	return commandPanel;
+    public CommandPanel getCommandPanel() {
+        return commandPanel;
     }
 
     public void setNickname(String nickname) {
@@ -211,13 +204,13 @@ public class StatusBar extends JPanel implements VCardListener {
         statusPanel.setStatus(status);
     }
 
-	protected void updatePresence() {
-		setStatus(currentPresence.getStatus());
-		final Icon icon = PresenceManager.getIconFromPresence(currentPresence);
-		if (icon != null) {
-			statusPanel.setIcon(icon);
-		}
-	}
+    protected void updatePresence() {
+        setStatus(currentPresence.getStatus());
+        final Icon icon = PresenceManager.getIconFromPresence(currentPresence);
+        if (icon != null) {
+            statusPanel.setIcon(icon);
+        }
+    }
 
     public void showPopup(MouseEvent e) {
         final JPopupMenu popup = new JPopupMenu();
@@ -228,20 +221,18 @@ public class StatusBar extends JPanel implements VCardListener {
         }
 
         // Sort Custom Messages
-        Collections.sort( custom, new Comparator<CustomStatusItem>()
-        {
-        	public int compare( final CustomStatusItem a, final CustomStatusItem b )
-        	{
-        		return( a.getStatus().compareToIgnoreCase( b.getStatus() ) );
-        	}
-        } );
+        Collections.sort(custom, new Comparator<CustomStatusItem>() {
+            public int compare(final CustomStatusItem a, final CustomStatusItem b) {
+                return (a.getStatus().compareToIgnoreCase(b.getStatus()));
+            }
+        });
 
         // Build menu from StatusList
         for (final StatusItem statusItem : statusList) {
             final Action statusAction = new AbstractAction() {
-				private static final long serialVersionUID = -192865863435381702L;
+                private static final long serialVersionUID = -192865863435381702L;
 
-				public void actionPerformed(ActionEvent actionEvent) {
+                public void actionPerformed(ActionEvent actionEvent) {
                     final String text = statusItem.getText();
                     final StatusItem si = getStatusItem(text);
                     if (si == null) {
@@ -279,11 +270,9 @@ public class StatusBar extends JPanel implements VCardListener {
             if (!hasChildren) {
                 // Add as Menu Item
                 popup.add(statusAction);
-            }
-            else {
+            } else {
 
                 final JMenu mainStatusItem = new JMenu(statusAction);
-
 
                 popup.add(mainStatusItem);
 
@@ -295,9 +284,9 @@ public class StatusBar extends JPanel implements VCardListener {
                     if (type.equals(statusItem.getText())) {
                         // Add Child Menu
                         Action action = new AbstractAction() {
-							private static final long serialVersionUID = -1264239704492879742L;
+                            private static final long serialVersionUID = -1264239704492879742L;
 
-							public void actionPerformed(ActionEvent actionEvent) {
+                            public void actionPerformed(ActionEvent actionEvent) {
                                 final String text = mainStatusItem.getText();
                                 final StatusItem si = getStatusItem(text);
                                 if (si == null) {
@@ -308,9 +297,9 @@ public class StatusBar extends JPanel implements VCardListener {
 
                                 SwingWorker worker = new SwingWorker() {
                                     public Object construct() {
-                                    	Presence presence = PresenceManager.copy(si.getPresence());
-                                    	presence.setStatus(customStatus);
-										presence.setPriority(customItem.getPriority());
+                                        Presence presence = PresenceManager.copy(si.getPresence());
+                                        presence.setStatus(customStatus);
+                                        presence.setPriority(customItem.getPriority());
                                         return changePresence(presence);
                                     }
 
@@ -337,14 +326,13 @@ public class StatusBar extends JPanel implements VCardListener {
             }
         }
 
-
         //SPARK-1521. Add privacy menu if Privacy Manager is active and have any visible lists
         final PrivacyManager pmanager = PrivacyManager.getInstance();
         if (pmanager.isPrivacyActive() && pmanager.getPrivacyLists().size() > 0) {
-            
+
             JMenu privMenu = new JMenu(Res.getString("privacy.status.menu.entry"));
             privMenu.setIcon(SparkRes.getImageIcon("PRIVACY_ICON_SMALL"));
-            
+
             for (SparkPrivacyList plist : pmanager.getPrivacyLists()) {
                 JMenuItem it = new JMenuItem(plist.getListName());
                 privMenu.add(it);
@@ -383,7 +371,6 @@ public class StatusBar extends JPanel implements VCardListener {
         final JMenuItem changeStatusMenu = new JMenuItem(Res.getString("menuitem.set.status.message"), SparkRes.getImageIcon(SparkRes.BLANK_IMAGE));
         popup.addSeparator();
 
-
         popup.add(changeStatusMenu);
         changeStatusMenu.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -391,11 +378,10 @@ public class StatusBar extends JPanel implements VCardListener {
             }
         });
 
-
         Action editMessagesAction = new AbstractAction() {
-			private static final long serialVersionUID = 7148051050075679995L;
+            private static final long serialVersionUID = 7148051050075679995L;
 
-			public void actionPerformed(ActionEvent actionEvent) {
+            public void actionPerformed(ActionEvent actionEvent) {
                 CustomMessages.editCustomMessages();
             }
         };
@@ -407,16 +393,17 @@ public class StatusBar extends JPanel implements VCardListener {
         popup.show(panel, 0, panel.getHeight());
     }
 
-	protected JPanel getStatusPanel() {
-		return statusPanel;
-	}
+    protected JPanel getStatusPanel() {
+        return statusPanel;
+    }
 
     public void changeAvailability(final Presence presence) {
-    	// SPARK-1524: if we were reconnected because of the error
-    	// then we get presence with the mode == null. 
-    	if (presence.getMode() == null)
-    		return;
-    	
+        // SPARK-1524: if we were reconnected because of the error
+        // then we get presence with the mode == null. 
+        if (presence.getMode() == null) {
+            return;
+        }
+
         if ((presence.getMode() == currentPresence.getMode()) && (presence.getType() == currentPresence.getType()) && (presence.getStatus().equals(currentPresence.getStatus()))) {
             PacketExtension pe = presence.getExtension("x", "vcard-temp:x:update");
             if (pe != null) {
@@ -446,27 +433,24 @@ public class StatusBar extends JPanel implements VCardListener {
         statusPanel.setIcon(availableIcon);
     }
 
-
     public Collection<StatusItem> getStatusList() {
         return statusList;
     }
 
-    public Collection<CustomStatusItem> getCustomStatusList()
-    {
-    	List<CustomStatusItem> custom = CustomMessages.load();
-    	if (custom == null)
-    		custom = new ArrayList<CustomStatusItem>();
+    public Collection<CustomStatusItem> getCustomStatusList() {
+        List<CustomStatusItem> custom = CustomMessages.load();
+        if (custom == null) {
+            custom = new ArrayList<CustomStatusItem>();
+        }
 
-    	// Sort Custom Messages
-        Collections.sort( custom, new Comparator<CustomStatusItem>()
-        {
-        	public int compare( final CustomStatusItem a, final CustomStatusItem b )
-        	{
-        		return( a.getStatus().compareToIgnoreCase( b.getStatus() ) );
-        	}
-        } );
+        // Sort Custom Messages
+        Collections.sort(custom, new Comparator<CustomStatusItem>() {
+            public int compare(final CustomStatusItem a, final CustomStatusItem b) {
+                return (a.getStatus().compareToIgnoreCase(b.getStatus()));
+            }
+        });
 
-    	return custom;
+        return custom;
     }
 
     public Presence getPresence() {
@@ -481,8 +465,6 @@ public class StatusBar extends JPanel implements VCardListener {
         }
         return null;
     }
-
-
 
     public void loadVCard() {
         final Runnable loadVCard = new Runnable() {
@@ -504,33 +486,26 @@ public class StatusBar extends JPanel implements VCardListener {
                     String nickname = vCard.getNickName();
                     if (ModelUtil.hasLength(firstName) && ModelUtil.hasLength(lastName)) {
                         setNickname(firstName + " " + lastName);
-                    }
-                    else if (ModelUtil.hasLength(firstName)) {
+                    } else if (ModelUtil.hasLength(firstName)) {
                         setNickname(firstName);
-                    }
-                    else if (ModelUtil.hasLength(nickname)) {
+                    } else if (ModelUtil.hasLength(nickname)) {
                         setNickname(nickname);
-                    }
-                    else {
+                    } else {
                         nickname = SparkManager.getSessionManager().getUsername();
                         setNickname(nickname);
                     }
-                }
-                else {
+                } else {
                     String nickname = SparkManager.getSessionManager().getUsername();
                     setNickname(nickname);
                     return;
                 }
 
-
                 byte[] avatarBytes = null;
                 try {
                     avatarBytes = vCard.getAvatar();
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     Log.error("Cannot retrieve avatar bytes.", e);
                 }
-
 
                 if (avatarBytes != null && avatarBytes.length > 0) {
                     try {
@@ -540,12 +515,10 @@ public class StatusBar extends JPanel implements VCardListener {
                         imageLabel.invalidate();
                         imageLabel.validate();
                         imageLabel.repaint();
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                         // no issue
                     }
-                }
-                else {
+                } else {
                     imageLabel.setIcon(null);
                     imageLabel.setBorder(null);
                     imageLabel.invalidate();
@@ -556,9 +529,9 @@ public class StatusBar extends JPanel implements VCardListener {
         });
 
     }
-    
+
     public static Presence copyPresence(Presence presence) {
-    	return new Presence(presence.getType(), presence.getStatus(), presence.getPriority(), presence.getMode());
+        return new Presence(presence.getType(), presence.getStatus(), presence.getPriority(), presence.getMode());
     }
 
     /**
@@ -571,8 +544,9 @@ public class StatusBar extends JPanel implements VCardListener {
     }
 
     private class StatusPanel extends JPanel {
-		private static final long serialVersionUID = -5086334443225239032L;
-		private JLabel iconLabel;
+
+        private static final long serialVersionUID = -5086334443225239032L;
+        private JLabel iconLabel;
         private JLabel statusLabel;
 
         public StatusPanel() {
@@ -599,7 +573,6 @@ public class StatusBar extends JPanel implements VCardListener {
 
             final Border border = BorderFactory.createEmptyBorder(2, 2, 2, 2);
             setBorder(border);
-
 
             statusLabel.addMouseListener(new MouseAdapter() {
                 public void mouseReleased(MouseEvent e) {
@@ -640,7 +613,6 @@ public class StatusBar extends JPanel implements VCardListener {
         }
     }
 
-
     public void setDescriptiveText(String text) {
         descriptiveLabel.setText(text);
     }
@@ -650,7 +622,6 @@ public class StatusBar extends JPanel implements VCardListener {
         dim.width = 0;
         return dim;
     }
-
 
     public void vcardChanged(VCard vcard) {
         updateVCardInformation(vcard);
@@ -667,59 +638,60 @@ public class StatusBar extends JPanel implements VCardListener {
     private String changePresence(Presence presence) {
         // SPARK-1521. Other clients can see "Invisible" status while we are disappearing.
         // So we send "Offline" instead of "Invisible" for them.
-    	boolean isNewPresenceInvisible = PresenceManager
-				.isInvisible(presence);
-		if (isNewPresenceInvisible && !PrivacyManager.getInstance().isPrivacyActive()) {
-        	JOptionPane.showMessageDialog(null, Res.getString("dialog.invisible.privacy.lists.not.supported"));
+        boolean isNewPresenceInvisible = PresenceManager
+                .isInvisible(presence);
+        if (isNewPresenceInvisible && !PrivacyManager.getInstance().isPrivacyActive()) {
+            JOptionPane.showMessageDialog(null, Res.getString("dialog.invisible.privacy.lists.not.supported"));
         }
-        
-		Presence copyPresence = copyPresence(presence);
-		if (isNewPresenceInvisible) {
-			copyPresence.setStatus(Res.getString("status.offline"));
-		}
-		if (PresenceManager.areEqual(getCurrentPresence(), copyPresence)) {
-			return presence.getStatus();
-		}
 
-		// ask user to confirm that all group chat rooms will be closed if
-		// he/she goes to invisible.
-		if (isNewPresenceInvisible
-				&& SparkManager.getChatManager().getChatContainer()
-						.hasGroupChatRooms()) {
-			int reply = JOptionPane
-					.showConfirmDialog(
-							null,
-							Res.getString("dialog.confirm.close.all.conferences.if.invisible.msg"),
-							Res.getString("dialog.confirm.to.reveal.visibility.title"),
-							JOptionPane.YES_NO_OPTION);
-			if (reply == JOptionPane.NO_OPTION) {
-				return getCurrentPresence().getStatus();
-			}
-		}
+        Presence copyPresence = copyPresence(presence);
+        if (isNewPresenceInvisible) {
+            copyPresence.setStatus(Res.getString("status.offline"));
+        }
+        if (PresenceManager.areEqual(getCurrentPresence(), copyPresence)) {
+            return presence.getStatus();
+        }
 
-		// If we go visible then we should send "Available" first.
-		if (!isNewPresenceInvisible
-				&& PresenceManager.isInvisible(getCurrentPresence()))
-			PrivacyManager.getInstance().goToVisible();
+        // ask user to confirm that all group chat rooms will be closed if
+        // he/she goes to invisible.
+        if (isNewPresenceInvisible
+                && SparkManager.getChatManager().getChatContainer()
+                .hasGroupChatRooms()) {
+            int reply = JOptionPane
+                    .showConfirmDialog(
+                            null,
+                            Res.getString("dialog.confirm.close.all.conferences.if.invisible.msg"),
+                            Res.getString("dialog.confirm.to.reveal.visibility.title"),
+                            JOptionPane.YES_NO_OPTION);
+            if (reply == JOptionPane.NO_OPTION) {
+                return getCurrentPresence().getStatus();
+            }
+        }
 
-		// Then set the current status.
-		SparkManager.getSessionManager().changePresence(copyPresence);
+        // If we go visible then we should send "Available" first.
+        if (!isNewPresenceInvisible
+                && PresenceManager.isInvisible(getCurrentPresence())) {
+            PrivacyManager.getInstance().goToVisible();
+        }
 
-		// If we go invisible we should activate the "globally invisible list"
-		// and send "Available" after "Unavailable" presence.
-		if (isNewPresenceInvisible) {
-			SparkManager.getChatManager().getChatContainer()
-					.closeAllGroupChatRooms();
-			PrivacyManager.getInstance().goToInvisible();
-		}
+        // Then set the current status.
+        SparkManager.getSessionManager().changePresence(copyPresence);
 
-		return presence.getStatus();
+        // If we go invisible we should activate the "globally invisible list"
+        // and send "Available" after "Unavailable" presence.
+        if (isNewPresenceInvisible) {
+            SparkManager.getChatManager().getChatContainer()
+                    .closeAllGroupChatRooms();
+            PrivacyManager.getInstance().goToInvisible();
+        }
+
+        return presence.getStatus();
     }
-    
-	protected Presence getPresenceOnStart() {
-		return SettingsManager.getLocalPreferences().isLoginAsInvisible() 
-                ? PresenceManager.getUnavailablePresence() 
+
+    protected Presence getPresenceOnStart() {
+        return SettingsManager.getLocalPreferences().isLoginAsInvisible()
+                ? PresenceManager.getUnavailablePresence()
                 : PresenceManager.getAvailablePresence();
-	}
+    }
 
 }

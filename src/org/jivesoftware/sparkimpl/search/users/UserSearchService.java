@@ -1,24 +1,31 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.sparkimpl.search.users;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+import javax.swing.Icon;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import org.jivesoftware.resource.Res;
 import org.jivesoftware.resource.SparkRes;
 import org.jivesoftware.smack.XMPPException;
@@ -32,13 +39,8 @@ import org.jivesoftware.spark.util.GraphicUtils;
 import org.jivesoftware.spark.util.SwingWorker;
 import org.jivesoftware.spark.util.log.Log;
 
-import javax.swing.*;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
 public class UserSearchService implements Searchable {
+
     private Collection<String> searchServices;
 
     public UserSearchService() {
@@ -75,25 +77,23 @@ public class UserSearchService implements Searchable {
         try {
             searchForm = new UserSearchForm(searchServices);
             dataFormUI = searchForm.getQuestionForm();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(SparkManager.getMainWindow(), Res.getString("message.search.service.not.available"), Res.getString("title.error"), JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        JTextField textField = (JTextField)dataFormUI.getComponent("search");
+        JTextField textField = (JTextField) dataFormUI.getComponent("search");
         if (textField != null) {
             textField.setText(query);
-        }
-        else {
-            textField = (JTextField)dataFormUI.getComponent("last");
+        } else {
+            textField = (JTextField) dataFormUI.getComponent("last");
             if (textField != null) {
                 textField.setText(query);
             }
         }
 
         if (textField == null) {
-            textField = (JTextField)dataFormUI.getComponent("userName");
+            textField = (JTextField) dataFormUI.getComponent("userName");
             if (textField != null) {
                 textField.setText(query);
             }
@@ -120,8 +120,7 @@ public class UserSearchService implements Searchable {
     private void loadSearchServices() {
         try {
             searchServices = getServices();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.error("Unable to load search services.", e);
         }
     }
@@ -143,8 +142,7 @@ public class UserSearchService implements Searchable {
                 DiscoverInfo info;
                 try {
                     info = discoManager.discoverInfo(item.getEntityID());
-                }
-                catch (XMPPException e) {
+                } catch (XMPPException e) {
                     // Ignore Case
                     continue;
                 }
@@ -158,8 +156,7 @@ public class UserSearchService implements Searchable {
                         }
                     }
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 // No info found.
                 break;
             }
@@ -191,6 +188,5 @@ public class UserSearchService implements Searchable {
     public Icon getIcon() {
         return SparkRes.getImageIcon(SparkRes.SEARCH_USER_16x16);
     }
-
 
 }

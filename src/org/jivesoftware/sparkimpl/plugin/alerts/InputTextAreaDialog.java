@@ -1,36 +1,21 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.sparkimpl.plugin.alerts;
-
-import org.jivesoftware.spark.SparkManager;
-import org.jivesoftware.spark.component.TitlePanel;
-import org.jivesoftware.resource.Res;
-
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.Icon;
-import javax.swing.JDialog;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -39,16 +24,27 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.Icon;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import org.jivesoftware.resource.Res;
+import org.jivesoftware.spark.SparkManager;
+import org.jivesoftware.spark.component.TitlePanel;
 
 /**
- * <code>InputTextAreaDialog</code> class can be used for any input required that a simple text field could
- * not handle.
+ * <code>InputTextAreaDialog</code> class can be used for any input required
+ * that a simple text field could not handle.
  *
  * @author Derek DeMoro
  * @version 1.0, 06/28/2005
  */
 public final class InputTextAreaDialog implements PropertyChangeListener {
+
     private JTextArea textArea;
     private JOptionPane optionPane;
     private JDialog dialog;
@@ -66,11 +62,11 @@ public final class InputTextAreaDialog implements PropertyChangeListener {
     /**
      * Returns the input from a user.
      *
-     * @param title       the title of the dialog.
+     * @param title the title of the dialog.
      * @param description the dialog description.
-     * @param icon        the icon to use.
-     * @param width       the dialog width
-     * @param height      the dialog height
+     * @param icon the icon to use.
+     * @param width the dialog width
+     * @param height the dialog height
      * @return the users input.
      */
     public String getInput(String title, String description, Icon icon, int width, int height) {
@@ -83,10 +79,10 @@ public final class InputTextAreaDialog implements PropertyChangeListener {
     /**
      * Prompt and return input.
      *
-     * @param title       the title of the dialog.
+     * @param title the title of the dialog.
      * @param description the dialog description.
-     * @param icon        the icon to use.
-     * @param parent      the parent to use.
+     * @param icon the icon to use.
+     * @param parent the parent to use.
      * @return the user input.
      */
     public String getInput(String title, String description, Icon icon, Component parent) {
@@ -123,15 +119,13 @@ public final class InputTextAreaDialog implements PropertyChangeListener {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyChar() == KeyEvent.VK_TAB) {
                     optionPane.requestFocus();
-                }
-                else if (e.getKeyChar() == KeyEvent.VK_ESCAPE) {
+                } else if (e.getKeyChar() == KeyEvent.VK_ESCAPE) {
                     dialog.dispose();
                 }
             }
         });
 
         textArea.requestFocus();
-
 
         dialog.setVisible(true);
         return stringValue;
@@ -141,10 +135,10 @@ public final class InputTextAreaDialog implements PropertyChangeListener {
      * Move to focus forward action.
      */
     public Action nextFocusAction = new AbstractAction("Move Focus Forwards") {
-		private static final long serialVersionUID = 1238373124060258519L;
+        private static final long serialVersionUID = 1238373124060258519L;
 
-		public void actionPerformed(ActionEvent evt) {
-            ((Component)evt.getSource()).transferFocus();
+        public void actionPerformed(ActionEvent evt) {
+            ((Component) evt.getSource()).transferFocus();
         }
     };
 
@@ -152,25 +146,23 @@ public final class InputTextAreaDialog implements PropertyChangeListener {
      * Moves the focus backwards in the dialog.
      */
     public Action prevFocusAction = new AbstractAction("Move Focus Backwards") {
-		private static final long serialVersionUID = 7927553016576134725L;
+        private static final long serialVersionUID = 7927553016576134725L;
 
-		public void actionPerformed(ActionEvent evt) {
-            ((Component)evt.getSource()).transferFocusBackward();
+        public void actionPerformed(ActionEvent evt) {
+            ((Component) evt.getSource()).transferFocusBackward();
         }
     };
 
     public void propertyChange(PropertyChangeEvent e) {
-        String value = (String)optionPane.getValue();
+        String value = (String) optionPane.getValue();
         if (Res.getString("cancel").equals(value)) {
             stringValue = null;
             dialog.setVisible(false);
-        }
-        else if (Res.getString("ok").equals(value)) {
+        } else if (Res.getString("ok").equals(value)) {
             stringValue = textArea.getText();
             if (stringValue.trim().length() == 0) {
                 stringValue = "";
-            }
-            else {
+            } else {
                 stringValue = stringValue.trim();
             }
             dialog.setVisible(false);

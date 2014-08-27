@@ -1,23 +1,20 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
-
 package org.jivesoftware.sparkimpl.profile;
 
 import java.awt.Component;
@@ -25,19 +22,17 @@ import java.awt.FocusTraversalPolicy;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
 import org.jivesoftware.resource.Res;
 import org.jivesoftware.spark.component.focus.SpecifiedOrderFocusTraversalPolicy;
 import org.jivesoftware.spark.util.ResourceUtils;
 
 public class BusinessPanel extends JPanel {
 
-	private static final long serialVersionUID = -6319059605447012843L;
-	private JLabel companyLabel = new JLabel();
+    private static final long serialVersionUID = -6319059605447012843L;
+    private JLabel companyLabel = new JLabel();
     private JLabel streetLabel = new JLabel();
     private JLabel cityLabel = new JLabel();
     private JLabel stateLabel = new JLabel();
@@ -50,7 +45,6 @@ public class BusinessPanel extends JPanel {
     private JTextField zipCodeField = new JTextField();
     private JTextField countryField = new JTextField();
     private JTextField streetField = new JTextField();
-
 
     private JLabel jobTitleLabel = new JLabel();
     private JLabel departmentLabel = new JLabel();
@@ -71,20 +65,20 @@ public class BusinessPanel extends JPanel {
         this.setLayout(new GridBagLayout());
 
         // Setup Resources
-        ResourceUtils.resLabel(companyLabel, companyField,  Res.getString("label.company") + ":");
-        ResourceUtils.resLabel(streetLabel, streetField,  Res.getString("label.street.address") + ":");
-        ResourceUtils.resLabel(cityLabel, cityField,  Res.getString("label.city") + ":");
-        ResourceUtils.resLabel(stateLabel, stateField,  Res.getString("label.state.and.province") + ":");
+        ResourceUtils.resLabel(companyLabel, companyField, Res.getString("label.company") + ":");
+        ResourceUtils.resLabel(streetLabel, streetField, Res.getString("label.street.address") + ":");
+        ResourceUtils.resLabel(cityLabel, cityField, Res.getString("label.city") + ":");
+        ResourceUtils.resLabel(stateLabel, stateField, Res.getString("label.state.and.province") + ":");
         ResourceUtils.resLabel(zipCodeLabel, zipCodeField, Res.getString("label.postal.code") + ":");
-        ResourceUtils.resLabel(countryLabel, countryField,  Res.getString("label.country") + ":");
+        ResourceUtils.resLabel(countryLabel, countryField, Res.getString("label.country") + ":");
 
-        ResourceUtils.resLabel(jobTitleLabel, jobTitleField,  Res.getString("label.job.title") + ":");
-        ResourceUtils.resLabel(departmentLabel, departmentField,  Res.getString("label.department") + ":");
+        ResourceUtils.resLabel(jobTitleLabel, jobTitleField, Res.getString("label.job.title") + ":");
+        ResourceUtils.resLabel(departmentLabel, departmentField, Res.getString("label.department") + ":");
         ResourceUtils.resLabel(phoneLabel, phoneField, Res.getString("label.phone") + ":");
-        ResourceUtils.resLabel(faxLabel, faxField,  Res.getString("label.fax") + ":");
-        ResourceUtils.resLabel(mobileLabel, mobileField,  Res.getString("label.mobile") + ":");
-        ResourceUtils.resLabel(webPageLabel, webPageField,  Res.getString("label.web.page") + ":");
-        ResourceUtils.resLabel(pagerLabel, pagerField,  Res.getString("label.pager") + ":");
+        ResourceUtils.resLabel(faxLabel, faxField, Res.getString("label.fax") + ":");
+        ResourceUtils.resLabel(mobileLabel, mobileField, Res.getString("label.mobile") + ":");
+        ResourceUtils.resLabel(webPageLabel, webPageField, Res.getString("label.web.page") + ":");
+        ResourceUtils.resLabel(pagerLabel, pagerField, Res.getString("label.pager") + ":");
 
         this.add(streetField, new GridBagConstraints(1, 1, 1, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 0, 0));
         this.add(countryField, new GridBagConstraints(1, 5, 1, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 0, 0));
@@ -120,18 +114,17 @@ public class BusinessPanel extends JPanel {
         this.add(webPageLabel, new GridBagConstraints(2, 6, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0));
         this.add(webPageField, new GridBagConstraints(3, 6, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 0, 0));
 
+        final Component order[] = new Component[]{
+            companyField, streetField, cityField,
+            stateField, zipCodeField, countryField,
+            jobTitleField, departmentField, phoneField,
+            faxField, pagerField, mobileField,
+            webPageField
+        };
 
-        final Component order[] = new Component[] {	
-        											companyField, streetField,cityField,
-        											stateField, zipCodeField,countryField,
-        											jobTitleField,departmentField,phoneField,
-        											faxField, pagerField,mobileField,
-        											webPageField 
-        										   };
-        
         FocusTraversalPolicy policy = new SpecifiedOrderFocusTraversalPolicy(order);
         setFocusTraversalPolicy(policy);
-        setFocusTraversalPolicyProvider(true); 
+        setFocusTraversalPolicyProvider(true);
     }
 
     public void setCompany(String company) {
@@ -245,7 +238,7 @@ public class BusinessPanel extends JPanel {
             for (int i = 0; i < no; i++) {
                 Component comp = comps[i];
                 if (comp instanceof JTextField) {
-                    ((JTextField)comp).setEditable(allowEditing);
+                    ((JTextField) comp).setEditable(allowEditing);
                 }
             }
         }

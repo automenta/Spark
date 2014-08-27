@@ -1,28 +1,25 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.spark.component;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import javax.swing.BoxLayout;
 import javax.swing.JTextField;
 import javax.swing.text.AttributeSet;
@@ -46,7 +43,7 @@ public class AutoCompleteDocument extends PlainDocument {
     }
 
     public void insertString(int offs, String str, AttributeSet a)
-        throws BadLocationException {
+            throws BadLocationException {
         super.insertString(offs, str, a);
         String word = autoComplete(getText(0, getLength()));
         if (word != null) {
@@ -70,13 +67,13 @@ public class AutoCompleteDocument extends PlainDocument {
      * Creates a auto completing JTextField.
      *
      * @param dictionary an array of words to use when trying auto completion.
-     * @return a JTextField that is initialized as using an auto
-     *         completing textfield.
+     * @return a JTextField that is initialized as using an auto completing
+     * textfield.
      */
     public static JTextField createAutoCompleteTextField(String[] dictionary) {
         JTextField field = new JTextField();
         AutoCompleteDocument doc = new AutoCompleteDocument(field,
-            dictionary);
+                dictionary);
         field.setDocument(doc);
         return field;
     }
@@ -85,10 +82,10 @@ public class AutoCompleteDocument extends PlainDocument {
         javax.swing.JFrame frame = new javax.swing.JFrame("foo");
         frame.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
         String[] dict = {"auto", "automobile", "autocrat", "graduation"};
-        JTextField field =
-            AutoCompleteDocument.createAutoCompleteTextField(dict);
+        JTextField field
+                = AutoCompleteDocument.createAutoCompleteTextField(dict);
         BoxLayout layout = new BoxLayout(frame.getContentPane(),
-            BoxLayout.X_AXIS);
+                BoxLayout.X_AXIS);
         frame.getContentPane().setLayout(layout);
         frame.getContentPane().add(new javax.swing.JLabel("Text Field: "));
         frame.getContentPane().add(field);

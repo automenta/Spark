@@ -1,37 +1,34 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
+ * $RCSfile: ,v $ $Revision: $ $Date: $
  *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.spark.ui.themes;
 
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.Frame;
-import java.awt.Window;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.Properties;
 import java.util.Vector;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -47,7 +44,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
-
 import org.jivesoftware.Spark;
 import org.jivesoftware.resource.Default;
 import org.jivesoftware.resource.Res;
@@ -63,11 +59,11 @@ import org.jivesoftware.sparkimpl.plugin.emoticons.EmoticonManager;
 import org.jivesoftware.sparkimpl.settings.local.LocalPreferences;
 import org.jivesoftware.sparkimpl.settings.local.SettingsManager;
 
-
 /**
  * ThemePanel is used for the setting of TranscriptWindows and Emoticon packs.
  */
 public class ThemePanel extends JPanel {
+
     private static final long serialVersionUID = 2943854311454590459L;
 
     private TranscriptWindow emoticonpreviewtranscript;
@@ -114,115 +110,112 @@ public class ThemePanel extends JPanel {
      */
     public ThemePanel() {
 
-	_themepanel = this;
+        _themepanel = this;
         _themepanel.setLayout(new GridBagLayout());
 
-        LookAndFeelInfo[]  ui = UIManager.getInstalledLookAndFeels();
-
+        LookAndFeelInfo[] ui = UIManager.getInstalledLookAndFeels();
 
         Vector<String> lafname = new Vector<String>();
 
-        for(int i=0;i<ui.length;i++)
-        {
+        for (int i = 0; i < ui.length; i++) {
             _lookandfeelname.add(ui[i].getClassName());
-          lafname.add(ui[i].getName());
+            lafname.add(ui[i].getName());
         }
 
-	String[] nonSystemLookAndFeels = {
-		//JTattoo
-		"com.jtattoo.plaf.acryl.AcrylLookAndFeel", // was disabled
-		"com.jtattoo.plaf.aero.AeroLookAndFeel",
-		"com.jtattoo.plaf.aluminium.AluminiumLookAndFeel",
-		"com.jtattoo.plaf.bernstein.BernsteinLookAndFeel", // was disabled
-		"com.jtattoo.plaf.fast.FastLookAndFeel",
-		"com.jtattoo.plaf.graphite.GraphiteLookAndFeel", // was disabled
-		"com.jtattoo.plaf.hifi.HiFiLookAndFeel", // was disabled
-		"com.jtattoo.plaf.luna.LunaLookAndFeel",
-		"com.jtattoo.plaf.mcwin.McWinLookAndFeel",
-		"com.jtattoo.plaf.mint.MintLookAndFeel",
-		"com.jtattoo.plaf.noire.NoireLookAndFeel", // was disabled
-		"com.jtattoo.plaf.smart.SmartLookAndFeel",
-        "com.jtattoo.plaf.texture.TextureLookAndFeel", // new
+        String[] nonSystemLookAndFeels = {
+            //JTattoo
+            "com.jtattoo.plaf.acryl.AcrylLookAndFeel", // was disabled
+            "com.jtattoo.plaf.aero.AeroLookAndFeel",
+            "com.jtattoo.plaf.aluminium.AluminiumLookAndFeel",
+            "com.jtattoo.plaf.bernstein.BernsteinLookAndFeel", // was disabled
+            "com.jtattoo.plaf.fast.FastLookAndFeel",
+            "com.jtattoo.plaf.graphite.GraphiteLookAndFeel", // was disabled
+            "com.jtattoo.plaf.hifi.HiFiLookAndFeel", // was disabled
+            "com.jtattoo.plaf.luna.LunaLookAndFeel",
+            "com.jtattoo.plaf.mcwin.McWinLookAndFeel",
+            "com.jtattoo.plaf.mint.MintLookAndFeel",
+            "com.jtattoo.plaf.noire.NoireLookAndFeel", // was disabled
+            "com.jtattoo.plaf.smart.SmartLookAndFeel",
+            "com.jtattoo.plaf.texture.TextureLookAndFeel", // new
 
-        // Insubstance (Substance)
-        "org.pushingpixels.substance.api.skin.SubstanceAutumnLookAndFeel",
-        "org.pushingpixels.substance.api.skin.SubstanceBusinessBlackSteelLookAndFeel",
-        "org.pushingpixels.substance.api.skin.SubstanceBusinessBlueSteelLookAndFeel",
-        "org.pushingpixels.substance.api.skin.SubstanceBusinessLookAndFeel",
-        "org.pushingpixels.substance.api.skin.SubstanceCeruleanLookAndFeel", // new
-        "org.pushingpixels.substance.api.skin.SubstanceChallengerDeepLookAndFeel",
-        "org.pushingpixels.substance.api.skin.SubstanceCremeCoffeeLookAndFeel",
-        "org.pushingpixels.substance.api.skin.SubstanceCremeLookAndFeel",
-        "org.pushingpixels.substance.api.skin.SubstanceDustCoffeeLookAndFeel",
-        "org.pushingpixels.substance.api.skin.SubstanceDustLookAndFeel",
-        "org.pushingpixels.substance.api.skin.SubstanceEmeraldDuskLookAndFeel",
-        "org.pushingpixels.substance.api.skin.SubstanceGeminiLookAndFeel",
-        "org.pushingpixels.substance.api.skin.SubstanceGraphiteAquaLookAndFeel",
-        "org.pushingpixels.substance.api.skin.SubstanceGraphiteGlassLookAndFeel",
-        "org.pushingpixels.substance.api.skin.SubstanceGraphiteLookAndFeel",
-        "org.pushingpixels.substance.api.skin.SubstanceMagellanLookAndFeel",
-        "org.pushingpixels.substance.api.skin.SubstanceMarinerLookAndFeel", // new
-        "org.pushingpixels.substance.api.skin.SubstanceMistAquaLookAndFeel",
-        "org.pushingpixels.substance.api.skin.SubstanceMistSilverLookAndFeel",
-        "org.pushingpixels.substance.api.skin.SubstanceModerateLookAndFeel",
-        "org.pushingpixels.substance.api.skin.SubstanceNebulaBrickWallLookAndFeel",
-        "org.pushingpixels.substance.api.skin.SubstanceNebulaLookAndFeel",
-        "org.pushingpixels.substance.api.skin.SubstanceOfficeBlack2007LookAndFeel", // new
-        "org.pushingpixels.substance.api.skin.SubstanceOfficeBlue2007LookAndFeel",
-        "org.pushingpixels.substance.api.skin.SubstanceOfficeSilver2007LookAndFeel",
-        "org.pushingpixels.substance.api.skin.SubstanceRavenLookAndFeel",
-        "org.pushingpixels.substance.api.skin.SubstanceSaharaLookAndFeel",
-        "org.pushingpixels.substance.api.skin.SubstanceTwilightLookAndFeel"   
+            // Insubstance (Substance)
+            "org.pushingpixels.substance.api.skin.SubstanceAutumnLookAndFeel",
+            "org.pushingpixels.substance.api.skin.SubstanceBusinessBlackSteelLookAndFeel",
+            "org.pushingpixels.substance.api.skin.SubstanceBusinessBlueSteelLookAndFeel",
+            "org.pushingpixels.substance.api.skin.SubstanceBusinessLookAndFeel",
+            "org.pushingpixels.substance.api.skin.SubstanceCeruleanLookAndFeel", // new
+            "org.pushingpixels.substance.api.skin.SubstanceChallengerDeepLookAndFeel",
+            "org.pushingpixels.substance.api.skin.SubstanceCremeCoffeeLookAndFeel",
+            "org.pushingpixels.substance.api.skin.SubstanceCremeLookAndFeel",
+            "org.pushingpixels.substance.api.skin.SubstanceDustCoffeeLookAndFeel",
+            "org.pushingpixels.substance.api.skin.SubstanceDustLookAndFeel",
+            "org.pushingpixels.substance.api.skin.SubstanceEmeraldDuskLookAndFeel",
+            "org.pushingpixels.substance.api.skin.SubstanceGeminiLookAndFeel",
+            "org.pushingpixels.substance.api.skin.SubstanceGraphiteAquaLookAndFeel",
+            "org.pushingpixels.substance.api.skin.SubstanceGraphiteGlassLookAndFeel",
+            "org.pushingpixels.substance.api.skin.SubstanceGraphiteLookAndFeel",
+            "org.pushingpixels.substance.api.skin.SubstanceMagellanLookAndFeel",
+            "org.pushingpixels.substance.api.skin.SubstanceMarinerLookAndFeel", // new
+            "org.pushingpixels.substance.api.skin.SubstanceMistAquaLookAndFeel",
+            "org.pushingpixels.substance.api.skin.SubstanceMistSilverLookAndFeel",
+            "org.pushingpixels.substance.api.skin.SubstanceModerateLookAndFeel",
+            "org.pushingpixels.substance.api.skin.SubstanceNebulaBrickWallLookAndFeel",
+            "org.pushingpixels.substance.api.skin.SubstanceNebulaLookAndFeel",
+            "org.pushingpixels.substance.api.skin.SubstanceOfficeBlack2007LookAndFeel", // new
+            "org.pushingpixels.substance.api.skin.SubstanceOfficeBlue2007LookAndFeel",
+            "org.pushingpixels.substance.api.skin.SubstanceOfficeSilver2007LookAndFeel",
+            "org.pushingpixels.substance.api.skin.SubstanceRavenLookAndFeel",
+            "org.pushingpixels.substance.api.skin.SubstanceSaharaLookAndFeel",
+            "org.pushingpixels.substance.api.skin.SubstanceTwilightLookAndFeel"
 
         /*
-		//Substance
-		//"org.jvnet.substance.skin.SubstanceAutumnLookAndFeel",
-		"org.jvnet.substance.skin.SubstanceBusinessBlackSteelLookAndFeel",
-		"org.jvnet.substance.skin.SubstanceBusinessBlueSteelLookAndFeel",
-		"org.jvnet.substance.skin.SubstanceBusinessLookAndFeel",
-		//"org.jvnet.substance.skin.SubstanceChallengerDeepLookAndFeel",
-		"org.jvnet.substance.skin.SubstanceCremeCoffeeLookAndFeel",
-		"org.jvnet.substance.skin.SubstanceCremeLookAndFeel",
-		"org.jvnet.substance.skin.SubstanceDustCoffeeLookAndFeel",
-		"org.jvnet.substance.skin.SubstanceDustLookAndFeel",
-		//"org.jvnet.substance.skin.SubstanceEmeraldDuskLookAndFeel",
-		"org.jvnet.substance.api.skin.SubstanceGeminiLookAndFeel",
-		"org.jvnet.substance.api.skin.SubstanceGraphiteAquaLookAndFeel",
-		//"org.jvnet.substance.skin.SubstanceMagmaLookAndFeel", // removed from new version
-		//"org.jvnet.substance.api.skin.SubstanceMagellanLookAndFeel",
-		"org.jvnet.substance.skin.SubstanceMistAquaLookAndFeel",
-		"org.jvnet.substance.skin.SubstanceMistSilverLookAndFeel",
-		"org.jvnet.substance.skin.SubstanceModerateLookAndFeel",
-		"org.jvnet.substance.skin.SubstanceNebulaBrickWallLookAndFeel",
-		"org.jvnet.substance.skin.SubstanceNebulaLookAndFeel",
-		"org.jvnet.substance.skin.SubstanceOfficeBlue2007LookAndFeel",
-		"org.jvnet.substance.skin.SubstanceOfficeSilver2007LookAndFeel",
-		"org.jvnet.substance.skin.SubstanceRavenGraphiteGlassLookAndFeel",
-		"org.jvnet.substance.skin.SubstanceRavenGraphiteLookAndFeel",
-		//"org.jvnet.substance.skin.SubstanceRavenLookAndFeel",
-		"org.jvnet.substance.skin.SubstanceSaharaLookAndFeel",
-		//"org.jvnet.substance.skin.SubstanceTwilightLookAndFeel"
-*/
-		};
+         //Substance
+         //"org.jvnet.substance.skin.SubstanceAutumnLookAndFeel",
+         "org.jvnet.substance.skin.SubstanceBusinessBlackSteelLookAndFeel",
+         "org.jvnet.substance.skin.SubstanceBusinessBlueSteelLookAndFeel",
+         "org.jvnet.substance.skin.SubstanceBusinessLookAndFeel",
+         //"org.jvnet.substance.skin.SubstanceChallengerDeepLookAndFeel",
+         "org.jvnet.substance.skin.SubstanceCremeCoffeeLookAndFeel",
+         "org.jvnet.substance.skin.SubstanceCremeLookAndFeel",
+         "org.jvnet.substance.skin.SubstanceDustCoffeeLookAndFeel",
+         "org.jvnet.substance.skin.SubstanceDustLookAndFeel",
+         //"org.jvnet.substance.skin.SubstanceEmeraldDuskLookAndFeel",
+         "org.jvnet.substance.api.skin.SubstanceGeminiLookAndFeel",
+         "org.jvnet.substance.api.skin.SubstanceGraphiteAquaLookAndFeel",
+         //"org.jvnet.substance.skin.SubstanceMagmaLookAndFeel", // removed from new version
+         //"org.jvnet.substance.api.skin.SubstanceMagellanLookAndFeel",
+         "org.jvnet.substance.skin.SubstanceMistAquaLookAndFeel",
+         "org.jvnet.substance.skin.SubstanceMistSilverLookAndFeel",
+         "org.jvnet.substance.skin.SubstanceModerateLookAndFeel",
+         "org.jvnet.substance.skin.SubstanceNebulaBrickWallLookAndFeel",
+         "org.jvnet.substance.skin.SubstanceNebulaLookAndFeel",
+         "org.jvnet.substance.skin.SubstanceOfficeBlue2007LookAndFeel",
+         "org.jvnet.substance.skin.SubstanceOfficeSilver2007LookAndFeel",
+         "org.jvnet.substance.skin.SubstanceRavenGraphiteGlassLookAndFeel",
+         "org.jvnet.substance.skin.SubstanceRavenGraphiteLookAndFeel",
+         //"org.jvnet.substance.skin.SubstanceRavenLookAndFeel",
+         "org.jvnet.substance.skin.SubstanceSaharaLookAndFeel",
+         //"org.jvnet.substance.skin.SubstanceTwilightLookAndFeel"
+         */
+        };
 
-	for (String s : nonSystemLookAndFeels) {
-	    _lookandfeelname.add(s);
-	    s = s.replace("LookAndFeel", "");
+        for (String s : nonSystemLookAndFeels) {
+            _lookandfeelname.add(s);
+            s = s.replace("LookAndFeel", "");
 
-	    if (s.contains("jtattoo")) {
-		s = "JTattoo" + s.substring(s.lastIndexOf(".") + 1);
-	    } else if (s.contains("jgoodies")) {
-		s = "JGoodies" + s.substring(s.lastIndexOf(".") + 1);
-	    } else {
-		s = s.substring(s.lastIndexOf(".") + 1);
-	    }
-	    lafname.add(s);
-	}
-
+            if (s.contains("jtattoo")) {
+                s = "JTattoo" + s.substring(s.lastIndexOf(".") + 1);
+            } else if (s.contains("jgoodies")) {
+                s = "JGoodies" + s.substring(s.lastIndexOf(".") + 1);
+            } else {
+                s = s.substring(s.lastIndexOf(".") + 1);
+            }
+            lafname.add(s);
+        }
 
         _lookandfeel = new JComboBox(lafname);
 
-        if (Default.getBoolean(Default.LOOK_AND_FEEL_DISABLED)){
+        if (Default.getBoolean(Default.LOOK_AND_FEEL_DISABLED)) {
             _lookandfeel.setEnabled(false);
         }
         _lookandfeelLabel = new JLabel(Res.getString("lookandfeel.select"));
@@ -230,94 +223,89 @@ public class ThemePanel extends JPanel {
 
         _lookandfeel.addActionListener(new ActionListener() {
 
-	    @Override
-	    public void actionPerformed(ActionEvent e) {
-		// Disable button for java.LaF's and for Synthetica
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Disable button for java.LaF's and for Synthetica
 
-		if (_lookandfeel.getSelectedIndex() < UIManager.getInstalledLookAndFeels().length) {
-		    _lookandfeelpreview.setEnabled(false);
-		    _lookandfeelpreview
-			    .setToolTipText(Res.getString("lookandfeel.tooltip.restart.yes"));
-		    _lookandfeelpreview.revalidate();
-		} else {
-		    _lookandfeelpreview.setEnabled(true);
-		    _lookandfeelpreview.setToolTipText(Res.getString("lookandfeel.tooltip.restart.no"));
-		    _lookandfeelpreview.revalidate();
-		}
-
-	    }
-	});
-
-
-	_lookandfeelpreview.addActionListener(new ActionListener() {
-
-	    @Override
-	    public void actionPerformed(ActionEvent e) {
-
-		SwingWorker worker = new SwingWorker() {
-		    @Override
-		    public Object construct() {
-
-			return 42;
-		    }
-
-            private void setNewLaF() {
-                try {
-                    UIManager.setLookAndFeel(_lookandfeelname.get(_lookandfeel.getSelectedIndex()));
-                    setJTattooBar(_lookandfeelname.get(_lookandfeel.getSelectedIndex()));
-                } catch (Exception e) {
-                    //WTF, i dont care
+                if (_lookandfeel.getSelectedIndex() < UIManager.getInstalledLookAndFeels().length) {
+                    _lookandfeelpreview.setEnabled(false);
+                    _lookandfeelpreview
+                            .setToolTipText(Res.getString("lookandfeel.tooltip.restart.yes"));
+                    _lookandfeelpreview.revalidate();
+                } else {
+                    _lookandfeelpreview.setEnabled(true);
+                    _lookandfeelpreview.setToolTipText(Res.getString("lookandfeel.tooltip.restart.no"));
+                    _lookandfeelpreview.revalidate();
                 }
-            }
 
-            private void updateAllComponentsLaF(final Window window) {
-                for (Window childWindow : window.getOwnedWindows()) {
-                    updateAllComponentsLaF(childWindow);
-                }
-                SwingUtilities.updateComponentTreeUI(window);
             }
+        });
+
+        _lookandfeelpreview.addActionListener(new ActionListener() {
 
             @Override
-            public void finished() {
-                // if the current laf is substance, and the new laf is not, we need to refresh all components,
-                //   but since substance is very stubborn, we must restart.
-                if (UIManager.getLookAndFeel().getName().toLowerCase().contains("substance")
-                        && !_lookandfeelname.get(_lookandfeel.getSelectedIndex()).toLowerCase().contains("substance")) { // substance is a PITA!
-                    if (JOptionPane.showConfirmDialog(SparkManager.getPreferenceManager().getPreferenceDialog(), Res.getString("message.restart.required"),
-                            Res.getString("title.alert"), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                        setNewLaF();
-                        SettingsManager.getLocalPreferences().setLookAndFeel(getLookAndFeel());
-                        SparkManager.getMainWindow().logout(false);
+            public void actionPerformed(ActionEvent e) {
+
+                SwingWorker worker = new SwingWorker() {
+                    @Override
+                    public Object construct() {
+
+                        return 42;
                     }
-                } else { // otherwise we're ok to just refresh all components
-                    setNewLaF();
-                    for (Frame frame : Frame.getFrames()) {
-                        updateAllComponentsLaF(frame);
+
+                    private void setNewLaF() {
+                        try {
+                            UIManager.setLookAndFeel(_lookandfeelname.get(_lookandfeel.getSelectedIndex()));
+                            setJTattooBar(_lookandfeelname.get(_lookandfeel.getSelectedIndex()));
+                        } catch (Exception e) {
+                            //WTF, i dont care
+                        }
                     }
-                    JFrame.setDefaultLookAndFeelDecorated(true);
-                    JDialog.setDefaultLookAndFeelDecorated(true);
-                    SettingsManager.getLocalPreferences().setLookAndFeel(getLookAndFeel());
-                }
-		    }
-		};
-		worker.start();
-	    }
-	});
 
+                    private void updateAllComponentsLaF(final Window window) {
+                        for (Window childWindow : window.getOwnedWindows()) {
+                            updateAllComponentsLaF(childWindow);
+                        }
+                        SwingUtilities.updateComponentTreeUI(window);
+                    }
 
-	    _useTabsForTransports = new JCheckBox("");
-	    _useTabsForConference = new JCheckBox("");
+                    @Override
+                    public void finished() {
+                        // if the current laf is substance, and the new laf is not, we need to refresh all components,
+                        //   but since substance is very stubborn, we must restart.
+                        if (UIManager.getLookAndFeel().getName().toLowerCase().contains("substance")
+                                && !_lookandfeelname.get(_lookandfeel.getSelectedIndex()).toLowerCase().contains("substance")) { // substance is a PITA!
+                            if (JOptionPane.showConfirmDialog(SparkManager.getPreferenceManager().getPreferenceDialog(), Res.getString("message.restart.required"),
+                                    Res.getString("title.alert"), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                                setNewLaF();
+                                SettingsManager.getLocalPreferences().setLookAndFeel(getLookAndFeel());
+                                SparkManager.getMainWindow().logout(false);
+                            }
+                        } else { // otherwise we're ok to just refresh all components
+                            setNewLaF();
+                            for (Frame frame : Frame.getFrames()) {
+                                updateAllComponentsLaF(frame);
+                            }
+                            JFrame.setDefaultLookAndFeelDecorated(true);
+                            JDialog.setDefaultLookAndFeelDecorated(true);
+                            SettingsManager.getLocalPreferences().setLookAndFeel(getLookAndFeel());
+                        }
+                    }
+                };
+                worker.start();
+            }
+        });
 
+        _useTabsForTransports = new JCheckBox("");
+        _useTabsForConference = new JCheckBox("");
 
         JLabel messageStyleLabel = new JLabel();
         messageStyleBox = new JComboBox();
-
 
         emoticonspanel = new EmoticonPanel(10);
         emoticonscrollpane = new JScrollPane(emoticonspanel);
         emoticonscrollpane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         emoticonscrollpane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-
 
         emoticonBox = new JComboBox();
 
@@ -340,23 +328,20 @@ public class ThemePanel extends JPanel {
         chatRoomFontField = new JTextField();
         chatRoomFontLabel = new JLabel();
 
+        String[] r = {Res.getString("checkbox.reconnect.panel.big"),
+            Res.getString("checkbox.reconnect.panel.small"),
+            Res.getString("checkbox.reconnect.panel.icon")};
+        _showReconnectBox = new JComboBox(r);
 
+        _showReconnectBox.setSelectedIndex(pref.getReconnectPanelType());
 
-	String[] r = { Res.getString("checkbox.reconnect.panel.big"),
-		Res.getString("checkbox.reconnect.panel.small"),
-		Res.getString("checkbox.reconnect.panel.icon") };
-	_showReconnectBox = new JComboBox(r);
-
-	_showReconnectBox.setSelectedIndex(pref.getReconnectPanelType());
-
-	_showReconnectBox.addActionListener(new ActionListener() {
-	    public void actionPerformed(ActionEvent e) {
-		if(_showReconnectBox.getSelectedIndex()!=-1)
-		setShowReconnectPanel(_showReconnectBox.getSelectedIndex());
-	    }
-	});
-
-
+        _showReconnectBox.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (_showReconnectBox.getSelectedIndex() != -1) {
+                    setShowReconnectPanel(_showReconnectBox.getSelectedIndex());
+                }
+            }
+        });
 
         showVCards = new JCheckBox();
 
@@ -396,7 +381,6 @@ public class ThemePanel extends JPanel {
         add(_lookandfeel, new GridBagConstraints(1, 4, 1, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 50, 0));
         add(_lookandfeelpreview, new GridBagConstraints(2, 4, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0));
 
-
         add(chatRoomFontLabel, new GridBagConstraints(0, 5, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0));
         add(chatRoomFontField, new GridBagConstraints(1, 5, 2, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 50, 0));
         add(contactListFontLabel, new GridBagConstraints(0, 6, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0));
@@ -408,52 +392,46 @@ public class ThemePanel extends JPanel {
         add(_useTabsForTransports, new GridBagConstraints(0, 10, 3, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 50, 0));
         add(_useTabsForConference, new GridBagConstraints(0, 11, 3, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 50, 0));
 
-
         JLabel reconnectionlabel = new JLabel(Res.getString("checkbox.reconnet.info"));
-        add(reconnectionlabel, new GridBagConstraints(0, 12, 1, 1,0.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 50, 0));
-	add(_showReconnectBox, new GridBagConstraints(1, 12, 3, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 50, 0));
-
+        add(reconnectionlabel, new GridBagConstraints(0, 12, 1, 1, 0.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 50, 0));
+        add(_showReconnectBox, new GridBagConstraints(1, 12, 3, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 50, 0));
 
         // Activate live one.
-
-
-
         _useTabsForTransports.setSelected(pref.getShowTransportTab());
         _useTabsForTransports.addActionListener(new ActionListener() {
 
-	    @Override
-	    public void actionPerformed(ActionEvent e) {
-		SettingsManager.getLocalPreferences().setShowTransportTab(_useTabsForTransports.isSelected());
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SettingsManager.getLocalPreferences().setShowTransportTab(_useTabsForTransports.isSelected());
 
-	    }
-	});
-		_useTabsForConference.setSelected(pref.isShowConferenceTab());
-		_useTabsForConference.addActionListener(new ActionListener() {
+            }
+        });
+        _useTabsForConference.setSelected(pref.isShowConferenceTab());
+        _useTabsForConference.addActionListener(new ActionListener() {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				SettingsManager.getLocalPreferences().setShowConferenceTab(
-						_useTabsForConference.isSelected());
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SettingsManager.getLocalPreferences().setShowConferenceTab(
+                        _useTabsForConference.isSelected());
 
-			}
-		});
+            }
+        });
 
         _useTabsForConference.setSelected(pref.isShowConferenceTab());
         _useTabsForConference.addActionListener(new ActionListener() {
 
-	    @Override
-	    public void actionPerformed(ActionEvent e) {
-		SettingsManager.getLocalPreferences().setShowConferenceTab(_useTabsForConference.isSelected());
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SettingsManager.getLocalPreferences().setShowConferenceTab(_useTabsForConference.isSelected());
 
-	    }
-	});
+            }
+        });
 
         final EmoticonManager emoticonManager = EmoticonManager.getInstance();
-        if (emoticonManager.getEmoticonPacks() != null)
-        {
-	        for (String pack : emoticonManager.getEmoticonPacks()) {
-	            emoticonBox.addItem(pack);
-	        }
+        if (emoticonManager.getEmoticonPacks() != null) {
+            for (String pack : emoticonManager.getEmoticonPacks()) {
+                emoticonBox.addItem(pack);
+            }
         }
 
         final String activePack = pref.getEmoticonPack();
@@ -461,8 +439,8 @@ public class ThemePanel extends JPanel {
 
         emoticonBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                emoticonManager.addEmoticonPack((String)emoticonBox.getSelectedItem());
-                emoticonManager.setActivePack((String)emoticonBox.getSelectedItem());
+                emoticonManager.addEmoticonPack((String) emoticonBox.getSelectedItem());
+                emoticonManager.setActivePack((String) emoticonBox.getSelectedItem());
                 showSelectedEmoticon();
             }
         });
@@ -483,17 +461,13 @@ public class ThemePanel extends JPanel {
 
         showAvatarsBox.setSelected(pref.areAvatarsVisible());
 
-
         if (pref.getContactListIconSize() == 16) {
             avatarSizeField.setSelectedIndex(0);
-        }
-        else if (pref.getContactListIconSize() == 24) {
+        } else if (pref.getContactListIconSize() == 24) {
             avatarSizeField.setSelectedIndex(1);
-        }
-        else if (pref.getContactListIconSize() == 32) {
+        } else if (pref.getContactListIconSize() == 32) {
             avatarSizeField.setSelectedIndex(2);
-        }
-        else {
+        } else {
             avatarSizeField.setSelectedIndex(1);
         }
 
@@ -503,8 +477,7 @@ public class ThemePanel extends JPanel {
 
             chatRoomFontField.setText(Integer.toString(chatRoomFontSize));
             contactListFontField.setText(Integer.toString(contactListFontSize));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.error(e);
         }
     }
@@ -513,31 +486,28 @@ public class ThemePanel extends JPanel {
      * Displays the active emoticon pack.
      */
     protected void showSelectedEmoticon() {
-	EmoticonManager emoticonManager = EmoticonManager.getInstance();
+        EmoticonManager emoticonManager = EmoticonManager.getInstance();
 
-	int i = emoticonManager.getActiveEmoticonSet().size();
-	if (i==0)
-	{
-	    emoticonspanel = new EmoticonPanel(1);
-	    JLabel label = new JLabel(SparkRes.getImageIcon(SparkRes.SMALL_DELETE));
-	    emoticonspanel.add(label);
-	}
-	else if (i < 25) {
-	    emoticonspanel = new EmoticonPanel(i);
-	} else {
-	    emoticonspanel = new EmoticonPanel(10);
-	}
-	for(Emoticon emoticon : emoticonManager.getActiveEmoticonSet())
-	{
-	   ImageIcon ico = new ImageIcon(emoticonManager.getEmoticonURL(emoticon));
-	   JLabel label = new JLabel(ico);
-	   emoticonspanel.add(label);
-	}
+        int i = emoticonManager.getActiveEmoticonSet().size();
+        if (i == 0) {
+            emoticonspanel = new EmoticonPanel(1);
+            JLabel label = new JLabel(SparkRes.getImageIcon(SparkRes.SMALL_DELETE));
+            emoticonspanel.add(label);
+        } else if (i < 25) {
+            emoticonspanel = new EmoticonPanel(i);
+        } else {
+            emoticonspanel = new EmoticonPanel(10);
+        }
+        for (Emoticon emoticon : emoticonManager.getActiveEmoticonSet()) {
+            ImageIcon ico = new ImageIcon(emoticonManager.getEmoticonURL(emoticon));
+            JLabel label = new JLabel(ico);
+            emoticonspanel.add(label);
+        }
 
-	int rows= Math.min(((EmoticonPanel)emoticonspanel).getNumRows()*45, 300);
-	emoticonscrollpane.setPreferredSize(new Dimension(300,rows));
-	emoticonscrollpane.setViewportView(emoticonspanel);
-	this.revalidate();
+        int rows = Math.min(((EmoticonPanel) emoticonspanel).getNumRows() * 45, 300);
+        emoticonscrollpane.setPreferredSize(new Dimension(300, rows));
+        emoticonscrollpane.setViewportView(emoticonspanel);
+        this.revalidate();
     }
 
     /**
@@ -546,7 +516,7 @@ public class ThemePanel extends JPanel {
      * @return the name of the selected theme.
      */
     public String getSelectedTheme() {
-        return (String)messageStyleBox.getSelectedItem();
+        return (String) messageStyleBox.getSelectedItem();
     }
 
     /**
@@ -555,7 +525,7 @@ public class ThemePanel extends JPanel {
      * @return the name of the emoticon pack.
      */
     public String getSelectedEmoticonPack() {
-        return (String)emoticonBox.getSelectedItem();
+        return (String) emoticonBox.getSelectedItem();
     }
 
     public void setEmoticonsEnabled(boolean enabled) {
@@ -565,7 +535,6 @@ public class ThemePanel extends JPanel {
     public boolean areEmoticonsEnabled() {
         return emoticonCheckBox.isSelected();
     }
-
 
     /**
      * Adds a new Emoticon pack to Spark.
@@ -596,7 +565,7 @@ public class ThemePanel extends JPanel {
 
                 // If the name does not exists, add it to the message box.
                 for (int i = 0; i < emoticonBox.getItemCount(); i++) {
-                    String n = (String)emoticonBox.getItemAt(i);
+                    String n = (String) emoticonBox.getItemAt(i);
                     if (name.equals(n)) {
                         return;
                     }
@@ -606,8 +575,7 @@ public class ThemePanel extends JPanel {
 
                 // Set Selected
                 emoticonBox.setSelectedItem(name);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 Log.error(e);
             }
         }
@@ -618,6 +586,7 @@ public class ThemePanel extends JPanel {
      * other files besides *.zip files.
      */
     private class ZipFilter extends javax.swing.filechooser.FileFilter {
+
         public boolean accept(File file) {
             String filename = file.getName();
             if (file.isDirectory()) {
@@ -631,36 +600,33 @@ public class ThemePanel extends JPanel {
         }
     }
 
-    public String getChatRoomFontSize(){
+    public String getChatRoomFontSize() {
         return chatRoomFontField.getText();
     }
 
-    public String getContactListFontSize(){
+    public String getContactListFontSize() {
         return contactListFontField.getText();
     }
 
-    public int getContactListIconSize(){
+    public int getContactListIconSize() {
         if (avatarSizeField.getSelectedIndex() == 0) {
             return 16;
-        }
-        else if (avatarSizeField.getSelectedIndex() == 1) {
+        } else if (avatarSizeField.getSelectedIndex() == 1) {
             return 24;
-        }
-        else if (avatarSizeField.getSelectedIndex() == 2) {
+        } else if (avatarSizeField.getSelectedIndex() == 2) {
             return 32;
-        }
-        else {
+        } else {
             return 24;
         }
     }
 
-    public boolean areAvatarsVisible(){
+    public boolean areAvatarsVisible() {
         return showAvatarsBox.isSelected();
     }
 
-    public boolean areVCardsVisible(){
-       return showVCards.isSelected();
-   }
+    public boolean areVCardsVisible() {
+        return showVCards.isSelected();
+    }
 
     /**
      * Returns the LookAndFeel with package origin <br>
@@ -670,7 +636,7 @@ public class ThemePanel extends JPanel {
      * @return {@link String}
      */
     public String getLookAndFeel() {
-	return _lookandfeelname.get(_lookandfeel.getSelectedIndex());
+        return _lookandfeelname.get(_lookandfeel.getSelectedIndex());
     }
 
     /**
@@ -679,7 +645,7 @@ public class ThemePanel extends JPanel {
      * @return
      */
     public int getReconnectPanelType() {
-	return _showReconnectBox.getSelectedIndex();
+        return _showReconnectBox.getSelectedIndex();
     }
 
     /**
@@ -688,32 +654,33 @@ public class ThemePanel extends JPanel {
      * @param reconnect
      */
     public void setShowReconnectPanel(int reconnect) {
-	_showReconnectBox.setSelectedIndex(reconnect);
+        _showReconnectBox.setSelectedIndex(reconnect);
     }
 
     /**
      * Tries to set the Menubar String for JTatto LaFs, doesnt work on Substance
+     *
      * @param s, the class of the LookandFeel
      */
     private void setJTattooBar(String classname) {
 
-	if (classname.contains("jtattoo")) {
-	    try {
-		Properties props = new Properties();
+        if (classname.contains("jtattoo")) {
+            try {
+                Properties props = new Properties();
 
-		String menubar = Default.getString(Default.MENUBAR_TEXT) == null ? ""
-			: Default.getString(Default.MENUBAR_TEXT);
+                String menubar = Default.getString(Default.MENUBAR_TEXT) == null ? ""
+                        : Default.getString(Default.MENUBAR_TEXT);
 
-		props.put("logoString", menubar);
+                props.put("logoString", menubar);
 
-		Class<?> c = ClassLoader.getSystemClassLoader().loadClass(classname);
-		Method m = c.getMethod("setCurrentTheme", Properties.class);
+                Class<?> c = ClassLoader.getSystemClassLoader().loadClass(classname);
+                Method m = c.getMethod("setCurrentTheme", Properties.class);
 
-		m.invoke(c.newInstance(), props);
-	    } catch (Exception e) {
-		Log.error("Error Setting JTattoo ", e);
-	    }
-	}
+                m.invoke(c.newInstance(), props);
+            } catch (Exception e) {
+                Log.error("Error Setting JTattoo ", e);
+            }
+        }
     }
 
     protected JLabel getLookandfeelLabel() {
@@ -743,10 +710,6 @@ public class ThemePanel extends JPanel {
     protected JComboBox getAvatarSizeField() {
         return avatarSizeField;
     }
-
-
-
-
 
 }
 

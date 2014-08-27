@@ -1,33 +1,28 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.sparkimpl.plugin.history;
 
-import org.jivesoftware.resource.Res;
-import org.jivesoftware.resource.SparkRes;
-import org.jivesoftware.spark.SparkManager;
-import org.jivesoftware.spark.plugin.Plugin;
-import org.jivesoftware.spark.ui.ContactItem;
-import org.jivesoftware.spark.ui.ContactList;
-import org.jivesoftware.spark.util.GraphicUtils;
-
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.Toolkit;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -45,7 +40,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -57,10 +51,17 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.ListCellRenderer;
 import javax.swing.SwingUtilities;
+import org.jivesoftware.resource.Res;
+import org.jivesoftware.resource.SparkRes;
+import org.jivesoftware.spark.SparkManager;
+import org.jivesoftware.spark.plugin.Plugin;
+import org.jivesoftware.spark.ui.ContactItem;
+import org.jivesoftware.spark.ui.ContactList;
+import org.jivesoftware.spark.util.GraphicUtils;
 
 /**
- * Adds a simple feature to list your most "Popular" contacts. Popular contacts is basically who
- * you talk with the most.
+ * Adds a simple feature to list your most "Popular" contacts. Popular contacts
+ * is basically who you talk with the most.
  */
 public class FrequentContactsPlugin implements Plugin {
 
@@ -80,7 +81,6 @@ public class FrequentContactsPlugin implements Plugin {
 
         window = new Window(SparkManager.getMainWindow());
 
-
         final JPanel mainPanel = new JPanel(new BorderLayout());
         final JLabel titleLabel = new JLabel(Res.getString("label.frequent.contacts"));
         titleLabel.setFont(new Font("Dialog", Font.BOLD, 11));
@@ -92,34 +92,34 @@ public class FrequentContactsPlugin implements Plugin {
         window.add(mainPanel);
 
         // Add Listeners
-	contacts.addMouseListener(new MouseAdapter() {
-	    public void mouseClicked(MouseEvent e) {
-		if (SwingUtilities.isRightMouseButton(e)) {
+        contacts.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                if (SwingUtilities.isRightMouseButton(e)) {
 
-		    contacts.setSelectedIndex(contacts.locationToIndex(e
-			    .getPoint()));
-		    String user = jidMap.get((JLabel) contacts
-			    .getSelectedValue());
-		    ContactItem contact = SparkManager.getContactList()
-			    .getContactItemByJID(user);
-		    SparkManager.getContactList().setSelectedUser(contact.getJID());
-		    SparkManager.getContactList().showPopup(contacts, e,
-			    contact);
-		}
+                    contacts.setSelectedIndex(contacts.locationToIndex(e
+                            .getPoint()));
+                    String user = jidMap.get((JLabel) contacts
+                            .getSelectedValue());
+                    ContactItem contact = SparkManager.getContactList()
+                            .getContactItemByJID(user);
+                    SparkManager.getContactList().setSelectedUser(contact.getJID());
+                    SparkManager.getContactList().showPopup(contacts, e,
+                            contact);
+                }
 
-		if (e.getClickCount() == 2) {
-		    final JLabel label = (JLabel) contacts.getSelectedValue();
-		    String user = jidMap.get(label);
-		    if (user != null) {
-			final String contactUsername = SparkManager
-				.getUserManager().getUserNicknameFromJID(user);
-			SparkManager.getChatManager().activateChat(user,
-				contactUsername);
-			window.dispose();
-		    }
-		}
-	    }
-	});
+                if (e.getClickCount() == 2) {
+                    final JLabel label = (JLabel) contacts.getSelectedValue();
+                    String user = jidMap.get(label);
+                    if (user != null) {
+                        final String contactUsername = SparkManager
+                                .getUserManager().getUserNicknameFromJID(user);
+                        SparkManager.getChatManager().activateChat(user,
+                                contactUsername);
+                        window.dispose();
+                    }
+                }
+            }
+        });
 
         contacts.addKeyListener(new KeyAdapter() {
             public void keyReleased(KeyEvent e) {
@@ -131,8 +131,7 @@ public class FrequentContactsPlugin implements Plugin {
                         SparkManager.getChatManager().activateChat(user, contactUsername);
                         window.dispose();
                     }
-                }
-                else if (e.getKeyChar() == KeyEvent.VK_ESCAPE) {
+                } else if (e.getKeyChar() == KeyEvent.VK_ESCAPE) {
                     window.dispose();
                 }
             }
@@ -152,17 +151,15 @@ public class FrequentContactsPlugin implements Plugin {
         SparkManager.getMainWindow().getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_T, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "favoritePeople");
         SparkManager.getMainWindow().getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_T, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "favoritePeople");
         SparkManager.getMainWindow().getRootPane().getActionMap().put("favoritePeople", new AbstractAction("favoritePeople") {
-			private static final long serialVersionUID = 6836584242669218932L;
+            private static final long serialVersionUID = 6836584242669218932L;
 
-			public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 // Show History Popup
                 showPopup();
             }
         });
 
-
     }
-
 
     /**
      * Displays your favorite contacts.
@@ -175,7 +172,6 @@ public class FrequentContactsPlugin implements Plugin {
 
         jidMap.clear();
         model.clear();
-
 
         final ContactList contactList = SparkManager.getWorkspace().getContactList();
 
@@ -197,10 +193,8 @@ public class FrequentContactsPlugin implements Plugin {
             }
         }
 
-
         window.setSize(200, 200);
         GraphicUtils.centerWindowOnComponent(window, SparkManager.getMainWindow());
-
 
         if (model.size() > 0) {
             contacts.setSelectedIndex(0);
@@ -210,7 +204,8 @@ public class FrequentContactsPlugin implements Plugin {
     }
 
     /**
-     * Returns a collection of your most popular contacts based on previous conversations.
+     * Returns a collection of your most popular contacts based on previous
+     * conversations.
      *
      * @return the collection of favorite people (jids)
      */
@@ -248,7 +243,6 @@ public class FrequentContactsPlugin implements Plugin {
         return jidList;
     }
 
-
     public void shutdown() {
 
     }
@@ -264,9 +258,10 @@ public class FrequentContactsPlugin implements Plugin {
      * Internal handling of a JLabel Renderer.
      */
     public class InternalRenderer extends JLabel implements ListCellRenderer {
-		private static final long serialVersionUID = -2925096995694392323L;
 
-		/**
+        private static final long serialVersionUID = -2925096995694392323L;
+
+        /**
          * Construct Default Renderer.
          */
         public InternalRenderer() {
@@ -274,15 +269,14 @@ public class FrequentContactsPlugin implements Plugin {
         }
 
         public Component getListCellRendererComponent(JList list,
-                                                      Object value,
-                                                      int index,
-                                                      boolean isSelected,
-                                                      boolean cellHasFocus) {
+                Object value,
+                int index,
+                boolean isSelected,
+                boolean cellHasFocus) {
             if (isSelected) {
                 setBackground(list.getSelectionBackground());
                 setForeground(list.getSelectionForeground());
-            }
-            else {
+            } else {
                 setBackground(list.getBackground());
                 setForeground(list.getForeground());
             }

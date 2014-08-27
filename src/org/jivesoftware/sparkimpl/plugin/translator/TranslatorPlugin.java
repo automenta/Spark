@@ -86,7 +86,7 @@ public class TranslatorPlugin implements Plugin {
                             // do nothing
                         }
                     };
-                    
+
                     roo.addMessageEventListener(messageListener);
                 }
             }

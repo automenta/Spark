@@ -1,41 +1,21 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */ 
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package org.jivesoftware.spark.ui.conferences;
-
-import org.jivesoftware.resource.SparkRes;
-import org.jivesoftware.resource.Res;
-import org.jivesoftware.smack.XMPPException;
-import org.jivesoftware.smackx.muc.MultiUserChat;
-import org.jivesoftware.spark.SparkManager;
-import org.jivesoftware.spark.component.TitlePanel;
-import org.jivesoftware.spark.util.ModelUtil;
-import org.jivesoftware.spark.util.ResourceUtils;
-import org.jivesoftware.spark.util.log.Log;
-
-import javax.swing.JCheckBox;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -44,8 +24,25 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import javax.swing.JCheckBox;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import org.jivesoftware.resource.Res;
+import org.jivesoftware.resource.SparkRes;
+import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smackx.muc.MultiUserChat;
+import org.jivesoftware.spark.SparkManager;
+import org.jivesoftware.spark.component.TitlePanel;
+import org.jivesoftware.spark.util.ModelUtil;
+import org.jivesoftware.spark.util.ResourceUtils;
+import org.jivesoftware.spark.util.log.Log;
 
 public class RoomCreationDialog extends JPanel {
+
     private static final long serialVersionUID = -8391698290385575601L;
     private JLabel nameLabel = new JLabel();
     private JLabel topicLabel = new JLabel();
@@ -63,8 +60,7 @@ public class RoomCreationDialog extends JPanel {
     public RoomCreationDialog() {
         try {
             jbInit();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.error(e);
         }
     }
@@ -117,7 +113,6 @@ public class RoomCreationDialog extends JPanel {
         dlg.setContentPane(mainPanel);
         dlg.setLocationRelativeTo(parent);
 
-
         PropertyChangeListener changeListener = new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent e) {
                 Object o = pane.getValue();
@@ -126,11 +121,10 @@ public class RoomCreationDialog extends JPanel {
                     return;
                 }
 
-                String value = (String)pane.getValue();
+                String value = (String) pane.getValue();
                 if (Res.getString("close").equals(value)) {
                     dlg.setVisible(false);
-                }
-                else if (Res.getString("create").equals(value)) {
+                } else if (Res.getString("create").equals(value)) {
                     boolean isValid = validatePanel();
                     if (isValid) {
                         String room = nameField.getText().replaceAll(" ", "_") + "@" + serviceName;
@@ -142,8 +136,7 @@ public class RoomCreationDialog extends JPanel {
                             dlg.setVisible(false);
                             ConferenceUtils.joinConferenceRoom(room, room);
                             return;
-                        }
-                        catch (XMPPException e1) {
+                        } catch (XMPPException e1) {
                             // Nothing to do
                         }
 
@@ -152,13 +145,11 @@ public class RoomCreationDialog extends JPanel {
                             showError("Could not join chat " + nameField.getText());
                             pane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 
-                        }
-                        else {
+                        } else {
                             pane.removePropertyChangeListener(this);
                             dlg.setVisible(false);
                         }
-                    }
-                    else {
+                    } else {
                         pane.setValue(JOptionPane.UNINITIALIZED_VALUE);
                     }
                 }
@@ -218,7 +209,6 @@ public class RoomCreationDialog extends JPanel {
         return new MultiUserChat(SparkManager.getConnection(), room.toLowerCase());
     }
 
-
     private void showError(String errorMessage) {
         JOptionPane.showMessageDialog(this, errorMessage, Res.getString("title.error"), JOptionPane.ERROR_MESSAGE);
     }
@@ -252,8 +242,10 @@ public class RoomCreationDialog extends JPanel {
     public String getRoomName() {
         return nameField.getText();
     }
+
     /**
      * Returns the Topic of the RoomCreationDialog
+     *
      * @return The Rooms Topic
      */
     public String getRoomTopic() {

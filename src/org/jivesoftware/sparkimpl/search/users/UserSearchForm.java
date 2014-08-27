@@ -1,25 +1,42 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
-
 package org.jivesoftware.sparkimpl.search.users;
 
+import java.awt.CardLayout;
+import java.awt.Component;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import org.jivesoftware.Spark;
 import org.jivesoftware.resource.Res;
 import org.jivesoftware.resource.SparkRes;
@@ -34,35 +51,13 @@ import org.jivesoftware.spark.util.ResourceUtils;
 import org.jivesoftware.spark.util.SwingWorker;
 import org.jivesoftware.spark.util.log.Log;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-
-import java.awt.CardLayout;
-import java.awt.Component;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-
-import java.io.File; 
-import java.io.FileInputStream; 
-import java.io.FileOutputStream;
-import java.io.IOException; 
-
-
 /**
- * UserSearchForm is used to do explicit searching of users using the JEP 55 Search Service.
+ * UserSearchForm is used to do explicit searching of users using the JEP 55
+ * Search Service.
  */
 public class UserSearchForm extends JPanel {
-    private static final long	serialVersionUID	= -9192188543673595941L;
+
+    private static final long serialVersionUID = -9192188543673595941L;
     private JComboBox servicesBox;
     private UserSearchManager searchManager;
 
@@ -73,11 +68,10 @@ public class UserSearchForm extends JPanel {
 
     private TitlePanel titlePanel;
 
-    private Map<String,SearchForm> serviceMap = new HashMap<String,SearchForm>();
+    private Map<String, SearchForm> serviceMap = new HashMap<String, SearchForm>();
 
-    
     private static File pluginsettings = new File(Spark.getSparkUserHome() + File.separator + "search.properties"); //new
-    
+
     /**
      * Initializes the UserSearchForm with all available search services.
      *
@@ -97,60 +91,51 @@ public class UserSearchForm extends JPanel {
         showService(getSearchService());
     }
 
-    
-    
-    
-    
-    
     private void addSearchServices() {
         // Populate with Search Services
         servicesBox = new JComboBox();
-    
+
         for (String searchService : searchServices) {
             String service = searchService;
             servicesBox.addItem(service);
         }
 
-        
         // Load the property file and add the search services that are read
         final Properties props = new Properties();
         String nextprop;
-        boolean numbprop_bool=true;
+        boolean numbprop_bool = true;
         int numbprop;
-        if (pluginsettings.exists()) { 
-	    // Log.warning("Search-service Properties-file does exist= " + pluginsettings.getPath()); 
-            try { 
-                numbprop=0;
-                props.load(new FileInputStream(pluginsettings)); 
-               	String testsearch; 
-               	numbprop_bool=true;
-               	while (numbprop_bool) {
-               		nextprop = "search"+numbprop;
-               		testsearch = props.getProperty(nextprop);
-               		if (null != testsearch) {
-               			Log.warning("Search-Info: SearchService-" + numbprop + " from properties-file is " + nextprop + " : " + testsearch); 
-               			servicesBox.addItem(testsearch); 
-                   		numbprop++;
-               			} 
-               		else 
-               			numbprop_bool=false; 
-               		}
+        if (pluginsettings.exists()) {
+            // Log.warning("Search-service Properties-file does exist= " + pluginsettings.getPath()); 
+            try {
+                numbprop = 0;
+                props.load(new FileInputStream(pluginsettings));
+                String testsearch;
+                numbprop_bool = true;
+                while (numbprop_bool) {
+                    nextprop = "search" + numbprop;
+                    testsearch = props.getProperty(nextprop);
+                    if (null != testsearch) {
+                        Log.warning("Search-Info: SearchService-" + numbprop + " from properties-file is " + nextprop + " : " + testsearch);
+                        servicesBox.addItem(testsearch);
+                        numbprop++;
+                    } else {
+                        numbprop_bool = false;
+                    }
+                }
 
-               	} catch (IOException ioe) {
-                 System.err.println(ioe); 
-                
-               } 
-           } 
-           else { 
-	    // Log.error("Search-Searvice-Error: Properties-file does not exist= " + pluginsettings.getPath()); 
-           }        
+            } catch (IOException ioe) {
+                System.err.println(ioe);
 
+            }
+        } else {
+            // Log.error("Search-Searvice-Error: Properties-file does not exist= " + pluginsettings.getPath()); 
+        }
 
-           if (servicesBox.getItemCount() > 0) {
-               servicesBox.setSelectedIndex(0);
-           }
-           
-        
+        if (servicesBox.getItemCount() > 0) {
+            servicesBox.setSelectedIndex(0);
+        }
+
         titlePanel = new TitlePanel("", "", SparkRes.getImageIcon(SparkRes.BLANK_IMAGE), true);
         add(titlePanel, new GridBagConstraints(0, 0, 3, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 
@@ -174,8 +159,7 @@ public class UserSearchForm extends JPanel {
                         public Object construct() {
                             try {
                                 newForm = searchManager.getSearchForm(serviceName);
-                            }
-                            catch (XMPPException e) {
+                            } catch (XMPPException e) {
                                 // Nothing to do
                             }
                             return newForm;
@@ -184,35 +168,32 @@ public class UserSearchForm extends JPanel {
                         public void finished() {
                             if (newForm == null) {
                                 JOptionPane.showMessageDialog(getGUI(), Res.getString("message.search.service.not.available"), Res.getString("title.notification"), JOptionPane.ERROR_MESSAGE);
-                            }
-                            else {
+                            } else {
                                 servicesBox.addItem(serviceName);
                                 servicesBox.setSelectedItem(serviceName);
 
-                                int numbprop=0;
+                                int numbprop = 0;
                                 boolean numbprop_bool = true;
                                 String nextprop, testsearch;
-                                while (numbprop_bool)
-                            	{
-                                nextprop = "search"+numbprop;
-                               	testsearch = props.getProperty(nextprop);
-                               	if (testsearch != null)
-                               		numbprop++;
-                               	else 
-                               		{
-                               		Log.warning("Search-Service: " + nextprop + " : " + serviceName + " added");
-                               		props.setProperty(nextprop, serviceName);
-                               		numbprop_bool = false;
-                               		}
-                               	}   
+                                while (numbprop_bool) {
+                                    nextprop = "search" + numbprop;
+                                    testsearch = props.getProperty(nextprop);
+                                    if (testsearch != null) {
+                                        numbprop++;
+                                    } else {
+                                        Log.warning("Search-Service: " + nextprop + " : " + serviceName + " added");
+                                        props.setProperty(nextprop, serviceName);
+                                        numbprop_bool = false;
+                                    }
+                                }
                                 try {
                                     props.store(new FileOutputStream(pluginsettings), null);
                                 } catch (IOException e) {
-                                	 System.err.println(e);
-                                }          
+                                    System.err.println(e);
+                                }
 
                             }
-                            
+
                         }
 
                     };
@@ -227,8 +208,7 @@ public class UserSearchForm extends JPanel {
                     public Object construct() {
                         try {
                             Thread.sleep(50);
-                        }
-                        catch (Exception e) {
+                        } catch (Exception e) {
                             Log.error("Problem sleeping thread.", e);
                         }
                         return "ok";
@@ -243,7 +223,7 @@ public class UserSearchForm extends JPanel {
         });
 
         add(cardPanel, new GridBagConstraints(0, 3, 3, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 0, 0));
- 
+
     }
 
     /**
@@ -254,8 +234,7 @@ public class UserSearchForm extends JPanel {
     public void showService(String service) {
         if (serviceMap.containsKey(service)) {
             cardLayout.show(cardPanel, service);
-        }
-        else {
+        } else {
             // Create new Form
             SearchForm searchForm = new SearchForm(service);
             cardPanel.add(searchForm, service);
@@ -270,14 +249,13 @@ public class UserSearchForm extends JPanel {
         titlePanel.setDescription(description);
     }
 
-
     /**
      * Returns the selected search service.
      *
      * @return the selected search service.
      */
     public String getSearchService() {
-        return (String)servicesBox.getSelectedItem();
+        return (String) servicesBox.getSelectedItem();
     }
 
     /**

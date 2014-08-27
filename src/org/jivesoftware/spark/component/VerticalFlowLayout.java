@@ -1,21 +1,19 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.spark.component;
 
@@ -27,16 +25,16 @@ import java.awt.Insets;
 
 /**
  * VerticalFlowLayout is similar to FlowLayout except it lays out components
- * vertically. Extends FlowLayout because it mimics much of the
- * behavior of the FlowLayout class, except vertically. An additional
- * feature is that you can specify a fill to edge flag, which causes
- * the VerticalFlowLayout manager to resize all components to expand to the
- * column width Warning: This causes problems when the main panel
- * has less space that it needs and it seems to prohibit multi-column
- * output. Additionally there is a vertical fill flag, which fills the last
- * component to the remaining height of the container.
+ * vertically. Extends FlowLayout because it mimics much of the behavior of the
+ * FlowLayout class, except vertically. An additional feature is that you can
+ * specify a fill to edge flag, which causes the VerticalFlowLayout manager to
+ * resize all components to expand to the column width Warning: This causes
+ * problems when the main panel has less space that it needs and it seems to
+ * prohibit multi-column output. Additionally there is a vertical fill flag,
+ * which fills the last component to the remaining height of the container.
  */
 public class VerticalFlowLayout extends FlowLayout {
+
     private static final long serialVersionUID = 2459290675844452874L;
 
     /**
@@ -60,8 +58,8 @@ public class VerticalFlowLayout extends FlowLayout {
     boolean vfill;
 
     /**
-     * Construct a new VerticalFlowLayout with a middle alignment, and
-     * the fill to edge flag set.
+     * Construct a new VerticalFlowLayout with a middle alignment, and the fill
+     * to edge flag set.
      */
     public VerticalFlowLayout() {
         this(TOP, 5, 5, true, false);
@@ -101,14 +99,14 @@ public class VerticalFlowLayout extends FlowLayout {
      * Construct a new VerticalFlowLayout.
      *
      * @param align the alignment value
-     * @param hgap  the horizontal gap variable
-     * @param vgap  the vertical gap variable
+     * @param hgap the horizontal gap variable
+     * @param vgap the vertical gap variable
      * @param hfill the fill to edge flag
      * @param vfill true if the panel should vertically fill.
      */
     public VerticalFlowLayout(int align,
-                              int hgap, int vgap,
-                              boolean hfill, boolean vfill) {
+            int hgap, int vgap,
+            boolean hfill, boolean vfill) {
         setAlignment(align);
         this.hgap = hgap;
         this.vgap = vgap;
@@ -117,8 +115,8 @@ public class VerticalFlowLayout extends FlowLayout {
     }
 
     /**
-     * Returns the preferred dimensions given the components
-     * in the target container.
+     * Returns the preferred dimensions given the components in the target
+     * container.
      *
      * @param target the component to lay out
      */
@@ -209,20 +207,22 @@ public class VerticalFlowLayout extends FlowLayout {
      * container using the bounds box defined.
      *
      * @param target the container.
-     * @param x      the x coordinate of the area.
-     * @param y      the y coordinate of the area.
-     * @param width  the width of the area.
+     * @param x the x coordinate of the area.
+     * @param y the y coordinate of the area.
+     * @param width the width of the area.
      * @param height the height of the area.
-     * @param first  the first component of the container to place.
-     * @param last   the last component of the container to place.
+     * @param first the first component of the container to place.
+     * @param last the last component of the container to place.
      */
     private void placethem(Container target, int x, int y, int width, int height,
-                           int first, int last) {
+            int first, int last) {
         int align = getAlignment();
-        if (align == MIDDLE)
+        if (align == MIDDLE) {
             y += height / 2;
-        if (align == BOTTOM)
+        }
+        if (align == BOTTOM) {
             y += height;
+        }
 
         for (int i = first; i < last; i++) {
             Component m = target.getComponent(i);
@@ -248,7 +248,6 @@ public class VerticalFlowLayout extends FlowLayout {
         int x = insets.left + hgap, y = 0;
         int colw = 0, start = 0;
 
-        
         for (int i = 0; i < numcomp; i++) {
             Component m = target.getComponent(i);
             if (m != null && m.isVisible()) {
@@ -262,8 +261,7 @@ public class VerticalFlowLayout extends FlowLayout {
                 if (this.hfill) {
                     m.setSize(maxwidth, d.height);
                     d.width = maxwidth;
-                }
-                else {
+                } else {
                     m.setSize(d.width, d.height);
                 }
 
@@ -273,10 +271,10 @@ public class VerticalFlowLayout extends FlowLayout {
                     x += hgap + colw;
                     colw = d.width;
                     start = i;
-                }
-                else {
-                    if (y > 0)
+                } else {
+                    if (y > 0) {
                         y += vgap;
+                    }
                     y += d.height;
                     colw = Math.max(colw, d.width);
                 }

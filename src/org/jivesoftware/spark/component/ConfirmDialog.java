@@ -1,31 +1,21 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.spark.component;
-
-import org.jivesoftware.spark.util.ResourceUtils;
-
-import javax.swing.Icon;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -35,14 +25,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import javax.swing.Icon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import org.jivesoftware.spark.util.ResourceUtils;
 
 /**
- * Implementation of a Confirm Dialog to replace the modal JOptionPane.confirm.  This is intended
- * for use as a yes - no dialog.
+ * Implementation of a Confirm Dialog to replace the modal JOptionPane.confirm.
+ * This is intended for use as a yes - no dialog.
  *
  * @author Derek DeMoro
  */
 public class ConfirmDialog extends BackgroundPanel {
+
     private static final long serialVersionUID = -441250586899776207L;
     private JLabel message;
     private JLabel iconLabel;
@@ -84,18 +81,17 @@ public class ConfirmDialog extends BackgroundPanel {
             }
         });
 
-
     }
 
     /**
      * Creates and displays the new confirm dialog.
      *
-     * @param parent  the parent dialog.
-     * @param title   the title of this dialog.
-     * @param text    the main text to display.
+     * @param parent the parent dialog.
+     * @param title the title of this dialog.
+     * @param text the main text to display.
      * @param yesText the text to use on the OK or Yes button.
-     * @param noText  the text to use on the No button.
-     * @param icon    the icon to use for graphical represenation.
+     * @param noText the text to use on the No button.
+     * @param icon the icon to use for graphical represenation.
      */
     public void showConfirmDialog(JFrame parent, String title, String text, String yesText, String noText, Icon icon) {
         message.setText("<html><body>" + text + "</body></html>");
@@ -129,7 +125,8 @@ public class ConfirmDialog extends BackgroundPanel {
     /**
      * Sets the ConfirmListener to use with this dialog instance.
      *
-     * @param listener the <code>ConfirmListener</code> to use with this instance.
+     * @param listener the <code>ConfirmListener</code> to use with this
+     * instance.
      */
     public void setConfirmListener(ConfirmListener listener) {
         this.listener = listener;

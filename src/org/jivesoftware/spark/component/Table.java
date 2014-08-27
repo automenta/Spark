@@ -1,27 +1,32 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.spark.component;
 
-import org.jivesoftware.spark.util.GraphicUtils;
-import org.jdesktop.swingx.JXTable;
-
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
 import javax.swing.Icon;
@@ -35,17 +40,8 @@ import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
-
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import org.jdesktop.swingx.JXTable;
+import org.jivesoftware.spark.util.GraphicUtils;
 
 /**
  * <code>Table</code> class can be used to maintain quality look and feel
@@ -54,7 +50,7 @@ import java.util.Map;
  * @version 1.0, 03/12/14
  */
 public abstract class Table extends JXTable {
-   
+
     private static final long serialVersionUID = -6511813002260596088L;
 
     private Table.JiveTableModel tableModel;
@@ -69,7 +65,7 @@ public abstract class Table extends JXTable {
      */
     public static final Color TOOLTIP_COLOR = new Color(166, 202, 240);
 
-    private final Map<Integer,Object> objectMap = new HashMap<Integer,Object>();
+    private final Map<Integer, Object> objectMap = new HashMap<Integer, Object>();
 
     /**
      * Empty Constructor.
@@ -83,8 +79,7 @@ public abstract class Table extends JXTable {
         Object value;
         try {
             value = getValueAt(r, c);
-        }
-        catch (Exception e1) {
+        } catch (Exception e1) {
             // If we encounter a row that should not actually exist and therefore
             // has a null value. Just return an empty string for the tooltip.
             return "";
@@ -93,16 +88,14 @@ public abstract class Table extends JXTable {
         String tooltipValue = null;
 
         if (value instanceof JLabel) {
-            tooltipValue = ((JLabel)value).getToolTipText();
+            tooltipValue = ((JLabel) value).getToolTipText();
         }
 
         if (value instanceof JLabel && tooltipValue == null) {
-            tooltipValue = ((JLabel)value).getText();
-        }
-        else if (value != null && tooltipValue == null) {
+            tooltipValue = ((JLabel) value).getText();
+        } else if (value != null && tooltipValue == null) {
             tooltipValue = value.toString();
-        }
-        else if (tooltipValue == null) {
+        } else if (tooltipValue == null) {
             tooltipValue = "";
         }
 
@@ -135,7 +128,6 @@ public abstract class Table extends JXTable {
         dim.height = 20;
         header.setPreferredSize(dim);
 
-
         getTableHeader().setReorderingAllowed(false);
         setGridColor(Color.white);
         setRowHeight(20);
@@ -162,22 +154,19 @@ public abstract class Table extends JXTable {
     }
 
     public Component prepareRenderer(TableCellRenderer renderer,
-                                     int rowIndex, int vColIndex) {
+            int rowIndex, int vColIndex) {
         Component c = super.prepareRenderer(renderer, rowIndex, vColIndex);
         if (rowIndex % 2 == 0 && !isCellSelected(rowIndex, vColIndex)) {
             c.setBackground(getBackground());
-        }
-        else if (isCellSelected(rowIndex, vColIndex)) {
+        } else if (isCellSelected(rowIndex, vColIndex)) {
             c.setBackground(SELECTION_COLOR);
-        }
-        else {
+        } else {
             // If not shaded, match the table's background
             c.setBackground(getBackground());
             //c.setBackground(new Color(217, 232, 250));
         }
         return c;
     }
-
 
     /**
      * Adds a list to the table model.
@@ -237,16 +226,16 @@ public abstract class Table extends JXTable {
      */
     public static class JiveTableModel extends DefaultTableModel {
 
-	private static final long serialVersionUID = 2256144012470569949L;
-	private boolean isEditable;
+        private static final long serialVersionUID = 2256144012470569949L;
+        private boolean isEditable;
 
         /**
-         * Use the JiveTableModel in order to better handle the table. This allows
-         * for consistency throughout the product.
+         * Use the JiveTableModel in order to better handle the table. This
+         * allows for consistency throughout the product.
          *
          * @param columnNames - String array of columnNames
-         * @param numRows     - initial number of rows
-         * @param isEditable  - true if the cells are editable, false otherwise.
+         * @param numRows - initial number of rows
+         * @param isEditable - true if the cells are editable, false otherwise.
          */
         public JiveTableModel(Object[] columnNames, int numRows, boolean isEditable) {
             super(columnNames, numRows);
@@ -256,7 +245,7 @@ public abstract class Table extends JXTable {
         /**
          * Returns true if cell is editable.
          *
-         * @param row    the row to check.
+         * @param row the row to check.
          * @param column the column to check.
          * @return true if the cell is editable.
          */
@@ -270,8 +259,8 @@ public abstract class Table extends JXTable {
      */
     public class JLabelRenderer extends JLabel implements TableCellRenderer {
 
-	private static final long serialVersionUID = 4433780600297455731L;
-	Border unselectedBorder;
+        private static final long serialVersionUID = 4433780600297455731L;
+        Border unselectedBorder;
         Border selectedBorder;
         boolean isBordered = true;
 
@@ -286,18 +275,17 @@ public abstract class Table extends JXTable {
         }
 
         public Component getTableCellRendererComponent(JTable table, Object color, boolean isSelected, boolean hasFocus, int row, int column) {
-            final String text = ((JLabel)color).getText();
+            final String text = ((JLabel) color).getText();
             if (text != null) {
                 setText(" " + text);
             }
-            final Icon icon = ((JLabel)color).getIcon();
+            final Icon icon = ((JLabel) color).getIcon();
             setIcon(icon);
 
             if (isSelected) {
                 setForeground(table.getSelectionForeground());
                 setBackground(table.getSelectionBackground());
-            }
-            else {
+            } else {
                 setForeground(Color.black);
                 setBackground(Color.white);
                 if (row % 2 == 0) {
@@ -312,8 +300,7 @@ public abstract class Table extends JXTable {
                                 table.getSelectionBackground());
                     }
                     setBorder(selectedBorder);
-                }
-                else {
+                } else {
                     if (unselectedBorder == null) {
                         unselectedBorder = BorderFactory.createMatteBorder(2, 5, 2, 5,
                                 table.getBackground());
@@ -330,9 +317,9 @@ public abstract class Table extends JXTable {
      */
     public class TextAreaCellRenderer extends JTextArea implements TableCellRenderer {
 
-	private static final long serialVersionUID = -8533968851464831361L;
+        private static final long serialVersionUID = -8533968851464831361L;
 
-	/**
+        /**
          * Create new renderer with font.
          *
          * @param font the font to use in the renderer.
@@ -344,7 +331,7 @@ public abstract class Table extends JXTable {
         }
 
         public Component getTableCellRendererComponent(JTable jTable, Object obj, boolean isSelected, boolean hasFocus,
-                                                       int row, int column) {
+                int row, int column) {
             // set color & border here
             setText(obj == null ? "" : obj.toString());
             setSize(jTable.getColumnModel().getColumn(column).getWidth(),
@@ -361,8 +348,8 @@ public abstract class Table extends JXTable {
      */
     public class JButtonRenderer extends JButton implements TableCellRenderer {
 
-	private static final long serialVersionUID = 1268514163461994738L;
-	Border unselectedBorder;
+        private static final long serialVersionUID = 1268514163461994738L;
+        Border unselectedBorder;
         Border selectedBorder;
         boolean isBordered = true;
 
@@ -372,19 +359,17 @@ public abstract class Table extends JXTable {
         public JButtonRenderer() {
         }
 
-
         public Component getTableCellRendererComponent(JTable table, Object color, boolean isSelected, boolean hasFocus, int row, int column) {
-            final String text = ((JButton)color).getText();
+            final String text = ((JButton) color).getText();
             setText(text);
 
-            final Icon icon = ((JButton)color).getIcon();
+            final Icon icon = ((JButton) color).getIcon();
             setIcon(icon);
 
             if (isSelected) {
                 setForeground(table.getSelectionForeground());
                 setBackground(table.getSelectionBackground());
-            }
-            else {
+            } else {
                 setForeground(Color.black);
                 setBackground(Color.white);
                 if (row % 2 == 0) {
@@ -399,8 +384,7 @@ public abstract class Table extends JXTable {
                                 table.getSelectionBackground());
                     }
                     setBorder(selectedBorder);
-                }
-                else {
+                } else {
                     if (unselectedBorder == null) {
                         unselectedBorder = BorderFactory.createMatteBorder(2, 5, 2, 5,
                                 table.getBackground());
@@ -414,9 +398,9 @@ public abstract class Table extends JXTable {
 
     public class ComboBoxRenderer extends JComboBox implements TableCellRenderer {
 
-	private static final long serialVersionUID = -545496178928790522L;
+        private static final long serialVersionUID = -545496178928790522L;
 
-	public ComboBoxRenderer() {
+        public ComboBoxRenderer() {
 
         }
 
@@ -425,12 +409,11 @@ public abstract class Table extends JXTable {
         }
 
         public Component getTableCellRendererComponent(JTable table, Object value,
-                                                       boolean isSelected, boolean hasFocus, int row, int column) {
+                boolean isSelected, boolean hasFocus, int row, int column) {
             if (isSelected) {
                 setForeground(table.getSelectionForeground());
                 super.setBackground(table.getSelectionBackground());
-            }
-            else {
+            } else {
                 setForeground(table.getForeground());
                 setBackground(table.getBackground());
             }
@@ -443,9 +426,9 @@ public abstract class Table extends JXTable {
 
     public class MyComboBoxEditor extends DefaultCellEditor {
 
-	private static final long serialVersionUID = 6097118754932234992L;
+        private static final long serialVersionUID = 6097118754932234992L;
 
-	public MyComboBoxEditor(String[] items) {
+        public MyComboBoxEditor(String[] items) {
             super(new JComboBox(items));
         }
     }
@@ -469,7 +452,7 @@ public abstract class Table extends JXTable {
     /**
      * Associate an object with a row.
      *
-     * @param row    - the current row
+     * @param row - the current row
      * @param object - the object to associate with the row.
      */
     public void addObject(int row, Object object) {

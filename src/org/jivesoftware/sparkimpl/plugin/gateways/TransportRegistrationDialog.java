@@ -1,24 +1,37 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.sparkimpl.plugin.gateways;
 
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 import org.jivesoftware.resource.Res;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Presence;
@@ -32,33 +45,15 @@ import org.jivesoftware.spark.util.ResourceUtils;
 import org.jivesoftware.sparkimpl.plugin.gateways.transports.Transport;
 import org.jivesoftware.sparkimpl.plugin.gateways.transports.TransportUtils;
 
-
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
-
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-
-
 /**
  * Dialog to allow the addition of gateways within Spark.
  *
  * @author Derek DeMoro
  */
 public class TransportRegistrationDialog extends JPanel implements ActionListener, KeyListener {
-	private static final long serialVersionUID = -5766084489027807577L;
-	private JTextField usernameField = new JTextField();
+
+    private static final long serialVersionUID = -5766084489027807577L;
+    private JTextField usernameField = new JTextField();
     private JPasswordField passwordField = new JPasswordField();
     private JTextField nicknameField = new JTextField();
     private RolloverButton registerButton = new RolloverButton("", null);
@@ -73,7 +68,7 @@ public class TransportRegistrationDialog extends JPanel implements ActionListene
      * @param serviceName the name of the transport service.
      */
     public TransportRegistrationDialog(String serviceName) {
-	
+
         setLayout(new GridBagLayout());
 
         this.serviceName = serviceName;
@@ -81,12 +76,10 @@ public class TransportRegistrationDialog extends JPanel implements ActionListene
         ResourceUtils.resButton(registerButton, Res.getString("button.save"));
         ResourceUtils.resButton(cancelButton, Res.getString("button.cancel"));
 
-
         final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         buttonPanel.add(registerButton);
         registerButton.requestFocus();
         buttonPanel.add(cancelButton);
-
 
         transport = TransportUtils.getTransport(serviceName);
 
@@ -115,7 +108,7 @@ public class TransportRegistrationDialog extends JPanel implements ActionListene
             nicknameLabel.setFont(new Font("Dialog", Font.BOLD, 11));
             ResourceUtils.resLabel(nicknameLabel, nicknameField, Res.getString("label.nickname") + ":");
             add(nicknameLabel, new GridBagConstraints(0, line, 1, 1, 0.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0));
-            add(nicknameField, new GridBagConstraints(1, line, 1, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 0,0));
+            add(nicknameField, new GridBagConstraints(1, line, 1, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 0, 0));
         }
 
         line++;
@@ -148,11 +141,10 @@ public class TransportRegistrationDialog extends JPanel implements ActionListene
         });
     }
 
-    public void addCancelActionListener(ActionListener a)
-    {
-	cancelButton.addActionListener(a);
+    public void addCancelActionListener(ActionListener a) {
+        cancelButton.addActionListener(a);
     }
-    
+
     public String getScreenName() {
         return usernameField.getText();
     }
@@ -190,8 +182,7 @@ public class TransportRegistrationDialog extends JPanel implements ActionListene
             Presence presence = statusBar.getPresence();
             presence.setTo(transport.getServiceName());
             SparkManager.getConnection().sendPacket(presence);
-        }
-        catch (XMPPException e1) {
+        } catch (XMPPException e1) {
             e1.printStackTrace();
             JOptionPane.showMessageDialog(this, Res.getString("message.registration.transport.failed"), Res.getString("title.registration.error"), JOptionPane.ERROR_MESSAGE);
         }
@@ -199,8 +190,6 @@ public class TransportRegistrationDialog extends JPanel implements ActionListene
         dialog.dispose();
     }
 
-
-    
     public void keyTyped(KeyEvent keyEvent) {
     }
 

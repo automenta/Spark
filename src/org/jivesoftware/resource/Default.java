@@ -1,21 +1,19 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
+ * $RCSfile: ,v $ $Revision: $ $Date: $
  *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.resource;
 
@@ -33,11 +31,12 @@ import org.jivesoftware.spark.PluginRes;
 import org.jivesoftware.spark.util.log.Log;
 
 public class Default {
+
     private static PropertyResourceBundle prb;
 
-    private static Map<String,Object> customMap = new HashMap<String,Object>();
+    private static Map<String, Object> customMap = new HashMap<String, Object>();
 
-    private static Map<String,ImageIcon> cache = new HashMap<String,ImageIcon>();
+    private static Map<String, ImageIcon> cache = new HashMap<String, ImageIcon>();
 
     public static final String APPLICATION_NAME = "APPLICATION_NAME";
     public static final String APPLICATION_INFO1 = "APPLICATION_INFO1";
@@ -97,7 +96,7 @@ public class Default {
     static ClassLoader cl = SparkRes.class.getClassLoader();
 
     static {
-        prb = (PropertyResourceBundle)ResourceBundle.getBundle("org/jivesoftware/resource/default");
+        prb = (PropertyResourceBundle) ResourceBundle.getBundle("org/jivesoftware/resource/default");
     }
 
     public static void putCustomValue(String value, Object object) {
@@ -118,20 +117,20 @@ public class Default {
     }
 
     public static boolean getBoolean(String propertyName) {
-	return getString(propertyName).replace(" ","").equals("true");
+        return getString(propertyName).replace(" ", "").equals("true");
     }
 
     public static ImageIcon getImageIcon(String imageName) {
         // Check custom map
         Object o = customMap.get(imageName);
         if (o != null && o instanceof ImageIcon) {
-            return (ImageIcon)o;
+            return (ImageIcon) o;
         }
 
         // Otherwise check cache
         o = cache.get(imageName);
         if (o != null && o instanceof ImageIcon) {
-            return (ImageIcon)o;
+            return (ImageIcon) o;
         }
 
         // Otherwise, load and add to cache.
@@ -141,25 +140,22 @@ public class Default {
             final ImageIcon icon = new ImageIcon(imageURL);
             cache.put(imageName, icon);
             return icon;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             Log.debug(imageName + " not found.");
         }
         return null;
     }
 
     public static URL getURL(String propertyName) {
-    	URL pluginUrl = PluginRes.getDefaultURL(propertyName);
+        URL pluginUrl = PluginRes.getDefaultURL(propertyName);
         return pluginUrl != null ? pluginUrl : cl.getResource(getString(propertyName));
     }
-
 
     public static URL getURLWithoutException(String propertyName) {
         // Otherwise, load and add to cache.
         try {
             return getURL(propertyName);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             Log.debug(propertyName + " not found.");
         }
         return null;
@@ -168,36 +164,37 @@ public class Default {
     /**
      * Returns a Collection of Plugins on the Blacklist<br>
      * Containing the Name and also if specified the entrypoint-class
+     *
      * @return Collection
      */
     public static Collection<String> getPluginBlacklist() {
-	String pluginlist = getString("PLUGIN_BLACKLIST").replace(" ", "")
-		.toLowerCase();
-	StringTokenizer tokenizer = new StringTokenizer(pluginlist, ",");
-	ArrayList<String> list = new ArrayList<String>();
+        String pluginlist = getString("PLUGIN_BLACKLIST").replace(" ", "")
+                .toLowerCase();
+        StringTokenizer tokenizer = new StringTokenizer(pluginlist, ",");
+        ArrayList<String> list = new ArrayList<String>();
 
-	while (tokenizer.hasMoreTokens()) {
-	    list.add(tokenizer.nextToken());
-	}
+        while (tokenizer.hasMoreTokens()) {
+            list.add(tokenizer.nextToken());
+        }
 
-	StringTokenizer clazztokenz = new StringTokenizer(
-		getString("PLUGIN_BLACKLIST_CLASS").replace(" ", ""), ",");
+        StringTokenizer clazztokenz = new StringTokenizer(
+                getString("PLUGIN_BLACKLIST_CLASS").replace(" ", ""), ",");
 
-	while (clazztokenz.hasMoreTokens()) {
-	    list.add(clazztokenz.nextToken());
-	}
+        while (clazztokenz.hasMoreTokens()) {
+            list.add(clazztokenz.nextToken());
+        }
 
-	return list;
+        return list;
 
     }
 
     /**
      * Returns all Keys stored in the default.properties file
+     *
      * @return {@link Enumeration}<{@link String}>
      */
-    public static Enumeration<String> getAllKeys()
-    {
-	return prb.getKeys();
+    public static Enumeration<String> getAllKeys() {
+        return prb.getKeys();
     }
 
 }

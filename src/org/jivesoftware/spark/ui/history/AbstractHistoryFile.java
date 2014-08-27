@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.jivesoftware.spark.ui.history;
 
@@ -17,105 +17,106 @@ import java.util.Map.Entry;
 
 /**
  * @author Vyacheslav Durin (nixspirit@gmail.com)
- * 
- *         Apr 10, 2013
+ *
+ * Apr 10, 2013
  * @version 0.1
  */
 public abstract class AbstractHistoryFile {
 
-	protected static final int SIZE_MULTIPLICATOR = 1024; // 1024-KB, 2048-MB
-	protected static final MessageFormat SIZE_FORMAT = new MessageFormat(
-			"{0,number,#.##} Kb");
-	protected static final DateFormat DAY_NAME_FORMAT = DateFormat
-			.getDateInstance(DateFormat.MEDIUM);
-	protected static final SimpleDateFormat MONTH_NAME_FORMAT = new SimpleDateFormat(
-			"MMMM yyyy");
-	private static final MessageFormat replacementFormat = new MessageFormat(
-			"<font color=\"#FF0000\" style=\"font-weight: bold;\">{0}</font>");
+    protected static final int SIZE_MULTIPLICATOR = 1024; // 1024-KB, 2048-MB
+    protected static final MessageFormat SIZE_FORMAT = new MessageFormat(
+            "{0,number,#.##} Kb");
+    protected static final DateFormat DAY_NAME_FORMAT = DateFormat
+            .getDateInstance(DateFormat.MEDIUM);
+    protected static final SimpleDateFormat MONTH_NAME_FORMAT = new SimpleDateFormat(
+            "MMMM yyyy");
+    private static final MessageFormat replacementFormat = new MessageFormat(
+            "<font color=\"#FF0000\" style=\"font-weight: bold;\">{0}</font>");
 
-	protected List<HistoryEntry> entries;
+    protected List<HistoryEntry> entries;
 
-	protected abstract long getSize();
+    protected abstract long getSize();
 
-	protected abstract List<HistoryEntry> createEntries();
+    protected abstract List<HistoryEntry> createEntries();
 
-	public String getFormatSize() {
-		return SIZE_FORMAT.format(new Object[] { getSize() });
-	}
+    public String getFormatSize() {
+        return SIZE_FORMAT.format(new Object[]{getSize()});
+    }
 
-	public Collection<HistoryEntry> getHistoryEntries() {
-		if (entries == null)
-			entries = createEntries();
-		return entries;
-	}
+    public Collection<HistoryEntry> getHistoryEntries() {
+        if (entries == null) {
+            entries = createEntries();
+        }
+        return entries;
+    }
 
-	public List<HistoryEntry> search(String occurrence) {
-		return search(entries, occurrence);
-	}
+    public List<HistoryEntry> search(String occurrence) {
+        return search(entries, occurrence);
+    }
 
-	// ############# UTILS ##############
+    // ############# UTILS ##############
+    private List<HistoryEntry> search(List<HistoryEntry> entries,
+            String occurrence) {
 
-	private List<HistoryEntry> search(List<HistoryEntry> entries,
-			String occurrence) {
+        List<HistoryEntry> result = new ArrayList<HistoryEntry>();
+        for (HistoryEntry historyEntry : entries) {
 
-		List<HistoryEntry> result = new ArrayList<HistoryEntry>();
-		for (HistoryEntry historyEntry : entries) {
+            if (!historyEntry.hasRecords()) {
 
-			if (!historyEntry.hasRecords()) {
+                if (hasOccurrence(historyEntry, occurrence)) {
+                    HistoryEntry copy = new HistoryEntry(historyEntry);
+                    highlihght(copy, occurrence);
+                    result.add(copy);
+                }
 
-				if (hasOccurrence(historyEntry, occurrence)) {
-					HistoryEntry copy = new HistoryEntry(historyEntry);
-					highlihght(copy, occurrence);
-					result.add(copy);
-				}
+            } else {
+                result.addAll(search(historyEntry.getEntries(), occurrence));
+            }
+        }
+        return result;
+    }
 
-			} else {
-				result.addAll(search(historyEntry.getEntries(), occurrence));
-			}
-		}
-		return result;
-	}
+    private boolean hasOccurrence(HistoryEntry historyEntry, String occurrence) {
+        if (historyEntry.isEmpty()) {
+            return false;
+        }
 
-	private boolean hasOccurrence(HistoryEntry historyEntry, String occurrence) {
-		if (historyEntry.isEmpty())
-			return false;
+        for (HistoryMessage msg : historyEntry.getMessages()) {
+            String body = msg.getBody();
+            if (body.contains(occurrence)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-		for (HistoryMessage msg : historyEntry.getMessages()) {
-			String body = msg.getBody();
-			if (body.contains(occurrence)) {
-				return true;
-			}
-		}
-		return false;
-	}
+    private void highlihght(HistoryEntry historyEntry, String occurrence) {
+        // TODO: now replaced always with the occurrence in lowercase.
+        String replacement = replacementFormat
+                .format(new String[]{occurrence});
+        String insentiveCase = "(?i)";
 
-	private void highlihght(HistoryEntry historyEntry, String occurrence) {
-		// TODO: now replaced always with the occurrence in lowercase.
-		String replacement = replacementFormat
-				.format(new String[] { occurrence });
-		String insentiveCase = "(?i)";
+        for (HistoryMessage msg : historyEntry.getMessages()) {
+            String body = msg.getBody();
+            msg.setBody(body
+                    .replaceAll(insentiveCase + occurrence, replacement));
+        }
+    }
 
-		for (HistoryMessage msg : historyEntry.getMessages()) {
-			String body = msg.getBody();
-			msg.setBody(body
-					.replaceAll(insentiveCase + occurrence, replacement));
-		}
-	}
+    protected List<HistoryEntry> toList(Map<Date, HistoryEntry> months) {
+        List<HistoryEntry> entries = new ArrayList<HistoryEntry>();
+        for (Entry<Date, HistoryEntry> historyEntry : months.entrySet()) {
+            entries.add(historyEntry.getValue());
+        }
 
-	protected List<HistoryEntry> toList(Map<Date, HistoryEntry> months) {
-		List<HistoryEntry> entries = new ArrayList<HistoryEntry>();
-		for (Entry<Date, HistoryEntry> historyEntry : months.entrySet()) {
-			entries.add(historyEntry.getValue());
-		}
+        Collections.sort(entries, new Comparator<HistoryEntry>() {
 
-		Collections.sort(entries, new Comparator<HistoryEntry>() {
+            @Override
+            public int compare(HistoryEntry o1, HistoryEntry o2) {
+                return o2.getDate().compareTo(o1.getDate());
+            }
+        });
 
-			@Override
-			public int compare(HistoryEntry o1, HistoryEntry o2) {
-				return o2.getDate().compareTo(o1.getDate());
-			}
-		});
-
-		return entries;
-	}
+        return entries;
+    }
 }

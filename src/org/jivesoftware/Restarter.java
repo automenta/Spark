@@ -1,30 +1,25 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
-
-
 package org.jivesoftware;
-
-import org.jivesoftware.spark.util.log.Log;
 
 import java.io.File;
 import java.io.IOException;
+import org.jivesoftware.spark.util.log.Log;
 
 /**
  * Used to restart spark on a sleep thread to allow for XMPP URI Mapping.
@@ -34,7 +29,8 @@ import java.io.IOException;
 public class Restarter {
 
     /**
-     * Is called on a restart of Spark. This is the format for restarting Spark in Log out.
+     * Is called on a restart of Spark. This is the format for restarting Spark
+     * in Log out.
      *
      * @param args the array of arguments.
      */
@@ -50,8 +46,7 @@ public class Restarter {
 
         try {
             Thread.sleep(2000);
-        }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
@@ -62,19 +57,17 @@ public class Restarter {
             }
             if (isLinux()) {
                 command = file.getCanonicalPath();
-            }
-            else if (isMac()) {
+            } else if (isMac()) {
                 command = "open -a Spark";
             }
 
             Runtime.getRuntime().exec(command);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Log.error("Error starting Spark", e);
         }
 
     }
-    
+
     /**
      * Return if we are running on windows.
      *
@@ -104,17 +97,15 @@ public class Restarter {
         String lcOSName = System.getProperty("os.name").toLowerCase();
         return lcOSName.indexOf("mac") != -1;
     }
-    
+
     /**
      * Return if we are running on Linux.
      *
      * @return true if we are running on Linux, false otherwise.
      */
-
     public static boolean isLinux() {
         final String osName = System.getProperty("os.name").toLowerCase();
         return osName.startsWith("linux");
     }
-    
-}
 
+}

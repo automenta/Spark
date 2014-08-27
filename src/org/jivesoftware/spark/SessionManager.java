@@ -1,24 +1,25 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.spark;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.SwingUtilities;
 import org.jivesoftware.smack.ConnectionListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
@@ -32,19 +33,16 @@ import org.jivesoftware.spark.ui.PresenceListener;
 import org.jivesoftware.spark.util.log.Log;
 import org.jivesoftware.sparkimpl.plugin.manager.Features;
 
-import javax.swing.SwingUtilities;
-
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * This manager is responsible for the handling of the XMPPConnection used within Spark. This is used
- * for the changing of the users presence, the handling of connection errors and the ability to add
- * presence listeners and retrieve the connection used in Spark.
+ * This manager is responsible for the handling of the XMPPConnection used
+ * within Spark. This is used for the changing of the users presence, the
+ * handling of connection errors and the ability to add presence listeners and
+ * retrieve the connection used in Spark.
  *
  * @author Derek DeMoro
  */
 public final class SessionManager implements ConnectionListener {
+
     private XMPPConnection connection;
     private PrivateDataManager personalDataManager;
 
@@ -66,8 +64,8 @@ public final class SessionManager implements ConnectionListener {
      * Initializes session.
      *
      * @param connection the XMPPConnection used in this session.
-     * @param username   the agents username.
-     * @param password   the agents password.
+     * @param username the agents username.
+     * @param password the agents password.
      */
     public void initializeSession(XMPPConnection connection, String username, String password) {
         this.connection = connection;
@@ -81,7 +79,6 @@ public final class SessionManager implements ConnectionListener {
         // Discover items
         discoverItems();
 
-
         ProviderManager.getInstance().addExtensionProvider("event", "http://jabber.org/protocol/disco#info", new Features.Provider());
     }
 
@@ -92,8 +89,7 @@ public final class SessionManager implements ConnectionListener {
         ServiceDiscoveryManager disco = ServiceDiscoveryManager.getInstanceFor(SparkManager.getConnection());
         try {
             discoverItems = disco.discoverItems(SparkManager.getConnection().getServiceName());
-        }
-        catch (XMPPException e) {
+        } catch (XMPPException e) {
             Log.error(e);
             discoverItems = new DiscoverItems();
         }
@@ -108,18 +104,16 @@ public final class SessionManager implements ConnectionListener {
         return connection;
     }
 
-
     /**
-     * Returns the PrivateDataManager responsible for handling all private data for individual
-     * agents.
+     * Returns the PrivateDataManager responsible for handling all private data
+     * for individual agents.
      *
-     * @return the PrivateDataManager responsible for handling all private data for individual
-     *         agents.
+     * @return the PrivateDataManager responsible for handling all private data
+     * for individual agents.
      */
     public PrivateDataManager getPersonalDataManager() {
         return personalDataManager;
     }
-
 
     /**
      * Returns the host for this connection.
@@ -216,8 +210,9 @@ public final class SessionManager implements ConnectionListener {
     }
 
     /**
-     * Adds a <code>PresenceListener</code> to Spark. PresenceListener's are used
-     * to allow notification of when the Spark users changes their presence.
+     * Adds a <code>PresenceListener</code> to Spark. PresenceListener's are
+     * used to allow notification of when the Spark users changes their
+     * presence.
      *
      * @param listener the listener.
      */
@@ -235,15 +230,15 @@ public final class SessionManager implements ConnectionListener {
     }
 
     /**
-     * Returns the users bare address. A bare-address is the address without a resource (ex. derek@jivesoftware.com/spark would
-     * be derek@jivesoftware.com)
+     * Returns the users bare address. A bare-address is the address without a
+     * resource (ex. derek@jivesoftware.com/spark would be
+     * derek@jivesoftware.com)
      *
      * @return the users bare address.
      */
     public String getBareAddress() {
         return userBareAddress;
     }
-
 
     /**
      * Returns the Discovered Items.

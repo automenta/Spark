@@ -1,28 +1,25 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.sparkimpl.preference.chat;
 
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
-
 import org.jivesoftware.resource.Res;
 import org.jivesoftware.resource.SparkRes;
 import org.jivesoftware.smack.XMPPException;
@@ -35,10 +32,12 @@ import org.jivesoftware.sparkimpl.settings.local.LocalPreferences;
 import org.jivesoftware.sparkimpl.settings.local.SettingsManager;
 
 /**
- * Handles the preferences for Chatting. This handles preferences used in chatting such as the nickname
- * to be used and showing dates and times of chat posts.
+ * Handles the preferences for Chatting. This handles preferences used in
+ * chatting such as the nickname to be used and showing dates and times of chat
+ * posts.
  */
 public class ChatPreference implements Preference {
+
     private ChatPreferencePanel panel = new ChatPreferencePanel();
     private String errorMessage = "Error";
 
@@ -98,9 +97,8 @@ public class ChatPreference implements Preference {
     public void commit() {
         LocalPreferences pref = SettingsManager.getLocalPreferences();
         pref.setTimeDisplayedInChat(panel.getShowTime());
-        if(panel.getShowTime() == true)
-        {
-      	  pref.setTimeFormat(panel.getFormatTime());
+        if (panel.getShowTime() == true) {
+            pref.setTimeFormat(panel.getFormatTime());
         }
         pref.setChatRoomNotifications(panel.isGroupChatNotificationsOn());
         pref.setChatHistoryEnabled(!panel.isChatHistoryHidden());
@@ -116,10 +114,9 @@ public class ChatPreference implements Preference {
         if (ModelUtil.hasLength(panel.getPassword()) && ModelUtil.hasLength(panel.getConfirmationPassword())) {
             try {
                 SparkManager.getConnection().getAccountManager().changePassword(panel.getPassword());
-            }
-            catch (XMPPException passwordEx) {
+            } catch (XMPPException passwordEx) {
                 JOptionPane.showMessageDialog(SparkManager.getMainWindow(), Res.getString("message.unable.to.save.password"),
-                    Res.getString("title.error"), JOptionPane.ERROR_MESSAGE);
+                        Res.getString("title.error"), JOptionPane.ERROR_MESSAGE);
                 Log.error("Unable to change password", passwordEx);
             }
         }
@@ -132,7 +129,6 @@ public class ChatPreference implements Preference {
     public String getErrorMessage() {
         return errorMessage;
     }
-
 
     public boolean isDataValid() {
         boolean dataIsValid = true;
@@ -156,6 +152,5 @@ public class ChatPreference implements Preference {
     public void shutdown() {
         commit();
     }
-
 
 }

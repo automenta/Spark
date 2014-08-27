@@ -1,46 +1,41 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.spark.component;
-
-
-import org.jivesoftware.spark.util.log.Log;
-
-import javax.swing.JEditorPane;
-import javax.swing.JPanel;
-import javax.swing.event.HyperlinkListener;
-import javax.swing.text.html.HTMLEditorKit;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import javax.swing.JEditorPane;
+import javax.swing.JPanel;
+import javax.swing.event.HyperlinkListener;
+import javax.swing.text.html.HTMLEditorKit;
+import org.jivesoftware.spark.util.log.Log;
 
 /**
- * Creates a new CoBrowser component. The CoBrowser is ChatRoom specific and is used
- * to control the end users browser.  Using the CoBrowser allows you to assist end customers
- * by directing them to the appropriate site.
+ * Creates a new CoBrowser component. The CoBrowser is ChatRoom specific and is
+ * used to control the end users browser. Using the CoBrowser allows you to
+ * assist end customers by directing them to the appropriate site.
  */
 public class HTMLViewer extends JPanel {
+
     private static final long serialVersionUID = 4938398130343609958L;
     private JEditorPane browser;
-
 
     /**
      * Creates a new CoBrowser object to be used with the specifid ChatRoom.
@@ -75,15 +70,14 @@ public class HTMLViewer extends JPanel {
                 url = "http://" + url;
             }
             browser.setPage(url);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             Log.error(ex);
         }
     }
 
-
     /**
-     * Returns the selected text contained in this TextComponent. If the selection is null or the document empty, returns null.
+     * Returns the selected text contained in this TextComponent. If the
+     * selection is null or the document empty, returns null.
      *
      * @return the text.
      */
@@ -91,10 +85,9 @@ public class HTMLViewer extends JPanel {
         return browser.getSelectedText();
     }
 
-
     /**
-     * Let's make sure that the panel doesn't strech past the
-     * scrollpane view pane.
+     * Let's make sure that the panel doesn't strech past the scrollpane view
+     * pane.
      *
      * @return the preferred dimension
      */
@@ -105,7 +98,8 @@ public class HTMLViewer extends JPanel {
     }
 
     /**
-     * Adds a hyperlink listener for notification of any changes, for example when a link is selected and entered.
+     * Adds a hyperlink listener for notification of any changes, for example
+     * when a link is selected and entered.
      *
      * @param listener the listener
      */

@@ -1,21 +1,19 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.sparkimpl.plugin.scratchpad;
 
@@ -40,7 +38,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TimerTask;
-
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
@@ -57,7 +54,6 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
 import javax.swing.KeyStroke;
-
 import org.jdesktop.swingx.calendar.DateUtils;
 import org.jivesoftware.resource.Res;
 import org.jivesoftware.resource.SparkRes;
@@ -79,7 +75,7 @@ public class ScratchPadPlugin implements Plugin {
 
     public static boolean SHOW_ALL_TASKS = true;
 
-    private static final String dateShortFormat = ((SimpleDateFormat)SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT)).toPattern();
+    private static final String dateShortFormat = ((SimpleDateFormat) SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT)).toPattern();
     private SimpleDateFormat formatter = new SimpleDateFormat(dateShortFormat);
     private static List<TaskUI> taskList = new ArrayList<TaskUI>();
     private static JPanel panel_events;
@@ -87,24 +83,24 @@ public class ScratchPadPlugin implements Plugin {
     private static JFrame frame;
 
     public void initialize() {
-   	 
-    	TimerTask startTask = new TimerTask() {
-			@Override
-			public void run() {
-				panel_events = new JPanel();
-				mainPanel = new JPanel();
-			}
-		};
-   	 
- 		TaskEngine.getInstance().schedule(startTask, 500);
- 		
+
+        TimerTask startTask = new TimerTask() {
+            @Override
+            public void run() {
+                panel_events = new JPanel();
+                mainPanel = new JPanel();
+            }
+        };
+
+        TaskEngine.getInstance().schedule(startTask, 500);
+
         ContactList contactList = SparkManager.getWorkspace().getContactList();
         contactList.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("control F6"), "viewNotes");
 
         contactList.getActionMap().put("viewNotes", new AbstractAction("viewNotes") {
-	    private static final long serialVersionUID = -3258500919859584696L;
+            private static final long serialVersionUID = -3258500919859584696L;
 
-	    public void actionPerformed(ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 // Retrieve notes and dispaly in editor.
                 retrieveNotes();
             }
@@ -113,9 +109,9 @@ public class ScratchPadPlugin implements Plugin {
         contactList.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("control F5"), "viewTasks");
 
         contactList.getActionMap().put("viewTasks", new AbstractAction("viewTasks") {
-	    private static final long serialVersionUID = 8589614513097901484L;
+            private static final long serialVersionUID = 8589614513097901484L;
 
-	    public void actionPerformed(ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 // Retrieve notes and dispaly in editor.
                 showTaskList();
             }
@@ -132,12 +128,11 @@ public class ScratchPadPlugin implements Plugin {
             }
         }
 
-        
         JMenuItem taskMenu = new JMenuItem(Res.getString("button.view.tasklist"),
-        	SparkRes.getImageIcon(SparkRes.DESKTOP_IMAGE));
-        
+                SparkRes.getImageIcon(SparkRes.DESKTOP_IMAGE));
+
         JMenuItem notesMenu = new JMenuItem(Res.getString("button.view.notes"),
-        	SparkRes.getImageIcon(SparkRes.DOCUMENT_16x16));
+                SparkRes.getImageIcon(SparkRes.DOCUMENT_16x16));
 
         taskMenu.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -152,11 +147,10 @@ public class ScratchPadPlugin implements Plugin {
         });
 
         // Add To toolbar
-      final JMenu actionsMenu = SparkManager.getMainWindow().getMenuByName(Res.getString("menuitem.actions"));
-	      actionsMenu.addSeparator();
-	      actionsMenu.add(taskMenu);
-	      actionsMenu.add(notesMenu);
-
+        final JMenu actionsMenu = SparkManager.getMainWindow().getMenuByName(Res.getString("menuitem.actions"));
+        actionsMenu.addSeparator();
+        actionsMenu.add(taskMenu);
+        actionsMenu.add(notesMenu);
 
         // Start notifications.
         new TaskNotification();
@@ -209,13 +203,13 @@ public class ScratchPadPlugin implements Plugin {
         mainPanel.setBackground(Color.white);
 
         final JPanel titlePanel = new JPanel(new BorderLayout()) {
-	    private static final long serialVersionUID = -8812868562658925280L;
+            private static final long serialVersionUID = -8812868562658925280L;
 
-	    public void paintComponent(Graphics g) {
+            public void paintComponent(Graphics g) {
                 Color startColor = Color.white;
                 Color endColor = new Color(198, 211, 247);
 
-                Graphics2D g2 = (Graphics2D)g;
+                Graphics2D g2 = (Graphics2D) g;
 
                 int w = getWidth();
                 int h = getHeight();
@@ -232,9 +226,9 @@ public class ScratchPadPlugin implements Plugin {
         mainPanel.add(titlePanel);
 
         Action showAllAction = new AbstractAction() {
-	    private static final long serialVersionUID = -7031122285194582204L;
+            private static final long serialVersionUID = -7031122285194582204L;
 
-	    public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 for (TaskUI ui : taskList) {
                     ui.setVisible(true);
                 }
@@ -244,9 +238,9 @@ public class ScratchPadPlugin implements Plugin {
         };
 
         Action showActiveAction = new AbstractAction() {
-	    private static final long serialVersionUID = -7551153291479117311L;
+            private static final long serialVersionUID = -7551153291479117311L;
 
-	    public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 for (TaskUI ui : taskList) {
                     if (ui.isSelected()) {
                         ui.setVisible(false);
@@ -258,9 +252,9 @@ public class ScratchPadPlugin implements Plugin {
         };
 
         final Action addAction = new AbstractAction() {
-	    private static final long serialVersionUID = -5937301529216080813L;
+            private static final long serialVersionUID = -5937301529216080813L;
 
-	    public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 String taskTitle = taskField.getText();
                 if (!ModelUtil.hasLength(taskTitle)) {
                     return;
@@ -279,8 +273,7 @@ public class ScratchPadPlugin implements Plugin {
                     try {
                         Date date = formatter.parse(dueDate);
                         task.setDueDate(date.getTime());
-                    }
-                    catch (ParseException e1) {
+                    } catch (ParseException e1) {
                         // Nothing to do
                     }
 
@@ -292,23 +285,23 @@ public class ScratchPadPlugin implements Plugin {
                 //mainPanel.add(taskUI);
                 panel_events.add(taskUI);
                 taskList.add(taskUI);
-                
+
                 panel_events.invalidate();
                 panel_events.validate();
-                panel_events.repaint();                
+                panel_events.repaint();
                 mainPanel.invalidate();
                 mainPanel.validate();
                 mainPanel.repaint();
                 frame.invalidate();
                 frame.validate();
-                frame.repaint();                
+                frame.repaint();
             }
         };
-        
+
         mainPanel.add(panel_events);
         panel_events.setLayout(new VerticalFlowLayout(VerticalFlowLayout.TOP, 0, 0, true, false));
         panel_events.setBackground(Color.white);
-        
+
         allButton.addActionListener(showAllAction);
         activeButton.addActionListener(showActiveAction);
 
@@ -321,8 +314,7 @@ public class ScratchPadPlugin implements Plugin {
 
         if (SHOW_ALL_TASKS) {
             allButton.setSelected(true);
-        }
-        else {
+        } else {
             activeButton.setSelected(true);
             showActiveAction.actionPerformed(null);
         }
@@ -330,7 +322,6 @@ public class ScratchPadPlugin implements Plugin {
         long tomorrow = DateUtils.addDays(new Date().getTime(), 1);
         SimpleDateFormat formatter = new SimpleDateFormat(dateShortFormat);
         dueDateField.setText(formatter.format(new Date(tomorrow)));
-
 
         final JScrollPane pane = new JScrollPane(mainPanel);
 
@@ -340,9 +331,9 @@ public class ScratchPadPlugin implements Plugin {
         frame.setSize(400, 400);
 
         final Action saveAction = new AbstractAction() {
-	    private static final long serialVersionUID = -4287799161421970177L;
+            private static final long serialVersionUID = -4287799161421970177L;
 
-	    public void actionPerformed(ActionEvent actionEvent) {
+            public void actionPerformed(ActionEvent actionEvent) {
                 // Save it.
                 Tasks tasks = new Tasks();
                 for (TaskUI ui : taskList) {
@@ -364,7 +355,6 @@ public class ScratchPadPlugin implements Plugin {
             }
         });
 
-
         frame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent windowEvent) {
                 saveAction.actionPerformed(null);
@@ -379,36 +369,35 @@ public class ScratchPadPlugin implements Plugin {
             }
         });
 
-
         GraphicUtils.centerWindowOnComponent(frame, SparkManager.getMainWindow());
         frame.setVisible(true);
     }
-    
+
     /**
      * Updates the GUI of Tasks
-     * 
+     *
      * @param tasks Tasks
      */
     public static void updateTaskUI(Tasks tasks) {
-    	panel_events.removeAll();
-    	taskList.clear();
-    	
+        panel_events.removeAll();
+        taskList.clear();
+
         for (Object o : tasks.getTasks()) {
             Task task = (Task) o;
             final TaskUI taskUI = new TaskUI(task);
-            
-            if ( SHOW_ALL_TASKS == false ) {
-            	if ( taskUI.isSelected() ) {
-            		taskUI.setVisible(false);
-            	}else {
-            		taskUI.setVisible(true);
-            	}
+
+            if (SHOW_ALL_TASKS == false) {
+                if (taskUI.isSelected()) {
+                    taskUI.setVisible(false);
+                } else {
+                    taskUI.setVisible(true);
+                }
             }
-            
+
             panel_events.add(taskUI);
             taskList.add(taskUI);
         }
-        
+
         panel_events.invalidate();
         panel_events.validate();
         panel_events.repaint();
@@ -431,7 +420,7 @@ public class ScratchPadPlugin implements Plugin {
             }
 
             public void finished() {
-                final PrivateNotes privateNotes = (PrivateNotes)get();
+                final PrivateNotes privateNotes = (PrivateNotes) get();
                 showPrivateNotes(privateNotes);
             }
         };
@@ -446,7 +435,6 @@ public class ScratchPadPlugin implements Plugin {
         titleLabel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
         titleLabel.setFont(new Font("Dialog", Font.BOLD, 13));
         titleLabel.setHorizontalAlignment(JLabel.CENTER);
-
 
         final JTextPane pane = new JTextPane();
         pane.setFont(new Font("Dialog", Font.PLAIN, 12));
@@ -464,7 +452,6 @@ public class ScratchPadPlugin implements Plugin {
         ResourceUtils.resButton(cancelButton, Res.getString("button.cancel"));
 
         final JFrame frame = new JFrame(Res.getString("title.notes"));
-
 
         final JPanel mainPanel = new JPanel();
 
@@ -487,14 +474,12 @@ public class ScratchPadPlugin implements Plugin {
         frame.getContentPane().add(mainPanel);
 
         //   mainPanel.add(titleLabel, new GridBagConstraints(0, 0, 3, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
-
         mainPanel.add(scrollPane, new GridBagConstraints(0, 1, 3, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
         mainPanel.add(button, new GridBagConstraints(1, 2, 1, 1, 1.0, 0.0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
         mainPanel.add(cancelButton, new GridBagConstraints(2, 2, 1, 1, 0.0, 0.0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 
         frame.pack();
         frame.setSize(400, 400);
-
 
         GraphicUtils.centerWindowOnComponent(frame, SparkManager.getMainWindow());
         frame.setVisible(true);
@@ -527,7 +512,7 @@ public class ScratchPadPlugin implements Plugin {
 
     public void uninstall() {
     }
-    
+
     public static List<TaskUI> getTaskList() {
         return taskList;
     }

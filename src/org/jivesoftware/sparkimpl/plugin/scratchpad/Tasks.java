@@ -1,27 +1,24 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.sparkimpl.plugin.scratchpad;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smackx.PrivateDataManager;
@@ -44,7 +41,6 @@ public class Tasks implements PrivateData {
     public Tasks() {
     }
 
-
     public List<Task> getTasks() {
         return tasks;
     }
@@ -52,7 +48,7 @@ public class Tasks implements PrivateData {
     public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
     }
-    
+
     public void addTask(Task task) {
         tasks.add(task);
     }
@@ -65,7 +61,7 @@ public class Tasks implements PrivateData {
     public String getElementName() {
         return "scratchpad";
     }
-    
+
     /**
      * Returns the root element XML namespace.
      *
@@ -129,14 +125,12 @@ public class Tasks implements PrivateData {
 
                 if (eventType == XmlPullParser.START_TAG && "task".equals(parser.getName())) {
                     tasks.addTask(getTask(parser));
-                }
-                else if (eventType == XmlPullParser.END_TAG) {
+                } else if (eventType == XmlPullParser.END_TAG) {
                     if ("scratchpad".equals(parser.getName())) {
                         done = true;
                     }
                 }
             }
-
 
             return tasks;
         }
@@ -167,19 +161,15 @@ public class Tasks implements PrivateData {
                 if (ModelUtil.hasLength(completed)) {
                     task.setCompleted(Boolean.parseBoolean(completed));
                 }
-            }
-
-            else if (eventType == XmlPullParser.END_TAG) {
+            } else if (eventType == XmlPullParser.END_TAG) {
                 if ("task".equals(parser.getName())) {
                     done = true;
                 }
             }
         }
 
-
         return task;
     }
-
 
     public static void saveTasks(Tasks tasks, XMPPConnection con) {
         PrivateDataManager manager = new PrivateDataManager(con);
@@ -187,8 +177,7 @@ public class Tasks implements PrivateData {
         PrivateDataManager.addPrivateDataProvider("scratchpad", "scratchpad:tasks", new Tasks.Provider());
         try {
             manager.setPrivateData(tasks);
-        }
-        catch (XMPPException e) {
+        } catch (XMPPException e) {
             Log.error(e);
         }
     }
@@ -198,44 +187,42 @@ public class Tasks implements PrivateData {
 
         PrivateDataManager.addPrivateDataProvider("scratchpad", "scratchpad:tasks", new Tasks.Provider());
 
-
         Tasks tasks = null;
 
         try {
-            tasks = (Tasks)manager.getPrivateData("scratchpad", "scratchpad:tasks");
-        }
-        catch (XMPPException e) {
+            tasks = (Tasks) manager.getPrivateData("scratchpad", "scratchpad:tasks");
+        } catch (XMPPException e) {
             Log.error(e);
         }
 
         return tasks;
     }
-    
+
     /**
      * Delete task
-     * 
+     *
      * @param task : task to delete
      */
     public static void deleteTask(Task task) {
-    	
-    	List<TaskUI> taskList = (List<TaskUI>) ScratchPadPlugin.getTaskList();
-    	
-    	// find and delete task in list
-    	for ( int i = 0; i < taskList.size(); i++ ) {
+
+        List<TaskUI> taskList = (List<TaskUI>) ScratchPadPlugin.getTaskList();
+
+        // find and delete task in list
+        for (int i = 0; i < taskList.size(); i++) {
             Task t = taskList.get(i).getTask();
-            if ( t == task ) {
-            	taskList.remove(i);
-            	break;
+            if (t == task) {
+                taskList.remove(i);
+                break;
             }
         }
-    	
-    	// save Tasks
-    	Tasks tasks = new Tasks();
+
+        // save Tasks
+        Tasks tasks = new Tasks();
         for (TaskUI ui : taskList) {
-            Task nTask = ui.getTask();            
+            Task nTask = ui.getTask();
             tasks.addTask(nTask);
         }
-        
+
         // update GUI
         ScratchPadPlugin.updateTaskUI(tasks);
     }

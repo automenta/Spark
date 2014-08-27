@@ -1,21 +1,19 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.sparkimpl.plugin.filetransfer.transfer.ui;
 
@@ -40,7 +38,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
@@ -53,7 +50,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JProgressBar;
-
 import org.jivesoftware.Spark;
 import org.jivesoftware.resource.Res;
 import org.jivesoftware.resource.SparkRes;
@@ -106,12 +102,11 @@ public class ReceiveFileTransfer extends JPanel {
 
         add(acceptButton, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 5), 0, 0));
         add(pathButton, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 5), 0, 0));
-        pathButton.setVisible( false );
+        pathButton.setVisible(false);
         add(declineButton, new GridBagConstraints(2, 2, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 5), 0, 0));
 
         // Decorate Cancel Button
         decorateCancelButton();
-
 
         pathButton.setForeground(new Color(73, 113, 196));
         acceptButton.setForeground(new Color(73, 113, 196));
@@ -122,7 +117,6 @@ public class ReceiveFileTransfer extends JPanel {
 
         acceptButton.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(73, 113, 196)));
         declineButton.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(73, 113, 196)));
-
 
         setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.white));
 
@@ -136,7 +130,7 @@ public class ReceiveFileTransfer extends JPanel {
                 pathButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         });
-        
+
         acceptButton.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent e) {
                 acceptButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -189,38 +183,37 @@ public class ReceiveFileTransfer extends JPanel {
 
             // Delete temp file when program exits.
             file.delete();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             imageLabel.setIcon(SparkRes.getImageIcon(SparkRes.DOCUMENT_INFO_32x32));
             Log.error(e);
         }
-        
+
         acceptButton.addMouseListener(new MouseAdapter() {
 
             public void mousePressed(MouseEvent e) {
-            	try{
-            		Downloads.checkDownloadDirectory();
-            		acceptRequest(request);
-            	}catch (Exception ex){
+                try {
+                    Downloads.checkDownloadDirectory();
+                    acceptRequest(request);
+                } catch (Exception ex) {
                     // this means there is a problem with the download directory
-            	    request.reject();
-                    
+                    request.reject();
+
                     setBackground(new Color(239, 245, 250));
                     acceptButton.setVisible(false);
                     declineButton.setVisible(false);
-                    if (Downloads.getDownloadDirectory() == null){
-                        fileLabel.setText(""); 
-                    }else{
-                        ResourceUtils.resLabel( fileLabel, null, Res.getString("label.transfer.download.directory") + 
-                                " " + Downloads.getDownloadDirectory().getAbsolutePath() );      
+                    if (Downloads.getDownloadDirectory() == null) {
+                        fileLabel.setText("");
+                    } else {
+                        ResourceUtils.resLabel(fileLabel, null, Res.getString("label.transfer.download.directory")
+                                + " " + Downloads.getDownloadDirectory().getAbsolutePath());
                     }
 
                     // option to set a new path for the file-download
-                    pathButton.setVisible( true );
-                    pathButton.addMouseListener( new MouseAdapter() { 
+                    pathButton.setVisible(true);
+                    pathButton.addMouseListener(new MouseAdapter() {
                         public void mousePressed(MouseEvent e) {
-                            Preference p = SparkManager.getPreferenceManager().getPreference( 
-                                    new FileTransferPreference().getNamespace() );
+                            Preference p = SparkManager.getPreferenceManager().getPreference(
+                                    new FileTransferPreference().getNamespace());
                             // retrieve the filetransfer preferences and show the preference menu
                             // to the user
                             SparkManager.getPreferenceManager().showPreferences(p);
@@ -233,7 +226,7 @@ public class ReceiveFileTransfer extends JPanel {
                     invalidate();
                     validate();
                     repaint();
-            	}
+                }
             }
         });
 
@@ -261,127 +254,115 @@ public class ReceiveFileTransfer extends JPanel {
     }
 
     private void acceptRequest(final FileTransferRequest request) {
-	String requestor = request.getRequestor();
-	String bareJID = StringUtils.parseBareAddress(requestor);
+        String requestor = request.getRequestor();
+        String bareJID = StringUtils.parseBareAddress(requestor);
 
-	ContactList contactList = SparkManager.getWorkspace().getContactList();
-	final ContactItem contactItem = contactList
-		.getContactItemByJID(bareJID);
+        ContactList contactList = SparkManager.getWorkspace().getContactList();
+        final ContactItem contactItem = contactList
+                .getContactItemByJID(bareJID);
 
-	setBackground(new Color(239, 245, 250));
-	acceptButton.setVisible(false);
-	declineButton.setVisible(false);
-	titleLabel.setText(Res.getString("message.negotiate.file.transfer"));
-	titleLabel.setForeground(new Color(65, 139, 179));
+        setBackground(new Color(239, 245, 250));
+        acceptButton.setVisible(false);
+        declineButton.setVisible(false);
+        titleLabel.setText(Res.getString("message.negotiate.file.transfer"));
+        titleLabel.setForeground(new Color(65, 139, 179));
 
-	add(progressBar, new GridBagConstraints(1, 2, 2, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 5), 150, 0));
-	add(progressLabel, new GridBagConstraints(1, 3, 2, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 5), 150, 0));
-	add(cancelButton, new GridBagConstraints(1, 4, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 5, 5), 0, 0));
-	cancelButton.setVisible(true);
-	transfer = request.accept(); 
-	final File downloadedFile = new File(Downloads.getDownloadDirectory(), request.getFileName());
-	
-	try {
-	    _starttime = System.currentTimeMillis();
+        add(progressBar, new GridBagConstraints(1, 2, 2, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 5), 150, 0));
+        add(progressLabel, new GridBagConstraints(1, 3, 2, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 5), 150, 0));
+        add(cancelButton, new GridBagConstraints(1, 4, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 5, 5), 0, 0));
+        cancelButton.setVisible(true);
+        transfer = request.accept();
+        final File downloadedFile = new File(Downloads.getDownloadDirectory(), request.getFileName());
+
+        try {
+            _starttime = System.currentTimeMillis();
             transfer.recieveFile(downloadedFile);
-        }
-        catch (XMPPException e) {
+        } catch (XMPPException e) {
             Log.error(e);
         }
-	
+
         progressBar.setMaximum(100); // setting it to percent
         progressBar.setStringPainted(true);
 
+        final Timer timer = new Timer();
+        TimerTask updateProgessBar = new TimerTask() {
+            @Override
+            public void run() {
+                if (transfer.getAmountWritten() >= request.getFileSize()
+                        || transfer.getStatus() == FileTransfer.Status.error
+                        || transfer.getStatus() == FileTransfer.Status.refused
+                        || transfer.getStatus() == FileTransfer.Status.cancelled
+                        || transfer.getStatus() == FileTransfer.Status.complete) {
+                    this.cancel();
+                    timer.cancel();
+                    _endtime = System.currentTimeMillis();
+                    updateonFinished(request, downloadedFile);
+                } else {
+                    // 100 % = Filesize
+                    // x %   = Currentsize	    
+                    long p = (transfer.getAmountWritten() * 100 / transfer.getFileSize());
+                    progressBar.setValue(Math.round(p));
+                }
 
-	final Timer timer = new Timer();
-	TimerTask updateProgessBar = new TimerTask() {
-	    @Override
-	    public void run() {
-		if (transfer.getAmountWritten() >= request.getFileSize() 
-			|| transfer.getStatus() == FileTransfer.Status.error 
-			|| transfer.getStatus() == FileTransfer.Status.refused
-			|| transfer.getStatus() == FileTransfer.Status.cancelled
-			|| transfer.getStatus() == FileTransfer.Status.complete) 
-		{
-		    this.cancel();
-		    timer.cancel();
-		    _endtime = System.currentTimeMillis();
-		    updateonFinished(request, downloadedFile);
-		}else
-		{
-		    // 100 % = Filesize
-		    // x %   = Currentsize	    
-		    long p = (transfer.getAmountWritten() * 100 / transfer.getFileSize() );
-		    progressBar.setValue(Math.round(p));        
-		}
-		
-	    }
-	};
-	
-	final Timer timer2 = new Timer();
-	TimerTask updatePrograssBarText = new TimerTask() {
-	long timenow;
-	long timeearlier;
-	long bytesnow;
-	long bytesearlier;
-	    @Override
-	    public void run() {
-		if (transfer.getAmountWritten() >= request.getFileSize() 
-			|| transfer.getStatus() == FileTransfer.Status.error 
-			|| transfer.getStatus() == FileTransfer.Status.refused
-			|| transfer.getStatus() == FileTransfer.Status.cancelled
-			|| transfer.getStatus() == FileTransfer.Status.complete) 
-		{
-		    this.cancel();
-		    timer2.cancel();
-		}
-		else{
-    		
-            	timenow = System.currentTimeMillis();
-            	bytesnow = transfer.getAmountWritten();
-            	bytesRead = transfer.getAmountWritten();
+            }
+        };
+
+        final Timer timer2 = new Timer();
+        TimerTask updatePrograssBarText = new TimerTask() {
+            long timenow;
+            long timeearlier;
+            long bytesnow;
+            long bytesearlier;
+
+            @Override
+            public void run() {
+                if (transfer.getAmountWritten() >= request.getFileSize()
+                        || transfer.getStatus() == FileTransfer.Status.error
+                        || transfer.getStatus() == FileTransfer.Status.refused
+                        || transfer.getStatus() == FileTransfer.Status.cancelled
+                        || transfer.getStatus() == FileTransfer.Status.complete) {
+                    this.cancel();
+                    timer2.cancel();
+                } else {
+
+                    timenow = System.currentTimeMillis();
+                    bytesnow = transfer.getAmountWritten();
+                    bytesRead = transfer.getAmountWritten();
                     if (bytesRead == -1) {
                         bytesRead = 0;
                     }
                     ByteFormat format = new ByteFormat();
                     String text = format.format(bytesRead);
-                    
-                    
-                                    
-                    	
+
                     FileTransfer.Status status = transfer.getStatus();
-                    if (status == FileTransfer.Status.in_progress) 
-                    {
+                    if (status == FileTransfer.Status.in_progress) {
                         titleLabel.setText(Res.getString("message.receiving.file", contactItem.getDisplayName()));
-                        String speed =TransferUtils.calculateSpeed(bytesnow-bytesearlier, timenow-timeearlier);
+                        String speed = TransferUtils.calculateSpeed(bytesnow - bytesearlier, timenow - timeearlier);
                         String est = TransferUtils.calculateEstimate(bytesnow, transfer.getFileSize(), _starttime, System.currentTimeMillis());
                         progressLabel.setText(Res.getString("message.transfer.progressbar.text.received", text, speed, est));
-                    }
-                    else if (status == FileTransfer.Status.negotiating_stream) {
+                    } else if (status == FileTransfer.Status.negotiating_stream) {
                         titleLabel.setText(Res.getString("message.negotiate.stream"));
                     }
                     bytesearlier = bytesnow;
                     timeearlier = timenow;
-		}
-	    }
-	};
-	
-	
-	
-	timer.scheduleAtFixedRate(updateProgessBar, 10, 10);
-	timer2.scheduleAtFixedRate(updatePrograssBarText, 10, 500);
-	
+                }
+            }
+        };
+
+        timer.scheduleAtFixedRate(updateProgessBar, 10, 10);
+        timer2.scheduleAtFixedRate(updatePrograssBarText, 10, 500);
+
     }
 
     private void updateonFinished(final FileTransferRequest request,
-	    final File downloadedFile) {
-	if (transfer.getAmountWritten() >= request.getFileSize()) {
+            final File downloadedFile) {
+        if (transfer.getAmountWritten() >= request.getFileSize()) {
             transferDone(request, transfer);
 
             imageLabel.setFile(downloadedFile);
             imageLabel.setToolTipText(Res.getString("message.click.to.open"));
             titleLabel.setToolTipText(Res.getString("message.click.to.open"));
-            String fin = TransferUtils.convertSecondstoHHMMSS(Math.round(_endtime-_starttime)/1000);
+            String fin = TransferUtils.convertSecondstoHHMMSS(Math.round(_endtime - _starttime) / 1000);
             progressLabel.setText(Res.getString("label.time", fin));
 
             imageLabel.addMouseListener(new MouseAdapter() {
@@ -402,7 +383,6 @@ public class ReceiveFileTransfer extends JPanel {
                     imageLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 }
             });
-                        
 
             titleLabel.addMouseListener(new MouseAdapter() {
                 public void mouseClicked(MouseEvent e) {
@@ -433,24 +413,18 @@ public class ReceiveFileTransfer extends JPanel {
                 Log.error("There was an error during file transfer.", transfer.getException());
             }
             transferMessage = Res.getString("message.error.during.file.transfer");
-        }
-        else if (transfer.getStatus() == FileTransfer.Status.refused) {
+        } else if (transfer.getStatus() == FileTransfer.Status.refused) {
             transferMessage = Res.getString("message.transfer.refused");
-        }
-        else if (transfer.getStatus() == FileTransfer.Status.cancelled ||
-            transfer.getAmountWritten() < request.getFileSize()) {
+        } else if (transfer.getStatus() == FileTransfer.Status.cancelled
+                || transfer.getAmountWritten() < request.getFileSize()) {
             transferMessage = Res.getString("message.transfer.cancelled");
-        }
-        else if(transfer.getAmountWritten() >= request.getFileSize())
-        {
+        } else if (transfer.getAmountWritten() >= request.getFileSize()) {
             transferMessage = Res.getString("message.transfer.complete", transfer.getFileName());
         }
 
         setFinishedText(transferMessage);
         showAlert(true);
     }
-    
-
 
     private void setFinishedText(String text) {
         acceptButton.setVisible(false);
@@ -483,14 +457,12 @@ public class ReceiveFileTransfer extends JPanel {
         remove(progressBar);
         remove(pathButton);
 
-
         final TransferButton openFileButton = new TransferButton();
         final TransferButton openFolderButton = new TransferButton();
         add(openFileButton, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 5), 0, 0));
         add(openFolderButton, new GridBagConstraints(2, 2, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 5), 0, 0));
-        
-        
-        final File downloadedFile = new File(Downloads.getDownloadDirectory(), request.getFileName());     
+
+        final File downloadedFile = new File(Downloads.getDownloadDirectory(), request.getFileName());
         openFileButton.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent e) {
                 openFileButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -502,7 +474,7 @@ public class ReceiveFileTransfer extends JPanel {
             }
 
             public void mousePressed(MouseEvent e) {
-                launchFile(Downloads.getDownloadDirectory()+"\\"+request.getFileName());
+                launchFile(Downloads.getDownloadDirectory() + "\\" + request.getFileName());
             }
         });
 
@@ -521,7 +493,6 @@ public class ReceiveFileTransfer extends JPanel {
             }
         });
 
-
         add(fileLabel, new GridBagConstraints(1, 1, 2, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 5, 5, 5), 0, 0));
 
         ResourceUtils.resButton(openFileButton, Res.getString("open"));
@@ -535,7 +506,6 @@ public class ReceiveFileTransfer extends JPanel {
         openFolderButton.setForeground(new Color(73, 113, 196));
         openFolderButton.setFont(new Font("Dialog", Font.BOLD, 11));
 
-
         imageLabel.setIcon(GraphicUtils.getIcon(downloadedFile));
         imageLabel.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
@@ -547,15 +517,13 @@ public class ReceiveFileTransfer extends JPanel {
             }
         });
 
-
         if (isImage(downloadedFile.getName())) {
             try {
                 URL imageURL = downloadedFile.toURI().toURL();
                 ImageIcon image = new ImageIcon(imageURL);
                 image = GraphicUtils.scaleImageIcon(image, 64, 64);
                 imageLabel.setIcon(image);
-            }
-            catch (MalformedURLException e) {
+            } catch (MalformedURLException e) {
                 Log.error("Could not locate image.", e);
                 imageLabel.setIcon(SparkRes.getImageIcon(SparkRes.DOCUMENT_INFO_32x32));
             }
@@ -566,14 +534,11 @@ public class ReceiveFileTransfer extends JPanel {
         repaint();
     }
 
-  
-
     private class TransferButton extends JButton {
 
-		private static final long serialVersionUID = -9198495278243559064L;
+        private static final long serialVersionUID = -9198495278243559064L;
 
-
-		public TransferButton() {
+        public TransferButton() {
             decorate();
         }
 
@@ -587,7 +552,6 @@ public class ReceiveFileTransfer extends JPanel {
             super(text, icon);
             decorate();
         }
-
 
         /**
          * Decorates the button with the approriate UI configurations.
@@ -619,8 +583,7 @@ public class ReceiveFileTransfer extends JPanel {
         if (alert) {
             titleLabel.setForeground(new Color(211, 174, 102));
             setBackground(new Color(250, 249, 242));
-        }
-        else {
+        } else {
             setBackground(new Color(239, 245, 250));
             titleLabel.setForeground(new Color(65, 139, 179));
         }
@@ -649,7 +612,7 @@ public class ReceiveFileTransfer extends JPanel {
                 acceptButton.setVisible(false);
                 declineButton.setVisible(false);
                 cancelButton.setVisible(false);
-                
+
             }
         });
 
@@ -672,15 +635,14 @@ public class ReceiveFileTransfer extends JPanel {
 
             final ReceiveFileTransfer ui = this;
             Action saveAsAction = new AbstractAction() {
-				private static final long serialVersionUID = -3010501340128285438L;
+                private static final long serialVersionUID = -3010501340128285438L;
 
-				public void actionPerformed(ActionEvent e) {
+                public void actionPerformed(ActionEvent e) {
                     final JFileChooser chooser = Downloads.getFileChooser();
                     File selectedFile = chooser.getSelectedFile();
                     if (selectedFile != null) {
                         selectedFile = new File(selectedFile.getParent(), downloadedFile.getName());
-                    }
-                    else {
+                    } else {
                         selectedFile = downloadedFile;
                     }
                     chooser.setSelectedFile(selectedFile);
@@ -696,8 +658,7 @@ public class ReceiveFileTransfer extends JPanel {
                                 }
                             }
                             URLFileSystem.copy(downloadedFile.toURI().toURL(), file);
-                        }
-                        catch (IOException e1) {
+                        } catch (IOException e1) {
                             Log.error(e1);
                         }
                     }
@@ -709,10 +670,10 @@ public class ReceiveFileTransfer extends JPanel {
             popup.show(this, e.getX(), e.getY());
         }
     }
-    
+
     /**
      * Return correct URI for filePath. dont mind of local or remote path
-     * 
+     *
      * @param filePath
      * @return
      */
@@ -720,8 +681,9 @@ public class ReceiveFileTransfer extends JPanel {
         URI uri = null;
         filePath = filePath.trim();
         if (filePath.indexOf("http") == 0 || filePath.indexOf("\\") == 0) {
-            if (filePath.indexOf("\\") == 0)
+            if (filePath.indexOf("\\") == 0) {
                 filePath = "file:" + filePath;
+            }
             try {
                 filePath = filePath.replaceAll(" ", "%20");
                 URL url = new URL(filePath);
@@ -737,16 +699,17 @@ public class ReceiveFileTransfer extends JPanel {
         }
         return uri;
     }
-    
+
     /**
      * Launches a file browser or opens a file with java Desktop.open() if is
      * supported
-     * 
+     *
      * @param file
      */
     private void launchFile(File file) {
-        if (!Desktop.isDesktopSupported())
+        if (!Desktop.isDesktopSupported()) {
             return;
+        }
         Desktop dt = Desktop.getDesktop();
         try {
             dt.open(file);
@@ -758,14 +721,16 @@ public class ReceiveFileTransfer extends JPanel {
     /**
      * Launches a file browser or opens a file with java Desktop.open() if is
      * supported
-     * 
+     *
      * @param filePath
      */
     private void launchFile(String filePath) {
-        if (filePath == null || filePath.trim().length() == 0)
+        if (filePath == null || filePath.trim().length() == 0) {
             return;
-        if (!Desktop.isDesktopSupported())
+        }
+        if (!Desktop.isDesktopSupported()) {
             return;
+        }
         Desktop dt = Desktop.getDesktop();
         try {
             dt.browse(getFileURI(filePath));

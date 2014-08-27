@@ -1,28 +1,21 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.spark.component.panes;
-
-import org.jivesoftware.resource.SparkRes;
-import org.jivesoftware.spark.util.ColorUtil;
-import org.jivesoftware.spark.util.GraphicUtils;
-import org.jivesoftware.spark.util.log.Log;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -37,20 +30,24 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.util.StringTokenizer;
-
 import javax.swing.Icon;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.UIManager;
+import org.jivesoftware.resource.SparkRes;
+import org.jivesoftware.spark.util.ColorUtil;
+import org.jivesoftware.spark.util.GraphicUtils;
+import org.jivesoftware.spark.util.log.Log;
 
 /**
- * Internal implementation of the Title pane in the northern region of a CollapsiblePane.
+ * Internal implementation of the Title pane in the northern region of a
+ * CollapsiblePane.
  *
  * @author Derek DeMoro
  */
 public class CollapsibleTitlePane extends BaseCollapsibleTitlePane {
-	private static final long serialVersionUID = 2528585101535037612L;
-	private JLabel titleLabel;
+
+    private static final long serialVersionUID = 2528585101535037612L;
+    private JLabel titleLabel;
     private JLabel iconLabel;
 
     private JLabel preIconLabel;
@@ -73,7 +70,7 @@ public class CollapsibleTitlePane extends BaseCollapsibleTitlePane {
         Font titleFont = new Font("Dialog", Font.BOLD, 11);
 
         // Initialize color
-        startColor = new Color(238,242,253);
+        startColor = new Color(238, 242, 253);
         endColor = Color.white;
         titleLabel = new JLabel();
         iconLabel = new JLabel();
@@ -86,11 +83,10 @@ public class CollapsibleTitlePane extends BaseCollapsibleTitlePane {
 
         setCollapsed(false);
 
-        Color customTitleColor = (Color)UIManager.get("CollapsiblePane.titleColor");
+        Color customTitleColor = (Color) UIManager.get("CollapsiblePane.titleColor");
         if (customTitleColor != null) {
             titleLabel.setForeground(customTitleColor);
-        }
-        else {
+        } else {
             titleLabel.setForeground(titleColor);
         }
 
@@ -114,8 +110,6 @@ public class CollapsibleTitlePane extends BaseCollapsibleTitlePane {
 //            startColor = getColor(start);
 //            endColor = getColor(end);
 //        }
-
-
     }
 
     public void setStartColor(Color color) {
@@ -146,17 +140,14 @@ public class CollapsibleTitlePane extends BaseCollapsibleTitlePane {
 
             if (!collapsed) {
                 preIconLabel.setIcon(SparkRes.getImageIcon(SparkRes.PANE_DOWN_ARROW_IMAGE));
-            }
-            else {
+            } else {
                 preIconLabel.setIcon(SparkRes.getImageIcon(SparkRes.PANE_UP_ARROW_IMAGE));
             }
-        }
-        else {
+        } else {
             iconLabel.setIcon(null);
             if (collapsed) {
                 preIconLabel.setIcon(SparkRes.getImageIcon(SparkRes.PLUS_SIGN));
-            }
-            else {
+            } else {
                 preIconLabel.setIcon(SparkRes.getImageIcon(SparkRes.MINUS_SIGN));
             }
         }
@@ -172,21 +163,20 @@ public class CollapsibleTitlePane extends BaseCollapsibleTitlePane {
         return titleColor;
     }
 
-
     public void paintComponent(Graphics g) {
         if (backgroundImage != null) {
-            double scaleX = getWidth() / (double)backgroundImage.getWidth(null);
-            double scaleY = getHeight() / (double)backgroundImage.getHeight(null);
+            double scaleX = getWidth() / (double) backgroundImage.getWidth(null);
+            double scaleY = getHeight() / (double) backgroundImage.getHeight(null);
             AffineTransform xform = AffineTransform.getScaleInstance(scaleX, scaleY);
-            ((Graphics2D)g).drawImage(backgroundImage, xform, this);
+            ((Graphics2D) g).drawImage(backgroundImage, xform, this);
             return;
         }
 
         Color stopColor = endColor;
         Color starterColor = startColor;
 
-        Color customStartColor = (Color)UIManager.get("CollapsiblePane.startColor");
-        Color customEndColor = (Color)UIManager.get("CollapsiblePane.endColor");
+        Color customStartColor = (Color) UIManager.get("CollapsiblePane.startColor");
+        Color customEndColor = (Color) UIManager.get("CollapsiblePane.endColor");
 
         if (customEndColor != null) {
             stopColor = customEndColor;
@@ -200,7 +190,7 @@ public class CollapsibleTitlePane extends BaseCollapsibleTitlePane {
             stopColor = ColorUtil.lighter(stopColor, 0.05);
         }
 
-        Graphics2D g2 = (Graphics2D)g;
+        Graphics2D g2 = (Graphics2D) g;
 
         int w = getWidth();
         int h = getHeight();
@@ -225,8 +215,7 @@ public class CollapsibleTitlePane extends BaseCollapsibleTitlePane {
         try {
             StringTokenizer tkn = new StringTokenizer(commaColorString, ",");
             color = new Color(Integer.parseInt(tkn.nextToken()), Integer.parseInt(tkn.nextToken()), Integer.parseInt(tkn.nextToken()));
-        }
-        catch (NumberFormatException e1) {
+        } catch (NumberFormatException e1) {
             Log.error(e1);
             return Color.white;
         }

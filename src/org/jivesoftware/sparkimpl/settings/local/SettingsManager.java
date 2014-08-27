@@ -1,23 +1,20 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
-
 package org.jivesoftware.sparkimpl.settings.local;
 
 import java.io.File;
@@ -27,17 +24,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-
 import org.jivesoftware.Spark;
 import org.jivesoftware.resource.SparkRes;
 import org.jivesoftware.spark.util.WinRegistry;
 import org.jivesoftware.spark.util.log.Log;
 
-
 /**
  * Responsbile for the loading and persisting of LocalSettings.
  */
 public class SettingsManager {
+
     private static LocalPreferences localPreferences;
 
     private static List<PreferenceListener> listeners = new ArrayList<PreferenceListener>();
@@ -53,7 +49,7 @@ public class SettingsManager {
      * @return the LocalPreferences for this user.
      */
     public static LocalPreferences getLocalPreferences() {
-        if(localPreferences != null){
+        if (localPreferences != null) {
             return localPreferences;
         }
 
@@ -83,57 +79,47 @@ public class SettingsManager {
 
         try {
             props.store(new FileOutputStream(getSettingsFile()), "Spark Settings");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.error("Error saving settings.", e);
         }
-        
-        if (localPreferences.getStartOnStartup())
-        {
-        	try	{
-        		if (Spark.isWindows())
-        		{
-        			String PROGDIR = Spark.getBinDirectory().getParent();
-        			File file = new File(PROGDIR + "\\" + SparkRes.getString(SparkRes.EXECUTABLE_NAME));
-        			if (file.exists())
-        			{
-		        		WinRegistry.createKey(
-		        				WinRegistry.HKEY_CURRENT_USER, 
-		        				"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run");
-        				WinRegistry.writeStringValue(
-        					WinRegistry.HKEY_CURRENT_USER, 
-        					"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", 
-        					SparkRes.getString(SparkRes.APP_NAME), 
-        					file.getAbsolutePath());
-        			}
-        		}        	
-        	} 
-        	catch (Exception e) {
-        		e.printStackTrace();
-        	}
-        }
-        else
-        {
 
-    		if (Spark.isWindows())
-    		{
-            	try	{
-            		String run = WinRegistry.readString(
-            				WinRegistry.HKEY_CURRENT_USER, 
-            				"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", 
-            				SparkRes.getString(SparkRes.APP_NAME));
-            		if (run != null)
-            		{
-	            		WinRegistry.deleteValue(
-	            	          WinRegistry.HKEY_CURRENT_USER, 
-	            	          "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", 
-	            	          SparkRes.getString(SparkRes.APP_NAME));
-            		}
-            	}
-            	catch (Exception e) {
-            		Log.error("Can not delete registry entry",e);
-            	}
-    		}
+        if (localPreferences.getStartOnStartup()) {
+            try {
+                if (Spark.isWindows()) {
+                    String PROGDIR = Spark.getBinDirectory().getParent();
+                    File file = new File(PROGDIR + "\\" + SparkRes.getString(SparkRes.EXECUTABLE_NAME));
+                    if (file.exists()) {
+                        WinRegistry.createKey(
+                                WinRegistry.HKEY_CURRENT_USER,
+                                "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run");
+                        WinRegistry.writeStringValue(
+                                WinRegistry.HKEY_CURRENT_USER,
+                                "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+                                SparkRes.getString(SparkRes.APP_NAME),
+                                file.getAbsolutePath());
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+
+            if (Spark.isWindows()) {
+                try {
+                    String run = WinRegistry.readString(
+                            WinRegistry.HKEY_CURRENT_USER,
+                            "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+                            SparkRes.getString(SparkRes.APP_NAME));
+                    if (run != null) {
+                        WinRegistry.deleteValue(
+                                WinRegistry.HKEY_CURRENT_USER,
+                                "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+                                SparkRes.getString(SparkRes.APP_NAME));
+                    }
+                } catch (Exception e) {
+                    Log.error("Can not delete registry entry", e);
+                }
+            }
         }
     }
 
@@ -159,13 +145,11 @@ public class SettingsManager {
         return new File(file, "spark.properties");
     }
 
-
     private static LocalPreferences load() {
         final Properties props = new Properties();
         try {
             props.load(new FileInputStream(getSettingsFile()));
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Log.error(e);
             return new LocalPreferences();
         }

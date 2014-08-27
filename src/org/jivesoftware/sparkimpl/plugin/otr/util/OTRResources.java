@@ -43,7 +43,7 @@ public class OTRResources {
      * @param fileName
      * @return
      */
-    public static ImageIcon getIcon(String fileName) {        
+    public static ImageIcon getIcon(String fileName) {
         return SparkRes.getImageIcon(fileName);
 //        final ClassLoader cl = OTRResources.class.getClassLoader();
 //        ImageIcon icon = new ImageIcon(cl.getResource(fileName));

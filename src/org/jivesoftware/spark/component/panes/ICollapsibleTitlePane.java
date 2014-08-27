@@ -1,34 +1,33 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- *  
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2011 eZuce Inc. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.spark.component.panes;
 
 import javax.swing.Icon;
 
 public interface ICollapsibleTitlePane {
-	void setIcon(Icon icon);
 
-	void setTitle(String title);
+    void setIcon(Icon icon);
 
-	boolean isCollapsed();
+    void setTitle(String title);
 
-	void setCollapsed(boolean collapsed);
+    boolean isCollapsed();
 
-	void setSubPane(boolean subPane);
+    void setCollapsed(boolean collapsed);
+
+    void setSubPane(boolean subPane);
 }

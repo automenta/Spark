@@ -1,24 +1,50 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
+ * $RCSfile: ,v $ $Revision: $ $Date: $
  *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.spark.ui.conferences;
 
+import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import org.jivesoftware.resource.Res;
 import org.jivesoftware.resource.SparkRes;
 import org.jivesoftware.smack.XMPPException;
@@ -37,37 +63,8 @@ import org.jivesoftware.spark.util.SwingWorker;
 import org.jivesoftware.spark.util.log.Log;
 import org.jivesoftware.sparkimpl.settings.local.SettingsManager;
 
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-
-import java.awt.BorderLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 final class InvitationDialog extends JPanel {
+
     private static final long serialVersionUID = -8588678602429200581L;
     private JLabel roomsLabel = new JLabel();
     private JComponent roomsField = new JTextField();
@@ -78,7 +75,6 @@ final class InvitationDialog extends JPanel {
     private JTextField messageField = new JTextField();
 
     private JLabel inviteLabel = new JLabel();
-
 
     private DefaultListModel invitedUsers = new DefaultListModel();
     private JList invitedUserList = new JList(invitedUsers);
@@ -114,7 +110,6 @@ final class InvitationDialog extends JPanel {
         add(roomsLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0));
         add(roomsField, new GridBagConstraints(1, 0, 3, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 0, 0));
 
-
         add(messageLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0));
         add(messageField, new GridBagConstraints(1, 1, 3, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 0, 0));
 
@@ -139,8 +134,7 @@ final class InvitationDialog extends JPanel {
                     JOptionPane.showMessageDialog(dlg, Res.getString("message.enter.valid.jid"), Res.getString("title.error"), JOptionPane.ERROR_MESSAGE);
                     jidField.setText("");
                     jidField.requestFocus();
-                }
-                else {
+                } else {
                     if (!invitedUsers.contains(jid)) {
                         invitedUsers.addElement(jid);
                     }
@@ -163,7 +157,6 @@ final class InvitationDialog extends JPanel {
                 }
             }
         });
-
 
         add(inviteLabel, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 0, 0));
         add(new JScrollPane(invitedUserList), new GridBagConstraints(1, 3, 3, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 0, 0));
@@ -196,9 +189,9 @@ final class InvitationDialog extends JPanel {
         final int index = invitedUserList.locationToIndex(e.getPoint());
 
         Action removeAction = new AbstractAction() {
-	    private static final long serialVersionUID = 7837533277115442942L;
+            private static final long serialVersionUID = 7837533277115442942L;
 
-	    public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 invitedUsers.remove(index);
             }
         };
@@ -261,7 +254,6 @@ final class InvitationDialog extends JPanel {
     public void inviteUsersToRoom(final String serviceName, Collection<BookmarkedConference> rooms, String adHocRoomName, Collection<String> jids) {
         fillRoomsUI(rooms, adHocRoomName);
 
-
         JFrame parent = SparkManager.getChatManager().getChatContainer().getChatFrame();
         if (parent == null || !parent.isVisible()) {
             parent = SparkManager.getMainWindow();
@@ -275,7 +267,6 @@ final class InvitationDialog extends JPanel {
         }
 
         final JOptionPane pane;
-
 
         TitlePanel titlePanel;
 
@@ -304,15 +295,13 @@ final class InvitationDialog extends JPanel {
         dlg.setContentPane(mainPanel);
         dlg.setLocationRelativeTo(parent);
 
-
         PropertyChangeListener changeListener = new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent e) {
-                String value = (String)pane.getValue();
+                String value = (String) pane.getValue();
                 if (Res.getString("cancel").equals(value)) {
                     pane.setValue(JOptionPane.UNINITIALIZED_VALUE);
                     dlg.dispose();
-                }
-                else if (Res.getString("invite").equals(value)) {
+                } else if (Res.getString("invite").equals(value)) {
                     final String roomTitle = getSelectedRoomName();
                     final BookmarkedConference selectedBookmarkedConf = getSelectedBookmarkedConference();
                     int size = invitedUserList.getModel().getSize();
@@ -348,21 +337,18 @@ final class InvitationDialog extends JPanel {
                         invitedUserList.setSelectionInterval(0, invitedUsers.getSize() - 1);
                     }
 
-
                     GroupChatRoom chatRoom;
                     try {
                         chatRoom = SparkManager.getChatManager().getGroupChat(roomName);
-                    }
-                    catch (ChatNotFoundException e1) {
+                    } catch (ChatNotFoundException e1) {
                         dlg.setVisible(false);
                         final List<String> jidList = new ArrayList<String>();
                         Object[] jids = invitedUserList.getSelectedValues();
                         final int no = jids != null ? jids.length : 0;
                         for (int i = 0; i < no; i++) {
                             try {
-                                jidList.add((String)jids[i]);
-                            }
-                            catch (NullPointerException ee) {
+                                jidList.add((String) jids[i]);
+                            } catch (NullPointerException ee) {
                                 Log.error(ee);
                             }
                         }
@@ -371,8 +357,7 @@ final class InvitationDialog extends JPanel {
                             public Object construct() {
                                 try {
                                     Thread.sleep(15);
-                                }
-                                catch (InterruptedException e2) {
+                                } catch (InterruptedException e2) {
                                     Log.error(e2);
                                 }
                                 return "ok";
@@ -388,8 +373,7 @@ final class InvitationDialog extends JPanel {
                                                 selectedBookmarkedConf.getName(), selectedBookmarkedConf.getJid(),
                                                 selectedBookmarkedConf.getPassword(), messageText, jidList);
                                     }
-                                }
-                                catch (XMPPException e2) {
+                                } catch (XMPPException e2) {
                                     JOptionPane.showMessageDialog(pane, ConferenceUtils.getReason(e2), Res.getString("title.error"), JOptionPane.ERROR_MESSAGE);
                                 }
                             }
@@ -406,7 +390,7 @@ final class InvitationDialog extends JPanel {
                     Object[] values = invitedUserList.getSelectedValues();
                     final int no = values != null ? values.length : 0;
                     for (int i = 0; i < no; i++) {
-                        String jid = (String)values[i];
+                        String jid = (String) values[i];
                         chatRoom.getMultiUserChat().invite(jid, message != null ? message : Res.getString("message.please.join.in.conference"));
                         String nickname = SparkManager.getUserManager().getUserNicknameFromJID(jid);
                         chatRoom.getTranscriptWindow().insertNotificationMessage("Invited " + nickname, ChatManager.NOTIFICATION_COLOR);

@@ -1,26 +1,31 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.spark.component;
 
-import org.jivesoftware.spark.util.GraphicUtils;
-
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
 import javax.swing.Icon;
@@ -33,16 +38,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
-
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Font;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import org.jivesoftware.spark.util.GraphicUtils;
 
 /**
  * <code>JiveTable</code> class can be used to maintain quality look and feel
@@ -51,6 +47,7 @@ import java.util.Map;
  * @version 1.0, 03/12/14
  */
 public abstract class JiveSortableTable extends Table {
+
     private static final long serialVersionUID = 1862216857622703383L;
 
     private Table.JiveTableModel tableModel;
@@ -65,7 +62,7 @@ public abstract class JiveSortableTable extends Table {
      */
     public static final Color TOOLTIP_COLOR = new Color(166, 202, 240);
 
-    private final Map<Integer,Object> objectMap = new HashMap<Integer,Object>();
+    private final Map<Integer, Object> objectMap = new HashMap<Integer, Object>();
 
     /**
      * Empty Constructor.
@@ -79,8 +76,7 @@ public abstract class JiveSortableTable extends Table {
         Object value;
         try {
             value = getValueAt(r, c);
-        }
-        catch (Exception e1) {
+        } catch (Exception e1) {
             // If we encounter a row that should not actually exist and therefore
             // has a null value. Just return an empty string for the tooltip.
             return "";
@@ -89,16 +85,14 @@ public abstract class JiveSortableTable extends Table {
         String tooltipValue = null;
 
         if (value instanceof JLabel) {
-            tooltipValue = ((JLabel)value).getToolTipText();
+            tooltipValue = ((JLabel) value).getToolTipText();
         }
 
         if (value instanceof JLabel && tooltipValue == null) {
-            tooltipValue = ((JLabel)value).getText();
-        }
-        else if (value != null && tooltipValue == null) {
+            tooltipValue = ((JLabel) value).getText();
+        } else if (value != null && tooltipValue == null) {
             tooltipValue = value.toString();
-        }
-        else if (tooltipValue == null) {
+        } else if (tooltipValue == null) {
             tooltipValue = "";
         }
 
@@ -123,7 +117,6 @@ public abstract class JiveSortableTable extends Table {
      */
     protected JiveSortableTable(String[] headers) {
         tableModel = new Table.JiveTableModel(headers, 0, false);
-
 
         getTableHeader().setReorderingAllowed(false);
         setGridColor(Color.white);
@@ -206,16 +199,17 @@ public abstract class JiveSortableTable extends Table {
      * The internal Table Model.
      */
     public static class JiveTableModel extends DefaultTableModel {
-	private static final long serialVersionUID = -8112392992589859403L;
-	private boolean isEditable;
+
+        private static final long serialVersionUID = -8112392992589859403L;
+        private boolean isEditable;
 
         /**
-         * Use the JiveTableModel in order to better handle the table. This allows
-         * for consistency throughout the product.
+         * Use the JiveTableModel in order to better handle the table. This
+         * allows for consistency throughout the product.
          *
          * @param columnNames - String array of columnNames
-         * @param numRows     - initial number of rows
-         * @param isEditable  - true if the cells are editable, false otherwise.
+         * @param numRows - initial number of rows
+         * @param isEditable - true if the cells are editable, false otherwise.
          */
         public JiveTableModel(Object[] columnNames, int numRows, boolean isEditable) {
             super(columnNames, numRows);
@@ -225,7 +219,7 @@ public abstract class JiveSortableTable extends Table {
         /**
          * Returns true if cell is editable.
          *
-         * @param row    the row to check.
+         * @param row the row to check.
          * @param column the column to check.
          * @return true if the cell is editable.
          */
@@ -238,8 +232,9 @@ public abstract class JiveSortableTable extends Table {
      * A swing renderer used to display labels within a table.
      */
     public class JLabelRenderer extends JLabel implements TableCellRenderer {
-	private static final long serialVersionUID = 8670248883432881619L;
-	Border unselectedBorder;
+
+        private static final long serialVersionUID = 8670248883432881619L;
+        Border unselectedBorder;
         Border selectedBorder;
         boolean isBordered = true;
 
@@ -254,18 +249,17 @@ public abstract class JiveSortableTable extends Table {
         }
 
         public Component getTableCellRendererComponent(JTable table, Object color, boolean isSelected, boolean hasFocus, int row, int column) {
-            final String text = ((JLabel)color).getText();
+            final String text = ((JLabel) color).getText();
             if (text != null) {
                 setText(" " + text);
             }
-            final Icon icon = ((JLabel)color).getIcon();
+            final Icon icon = ((JLabel) color).getIcon();
             setIcon(icon);
 
             if (isSelected) {
                 setForeground(table.getSelectionForeground());
                 setBackground(table.getSelectionBackground());
-            }
-            else {
+            } else {
                 setForeground(Color.black);
                 setBackground(Color.white);
                 if (row % 2 == 0) {
@@ -280,8 +274,7 @@ public abstract class JiveSortableTable extends Table {
                                 table.getSelectionBackground());
                     }
                     setBorder(selectedBorder);
-                }
-                else {
+                } else {
                     if (unselectedBorder == null) {
                         unselectedBorder = BorderFactory.createMatteBorder(2, 5, 2, 5,
                                 table.getBackground());
@@ -297,9 +290,10 @@ public abstract class JiveSortableTable extends Table {
      * A swing renderer to dispaly Textareas within a table.
      */
     public class TextAreaCellRenderer extends JTextArea implements TableCellRenderer {
-	private static final long serialVersionUID = -1704445909682732833L;
 
-	/**
+        private static final long serialVersionUID = -1704445909682732833L;
+
+        /**
          * Create new renderer with font.
          *
          * @param font the font to use in the renderer.
@@ -311,7 +305,7 @@ public abstract class JiveSortableTable extends Table {
         }
 
         public Component getTableCellRendererComponent(JTable jTable, Object obj, boolean isSelected, boolean hasFocus,
-                                                       int row, int column) {
+                int row, int column) {
             // set color & border here
             setText(obj == null ? "" : obj.toString());
             setSize(jTable.getColumnModel().getColumn(column).getWidth(),
@@ -327,8 +321,9 @@ public abstract class JiveSortableTable extends Table {
      * A swing renderer used to display Buttons within a table.
      */
     public class JButtonRenderer extends JButton implements TableCellRenderer {
- 	private static final long serialVersionUID = -1847536957519732935L;
-	Border unselectedBorder;
+
+        private static final long serialVersionUID = -1847536957519732935L;
+        Border unselectedBorder;
         Border selectedBorder;
         boolean isBordered = true;
 
@@ -338,19 +333,17 @@ public abstract class JiveSortableTable extends Table {
         public JButtonRenderer() {
         }
 
-
         public Component getTableCellRendererComponent(JTable table, Object color, boolean isSelected, boolean hasFocus, int row, int column) {
-            final String text = ((JButton)color).getText();
+            final String text = ((JButton) color).getText();
             setText(text);
 
-            final Icon icon = ((JButton)color).getIcon();
+            final Icon icon = ((JButton) color).getIcon();
             setIcon(icon);
 
             if (isSelected) {
                 setForeground(table.getSelectionForeground());
                 setBackground(table.getSelectionBackground());
-            }
-            else {
+            } else {
                 setForeground(Color.black);
                 setBackground(Color.white);
                 if (row % 2 == 0) {
@@ -365,8 +358,7 @@ public abstract class JiveSortableTable extends Table {
                                 table.getSelectionBackground());
                     }
                     setBorder(selectedBorder);
-                }
-                else {
+                } else {
                     if (unselectedBorder == null) {
                         unselectedBorder = BorderFactory.createMatteBorder(2, 5, 2, 5,
                                 table.getBackground());
@@ -379,9 +371,10 @@ public abstract class JiveSortableTable extends Table {
     }
 
     public class ComboBoxRenderer extends JComboBox implements TableCellRenderer {
-	private static final long serialVersionUID = 5892858463680797611L;
 
-	public ComboBoxRenderer() {
+        private static final long serialVersionUID = 5892858463680797611L;
+
+        public ComboBoxRenderer() {
 
         }
 
@@ -390,12 +383,11 @@ public abstract class JiveSortableTable extends Table {
         }
 
         public Component getTableCellRendererComponent(JTable table, Object value,
-                                                       boolean isSelected, boolean hasFocus, int row, int column) {
+                boolean isSelected, boolean hasFocus, int row, int column) {
             if (isSelected) {
                 setForeground(table.getSelectionForeground());
                 super.setBackground(table.getSelectionBackground());
-            }
-            else {
+            } else {
                 setForeground(table.getForeground());
                 setBackground(table.getBackground());
             }
@@ -407,9 +399,10 @@ public abstract class JiveSortableTable extends Table {
     }
 
     public class MyComboBoxEditor extends DefaultCellEditor {
-	private static final long serialVersionUID = 1003726653998005772L;
 
-	public MyComboBoxEditor(String[] items) {
+        private static final long serialVersionUID = 1003726653998005772L;
+
+        public MyComboBoxEditor(String[] items) {
             super(new JComboBox(items));
         }
     }
@@ -433,7 +426,7 @@ public abstract class JiveSortableTable extends Table {
     /**
      * Associate an object with a row.
      *
-     * @param row    - the current row
+     * @param row - the current row
      * @param object - the object to associate with the row.
      */
     public void addObject(int row, Object object) {

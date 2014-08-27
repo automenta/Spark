@@ -1,27 +1,23 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
-
 package org.jivesoftware.sparkimpl.preference.sounds;
 
 import java.io.File;
-
 import org.jivesoftware.smack.Connection;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.filter.PacketTypeFilter;
@@ -40,6 +36,7 @@ import org.jivesoftware.spark.ui.MessageListener;
 import org.jivesoftware.spark.util.TaskEngine;
 
 public class SoundPlugin implements Plugin, MessageListener, ChatRoomListener {
+
     SoundPreference soundPreference;
 
     public void initialize() {
@@ -50,7 +47,7 @@ public class SoundPlugin implements Plugin, MessageListener, ChatRoomListener {
 
         SparkManager.getConnection().addPacketListener(new PacketListener() {
             public void processPacket(Packet packet) {
-                Presence presence = (Presence)packet;
+                Presence presence = (Presence) packet;
                 if (!presence.isAvailable()) {
                     SoundPreferences preferences = soundPreference.getPreferences();
                     if (preferences != null && preferences.isPlayOfflineSound()) {
@@ -89,7 +86,7 @@ public class SoundPlugin implements Plugin, MessageListener, ChatRoomListener {
     public void messageReceived(ChatRoom room, Message message) {
 
         // Do not play sounds on history updates.
-        DelayInformation inf = (DelayInformation)message.getExtension("x", "jabber:x:delay");
+        DelayInformation inf = (DelayInformation) message.getExtension("x", "jabber:x:delay");
         if (inf != null) {
             return;
         }

@@ -1,21 +1,19 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
+ * $RCSfile: ,v $ $Revision: $ $Date: $
  *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.spark.ui.conferences;
 
@@ -34,7 +32,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -48,7 +45,6 @@ import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-
 import org.jivesoftware.resource.Res;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smackx.Form;
@@ -65,11 +61,11 @@ import org.jivesoftware.spark.util.ResourceUtils;
 import org.jivesoftware.spark.util.log.Log;
 
 public class DataFormDialog extends JPanel {
+
     private static final long serialVersionUID = -1536217028590811636L;
-    private final Map<String,JComponent> valueMap = new HashMap<String,JComponent>();
+    private final Map<String, JComponent> valueMap = new HashMap<String, JComponent>();
     private int row = 0;
     JDialog dialog = null;
-
 
     public DataFormDialog(JFrame parent, final MultiUserChat chat, final Form submitForm) {
         dialog = new JDialog(parent, true);
@@ -80,8 +76,7 @@ public class DataFormDialog extends JPanel {
         // Create the room
         try {
             form = chat.getConfigurationForm();
-        }
-        catch (XMPPException e) {
+        } catch (XMPPException e) {
             Log.error(e);
         }
 
@@ -104,50 +99,45 @@ public class DataFormDialog extends JPanel {
                 }
 
                 if (type.equals(FormField.TYPE_BOOLEAN)) {
-                    String o = (String)valueList.get(0);
+                    String o = (String) valueList.get(0);
                     boolean isSelected = o.equals("1");
                     JCheckBox box = new JCheckBox(label);
                     box.setSelected(isSelected);
                     addField(label, box, variable);
-                }
-                else if (type.equals(FormField.TYPE_TEXT_SINGLE) ||
-                        type.equals(FormField.TYPE_JID_SINGLE)) {
-                    String value = (String)valueList.get(0);
+                } else if (type.equals(FormField.TYPE_TEXT_SINGLE)
+                        || type.equals(FormField.TYPE_JID_SINGLE)) {
+                    String value = (String) valueList.get(0);
                     addField(label, new JTextField(value), variable);
-                }
-                else if (type.equals(FormField.TYPE_TEXT_MULTI) ||
-                        type.equals(FormField.TYPE_JID_MULTI)) {
+                } else if (type.equals(FormField.TYPE_TEXT_MULTI)
+                        || type.equals(FormField.TYPE_JID_MULTI)) {
                     StringBuffer buf = new StringBuffer();
                     iter = field.getValues();
 
                     while (iter.hasNext()) {
-                        buf.append((String)iter.next());
+                        buf.append((String) iter.next());
 
                         if (iter.hasNext()) {
                             buf.append(",");
                         }
                     }
                     addField(label, new JTextArea(buf.toString()), variable);
-                }
-                else if (type.equals(FormField.TYPE_TEXT_PRIVATE)) {
+                } else if (type.equals(FormField.TYPE_TEXT_PRIVATE)) {
                     addField(label, new JPasswordField(), variable);
-                }
-                else if (type.equals(FormField.TYPE_LIST_SINGLE)) {
+                } else if (type.equals(FormField.TYPE_LIST_SINGLE)) {
                     JComboBox box = new JComboBox();
                     iter = field.getOptions();
                     while (iter.hasNext()) {
-                        FormField.Option option = (FormField.Option)iter.next();
+                        FormField.Option option = (FormField.Option) iter.next();
                         String value = option.getValue();
                         box.addItem(value);
                     }
                     if (valueList.size() > 0) {
-                        String defaultValue = (String)valueList.get(0);
+                        String defaultValue = (String) valueList.get(0);
                         box.setSelectedItem(defaultValue);
                     }
 
                     addField(label, box, variable);
-                }
-                else if (type.equals(FormField.TYPE_LIST_MULTI)) {
+                } else if (type.equals(FormField.TYPE_LIST_MULTI)) {
                     CheckBoxList checkBoxList = new CheckBoxList();
                     Iterator<Option> options = field.getOptions();
                     Option option = null;
@@ -156,7 +146,7 @@ public class DataFormDialog extends JPanel {
                     Iterator<?> i = field.getValues();
                     List<String> values = new ArrayList<String>();
                     while (i.hasNext()) {
-                        values.add((String)i.next());
+                        values.add((String) i.next());
                     }
                     while (options.hasNext()) {
                         option = options.next();
@@ -167,11 +157,9 @@ public class DataFormDialog extends JPanel {
                     addField(label, checkBoxList, variable);
                 }
             }
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             Log.error(e);
         }
-
 
         JButton button = new JButton();
         ResourceUtils.resButton(button, Res.getString("button.update"));
@@ -212,7 +200,6 @@ public class DataFormDialog extends JPanel {
         GraphicUtils.centerWindowOnScreen(dialog);
         dialog.setVisible(true);
 
-
     }
 
     private void updateRoomConfiguration(Form submitForm, MultiUserChat chat) {
@@ -252,7 +239,6 @@ public class DataFormDialog extends JPanel {
             }
         }
 
-
         try {
             chat.sendConfigurationForm(submitForm);
             RoomInfo info = MultiUserChat.getRoomInfo(SparkManager.getConnection(), chat.getRoom());
@@ -260,8 +246,7 @@ public class DataFormDialog extends JPanel {
             if (!info.isPersistent()) {
                 BookmarkManager.getBookmarkManager(SparkManager.getConnection()).removeBookmarkedConference(info.getRoom());
             }
-        }
-        catch (XMPPException e) {
+        } catch (XMPPException e) {
             Log.error(e);
         }
     }
@@ -277,14 +262,11 @@ public class DataFormDialog extends JPanel {
             JScrollPane pane = new JScrollPane(comp);
             pane.setBorder(BorderFactory.createTitledBorder(Res.getString("group.comma.delimited")));
             this.add(pane, new GridBagConstraints(1, row, 1, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 75, 50));
-        }
-        else if (comp instanceof JCheckBox) {
+        } else if (comp instanceof JCheckBox) {
             this.add(comp, new GridBagConstraints(0, row, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 0, 0));
-        }
-        else if (comp instanceof CheckBoxList) {
+        } else if (comp instanceof CheckBoxList) {
             this.add(comp, new GridBagConstraints(1, row, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 75, 50));
-        }
-        else {
+        } else {
             this.add(comp, new GridBagConstraints(1, row, 1, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 75, 0));
 
         }
@@ -292,15 +274,14 @@ public class DataFormDialog extends JPanel {
         row++;
     }
 
-
     public String getValue(String label) {
         Component comp = valueMap.get(label);
         if (comp instanceof JCheckBox) {
-            return "" + ((JCheckBox)comp).isSelected();
+            return "" + ((JCheckBox) comp).isSelected();
         }
 
         if (comp instanceof JTextField) {
-            return ((JTextField)comp).getText();
+            return ((JTextField) comp).getText();
         }
         return null;
     }

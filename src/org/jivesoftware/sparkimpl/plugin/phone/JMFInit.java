@@ -1,52 +1,47 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.sparkimpl.plugin.phone;
 
 import com.sun.media.ExclusiveUse;
 import com.sun.media.util.Registry;
-import org.jivesoftware.spark.util.log.Log;
-
+import java.awt.Frame;
+import java.util.Vector;
 import javax.media.Format;
 import javax.media.PlugInManager;
 import javax.media.Renderer;
 import javax.media.format.AudioFormat;
-
-import java.awt.Frame;
-import java.util.Vector;
+import org.jivesoftware.spark.util.log.Log;
 
 public class JMFInit extends Frame implements Runnable {
-	private static final long serialVersionUID = 6591937615313371376L;
 
-	public JMFInit(String[] args, boolean visible) {
+    private static final long serialVersionUID = 6591937615313371376L;
+
+    public JMFInit(String[] args, boolean visible) {
         super("Initializing JMF...");
 
         Registry.set("secure.allowCaptureFromApplets", true);
         Registry.set("secure.allowSaveFileFromApplets", true);
 
-
         updateTemp(args);
 
         try {
             Registry.commit();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
 
             message("Failed to commit to JMFRegistry!");
         }
@@ -55,16 +50,16 @@ public class JMFInit extends Frame implements Runnable {
         detectThread.run();
 
         /*
-           * int slept = 0; while (!done && slept < 60 * 1000 * 2) { try {
-           * Thread.currentThread().sleep(500); } catch (InterruptedException ie) { }
-           * slept += 500; }
-           *
-           * if (!done) { console.error("Detection is taking too long!
-           * Aborting!"); message("Detection is taking too long! Aborting!"); }
-           *
-           * try { Thread.currentThread().sleep(2000); } catch
-           * (InterruptedException ie) { }
-           */
+         * int slept = 0; while (!done && slept < 60 * 1000 * 2) { try {
+         * Thread.currentThread().sleep(500); } catch (InterruptedException ie) { }
+         * slept += 500; }
+         *
+         * if (!done) { console.error("Detection is taking too long!
+         * Aborting!"); message("Detection is taking too long! Aborting!"); }
+         *
+         * try { Thread.currentThread().sleep(2000); } catch
+         * (InterruptedException ie) { }
+         */
     }
 
     public void run() {
@@ -83,8 +78,7 @@ public class JMFInit extends Frame implements Runnable {
                 Registry.commit();
 
                 message("Updated registry");
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 message("Couldn't update registry!");
             }
         }
@@ -98,11 +92,9 @@ public class JMFInit extends Frame implements Runnable {
             dsauto = Class.forName("DirectSoundAuto");
             dsauto.newInstance();
             message("Finished detecting DirectSound capturer");
-        }
-        catch (ThreadDeath td) {
+        } catch (ThreadDeath td) {
             throw td;
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
             // Nothing to do
         }
 
@@ -111,62 +103,60 @@ public class JMFInit extends Frame implements Runnable {
             jsauto = Class.forName("JavaSoundAuto");
             jsauto.newInstance();
             message("Finished detecting javasound capturer");
-        }
-        catch (ThreadDeath td) {
+        } catch (ThreadDeath td) {
             throw td;
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
             message("JavaSound capturer detection failed!");
         }
 
         /*
-        // Check if VFWAuto or SunVideoAuto is available
-        message("Looking for video capture devices");
-        Class auto = null;
-        Class autoPlus = null;
-        try {
-            auto = Class.forName("VFWAuto");
-        }
-        catch (Exception e) {
-        }
-        if (auto == null) {
-            try {
-                auto = Class.forName("SunVideoAuto");
-            }
-            catch (Exception ee) {
+         // Check if VFWAuto or SunVideoAuto is available
+         message("Looking for video capture devices");
+         Class auto = null;
+         Class autoPlus = null;
+         try {
+         auto = Class.forName("VFWAuto");
+         }
+         catch (Exception e) {
+         }
+         if (auto == null) {
+         try {
+         auto = Class.forName("SunVideoAuto");
+         }
+         catch (Exception ee) {
 
-            }
-            try {
-                autoPlus = Class.forName("SunVideoPlusAuto");
-            }
-            catch (Exception ee) {
+         }
+         try {
+         autoPlus = Class.forName("SunVideoPlusAuto");
+         }
+         catch (Exception ee) {
 
-            }
-        }
-        if (auto == null) {
-            try {
-                auto = Class.forName("V4LAuto");
-            }
-            catch (Exception ee) {
+         }
+         }
+         if (auto == null) {
+         try {
+         auto = Class.forName("V4LAuto");
+         }
+         catch (Exception ee) {
 
-            }
-        }
-        try {
-            Object instance = auto.newInstance();
-            if (autoPlus != null) {
-                Object instancePlus = autoPlus.newInstance();
-            }
+         }
+         }
+         try {
+         Object instance = auto.newInstance();
+         if (autoPlus != null) {
+         Object instancePlus = autoPlus.newInstance();
+         }
 
-            message("Finished detecting video capture devices");
-        }
-        catch (ThreadDeath td) {
-            throw td;
-        }
-        catch (Throwable t) {
+         message("Finished detecting video capture devices");
+         }
+         catch (ThreadDeath td) {
+         throw td;
+         }
+         catch (Throwable t) {
 
-            message("Capture device detection failed!");
-        }
-        */
+         message("Capture device detection failed!");
+         }
+         */
     }
 
     private void detectDirectAudio() {
@@ -182,7 +172,7 @@ public class JMFInit extends Frame implements Runnable {
             // Find the renderer class and instantiate it.
             cls = Class.forName(dar);
 
-            Renderer rend = (Renderer)cls.newInstance();
+            Renderer rend = (Renderer) cls.newInstance();
             try {
                 // Set the format and open the device
                 AudioFormat af = new AudioFormat(AudioFormat.LINEAR, 44100, 16,
@@ -204,12 +194,10 @@ public class JMFInit extends Frame implements Runnable {
                     // Log.debug("registered");
                 }
                 rend.close();
-            }
-            catch (Throwable t) {
+            } catch (Throwable t) {
                 // Log.debug("Error " + t);
             }
-        }
-        catch (Throwable tt) {
+        } catch (Throwable tt) {
             // Nothing to do
         }
     }
@@ -225,10 +213,10 @@ public class JMFInit extends Frame implements Runnable {
             // Find the renderer class and instantiate it.
             cls = Class.forName(dar);
 
-            Renderer rend = (Renderer)cls.newInstance();
+            Renderer rend = (Renderer) cls.newInstance();
 
             if (rend instanceof ExclusiveUse
-                    && !((ExclusiveUse)rend).isExclusive()) {
+                    && !((ExclusiveUse) rend).isExclusive()) {
                 // sol8+, DAR supports mixing
                 Vector<String> rendList = PlugInManager.getPlugInList(null, null,
                         plType);
@@ -237,7 +225,7 @@ public class JMFInit extends Frame implements Runnable {
                 String rname;
 
                 for (int i = 0; i < listSize; i++) {
-                    rname = (String)(rendList.elementAt(i));
+                    rname = (String) (rendList.elementAt(i));
                     if (rname.equals(dar)) { // DAR is in the registry
                         found = true;
                         rendList.removeElementAt(i);
@@ -251,8 +239,7 @@ public class JMFInit extends Frame implements Runnable {
                     PlugInManager.commit();
                 }
             }
-        }
-        catch (Throwable tt) {
+        } catch (Throwable tt) {
             // Nothing to do
         }
     }
@@ -278,7 +265,6 @@ public class JMFInit extends Frame implements Runnable {
 //        setVisible(visible);
 //
 //    }
-
     public static void start(boolean visible) {
         new JMFInit(null, visible);
     }

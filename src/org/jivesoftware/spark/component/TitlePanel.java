@@ -1,21 +1,19 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.spark.component;
 
@@ -30,13 +28,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
- * <code>TitlePanel</code> class is the top panel displayed in this application. This
- * should be used to identify the application to users using a title, brief description,
- * and the company's logo.
+ * <code>TitlePanel</code> class is the top panel displayed in this application.
+ * This should be used to identify the application to users using a title, brief
+ * description, and the company's logo.
  *
  * @author Derek DeMoro
  */
 public final class TitlePanel extends JPanel {
+
     private static final long serialVersionUID = -967166058268240672L;
     private final JLabel titleLabel = new JLabel();
     private final JLabel descriptionLabel = new JLabel();
@@ -46,9 +45,9 @@ public final class TitlePanel extends JPanel {
     /**
      * Create a new TitlePanel.
      *
-     * @param title           the title to use with the panel.
-     * @param description     the panel description.
-     * @param icon            the icon to use with the panel.
+     * @param title the title to use with the panel.
+     * @param description the panel description.
+     * @param icon the icon to use with the panel.
      * @param showDescription true if the descrption should be shown.
      */
     public TitlePanel(String title, String description, Icon icon, boolean showDescription) {
@@ -74,8 +73,7 @@ public final class TitlePanel extends JPanel {
 
             titleLabel.setFont(new Font("dialog", Font.BOLD, 11));
             descriptionLabel.setFont(new Font("dialog", 0, 10));
-        }
-        else {
+        } else {
             final JPanel panel = new JPanel();
             panel.setBorder(BorderFactory.createEtchedBorder());
 
@@ -92,11 +90,11 @@ public final class TitlePanel extends JPanel {
 
     }
 
-
     /**
      * Set the icon for the panel.
      *
-     * @param icon - the relative icon based on classpath. ex. /com/jivesoftware/images/Foo.gif.
+     * @param icon - the relative icon based on classpath. ex.
+     * /com/jivesoftware/images/Foo.gif.
      */
     public final void setIcon(Icon icon) {
         titleLabel.setIcon(icon);
@@ -117,11 +115,8 @@ public final class TitlePanel extends JPanel {
      * @param desc - brief description
      */
     public final void setDescription(String desc) {
-	desc = "<HTML><BODY>"+desc+"</HTML></BODY>";
+        desc = "<HTML><BODY>" + desc + "</HTML></BODY>";
         descriptionLabel.setText(desc);
     }
-
-
-
 
 }

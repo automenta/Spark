@@ -1,41 +1,28 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.sparkimpl.plugin.history;
 
-import org.jivesoftware.resource.Res;
-import org.jivesoftware.resource.SparkRes;
-import org.jivesoftware.smack.packet.Message;
-import org.jivesoftware.smack.util.StringUtils;
-import org.jivesoftware.spark.SparkManager;
-import org.jivesoftware.spark.plugin.Plugin;
-import org.jivesoftware.spark.ui.ChatRoom;
-import org.jivesoftware.spark.ui.ContactItem;
-import org.jivesoftware.spark.ui.ContactList;
-import org.jivesoftware.spark.ui.MessageFilter;
-import org.jivesoftware.spark.ui.rooms.ChatRoomImpl;
-import org.jivesoftware.spark.util.GraphicUtils;
-import org.jivesoftware.spark.util.log.Log;
-import org.xmlpull.mxp1.MXParser;
-import org.xmlpull.v1.XmlPullParser;
-
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.Toolkit;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -55,7 +42,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -67,6 +53,21 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.ListCellRenderer;
 import javax.swing.SwingUtilities;
+import org.jivesoftware.resource.Res;
+import org.jivesoftware.resource.SparkRes;
+import org.jivesoftware.smack.packet.Message;
+import org.jivesoftware.smack.util.StringUtils;
+import org.jivesoftware.spark.SparkManager;
+import org.jivesoftware.spark.plugin.Plugin;
+import org.jivesoftware.spark.ui.ChatRoom;
+import org.jivesoftware.spark.ui.ContactItem;
+import org.jivesoftware.spark.ui.ContactList;
+import org.jivesoftware.spark.ui.MessageFilter;
+import org.jivesoftware.spark.ui.rooms.ChatRoomImpl;
+import org.jivesoftware.spark.util.GraphicUtils;
+import org.jivesoftware.spark.util.log.Log;
+import org.xmlpull.mxp1.MXParser;
+import org.xmlpull.v1.XmlPullParser;
 
 /**
  * Allows users to see the last 10 people they have talked with.
@@ -94,7 +95,6 @@ public class ConversationHistoryPlugin implements Plugin {
 
         window = new Window(SparkManager.getMainWindow());
 
-
         final JPanel mainPanel = new JPanel(new BorderLayout());
         final JLabel titleLabel = new JLabel(Res.getString("label.recent.conversation"));
         titleLabel.setFont(new Font("Dialog", Font.BOLD, 11));
@@ -106,34 +106,34 @@ public class ConversationHistoryPlugin implements Plugin {
         window.add(mainPanel);
 
         // Add Listeners
-	contacts.addMouseListener(new MouseAdapter() {
-	    public void mouseClicked(MouseEvent e) {
-		if (SwingUtilities.isRightMouseButton(e)) {
+        contacts.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                if (SwingUtilities.isRightMouseButton(e)) {
 
-		    contacts.setSelectedIndex(contacts.locationToIndex(e
-			    .getPoint()));
-		    String user = jidMap.get((JLabel) contacts
-			    .getSelectedValue());
-		    ContactItem contact = SparkManager.getContactList()
-			    .getContactItemByJID(user);
-		    SparkManager.getContactList().setSelectedUser(contact.getJID());
-		    SparkManager.getContactList().showPopup(contacts, e,
-			    contact);
-		}
+                    contacts.setSelectedIndex(contacts.locationToIndex(e
+                            .getPoint()));
+                    String user = jidMap.get((JLabel) contacts
+                            .getSelectedValue());
+                    ContactItem contact = SparkManager.getContactList()
+                            .getContactItemByJID(user);
+                    SparkManager.getContactList().setSelectedUser(contact.getJID());
+                    SparkManager.getContactList().showPopup(contacts, e,
+                            contact);
+                }
 
-		if (e.getClickCount() == 2) {
-		    final JLabel label = (JLabel) contacts.getSelectedValue();
-		    String user = jidMap.get(label);
-		    if (user != null) {
-			final String contactUsername = SparkManager
-				.getUserManager().getUserNicknameFromJID(user);
-			SparkManager.getChatManager().activateChat(user,
-				contactUsername);
-			window.dispose();
-		    }
-		}
-	    }
-	});
+                if (e.getClickCount() == 2) {
+                    final JLabel label = (JLabel) contacts.getSelectedValue();
+                    String user = jidMap.get(label);
+                    if (user != null) {
+                        final String contactUsername = SparkManager
+                                .getUserManager().getUserNicknameFromJID(user);
+                        SparkManager.getChatManager().activateChat(user,
+                                contactUsername);
+                        window.dispose();
+                    }
+                }
+            }
+        });
 
         contacts.addKeyListener(new KeyAdapter() {
             public void keyReleased(KeyEvent e) {
@@ -145,8 +145,7 @@ public class ConversationHistoryPlugin implements Plugin {
                         SparkManager.getChatManager().activateChat(user, contactUsername);
                         window.dispose();
                     }
-                }
-                else if (e.getKeyChar() == KeyEvent.VK_ESCAPE) {
+                } else if (e.getKeyChar() == KeyEvent.VK_ESCAPE) {
                     window.dispose();
                 }
             }
@@ -170,9 +169,9 @@ public class ConversationHistoryPlugin implements Plugin {
         SparkManager.getMainWindow().getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_E, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "historyPeople");
 
         SparkManager.getMainWindow().getRootPane().getActionMap().put("historyPeople", new AbstractAction("historyPeople") {
-			private static final long serialVersionUID = 2465628887318732082L;
+            private static final long serialVersionUID = 2465628887318732082L;
 
-			public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 // Show History Popup
                 showHistoryPopup();
             }
@@ -217,7 +216,6 @@ public class ConversationHistoryPlugin implements Plugin {
         jidMap.clear();
         model.clear();
 
-
         final ContactList contactList = SparkManager.getWorkspace().getContactList();
 
         int limit = historyList.size() > 10 ? 10 : historyList.size();
@@ -241,17 +239,14 @@ public class ConversationHistoryPlugin implements Plugin {
             }
         }
 
-
         window.setSize(200, 200);
         GraphicUtils.centerWindowOnComponent(window, SparkManager.getMainWindow());
-
 
         if (model.size() > 0) {
             contacts.setSelectedIndex(0);
         }
 
         window.setVisible(true);
-
 
     }
 
@@ -275,13 +270,11 @@ public class ConversationHistoryPlugin implements Plugin {
                 if (eventType == XmlPullParser.START_TAG && "user".equals(parser.getName())) {
                     String jid = StringUtils.parseBareAddress(parser.nextText());
                     historyList.add(jid);
-                }
-                else if (eventType == XmlPullParser.END_TAG && "conversations".equals(parser.getName())) {
+                } else if (eventType == XmlPullParser.END_TAG && "conversations".equals(parser.getName())) {
                     done = true;
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.error(e);
         }
     }
@@ -295,7 +288,6 @@ public class ConversationHistoryPlugin implements Plugin {
         builder.append("</conversations>");
 
         // Write out to file system.
-
         if (!transcriptDir.exists()) {
             transcriptDir.mkdirs();
         }
@@ -306,8 +298,7 @@ public class ConversationHistoryPlugin implements Plugin {
             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(conFile), "UTF-8"));
             out.write(builder.toString());
             out.close();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Log.error(e);
         }
     }
@@ -323,9 +314,10 @@ public class ConversationHistoryPlugin implements Plugin {
      * Internal handling of a Jlabel Renderer.
      */
     public class InternalRenderer extends JLabel implements ListCellRenderer {
-		private static final long serialVersionUID = 1812281106979897477L;
 
-		/**
+        private static final long serialVersionUID = 1812281106979897477L;
+
+        /**
          * Construct Default Renderer.
          */
         public InternalRenderer() {
@@ -333,15 +325,14 @@ public class ConversationHistoryPlugin implements Plugin {
         }
 
         public Component getListCellRendererComponent(JList list,
-                                                      Object value,
-                                                      int index,
-                                                      boolean isSelected,
-                                                      boolean cellHasFocus) {
+                Object value,
+                int index,
+                boolean isSelected,
+                boolean cellHasFocus) {
             if (isSelected) {
                 setBackground(list.getSelectionBackground());
                 setForeground(list.getSelectionForeground());
-            }
-            else {
+            } else {
                 setBackground(list.getBackground());
                 setForeground(list.getForeground());
             }
@@ -352,6 +343,5 @@ public class ConversationHistoryPlugin implements Plugin {
             return this;
         }
     }
-
 
 }

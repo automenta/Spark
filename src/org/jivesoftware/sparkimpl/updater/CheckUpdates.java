@@ -1,25 +1,44 @@
 /**
- * $Revision: $
- * $Date: $
- * 
+ * $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
-
 package org.jivesoftware.sparkimpl.updater;
 
 import com.thoughtworks.xstream.XStream;
+import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.TimerTask;
+import javax.swing.JEditorPane;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
+import javax.swing.text.html.HTMLEditorKit;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
@@ -49,30 +68,8 @@ import org.jivesoftware.sparkimpl.settings.JiveInfo;
 import org.jivesoftware.sparkimpl.settings.local.LocalPreferences;
 import org.jivesoftware.sparkimpl.settings.local.SettingsManager;
 
-import javax.swing.JEditorPane;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JProgressBar;
-import javax.swing.JScrollPane;
-import javax.swing.text.html.HTMLEditorKit;
-
-import java.awt.Color;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.TimerTask;
-
 public class CheckUpdates {
+
     private String mainUpdateURL;
     private JProgressBar bar;
     private TitlePanel titlePanel;
@@ -82,7 +79,6 @@ public class CheckUpdates {
     private boolean sparkPluginInstalled;
     private XStream xstream = new XStream();
     private String sizeText;
-
 
     public CheckUpdates() {
         // Set the Jabber IQ Provider for Jabber:iq:spark
@@ -101,15 +97,13 @@ public class CheckUpdates {
         if (!sparkPluginInstalled && !Spark.disableUpdatesOnCustom()) {
             // Handle Jivesoftware.org update
             return isNewBuildAvailableFromJivesoftware();
-        }
-        else if (sparkPluginInstalled) {
+        } else if (sparkPluginInstalled) {
             try {
                 SparkVersion serverVersion = getLatestVersion(SparkManager.getConnection());
                 if (isGreater(serverVersion.getVersion(), JiveInfo.getVersion())) {
                     return serverVersion;
                 }
-            }
-            catch (XMPPException e) {
+            } catch (XMPPException e) {
                 // Nothing to do
             }
 
@@ -117,7 +111,6 @@ public class CheckUpdates {
 
         return null;
     }
-
 
     /**
      * Returns true if there is a new build available for download.
@@ -128,11 +121,9 @@ public class CheckUpdates {
         PostMethod post = new PostMethod(mainUpdateURL);
         if (Spark.isWindows()) {
             post.addParameter("os", "windows");
-        }
-        else if (Spark.isMac()) {
+        } else if (Spark.isMac()) {
             post.addParameter("os", "mac");
-        }
-        else {
+        } else {
             post.addParameter("os", "linux");
         }
 
@@ -143,8 +134,6 @@ public class CheckUpdates {
 //        if (isBetaCheckingEnabled) {
 //            post.addParameter("beta", "true");
 //        }
-
-
         Protocol.registerProtocol("https", new Protocol("https", new EasySSLProtocolSocketFactory(), 443));
         HttpClient httpclient = new HttpClient();
         String proxyHost = System.getProperty("http.proxyHost");
@@ -152,8 +141,7 @@ public class CheckUpdates {
         if (ModelUtil.hasLength(proxyHost) && ModelUtil.hasLength(proxyPort)) {
             try {
                 httpclient.getHostConfiguration().setProxy(proxyHost, Integer.parseInt(proxyPort));
-            }
-            catch (NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 Log.error(e);
             }
         }
@@ -163,21 +151,18 @@ public class CheckUpdates {
                 return null;
             }
 
-
             String xml = post.getResponseBodyAsString();
 
             // Server Version
-            SparkVersion serverVersion = (SparkVersion)xstream.fromXML(xml);
+            SparkVersion serverVersion = (SparkVersion) xstream.fromXML(xml);
             if (isGreater(serverVersion.getVersion(), JiveInfo.getVersion())) {
                 return serverVersion;
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Log.error(e);
         }
         return null;
     }
-
 
     public void downloadUpdate(final File downloadedFile, final SparkVersion version) {
         final java.util.Timer timer = new java.util.Timer();
@@ -193,14 +178,12 @@ public class CheckUpdates {
         if (ModelUtil.hasLength(proxyHost) && ModelUtil.hasLength(proxyPort)) {
             try {
                 httpclient.getHostConfiguration().setProxy(proxyHost, Integer.parseInt(proxyPort));
-            }
-            catch (NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 Log.error(e);
             }
         }
 
         // Execute request
-
         try {
             int result = httpclient.executeMethod(post);
             if (result != 200) {
@@ -208,11 +191,10 @@ public class CheckUpdates {
             }
 
             long length = post.getResponseContentLength();
-            int contentLength = (int)length;
+            int contentLength = (int) length;
 
             bar = new JProgressBar(0, contentLength);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Log.error(e);
         }
 
@@ -231,7 +213,6 @@ public class CheckUpdates {
                     sizeText = formater.format(size);
                     titlePanel.setDescription(Res.getString("message.version", version.getVersion()) + " \n" + Res.getString("message.file.size", sizeText));
 
-
                     downloadedFile.getParentFile().mkdirs();
 
                     FileOutputStream out = new FileOutputStream(downloadedFile);
@@ -241,27 +222,22 @@ public class CheckUpdates {
                     if (!cancel) {
                         downloadComplete = true;
                         promptForInstallation(downloadedFile, Res.getString("title.download.complete"), Res.getString("message.restart.spark"));
-                    }
-                    else {
+                    } else {
                         out.close();
                         downloadedFile.delete();
                     }
 
-
                     UPDATING = false;
                     frame.dispose();
-                }
-                catch (Exception ex) {
+                } catch (Exception ex) {
                     // Nothing to do
-                }
-                finally {
+                } finally {
                     timer.cancel();
                     // Release current connection to the connection pool once you are done
                     post.releaseConnection();
                 }
             }
         });
-
 
         frame.getContentPane().setLayout(new GridBagLayout());
         frame.getContentPane().add(titlePanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 0, 0));
@@ -275,16 +251,14 @@ public class CheckUpdates {
             if (version.getChangeLogURL() != null) {
                 pane.setEditorKit(new HTMLEditorKit());
                 pane.setPage(version.getChangeLogURL());
-            }
-            else if (version.getDisplayMessage() != null) {
+            } else if (version.getDisplayMessage() != null) {
                 pane.setText(version.getDisplayMessage());
             }
 
             if (displayContentPane) {
                 frame.getContentPane().add(new JScrollPane(pane), new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 0, 0));
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Log.error(e);
         }
 
@@ -292,8 +266,7 @@ public class CheckUpdates {
         frame.pack();
         if (displayContentPane) {
             frame.setSize(600, 400);
-        }
-        else {
+        } else {
             frame.setSize(400, 100);
         }
         frame.setLocationRelativeTo(SparkManager.getMainWindow());
@@ -314,7 +287,6 @@ public class CheckUpdates {
         frame.setVisible(true);
         thread.start();
 
-
         timer.scheduleAtFixedRate(new TimerTask() {
             int seconds = 1;
 
@@ -332,9 +304,9 @@ public class CheckUpdates {
     }
 
     /**
-     * Common code for copy routines.  By convention, the streams are
-     * closed in the same method in which they were opened.  Thus,
-     * this method does not close the streams when the copying is done.
+     * Common code for copy routines. By convention, the streams are closed in
+     * the same method in which they were opened. Thus, this method does not
+     * close the streams when the copying is done.
      *
      * @param in Source stream
      * @param out Destination stream
@@ -353,14 +325,14 @@ public class CheckUpdates {
                 read += bytesRead;
                 bar.setValue(read);
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Log.error(e);
         }
     }
 
     /**
-     * Checks Spark Manager and/or Jive Software for the latest version of Spark.
+     * Checks Spark Manager and/or Jive Software for the latest version of
+     * Spark.
      *
      * @param explicit true if the user explicitly asks for the latest version.
      * @throws Exception if there is an error during check
@@ -401,18 +373,16 @@ public class CheckUpdates {
 
         boolean periodOrLonger = new Date().getTime() >= lastCheckedPlusAPeriod.getTime();
 
-
         if (periodOrLonger || explicit || sparkPluginInstalled) {
-            
-            if (!explicit && !localPreferences.isBetaCheckingEnabled())
-            {
+
+            if (!explicit && !localPreferences.isBetaCheckingEnabled()) {
                 return;
             }
             // Check version on server.
             lastChecked = new Date();
             localPreferences.setLastCheckForUpdates(lastChecked);
             SettingsManager.saveSettings();
-            
+
             final SparkVersion serverVersion = newBuildAvailable();
             if (serverVersion == null) {
                 UPDATING = false;
@@ -452,8 +422,7 @@ public class CheckUpdates {
                         public Object construct() {
                             try {
                                 Thread.sleep(50);
-                            }
-                            catch (InterruptedException e) {
+                            } catch (InterruptedException e) {
                                 Log.error(e);
                             }
                             return "ok";
@@ -462,19 +431,15 @@ public class CheckUpdates {
                         public void finished() {
                             if (Spark.isWindows()) {
                                 downloadUpdate(fileToDownload, serverVersion);
-                            }
-                            else {
+                            } else {
                                 // Launch browser to download page.
                                 try {
                                     if (sparkPluginInstalled) {
                                         BrowserLauncher.openURL(serverVersion.getDownloadURL());
-                                    }
-                                    else {
+                                    } else {
                                         BrowserLauncher.openURL("http://www.igniterealtime.org/downloads/index.jsp#spark");
                                     }
-                                }
-
-                                catch (Exception e) {
+                                } catch (Exception e) {
                                     Log.error(e);
                                 }
                                 UPDATING = false;
@@ -489,18 +454,16 @@ public class CheckUpdates {
                     UPDATING = false;
                 }
             });
-        }
-        else {
+        } else {
             UPDATING = false;
         }
 
     }
 
-
     /**
      * Returns true if the first version number is greater than the second.
      *
-     * @param firstVersion  the first version number.
+     * @param firstVersion the first version number.
      * @param secondVersion the second version number.
      * @return returns true if the first version is greater than the second.
      */
@@ -530,13 +493,11 @@ public class CheckUpdates {
         if (versionOneBetaOrAlpha) {
             String versionOne = getVersion(firstVersion);
             return versionOne.compareTo(secondVersion) >= 1;
-        }
-        else if (versionTwoBetaOrAlpha) {
+        } else if (versionTwoBetaOrAlpha) {
             String versionTwo = getVersion(secondVersion);
             int result = firstVersion.compareTo(versionTwo);
             return result >= 0;
         }
-
 
         return firstVersion.compareTo(secondVersion) >= 1;
     }
@@ -552,7 +513,8 @@ public class CheckUpdates {
     }
 
     /**
-     * Returns the latest version of Spark available via Spark Manager or Jive Software.
+     * Returns the latest version of Spark available via Spark Manager or Jive
+     * Software.
      *
      * @param connection the XMPPConnection to use.
      * @return the information for about the latest Spark Client.
@@ -566,8 +528,7 @@ public class CheckUpdates {
         PacketCollector collector = connection.createPacketCollector(new PacketIDFilter(request.getPacketID()));
         connection.sendPacket(request);
 
-
-        SparkVersion response = (SparkVersion)collector.nextResult(SmackConfiguration.getPacketReplyTimeout());
+        SparkVersion response = (SparkVersion) collector.nextResult(SmackConfiguration.getPacketReplyTimeout());
 
         // Cancel the collector.
         collector.cancel();
@@ -581,8 +542,8 @@ public class CheckUpdates {
     }
 
     /**
-     * Does a service discvery on the server to see if a Spark Manager
-     * is enabled.
+     * Does a service discvery on the server to see if a Spark Manager is
+     * enabled.
      *
      * @param con the XMPPConnection to use.
      * @return true if Spark Manager is available.
@@ -592,18 +553,16 @@ public class CheckUpdates {
             return false;
         }
 
-
         try {
             DiscoverItems items = SparkManager.getSessionManager().getDiscoveredItems();
             Iterator<DiscoverItems.Item> iter = items.getItems();
             while (iter.hasNext()) {
-                DiscoverItems.Item item = (DiscoverItems.Item)iter.next();
+                DiscoverItems.Item item = (DiscoverItems.Item) iter.next();
                 if ("Spark Updater".equals(item.getName())) {
                     return true;
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.error(e);
         }
 
@@ -615,8 +574,8 @@ public class CheckUpdates {
      * Prompts the user to install the latest Spark.
      *
      * @param downloadedFile the location of the latest downloaded client.
-     * @param title          the title
-     * @param message        the message
+     * @param title the title
+     * @param message the message
      */
     private void promptForInstallation(final File downloadedFile, String title, String message) {
         ConfirmDialog confirm = new ConfirmDialog();
@@ -628,12 +587,10 @@ public class CheckUpdates {
                 try {
                     if (Spark.isWindows()) {
                         Runtime.getRuntime().exec(downloadedFile.getAbsolutePath());
-                    }
-                    else if (Spark.isMac()) {
+                    } else if (Spark.isMac()) {
                         Runtime.getRuntime().exec("open " + downloadedFile.getCanonicalPath());
                     }
-                }
-                catch (IOException e) {
+                } catch (IOException e) {
                     Log.error(e);
                 }
                 SparkManager.getMainWindow().shutdown();
@@ -646,7 +603,8 @@ public class CheckUpdates {
     }
 
     /**
-     * Checks to see if a new version of Spark has already been downloaded by not installed.
+     * Checks to see if a new version of Spark has already been downloaded by
+     * not installed.
      *
      * @return true if a newer version exists.
      */
@@ -677,8 +635,7 @@ public class CheckUpdates {
                             // Prompt
                             promptForInstallation(file, Res.getString("title.new.client.available"), Res.getString("message.restart.spark.to.install"));
                             return true;
-                        }
-                        else {
+                        } else {
                             file.delete();
                         }
 
@@ -689,6 +646,5 @@ public class CheckUpdates {
 
         return false;
     }
-
 
 }

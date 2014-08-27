@@ -1,36 +1,21 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.spark.component;
-
-import org.jivesoftware.resource.SparkRes;
-import org.jivesoftware.spark.ui.ContactItem;
-import org.jivesoftware.spark.util.ModelUtil;
-
-import javax.swing.DefaultListModel;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.JWindow;
-import javax.swing.ListCellRenderer;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -43,6 +28,17 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.DefaultListModel;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.JWindow;
+import javax.swing.ListCellRenderer;
+import org.jivesoftware.resource.SparkRes;
+import org.jivesoftware.spark.ui.ContactItem;
+import org.jivesoftware.spark.util.ModelUtil;
 
 /**
  * Implementation of a popup field from a TextField.
@@ -61,16 +57,15 @@ public class JContactItemField extends JPanel {
     public JContactItemField(List<ContactItem> items) {
         setLayout(new BorderLayout());
         list = new JList(model) {
-	    private static final long serialVersionUID = -9031169221430835595L;
+            private static final long serialVersionUID = -9031169221430835595L;
 
-	    public String getToolTipText(MouseEvent e) {
+            public String getToolTipText(MouseEvent e) {
                 int row = locationToIndex(e.getPoint());
-                if (row >= 0)
-                {
-                    final ContactItem item = (ContactItem)getModel().getElementAt(row);
+                if (row >= 0) {
+                    final ContactItem item = (ContactItem) getModel().getElementAt(row);
                     if (item != null) {
                         return item.getJID();
-                }
+                    }
                 }
                 return null;
             }
@@ -79,7 +74,6 @@ public class JContactItemField extends JPanel {
         this.items = items;
 
         add(textField, BorderLayout.CENTER);
-
 
         textField.addKeyListener(new KeyAdapter() {
             public void keyReleased(KeyEvent keyEvent) {
@@ -91,7 +85,7 @@ public class JContactItemField extends JPanel {
                 if (keyEvent.getKeyCode() == KeyEvent.VK_ENTER) {
                     int index = list.getSelectedIndex();
                     if (index >= 0) {
-                        ContactItem selection = (ContactItem)list.getSelectedValue();
+                        ContactItem selection = (ContactItem) list.getSelectedValue();
                         textField.setText(selection.getDisplayName());
                         popup.setVisible(false);
                     }
@@ -111,7 +105,6 @@ public class JContactItemField extends JPanel {
             }
         });
 
-
         textField.addFocusListener(new FocusListener() {
             public void focusGained(FocusEvent e) {
             }
@@ -121,13 +114,10 @@ public class JContactItemField extends JPanel {
             }
         });
 
-
         popup = new JWindow();
-
 
         popup.getContentPane().add(new JScrollPane(list));
         popup.setAlwaysOnTop(true);
-
 
         list.setCellRenderer(new PopupRenderer());
         list.addMouseListener(new MouseAdapter() {
@@ -135,7 +125,7 @@ public class JContactItemField extends JPanel {
                 if (e.getClickCount() == 2) {
                     int index = list.getSelectedIndex();
                     if (index >= 0) {
-                        ContactItem selection = (ContactItem)list.getSelectedValue();
+                        ContactItem selection = (ContactItem) list.getSelectedValue();
                         textField.setText(selection.getDisplayName());
                         popup.setVisible(false);
                     }
@@ -161,16 +151,15 @@ public class JContactItemField extends JPanel {
 
         String typedItem = textField.getText();
 
-	final List<ContactItem> validItems = new ArrayList<ContactItem>();
-	for (ContactItem contactItem : items) {
-	    String nickname = contactItem.getDisplayName().toLowerCase();
-	    if (nickname.startsWith(typedItem.toLowerCase())) {
-		validItems.add(contactItem);
-	    } else if (typedItem.length() > 2 && nickname.contains(typedItem.toLowerCase())) {
-		validItems.add(contactItem);
-	    }
-	}
-
+        final List<ContactItem> validItems = new ArrayList<ContactItem>();
+        for (ContactItem contactItem : items) {
+            String nickname = contactItem.getDisplayName().toLowerCase();
+            if (nickname.startsWith(typedItem.toLowerCase())) {
+                validItems.add(contactItem);
+            } else if (typedItem.length() > 2 && nickname.contains(typedItem.toLowerCase())) {
+                validItems.add(contactItem);
+            }
+        }
 
         if (validItems.size() > 0) {
             for (final ContactItem label : validItems) {
@@ -196,8 +185,8 @@ public class JContactItemField extends JPanel {
     }
 
     /**
-     * Validate the given text - to pass it must contain letters, digits, '@', '-', '_', '.', ','
-     * or a space character.
+     * Validate the given text - to pass it must contain letters, digits, '@',
+     * '-', '_', '.', ',' or a space character.
      *
      * @param text the text to check
      * @return true if the given text is valid, false otherwise.
@@ -215,13 +204,12 @@ public class JContactItemField extends JPanel {
             }
         }
 
-
         return true;
     }
 
     /**
-     * Validate the given text - to pass it must contain letters, digits, '@', '-', '_', '.', ','
-     * or a space character.
+     * Validate the given text - to pass it must contain letters, digits, '@',
+     * '-', '_', '.', ',' or a space character.
      *
      * @param ch the character
      * @return true if the given text is valid, false otherwise.
@@ -248,7 +236,7 @@ public class JContactItemField extends JPanel {
     }
 
     public ContactItem getSelectedContactItem() {
-        return (ContactItem)list.getSelectedValue();
+        return (ContactItem) list.getSelectedValue();
     }
 
     public void setText(String text) {
@@ -268,9 +256,10 @@ public class JContactItemField extends JPanel {
     }
 
     class PopupRenderer extends JLabel implements ListCellRenderer {
-	private static final long serialVersionUID = 239608430590852355L;
 
-	/**
+        private static final long serialVersionUID = 239608430590852355L;
+
+        /**
          * Construct Default JLabelIconRenderer.
          */
         public PopupRenderer() {
@@ -280,26 +269,23 @@ public class JContactItemField extends JPanel {
         }
 
         public Component getListCellRendererComponent(JList list,
-                                                      Object value,
-                                                      int index,
-                                                      boolean isSelected,
-                                                      boolean cellHasFocus) {
+                Object value,
+                int index,
+                boolean isSelected,
+                boolean cellHasFocus) {
             if (isSelected) {
                 setBackground(list.getSelectionBackground());
                 setForeground(list.getSelectionForeground());
-            }
-            else {
+            } else {
                 setBackground(list.getBackground());
                 setForeground(list.getForeground());
             }
 
-
-            ContactItem contactItem = (ContactItem)value;
+            ContactItem contactItem = (ContactItem) value;
             setText(contactItem.getDisplayName());
             if (contactItem.getIcon() == null) {
                 setIcon(SparkRes.getImageIcon(SparkRes.CLEAR_BALL_ICON));
-            }
-            else {
+            } else {
                 setIcon(contactItem.getIcon());
             }
             setFont(contactItem.getNicknameLabel().getFont());
@@ -312,15 +298,14 @@ public class JContactItemField extends JPanel {
     public boolean canClose() {
         return !textField.hasFocus();
     }
-    
+
     /**
      * sets the selected Index using the Point of a given {@link MouseEvent}
+     *
      * @param mouseevent - {@link MouseEvent} to get The {@link Point} from
      */
-    public void setSelectetIndex(MouseEvent mouseevent)
-    {	
-	list.setSelectedIndex(list.locationToIndex(mouseevent.getPoint()));
+    public void setSelectetIndex(MouseEvent mouseevent) {
+        list.setSelectedIndex(list.locationToIndex(mouseevent.getPoint()));
     }
-
 
 }

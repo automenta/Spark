@@ -1,21 +1,19 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.sparkimpl.preference.chat;
 
@@ -25,7 +23,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
@@ -35,7 +32,6 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-
 import org.jivesoftware.resource.Default;
 import org.jivesoftware.resource.Res;
 import org.jivesoftware.spark.SparkManager;
@@ -49,8 +45,8 @@ import org.jivesoftware.sparkimpl.settings.local.SettingsManager;
  */
 public class ChatPreferencePanel extends JPanel implements ActionListener {
 
-	private static final long serialVersionUID = 8910938026549098719L;
-	private JCheckBox showTimeBox = new JCheckBox();
+    private static final long serialVersionUID = 8910938026549098719L;
+    private JCheckBox showTimeBox = new JCheckBox();
     private ButtonGroup timeFormat = new ButtonGroup();
     private JRadioButton format12 = new JRadioButton("12:00 PM", true);
     private JRadioButton format24 = new JRadioButton("24:00", false);
@@ -83,13 +79,10 @@ public class ChatPreferencePanel extends JPanel implements ActionListener {
         timeFormat.add(format24);
         timeFormat.add(format12);
         final LocalPreferences pref = SettingsManager.getLocalPreferences();
-        if(pref.getTimeFormat().equals("HH:mm"))
-        {
-      	  format24.setSelected(true);
-        }
-        else
-        {
-      	  format12.setSelected(true);
+        if (pref.getTimeFormat().equals("HH:mm")) {
+            format24.setSelected(true);
+        } else {
+            format12.setSelected(true);
         }
         // Setup Mnemonics
         ResourceUtils.resButton(showTimeBox, Res.getString("checkbox.show.time.in.chat.window"));
@@ -106,7 +99,7 @@ public class ChatPreferencePanel extends JPanel implements ActionListener {
         chatWindowPanel.setBorder(BorderFactory.createTitledBorder(Res.getString("group.chat.window.information")));
 
         if (!Default.getBoolean(Default.CHANGE_PASSWORD_DISABLED)) {
-        	add(generalPanel);
+            add(generalPanel);
         }
         add(chatWindowPanel);
 
@@ -124,35 +117,29 @@ public class ChatPreferencePanel extends JPanel implements ActionListener {
         chatWindowPanel.add(sortChatHistoryAscending, new GridBagConstraints(0, 4, 2, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0));
         chatWindowPanel.add(tabsOnTopBox, new GridBagConstraints(0, 5, 2, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0));
         chatWindowPanel.add(buzzBox, new GridBagConstraints(0, 6, 2, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0));
-       
+
         JLabel chatTimeoutLabel = new JLabel();
         ResourceUtils.resLabel(chatTimeoutLabel, chatTimeoutField, Res.getString("label.minutes.before.stale.chat") + ":");
         chatWindowPanel.add(chatTimeoutLabel, new GridBagConstraints(0, 6, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0));
         chatWindowPanel.add(chatTimeoutField, new GridBagConstraints(1, 6, 2, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 50, 0));
 
-
         generalPanel.add(passwordLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0));
         generalPanel.add(passwordField, new GridBagConstraints(1, 1, 1, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 100, 0));
         generalPanel.add(confirmationPasswordLabel, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0));
         generalPanel.add(confirmationPasswordField, new GridBagConstraints(1, 2, 1, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 100, 0));
-        
-        showTimeBox.addActionListener(new ActionListener()
- 	     {
-      	  public void actionPerformed(ActionEvent e)
-      	  {
-      		  if(showTimeBox.isSelected())
-      		  {
-      			  format12.setEnabled(true);
-      			  format24.setEnabled(true);
-      		  }
-      		  else
-      		  {
-      			  format12.setEnabled(false);
-      			  format24.setEnabled(false);
-      		  }
-      	  }
- 	     });
-        
+
+        showTimeBox.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (showTimeBox.isSelected()) {
+                    format12.setEnabled(true);
+                    format24.setEnabled(true);
+                } else {
+                    format12.setEnabled(false);
+                    format24.setEnabled(false);
+                }
+            }
+        });
+
         hideChatHistory.addActionListener(this);
     }
 
@@ -173,16 +160,13 @@ public class ChatPreferencePanel extends JPanel implements ActionListener {
     public boolean getShowTime() {
         return showTimeBox.isSelected();
     }
-    
+
     public String getFormatTime() {
-       if(format24.isSelected())
-       {
-      	 return "HH:mm";
-       }
-       else
-       {
-      	 return "h:mm a"; 
-       }
+        if (format24.isSelected()) {
+            return "HH:mm";
+        } else {
+            return "h:mm a";
+        }
     }
 
     /**
@@ -226,7 +210,7 @@ public class ChatPreferencePanel extends JPanel implements ActionListener {
     public boolean isChatHistoryHidden() {
         return hideChatHistory.isSelected();
     }
-    
+
     public void setPrevChatHistoryHidden(boolean hide) {
         hidePrevChatHistory.setSelected(hide);
     }
@@ -239,27 +223,26 @@ public class ChatPreferencePanel extends JPanel implements ActionListener {
         chatTimeoutField.setText(Integer.toString(time));
     }
 
-    public void setTabsOnTop(boolean top){
+    public void setTabsOnTop(boolean top) {
         tabsOnTopBox.setSelected(top);
     }
 
-    public boolean isTabsOnTop(){
+    public boolean isTabsOnTop() {
         return tabsOnTopBox.isSelected();
     }
 
-    public void setBuzzEnabled(boolean allowBuzz){
+    public void setBuzzEnabled(boolean allowBuzz) {
         buzzBox.setSelected(allowBuzz);
     }
 
-    public boolean isBuzzEnabled(){
+    public boolean isBuzzEnabled() {
         return buzzBox.isSelected();
     }
 
     public int getChatTimeoutTime() {
         try {
             return Integer.parseInt(chatTimeoutField.getText());
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             return 15;
         }
     }
@@ -278,8 +261,8 @@ public class ChatPreferencePanel extends JPanel implements ActionListener {
                     transcriptFile.delete();
                 }
             }
-    } else {
-            hidePrevChatHistory.setEnabled(true);            
+        } else {
+            hidePrevChatHistory.setEnabled(true);
         }
     }
 

@@ -1,22 +1,20 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */ 
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package org.jivesoftware.spark.ui;
 
 import java.awt.Color;
@@ -26,11 +24,9 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.TimerTask;
-
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.text.html.HTMLEditorKit;
-
 import org.jivesoftware.resource.Res;
 import org.jivesoftware.resource.SparkRes;
 import org.jivesoftware.smack.ConnectionListener;
@@ -41,14 +37,16 @@ import org.jivesoftware.spark.util.SwingTimerTask;
 import org.jivesoftware.spark.util.TaskEngine;
 
 /**
- * RetryPanel is the UI/Function class to handle reconnection logic. This allows for a simple card layout to replace the current
- * roster when the connection has been lost.
+ * RetryPanel is the UI/Function class to handle reconnection logic. This allows
+ * for a simple card layout to replace the current roster when the connection
+ * has been lost.
  *
  * @author Derek DeMoro
  */
 public class ReconnectPanel extends JPanel implements ConnectionListener {
-	private static final long serialVersionUID = -7099075581561760774L;
-	private JEditorPane pane;
+
+    private static final long serialVersionUID = -7099075581561760774L;
+    private JEditorPane pane;
     private RolloverButton retryButton;
     private boolean closedOnError;
 
@@ -74,7 +72,6 @@ public class ReconnectPanel extends JPanel implements ConnectionListener {
             }
         });
 
-
         setBackground(Color.white);
 
         retryButton.setText(Res.getString("button.reconnect2"));
@@ -94,21 +91,18 @@ public class ReconnectPanel extends JPanel implements ConnectionListener {
 
         TaskEngine.getInstance().schedule(task, 100);
     }
-    
+
     private void reconnect() {
         try {
             if (closedOnError) {
-            	SparkManager.getConnection().connect();
-            }
-            else {
+                SparkManager.getConnection().connect();
+            } else {
                 SparkManager.getMainWindow().logout(false);
             }
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
-
 
     /**
      * Sets the reason the user was disconnected from the server.
@@ -137,8 +131,8 @@ public class ReconnectPanel extends JPanel implements ConnectionListener {
     }
 
     /**
-     * Starts the countdown to the next retry attempt. The retry attemp is set for every 45 seconds or what is set
-     * as the default in preferences.
+     * Starts the countdown to the next retry attempt. The retry attemp is set
+     * for every 45 seconds or what is set as the default in preferences.
      *
      * @param text the text to display on the reconnect button.
      */
@@ -157,7 +151,6 @@ public class ReconnectPanel extends JPanel implements ConnectionListener {
     public void setClosedOnError(boolean onError) {
         closedOnError = onError;
     }
-
 
     public void connectionClosed() {
         retryButton.setVisible(true);

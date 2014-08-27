@@ -1,34 +1,30 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.spark.util;
 
-import org.jivesoftware.smack.util.StringUtils;
-import org.jivesoftware.spark.util.log.Log;
-
+import java.io.UnsupportedEncodingException;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-
-import java.io.UnsupportedEncodingException;
+import org.jivesoftware.smack.util.StringUtils;
+import org.jivesoftware.spark.util.log.Log;
 
 /**
  * Encrypts and Decrypts text based on DESede keys.
@@ -49,8 +45,7 @@ public class Encryptor {
             dcipher = Cipher.getInstance("DESede");
             ecipher.init(Cipher.ENCRYPT_MODE, key);
             dcipher.init(Cipher.DECRYPT_MODE, key);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.error(e);
         }
     }
@@ -72,14 +67,11 @@ public class Encryptor {
 
             // Decode using utf-8
             return new String(utf8, "UTF8");
-        }
-        catch (IllegalBlockSizeException e) {
+        } catch (IllegalBlockSizeException e) {
             Log.error(e);
-        }
-        catch (BadPaddingException e) {
+        } catch (BadPaddingException e) {
             Log.error(e);
-        }
-        catch (UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException e) {
             Log.error(e);
         }
         return null;

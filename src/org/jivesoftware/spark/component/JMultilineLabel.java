@@ -1,25 +1,21 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.spark.component;
-
-import javax.swing.JComponent;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -31,8 +27,10 @@ import java.awt.font.TextAttribute;
 import java.awt.font.TextLayout;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
+import javax.swing.JComponent;
 
 public class JMultilineLabel extends JComponent {
+
     private static final long serialVersionUID = 3061233171993075054L;
     private String text;
     private Insets margin = new Insets(1, 1, 1, 1);
@@ -53,8 +51,9 @@ public class JMultilineLabel extends JComponent {
         String old = this.text;
         this.text = text;
         firePropertyChange("text", old, this.text);
-        if ((old == null) ? text != null : !old.equals(text))
+        if ((old == null) ? text != null : !old.equals(text)) {
             morph();
+        }
     }
 
     public int getMaxWidth() {
@@ -62,13 +61,15 @@ public class JMultilineLabel extends JComponent {
     }
 
     public void setMaxWidth(int maxWidth) {
-        if (maxWidth <= 0)
+        if (maxWidth <= 0) {
             throw new IllegalArgumentException();
+        }
         int old = this.maxWidth;
         this.maxWidth = maxWidth;
         firePropertyChange("maxWidth", old, this.maxWidth);
-        if (old != this.maxWidth)
+        if (old != this.maxWidth) {
             morph();
+        }
     }
 
     public boolean isJustified() {
@@ -79,8 +80,9 @@ public class JMultilineLabel extends JComponent {
         boolean old = this.justify;
         this.justify = justify;
         firePropertyChange("justified", old, this.justify);
-        if (old != this.justify)
+        if (old != this.justify) {
             repaint();
+        }
     }
 
     public Dimension getPreferredSize() {
@@ -93,7 +95,7 @@ public class JMultilineLabel extends JComponent {
 
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        paintOrGetSize((Graphics2D)g, getWidth());
+        paintOrGetSize((Graphics2D) g, getWidth());
     }
 
     private Dimension paintOrGetSize(Graphics2D g, int width) {
@@ -109,16 +111,17 @@ public class JMultilineLabel extends JComponent {
             float max = 0;
             while (lbm.getPosition() < aci.getEndIndex()) {
                 TextLayout textLayout = lbm.nextLayout(width);
-                if (g != null && isJustified() && textLayout.getVisibleAdvance() > 0.80 * width)
+                if (g != null && isJustified() && textLayout.getVisibleAdvance() > 0.80 * width) {
                     textLayout = textLayout.getJustifiedLayout(width);
-                if (g != null)
+                }
+                if (g != null) {
                     textLayout.draw(g, x, y + textLayout.getAscent());
+                }
                 y += textLayout.getDescent() + textLayout.getLeading() + textLayout.getAscent();
                 max = Math.max(max, textLayout.getVisibleAdvance());
             }
             w += max;
         }
-        return new Dimension((int)Math.ceil(w), (int)Math.ceil(y) + insets.bottom + margin.bottom);
+        return new Dimension((int) Math.ceil(w), (int) Math.ceil(y) + insets.bottom + margin.bottom);
     }
 }
-

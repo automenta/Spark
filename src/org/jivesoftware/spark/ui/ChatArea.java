@@ -1,22 +1,20 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */ 
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package org.jivesoftware.spark.ui;
 
 import java.awt.Color;
@@ -31,7 +29,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.StringTokenizer;
-
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import javax.swing.JComponent;
@@ -48,7 +45,6 @@ import javax.swing.text.Element;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
-
 import org.jivesoftware.resource.Res;
 import org.jivesoftware.spark.SparkManager;
 import org.jivesoftware.spark.plugin.ContextMenuListener;
@@ -60,13 +56,14 @@ import org.jivesoftware.sparkimpl.settings.local.LocalPreferences;
 import org.jivesoftware.sparkimpl.settings.local.SettingsManager;
 
 /**
- * The ChatArea class handles proper chat text formatting such as url handling. Use ChatArea for proper
- * formatting of bold, italics, underlined and urls.
+ * The ChatArea class handles proper chat text formatting such as url handling.
+ * Use ChatArea for proper formatting of bold, italics, underlined and urls.
  */
 public class ChatArea extends JTextPane implements MouseListener, MouseMotionListener, ActionListener {
-	private static final long serialVersionUID = -2155445968040220072L;
 
-	/**
+    private static final long serialVersionUID = -2155445968040220072L;
+
+    /**
      * The SimpleAttributeSet used within this instance of JTextPane.
      */
     public final SimpleAttributeSet styles = new SimpleAttributeSet();
@@ -95,7 +92,6 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
 
     private JPopupMenu popup;
 
-
     private JMenuItem cutMenu;
     private JMenuItem copyMenu;
     private JMenuItem pasteMenu;
@@ -106,7 +102,7 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
     protected EmoticonManager emoticonManager;
 
     protected Boolean forceEmoticons = false;
-    
+
     protected Boolean emoticonsAvailable = true;
 
     /**
@@ -114,12 +110,12 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
      */
     public ChatArea() {
         emoticonManager = EmoticonManager.getInstance();
-        
-        Collection<String> emoticonPacks = null; 
+
+        Collection<String> emoticonPacks = null;
         emoticonPacks = emoticonManager.getEmoticonPacks();
-        
-        if(emoticonPacks == null) {
-        	emoticonsAvailable = false;
+
+        if (emoticonPacks == null) {
+            emoticonsAvailable = false;
         }
 
         // Set Default Font
@@ -127,7 +123,6 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
         int fs = pref.getChatRoomFontSize();
         fontSize = fs;
         setFontSize(fs);
-
 
         cutMenu = new JMenuItem(Res.getString("action.cut"));
         cutMenu.addActionListener(this);
@@ -144,13 +139,12 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
         // Set Default Font
         setFont(new Font("Dialog", Font.PLAIN, 12));
 
-
         getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("Ctrl x"), "cut");
 
         getActionMap().put("cut", new AbstractAction("cut") {
-			private static final long serialVersionUID = 9117190151545566922L;
+            private static final long serialVersionUID = 9117190151545566922L;
 
-			public void actionPerformed(ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 cutAction();
             }
         });
@@ -158,9 +152,9 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
         getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("Ctrl c"), "copy");
 
         getActionMap().put("copy", new AbstractAction("copy") {
-			private static final long serialVersionUID = 4949716854440264528L;
+            private static final long serialVersionUID = 4949716854440264528L;
 
-			public void actionPerformed(ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 SparkManager.setClipboard(getSelectedText());
             }
         });
@@ -168,9 +162,9 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
         getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke("Ctrl v"), "paste");
 
         getActionMap().put("paste", new AbstractAction("paste") {
-			private static final long serialVersionUID = -8767763580660683678L;
+            private static final long serialVersionUID = -8767763580660683678L;
 
-			public void actionPerformed(ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 pasteAction();
             }
         });
@@ -185,7 +179,7 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
     public void setText(String message) {
         // By default, use the hand cursor for link selection
         // and scrolling.
-      //  setCursor(HAND_CURSOR);
+        //  setCursor(HAND_CURSOR);
 
         // Make sure the message is not null.
         //  message = message.trim();
@@ -194,48 +188,49 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
         if (ModelUtil.hasLength(message)) {
             try {
                 insert(message);
-            }
-            catch (BadLocationException e) {
+            } catch (BadLocationException e) {
                 Log.error(e);
             }
         }
     }
+
     /**
-     * setText is a core JTextPane method that can beused to inject a different Document type
-     * for instance HTMLDocument (setText("<HTML></HTML>")
-     * We should keep the functionality - it is useful when we want to inject a different Document type
-     * instead of StyleDocument 
+     * setText is a core JTextPane method that can beused to inject a different
+     * Document type for instance HTMLDocument (setText("<HTML></HTML>") We
+     * should keep the functionality - it is useful when we want to inject a
+     * different Document type instead of StyleDocument
+     *
      * @param content
      */
     public void setInitialContent(String content) {
         super.setText(content);
-    } 
-    
-   
+    }
+
     /**
      * Removes the last appearance of word from the TextArea
+     *
      * @param word
      */
-    public void removeLastWord(String word)
-    {
-	select(getText().lastIndexOf(word),getText().length());	
-	replaceSelection("");
+    public void removeLastWord(String word) {
+        select(getText().lastIndexOf(word), getText().length());
+        replaceSelection("");
     }
-    
+
     /**
      * Removes everything in between <b>begin</b> and <b>end</b>
+     *
      * @param begin
      * @param end
      */
-    public void removeWordInBetween(int begin, int end){
-	select(begin, end);
-	replaceSelection("");
+    public void removeWordInBetween(int begin, int end) {
+        select(begin, end);
+        replaceSelection("");
     }
 
     /**
      * Clear the current document. This will remove all text and element
-     * attributes such as bold, italics, and underlining. Note that the font family  and
-     * font size will be persisted.
+     * attributes such as bold, italics, and underlining. Note that the font
+     * family and font size will be persisted.
      */
     public void clear() {
         super.setText("");
@@ -253,10 +248,9 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
         setCharacterAttributes(styles, false);
     }
 
-
     /**
-     * Does the actual insertion of text, adhering to the styles
-     * specified during message creation in either the thin or thick client.
+     * Does the actual insertion of text, adhering to the styles specified
+     * during message creation in either the thin or thick client.
      *
      * @param text - the text to insert.
      * @throws BadLocationException if location is not available to insert into.
@@ -270,14 +264,12 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
         while (tokenizer.hasMoreTokens()) {
             String textFound = tokenizer.nextToken();
             if ((textFound.startsWith("http://") || textFound.startsWith("ftp://")
-                    || textFound.startsWith("https://") || textFound.startsWith("www.")) &&
-                    textFound.indexOf(".") > 1) {
+                    || textFound.startsWith("https://") || textFound.startsWith("www."))
+                    && textFound.indexOf(".") > 1) {
                 insertLink(textFound);
-            }
-            else if ( textFound.startsWith("\\\\")  || (textFound.indexOf("://") > 0 && textFound.indexOf(".") < 1) ) {
+            } else if (textFound.startsWith("\\\\") || (textFound.indexOf("://") > 0 && textFound.indexOf(".") < 1)) {
                 insertAddress(textFound);
-            }     
-            else if (!insertImage(textFound)) {
+            } else if (!insertImage(textFound)) {
                 insertText(textFound);
             }
         }
@@ -292,7 +284,8 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
      * Inserts text into the current document.
      *
      * @param text the text to insert
-     * @throws BadLocationException if the location is not available for insertion.
+     * @throws BadLocationException if the location is not available for
+     * insertion.
      */
     public void insertText(String text) throws BadLocationException {
         final Document doc = getDocument();
@@ -304,9 +297,10 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
     /**
      * Inserts text into the current document.
      *
-     * @param text  the text to insert
+     * @param text the text to insert
      * @param color the color of the text
-     * @throws BadLocationException if the location is not available for insertion.
+     * @throws BadLocationException if the location is not available for
+     * insertion.
      */
     public void insertText(String text, Color color) throws BadLocationException {
         final Document doc = getDocument();
@@ -319,38 +313,41 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
      * Inserts a link into the current document.
      *
      * @param link - the link to insert( ex. http://www.javasoft.com )
-     * @throws BadLocationException if the location is not available for insertion.
+     * @throws BadLocationException if the location is not available for
+     * insertion.
      */
     public void insertLink(String link) throws BadLocationException {
         final Document doc = getDocument();
         styles.addAttribute("link", link);
 
-        StyleConstants.setForeground(styles, (Color)UIManager.get("Link.foreground"));
+        StyleConstants.setForeground(styles, (Color) UIManager.get("Link.foreground"));
         StyleConstants.setUnderline(styles, true);
         doc.insertString(doc.getLength(), link, styles);
         StyleConstants.setUnderline(styles, false);
-        StyleConstants.setForeground(styles, (Color)UIManager.get("TextPane.foreground"));
+        StyleConstants.setForeground(styles, (Color) UIManager.get("TextPane.foreground"));
         styles.removeAttribute("link");
         setCharacterAttributes(styles, false);
         setCaretPosition(doc.getLength());
 
     }
-    
-     /**
-     * Inserts a network address into the current document. 
+
+    /**
+     * Inserts a network address into the current document.
      *
-     * @param address - the address to insert( ex. \superpc\etc\file\ OR http://localhost/ )
-     * @throws BadLocationException if the location is not available for insertion.
+     * @param address - the address to insert( ex. \superpc\etc\file\ OR
+     * http://localhost/ )
+     * @throws BadLocationException if the location is not available for
+     * insertion.
      */
     public void insertAddress(String address) throws BadLocationException {
         final Document doc = getDocument();
         styles.addAttribute("link", address);
 
-        StyleConstants.setForeground(styles, (Color)UIManager.get("Address.foreground"));
+        StyleConstants.setForeground(styles, (Color) UIManager.get("Address.foreground"));
         StyleConstants.setUnderline(styles, true);
         doc.insertString(doc.getLength(), address, styles);
         StyleConstants.setUnderline(styles, false);
-        StyleConstants.setForeground(styles, (Color)UIManager.get("TextPane.foreground"));
+        StyleConstants.setForeground(styles, (Color) UIManager.get("TextPane.foreground"));
         styles.removeAttribute("link");
         setCharacterAttributes(styles, false);
         setCaretPosition(doc.getLength());
@@ -364,8 +361,8 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
      * @return true if the image was found, otherwise false.
      */
     public boolean insertImage(String imageKey) {
-    	
-        if(!forceEmoticons && !SettingsManager.getLocalPreferences().areEmoticonsEnabled() || !emoticonsAvailable){
+
+        if (!forceEmoticons && !SettingsManager.getLocalPreferences().areEmoticonsEnabled() || !emoticonsAvailable) {
             return false;
         }
         final Document doc = getDocument();
@@ -386,18 +383,17 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
      */
     public void insertHorizontalLine() {
         try {
-            insertComponent( new JSeparator() );
+            insertComponent(new JSeparator());
             insertText("\n");
-        }
-        catch (BadLocationException e) {
+        } catch (BadLocationException e) {
             Log.error("Error message.", e);
         }
     }
 
-    /**     
-     * Sets the current element to be either bold or not depending
-     * on the current state. If the element is currently set as bold,
-     * it will be set to false, and vice-versa.
+    /**
+     * Sets the current element to be either bold or not depending on the
+     * current state. If the element is currently set as bold, it will be set to
+     * false, and vice-versa.
      */
     public void setBold() {
         final Element element = getStyledDocument().getCharacterElement(getCaretPosition() - 1);
@@ -407,17 +403,16 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
             StyleConstants.setBold(styles, !isBold);
             try {
                 setCharacterAttributes(styles, true);
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 Log.error("Error settings bold:", ex);
             }
         }
     }
 
     /**
-     * Sets the current element to be either italicized or not depending
-     * on the current state. If the element is currently set as italic,
-     * it will be set to false, and vice-versa.
+     * Sets the current element to be either italicized or not depending on the
+     * current state. If the element is currently set as italic, it will be set
+     * to false, and vice-versa.
      */
     public void setItalics() {
         final Element element = getStyledDocument().getCharacterElement(getCaretPosition() - 1);
@@ -427,17 +422,16 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
             StyleConstants.setItalic(styles, !isItalic);
             try {
                 setCharacterAttributes(styles, true);
-            }
-            catch (Exception fontException) {
+            } catch (Exception fontException) {
                 Log.error("Error settings italics:", fontException);
             }
         }
     }
 
     /**
-     * Sets the current document to be either underlined or not depending
-     * on the current state. If the element is currently set as underlined,
-     * it will be set to false, and vice-versa.
+     * Sets the current document to be either underlined or not depending on the
+     * current state. If the element is currently set as underlined, it will be
+     * set to false, and vice-versa.
      */
     public void setUnderlined() {
         final Element element = getStyledDocument().getCharacterElement(getCaretPosition() - 1);
@@ -447,8 +441,7 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
             StyleConstants.setUnderline(styles, !isUnderlined);
             try {
                 setCharacterAttributes(styles, true);
-            }
-            catch (Exception underlineException) {
+            } catch (Exception underlineException) {
                 Log.error("Error settings underline:", underlineException);
             }
         }
@@ -463,8 +456,7 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
         StyleConstants.setFontFamily(styles, font);
         try {
             setCharacterAttributes(styles, false);
-        }
-        catch (Exception fontException) {
+        } catch (Exception fontException) {
             Log.error("Error settings font:", fontException);
         }
 
@@ -480,8 +472,7 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
         StyleConstants.setFontSize(styles, size);
         try {
             setCharacterAttributes(styles, false);
-        }
-        catch (Exception fontException) {
+        } catch (Exception fontException) {
             Log.error("Error settings font:", fontException);
         }
 
@@ -499,36 +490,34 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
 
                 if (o != null) {
                     try {
-                        final String url = (String)o;
+                        final String url = (String) o;
                         boolean handled = fireLinkInterceptors(e, url);
                         if (!handled) {
-                            if(e.getButton() == MouseEvent.BUTTON1)
-                        	BrowserLauncher.openURL(url);
-			    else if (e.getButton() == MouseEvent.BUTTON3) {
-				JPopupMenu popupmenu = new JPopupMenu();
-				JMenuItem linkcopy = new JMenuItem(
-					Res.getString("action.copy"));
-				linkcopy.addActionListener(new ActionListener() {
+                            if (e.getButton() == MouseEvent.BUTTON1) {
+                                BrowserLauncher.openURL(url);
+                            } else if (e.getButton() == MouseEvent.BUTTON3) {
+                                JPopupMenu popupmenu = new JPopupMenu();
+                                JMenuItem linkcopy = new JMenuItem(
+                                        Res.getString("action.copy"));
+                                linkcopy.addActionListener(new ActionListener() {
 
-				    @Override
-				    public void actionPerformed(ActionEvent e) {
-					SparkManager.setClipboard(url);
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        SparkManager.setClipboard(url);
 
-				    }
-				});
-				linkcopy.setEnabled(true);
-				popupmenu.add(linkcopy);
-				popupmenu.show(this, e.getX(), e.getY());
-			    }
+                                    }
+                                });
+                                linkcopy.setEnabled(true);
+                                popupmenu.add(linkcopy);
+                                popupmenu.show(this, e.getX(), e.getY());
+                            }
                         }
-                    }
-                    catch (Exception ioe) {
+                    } catch (Exception ioe) {
                         Log.error("Error launching browser:", ioe);
                     }
                 }
             }
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             Log.error("Visible Error", ex);
         }
     }
@@ -540,9 +529,9 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
     }
 
     /**
-     * This launches the <code>BrowserLauncher</code> with the URL
-     * located in <code>ChatArea</code>. Note that the url will
-     * automatically be clickable when added to <code>ChatArea</code>
+     * This launches the <code>BrowserLauncher</code> with the URL located in
+     * <code>ChatArea</code>. Note that the url will automatically be clickable
+     * when added to <code>ChatArea</code>
      *
      * @param e - the MouseReleased event
      */
@@ -550,7 +539,6 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
         if (e.isPopupTrigger()) {
             handlePopup(e);
         }
-
 
     }
 
@@ -564,8 +552,7 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
     }
 
     /**
-     * Checks to see if the mouse is located over a browseable
-     * link.
+     * Checks to see if the mouse is located over a browseable link.
      *
      * @param e - the current MouseEvent.
      */
@@ -574,8 +561,7 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
     }
 
     /**
-     * Checks to see if the mouse is located over a browseable
-     * link.
+     * Checks to see if the mouse is located over a browseable link.
      *
      * @param e - the current MouseEvent.
      */
@@ -590,20 +576,19 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
 
                 if (o != null) {
                     setCursor(HAND_CURSOR);
-                }
-                else {
+                } else {
                     setCursor(DEFAULT_CURSOR);
                 }
             }
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             Log.error("Error in CheckLink:", ex);
         }
     }
 
     /**
-     * Examines the chatInput text pane, and returns a string containing the text with any markup
-     * (jive markup in our case). This will strip any terminating new line from the input.
+     * Examines the chatInput text pane, and returns a string containing the
+     * text with any markup (jive markup in our case). This will strip any
+     * terminating new line from the input.
      *
      * @return a string of marked up text.
      */
@@ -663,15 +648,13 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
                     if (token.startsWith("http://") || token.startsWith("ftp://")
                             || token.startsWith("https://")) {
                         buf.append("[url]").append(token).append("[/url]");
-                    }
-                    else if (token.startsWith("www")) {
+                    } else if (token.startsWith("www")) {
                         buf.append("[url ");
                         buf.append("http://").append(token);
                         buf.append("]");
                         buf.append(token);
                         buf.append("[/url]");
-                    }
-                    else {
+                    } else {
                         buf.append(token);
                     }
                 }
@@ -755,18 +738,14 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
         return false;
     }
 
-
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == cutMenu) {
             cutAction();
-        }
-        else if (e.getSource() == copyMenu) {
+        } else if (e.getSource() == copyMenu) {
             SparkManager.setClipboard(getSelectedText());
-        }
-        else if (e.getSource() == pasteMenu) {
+        } else if (e.getSource() == pasteMenu) {
             pasteAction();
-        }
-        else if (e.getSource() == selectAll) {
+        } else if (e.getSource() == selectAll) {
             requestFocus();
             selectAll();
         }

@@ -1,21 +1,19 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.spark.component;
 
@@ -23,7 +21,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
-
 import javax.swing.Icon;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -33,13 +30,13 @@ import javax.swing.UIManager;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.tree.TreeCellRenderer;
 
-
 /**
  * Swing Renderer for <code>CheckNode</code>.
  *
  * @author Derek DeMoro
  */
 public class CheckRenderer extends JPanel implements TreeCellRenderer {
+
     private static final long serialVersionUID = 687507314190933733L;
     private JCheckBox check;
     private TreeLabel label;
@@ -56,24 +53,22 @@ public class CheckRenderer extends JPanel implements TreeCellRenderer {
     }
 
     public Component getTreeCellRendererComponent(JTree tree, Object value,
-                                                  boolean isSelected, boolean expanded,
-                                                  boolean leaf, int row, boolean hasFocus) {
+            boolean isSelected, boolean expanded,
+            boolean leaf, int row, boolean hasFocus) {
         String stringValue = tree.convertValueToText(value, isSelected,
-            expanded, leaf, row, hasFocus);
+                expanded, leaf, row, hasFocus);
         setEnabled(tree.isEnabled());
-        check.setSelected(((CheckNode)value).isSelected());
+        check.setSelected(((CheckNode) value).isSelected());
         label.setFont(tree.getFont());
         label.setText(stringValue);
         label.setSelected(isSelected);
         label.setFocus(hasFocus);
         if (leaf) {
-            Icon icon = ((CheckNode)value).getIcon();
+            Icon icon = ((CheckNode) value).getIcon();
             label.setIcon(icon);
-        }
-        else if (expanded) {
+        } else if (expanded) {
             label.setIcon(UIManager.getIcon("Tree.openIcon"));
-        }
-        else {
+        } else {
             label.setIcon(UIManager.getIcon("Tree.closedIcon"));
         }
         return this;
@@ -83,7 +78,7 @@ public class CheckRenderer extends JPanel implements TreeCellRenderer {
         Dimension d_check = new Dimension(30, 30);
         Dimension d_label = label.getPreferredSize();
         return new Dimension(d_check.width + d_label.width,
-            d_check.height < d_label.height ? d_label.height : d_check.height);
+                d_check.height < d_label.height ? d_label.height : d_check.height);
     }
 
     public void doLayout() {
@@ -93,8 +88,7 @@ public class CheckRenderer extends JPanel implements TreeCellRenderer {
         int y_label = 0;
         if (d_check.height < d_label.height) {
             y_check = (d_label.height - d_check.height) / 2;
-        }
-        else {
+        } else {
             y_label = (d_check.height - d_label.height) / 2;
         }
         check.setLocation(0, y_check);
@@ -103,20 +97,20 @@ public class CheckRenderer extends JPanel implements TreeCellRenderer {
         label.setBounds(d_check.width, y_label, d_label.width, d_label.height);
     }
 
-
     public void setBackground(Color color) {
-        if (color instanceof ColorUIResource)
+        if (color instanceof ColorUIResource) {
             color = null;
+        }
         super.setBackground(color);
     }
-
 
     /**
      * Represents one UI node for the checkbox node.
      */
     public class TreeLabel extends JLabel {
-	private static final long serialVersionUID = -6367572474576692556L;
-	boolean isSelected;
+
+        private static final long serialVersionUID = -6367572474576692556L;
+        boolean isSelected;
         boolean hasFocus;
 
         /**
@@ -126,8 +120,9 @@ public class CheckRenderer extends JPanel implements TreeCellRenderer {
         }
 
         public void setBackground(Color color) {
-            if (color instanceof ColorUIResource)
+            if (color instanceof ColorUIResource) {
                 color = null;
+            }
             super.setBackground(color);
         }
 
@@ -137,8 +132,7 @@ public class CheckRenderer extends JPanel implements TreeCellRenderer {
                 if (0 < str.length()) {
                     if (isSelected) {
                         g.setColor(UIManager.getColor("Tree.selectionBackground"));
-                    }
-                    else {
+                    } else {
                         g.setColor(UIManager.getColor("Tree.textBackground"));
                     }
                     Dimension d = getPreferredSize();
@@ -161,7 +155,7 @@ public class CheckRenderer extends JPanel implements TreeCellRenderer {
             Dimension retDimension = super.getPreferredSize();
             if (retDimension != null) {
                 retDimension = new Dimension(retDimension.width + 3,
-                    retDimension.height);
+                        retDimension.height);
             }
             return retDimension;
         }

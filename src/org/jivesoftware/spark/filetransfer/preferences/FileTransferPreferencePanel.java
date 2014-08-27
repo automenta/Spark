@@ -1,35 +1,21 @@
 /**
- * $RCSfile: ,v $
- * $Revision: $
- * $Date: $
- * 
+ * $RCSfile: ,v $ $Revision: $ $Date: $
+ *
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.jivesoftware.spark.filetransfer.preferences;
-
-import org.jivesoftware.Spark;
-import org.jivesoftware.resource.Res;
-import org.jivesoftware.spark.util.ResourceUtils;
-import org.jivesoftware.spark.util.WindowsFileSystemView;
-
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -37,6 +23,16 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import org.jivesoftware.Spark;
+import org.jivesoftware.resource.Res;
+import org.jivesoftware.spark.util.ResourceUtils;
+import org.jivesoftware.spark.util.WindowsFileSystemView;
 
 /**
  * FileTransferPreferencePanel is the UI for handling File Transfer Preferences.
@@ -45,17 +41,16 @@ import java.io.File;
  */
 public class FileTransferPreferencePanel extends JPanel {
 
-	private static final long serialVersionUID = -2404221882867691253L;
-	private JTextField timeoutField;
+    private static final long serialVersionUID = -2404221882867691253L;
+    private JTextField timeoutField;
     private JTextField downloadDirectoryField;
 
     private JFileChooser fc;
 
-
     public FileTransferPreferencePanel() {
         setLayout(new GridBagLayout());
         setBorder(BorderFactory.createTitledBorder(Res.getString("title.file.transfer.preferences")));
-        
+
         timeoutField = new JTextField();
         downloadDirectoryField = new JTextField();
 
