@@ -24,13 +24,11 @@ import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.TimerTask;
 import javax.swing.AbstractAction;
@@ -55,7 +53,6 @@ import org.jivesoftware.smackx.packet.VCard;
 import org.jivesoftware.spark.PresenceManager;
 import org.jivesoftware.spark.SparkManager;
 import org.jivesoftware.spark.ui.CommandPanel;
-import org.jivesoftware.spark.ui.PresenceListener;
 import org.jivesoftware.spark.util.GraphicUtils;
 import org.jivesoftware.spark.util.ImageCombiner;
 import org.jivesoftware.spark.util.ModelUtil;
@@ -106,9 +103,9 @@ public class StatusBar extends JPanel implements VCardListener {
 
             add(imageLabel, new GridBagConstraints(0, 0, 1, 3, 0.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(2, 8, 2, 2), 0, 0));
 
-            add(nicknameLabel, new GridBagConstraints(1, 0, 1, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(2, 12, 0, 0), 0, 0));
-            add(statusPanel, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(0, 7, 0, 0), 0, 0));
-            add(commandPanel, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0, GridBagConstraints.SOUTHWEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 0), 0, 0));
+            add(nicknameLabel, new GridBagConstraints(1, 0, 1, 1, 0.5f, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(3, 3, 3, 3), 0, 0));
+            add(statusPanel, new GridBagConstraints(1, 0, 1, 1, 0.5f, 0.0, GridBagConstraints.NORTHEAST, GridBagConstraints.NONE, new Insets(3, 3, 3, 3), 0, 0));
+            add(commandPanel, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0, GridBagConstraints.SOUTHWEST, GridBagConstraints.NONE, new Insets(0, 5, 0, 0), 0, 0));
             nicknameLabel.setToolTipText(SparkManager.getConnection().getUser());
             nicknameLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 12));
             setStatus(Res.getString("status.online"));
