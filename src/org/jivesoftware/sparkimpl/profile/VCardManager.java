@@ -271,7 +271,7 @@ public class VCardManager {
         viewProfileMenu.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String jidToView = JOptionPane.showInputDialog(SparkManager.getMainWindow(), Res.getString("message.enter.jabber.id") + ":", Res.getString("title.lookup.profile"), JOptionPane.QUESTION_MESSAGE);
-                if (ModelUtil.hasLength(jidToView) && jidToView.indexOf("@") != -1 && ModelUtil.hasLength(StringUtils.parseServer(jidToView))) {
+                if (ModelUtil.hasLength(jidToView) && jidToView.contains("@") && ModelUtil.hasLength(StringUtils.parseServer(jidToView))) {
                     viewProfile(jidToView, SparkManager.getWorkspace());
                 } else if (ModelUtil.hasLength(jidToView)) {
                     JOptionPane.showMessageDialog(SparkManager.getMainWindow(), Res.getString("message.invalid.jabber.id"), Res.getString("title.error"), JOptionPane.ERROR_MESSAGE);
@@ -370,7 +370,7 @@ public class VCardManager {
                     ImageIO.write(image, "PNG", imageFile);
                 }
             }
-        } catch (Exception e) {
+        } catch (IOException | InterruptedException | XMPPException e) {
             personalVCard.setError(new XMPPError(XMPPError.Condition.conflict));
             Log.error(e);
         }
@@ -705,7 +705,7 @@ public class VCardManager {
 
                     }
                 }
-            } catch (Exception e) {
+            } catch (IOException | InterruptedException e) {
                 Log.error("Unable to update avatar in Contact Item.", e);
             }
         }

@@ -77,7 +77,7 @@ public class Tasks implements PrivateData {
      * @return the private data as XML.
      */
     public String toXML() {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append("<scratchpad xmlns=\"scratchpad:tasks\">");
         buf.append("<tasks showAll=\"").append(ScratchPadPlugin.SHOW_ALL_TASKS).append("\">");
 
@@ -205,7 +205,7 @@ public class Tasks implements PrivateData {
      */
     public static void deleteTask(Task task) {
 
-        List<TaskUI> taskList = (List<TaskUI>) ScratchPadPlugin.getTaskList();
+        List<TaskUI> taskList = ScratchPadPlugin.getTaskList();
 
         // find and delete task in list
         for (int i = 0; i < taskList.size(); i++) {

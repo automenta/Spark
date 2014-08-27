@@ -21,11 +21,13 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.HeadlessException;
 import java.awt.Insets;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Properties;
 import java.util.Vector;
@@ -44,6 +46,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.UnsupportedLookAndFeelException;
 import org.jivesoftware.Spark;
 import org.jivesoftware.resource.Default;
 import org.jivesoftware.resource.Res;
@@ -204,11 +207,11 @@ public class ThemePanel extends JPanel {
             s = s.replace("LookAndFeel", "");
 
             if (s.contains("jtattoo")) {
-                s = "JTattoo" + s.substring(s.lastIndexOf(".") + 1);
+                s = "JTattoo" + s.substring(s.lastIndexOf('.') + 1);
             } else if (s.contains("jgoodies")) {
-                s = "JGoodies" + s.substring(s.lastIndexOf(".") + 1);
+                s = "JGoodies" + s.substring(s.lastIndexOf('.') + 1);
             } else {
-                s = s.substring(s.lastIndexOf(".") + 1);
+                s = s.substring(s.lastIndexOf('.') + 1);
             }
             lafname.add(s);
         }
@@ -257,7 +260,7 @@ public class ThemePanel extends JPanel {
                         try {
                             UIManager.setLookAndFeel(_lookandfeelname.get(_lookandfeel.getSelectedIndex()));
                             setJTattooBar(_lookandfeelname.get(_lookandfeel.getSelectedIndex()));
-                        } catch (Exception e) {
+                        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) {
                             //WTF, i dont care
                         }
                     }
@@ -575,7 +578,7 @@ public class ThemePanel extends JPanel {
 
                 // Set Selected
                 emoticonBox.setSelectedItem(name);
-            } catch (Exception e) {
+            } catch (HeadlessException e) {
                 Log.error(e);
             }
         }
@@ -677,7 +680,7 @@ public class ThemePanel extends JPanel {
                 Method m = c.getMethod("setCurrentTheme", Properties.class);
 
                 m.invoke(c.newInstance(), props);
-            } catch (Exception e) {
+            } catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
                 Log.error("Error Setting JTattoo ", e);
             }
         }

@@ -17,9 +17,11 @@
  */
 package net.java.sipmack.media;
 
+import java.io.IOException;
 import javax.media.ControllerErrorEvent;
 import javax.media.ControllerEvent;
 import javax.media.ControllerListener;
+import javax.media.NoPlayerException;
 import javax.media.Player;
 import javax.media.RealizeCompleteEvent;
 import javax.media.protocol.DataSource;
@@ -79,7 +81,7 @@ public class AudioReceiver implements ReceiveStreamListener, SessionListener,
         } else if (evt instanceof NewReceiveStreamEvent) {
 
             try {
-                stream = ((NewReceiveStreamEvent) evt).getReceiveStream();
+                stream = evt.getReceiveStream();
                 DataSource ds = stream.getDataSource();
 
                 // Find out the formats.
@@ -111,7 +113,7 @@ public class AudioReceiver implements ReceiveStreamListener, SessionListener,
                     dataSync.notifyAll();
                 }
 
-            } catch (Exception e) {
+            } catch (IOException | NoPlayerException e) {
                 System.err.println("NewReceiveStreamEvent exception " + e.getMessage());
                 return;
             }

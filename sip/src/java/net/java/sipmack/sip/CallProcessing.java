@@ -252,7 +252,7 @@ public class CallProcessing {
                     Call.FAILED);
             sipManCallback.fireCommunicationsError(new CommunicationsException(
                     "Authorization failed!", exc));
-        } catch (Exception exc) {
+        } catch (ParseException exc) {
             callDispatcher.findCall(clientTransaction.getDialog()).setState(
                     Call.FAILED);
             sipManCallback.fireCommunicationsError(new CommunicationsException(
@@ -443,7 +443,7 @@ public class CallProcessing {
 
             endCall(call.getID());
 
-        } catch (Exception e) {
+        } catch (CommunicationsException e) {
             Log.error("processBye", e);
         }
     }
@@ -595,7 +595,7 @@ public class CallProcessing {
         String excessiveChars = SIPConfig.getExcessiveURIChar();
 
         if (excessiveChars != null) {
-            StringBuffer calleeBuff = new StringBuffer(callee);
+            StringBuilder calleeBuff = new StringBuilder(callee);
             for (int i = 0; i < excessiveChars.length(); i++) {
                 String charToDeleteStr = excessiveChars.substring(i, i + 1);
 
@@ -617,7 +617,7 @@ public class CallProcessing {
         }
 
         // Let's be uri fault tolerant
-        if (callee.toLowerCase().indexOf("sip:") == -1 // no sip scheme
+        if (!callee.toLowerCase().contains("sip:") // no sip scheme
                 && callee.indexOf('@') != -1 // most probably a sip uri
                 ) {
             callee = "sip:" + callee;
@@ -834,39 +834,43 @@ public class CallProcessing {
                     "Could not find call");
         }
         Dialog dialog = call.getDialog();
-        if (call.getState().equals(Call.CONNECTED)
-                || call.getState().equals(Call.RECONNECTED)) {
-            call.setState(Call.DISCONNECTED);
-            sayBye(dialog);
-        } else if (call.getState().equals(Call.DIALING)
-                || call.getState().equals(Call.RINGING)) {
-            if (dialog.getFirstTransaction() != null) {
-                try {
-                    // Someone knows about us. Let's be polite and say we
-                    // are leaving
-                    sayCancel(dialog);
-                } catch (CommunicationsException ex) {
-                    // something went wrong let's just tell the others
-                    sipManCallback
-                            .fireCommunicationsError(new CommunicationsException(
-                                            "Could not send the CANCEL request! "
-                                            + "Remote party won't know we're leaving!",
-                                            ex));
-                }
-            }
-            call.setState(Call.DISCONNECTED);
-        } else if (call.getState().equals(Call.ALERTING)) {
-            call.setState(Call.DISCONNECTED);
-            sayBusyHere(dialog);
-        } // For FAILED and BUSY we only need to update CALL_STATUS
-        else if (call.getState().equals(Call.BUSY)) {
-            call.setState(Call.DISCONNECTED);
-        } else if (call.getState().equals(Call.FAILED)) {
-            call.setState(Call.DISCONNECTED);
-        } else {
-            call.setState(Call.DISCONNECTED);
-            throw new CommunicationsException(
-                    "Could not determine call state!");
+        switch (call.getState()) {
+            case Call.CONNECTED:
+            case Call.RECONNECTED:
+                call.setState(Call.DISCONNECTED);
+                sayBye(dialog);
+                break;
+            case Call.DIALING:
+            case Call.RINGING:
+                if (dialog.getFirstTransaction() != null) {
+                    try {
+                        // Someone knows about us. Let's be polite and say we
+                        // are leaving
+                        sayCancel(dialog);
+                    } catch (CommunicationsException ex) {
+                        // something went wrong let's just tell the others
+                        sipManCallback
+                                .fireCommunicationsError(new CommunicationsException(
+                                        "Could not send the CANCEL request! "
+                                                + "Remote party won't know we're leaving!",
+                                        ex));
+                    }
+                }   call.setState(Call.DISCONNECTED);
+                break;
+            case Call.ALERTING:
+                call.setState(Call.DISCONNECTED);
+                sayBusyHere(dialog);
+                break;
+            case Call.BUSY:
+                call.setState(Call.DISCONNECTED);
+                break;
+            case Call.FAILED:
+                call.setState(Call.DISCONNECTED);
+                break;
+            default:
+                call.setState(Call.DISCONNECTED);
+                throw new CommunicationsException(
+                        "Could not determine call state!");
         }
     } // end call
 

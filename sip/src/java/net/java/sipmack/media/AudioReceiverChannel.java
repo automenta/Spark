@@ -19,6 +19,7 @@ package net.java.sipmack.media;
 
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
+import java.net.SocketException;
 import javax.media.rtp.RTPManager;
 import org.jitsi.service.libjitsi.LibJitsi;
 import org.jitsi.service.neomedia.DefaultStreamConnector;
@@ -102,7 +103,7 @@ public class AudioReceiverChannel {
                             new InetSocketAddress(this.remoteIpAddress, this.remotePort + 1)));
             mediaStream.setName(MediaType.AUDIO.toString());
             mediaStream.start();
-        } catch (Exception e) {
+        } catch (SocketException e) {
             e.printStackTrace();
         }
         return null;

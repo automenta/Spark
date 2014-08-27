@@ -32,6 +32,7 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
+import java.awt.dnd.InvalidDnDOperationException;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
@@ -95,7 +96,7 @@ public class FileDragLabel extends JLabel implements DropTargetListener, DragSou
             } else {
                 dropTargetDropEvent.rejectDrop();
             }
-        } catch (Exception ex) {
+        } catch (InvalidDnDOperationException ex) {
             Log.error(ex);
             dropTargetDropEvent.rejectDrop();
         }

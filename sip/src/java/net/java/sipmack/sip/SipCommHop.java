@@ -117,7 +117,7 @@ public class SipCommHop extends Object implements javax.sip.address.Hop {
                 }
             }
         } // IPv6 address and no port
-        else if (hostPort.indexOf(':') != hostPort.lastIndexOf(":")) {
+        else if (hostPort.indexOf(':') != hostPort.lastIndexOf(':')) {
             host = '[' + hostPort + ']';
         } else { // no square brackets and a single or zero colons => IPv4
             // hostPort
@@ -133,10 +133,10 @@ public class SipCommHop extends Object implements javax.sip.address.Hop {
                 }
             }
         }
-        if (host == null || host.equals("")) {
+        if (host == null || host.isEmpty()) {
             throw new IllegalArgumentException("no host!");
         }
-        if (portString == null || portString.equals("")) {
+        if (portString == null || portString.isEmpty()) {
             port = 5060;
         } else {
             try {

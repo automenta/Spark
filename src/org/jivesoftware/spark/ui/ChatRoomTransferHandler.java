@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.util.Collection;
 import javax.swing.JComponent;
 import javax.swing.TransferHandler;
+import javax.swing.text.BadLocationException;
 import org.jivesoftware.spark.util.log.Log;
 
 /**
@@ -92,7 +93,7 @@ public class ChatRoomTransferHandler extends TransferHandler {
                     chatRoom.getChatInputEditor().insert((String) o);
                     return true;
                 }
-            } catch (Exception e) {
+            } catch (UnsupportedFlavorException | IOException | BadLocationException e) {
                 Log.error(e);
             }
 

@@ -22,6 +22,7 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashSet;
@@ -34,6 +35,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import org.jivesoftware.resource.Default;
 import org.jivesoftware.spark.PluginManager;
 import org.jivesoftware.spark.ui.themes.ColorSettingManager;
@@ -87,7 +89,7 @@ public final class Spark {
     }
 
     public void startup() {
-        if (System.getenv("APPDATA") != null && !System.getenv("APPDATA").equals("")) {
+        if (System.getenv("APPDATA") != null && !System.getenv("APPDATA").isEmpty()) {
             USER_SPARK_HOME = System.getenv("APPDATA") + "/" + getUserConf();
         } else {
             USER_SPARK_HOME = System.getProperties().getProperty("user.home") + "/" + getUserConf();
@@ -102,7 +104,7 @@ public final class Spark {
         /**
          * Update Library Path *
          */
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append(current);
         buf.append(";");
 
@@ -195,7 +197,7 @@ public final class Spark {
                     dialog.invoke(new JFrame());
                 }
             });
-        } catch (Exception ex) {
+        } catch (InterruptedException | InvocationTargetException ex) {
             ex.printStackTrace();
         }
     }
@@ -235,7 +237,7 @@ public final class Spark {
                                 JDialog.setDefaultLookAndFeelDecorated(true);
                             }
                             UIManager.setLookAndFeel(laf);
-                        } catch (Exception e) {
+                        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) {
                             // dont care
                             e.printStackTrace();
                         }
@@ -249,7 +251,7 @@ public final class Spark {
                     }
                     UIManager.setLookAndFeel(laf);
 
-                } catch (Exception e) {
+                } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) {
                     e.printStackTrace();
                 }
             }
@@ -266,7 +268,7 @@ public final class Spark {
                 Class<?> c = ClassLoader.getSystemClassLoader().loadClass(laf);
                 Method m = c.getMethod("setCurrentTheme", Properties.class);
                 m.invoke(c.newInstance(), props);
-            } catch (Exception e) {
+            } catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
                 Log.error("Error Setting JTattoo ", e);
             }
         }
@@ -304,7 +306,7 @@ public final class Spark {
      */
     public static boolean isMac() {
         String lcOSName = System.getProperty("os.name").toLowerCase();
-        return lcOSName.indexOf("mac") != -1;
+        return lcOSName.contains("mac");
     }
 
     /**
@@ -333,7 +335,7 @@ public final class Spark {
         }
 
         String value = ARGUMENTS.substring(index + arg.length());
-        int index2 = value.indexOf("&");
+        int index2 = value.indexOf('&');
         if (index2 != -1) {
             // Must be the last argument
             value = value.substring(0, index2);

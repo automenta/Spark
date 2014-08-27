@@ -276,7 +276,7 @@ public final class ModelUtil {
         diff = diff % MS_IN_AN_HOUR;
         long numMinutes = diff / MS_IN_A_MINUTE;
 
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
 
         if (numDays > 0) {
             buf.append(numDays).append(" d, ");

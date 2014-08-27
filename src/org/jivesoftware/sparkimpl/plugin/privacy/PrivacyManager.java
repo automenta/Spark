@@ -388,7 +388,7 @@ public class PrivacyManager {
                 Log.debug("List \"" + previousActiveList.getListName() + "\" has been activated instead. ");
             }
 
-        } catch (Exception e) {
+        } catch (XMPPException e) {
             // e.printStackTrace();
             Log.error("PrivacyManager#goToVisible: " + e.getMessage());
         }
@@ -408,7 +408,7 @@ public class PrivacyManager {
             privacyManager.setActiveListName(INVISIBLE_LIST_NAME);
             SparkManager.getConnection().sendPacket(PresenceManager.getAvailablePresence());
             Log.debug("List \"" + INVISIBLE_LIST_NAME + "\" has been activated ");
-        } catch (Exception e) {
+        } catch (XMPPException e) {
             // e.printStackTrace();
             Log.error("PrivacyManager#activateGloballyInvisibleList: " + e.getMessage());
         }
@@ -426,7 +426,7 @@ public class PrivacyManager {
         try {
             PrivacyList pl = privacyManager.getActiveList();
             return pl != null && INVISIBLE_LIST_NAME.equalsIgnoreCase(pl.toString());
-        } catch (Exception e) {
+        } catch (XMPPException e) {
             // it can return item-not-found if there is no active list.
             // so it is fine to fall here.
             //e.printStackTrace();

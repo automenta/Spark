@@ -80,7 +80,7 @@ public class PhonebookManager implements BookManager {
     public List<PhoneNumber> getPhoneNumbers() {
         // if there are no entries, read the phonebook
         if (phonenumbers == null
-                || phonenumbers.size() == 0) {
+                || phonenumbers.isEmpty()) {
             loadPhonebook();
         }
 

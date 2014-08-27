@@ -21,6 +21,7 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.io.IOException;
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.event.HyperlinkListener;
@@ -70,7 +71,7 @@ public class HTMLViewer extends JPanel {
                 url = "http://" + url;
             }
             browser.setPage(url);
-        } catch (Exception ex) {
+        } catch (IOException ex) {
             Log.error(ex);
         }
     }

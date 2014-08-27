@@ -19,6 +19,7 @@ package org.jivesoftware.spark.plugin;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -118,65 +119,68 @@ public class PluginClassLoader extends URLClassLoader {
             int eventType = parser.getEventType();
             do {
                 if (eventType == XmlPullParser.START_TAG) {
-                    if (parser.getName().equals("iqProvider")) {
-                        parser.next();
-                        parser.next();
-                        String elementName = parser.nextText();
-                        parser.next();
-                        parser.next();
-                        String namespace = parser.nextText();
-                        parser.next();
-                        parser.next();
-                        String className = parser.nextText();
-                        // Only add the provider for the namespace if one isn't
-                        // already registered.
-
-                        // Attempt to load the provider class and then create
-                        // a new instance if it's an IQProvider. Otherwise, if it's
-                        // an IQ class, add the class object itself, then we'll use
-                        // reflection later to create instances of the class.
-                        try {
-                            // Add the provider to the map.
-                            Class<?> provider = this.loadClass(className);
-                            if (IQProvider.class.isAssignableFrom(provider)) {
-                                ProviderManager.getInstance().addIQProvider(elementName, namespace, provider.newInstance());
-                            } else if (IQ.class.isAssignableFrom(provider)) {
-                                ProviderManager.getInstance().addIQProvider(elementName, namespace, provider.newInstance());
+                    switch (parser.getName()) {
+                        case "iqProvider":
+                            {
+                                parser.next();
+                                parser.next();
+                                String elementName = parser.nextText();
+                                parser.next();
+                                parser.next();
+                                String namespace = parser.nextText();
+                                parser.next();
+                                parser.next();
+                                String className = parser.nextText();
+                                // Only add the provider for the namespace if one isn't
+                                // already registered.
+                                // Attempt to load the provider class and then create
+                                // a new instance if it's an IQProvider. Otherwise, if it's
+                                // an IQ class, add the class object itself, then we'll use
+                                // reflection later to create instances of the class.
+                                try {
+                                    // Add the provider to the map.
+                                    Class<?> provider = this.loadClass(className);
+                                    if (IQProvider.class.isAssignableFrom(provider)) {
+                                        ProviderManager.getInstance().addIQProvider(elementName, namespace, provider.newInstance());
+                                    } else if (IQ.class.isAssignableFrom(provider)) {
+                                        ProviderManager.getInstance().addIQProvider(elementName, namespace, provider.newInstance());
+                                    }
+                                } catch (ClassNotFoundException cnfe) {
+                                    cnfe.printStackTrace();
+                                }       break;
                             }
-                        } catch (ClassNotFoundException cnfe) {
-                            cnfe.printStackTrace();
-                        }
-
-                    } else if (parser.getName().equals("extensionProvider")) {
-                        parser.next();
-                        parser.next();
-                        String elementName = parser.nextText();
-                        parser.next();
-                        parser.next();
-                        String namespace = parser.nextText();
-                        parser.next();
-                        parser.next();
-                        String className = parser.nextText();
-                        // Only add the provider for the namespace if one isn't
-                        // already registered.
-                        // Attempt to load the provider class and then create
-                        // a new instance if it's a Provider. Otherwise, if it's
-                        // a PacketExtension, add the class object itself and
-                        // then we'll use reflection later to create instances
-                        // of the class.
-                        try {
-                            // Add the provider to the map.
-                            Class<?> provider = this.loadClass(className);
-                            if (PacketExtensionProvider.class.isAssignableFrom(
-                                    provider)) {
-                                ProviderManager.getInstance().addExtensionProvider(elementName, namespace, provider.newInstance());
-                            } else if (PacketExtension.class.isAssignableFrom(
-                                    provider)) {
-                                ProviderManager.getInstance().addExtensionProvider(elementName, namespace, provider.newInstance());
+                        case "extensionProvider":
+                            {
+                                parser.next();
+                                parser.next();
+                                String elementName = parser.nextText();
+                                parser.next();
+                                parser.next();
+                                String namespace = parser.nextText();
+                                parser.next();
+                                parser.next();
+                                String className = parser.nextText();
+                                // Only add the provider for the namespace if one isn't
+                                // already registered.
+                                // Attempt to load the provider class and then create
+                                // a new instance if it's a Provider. Otherwise, if it's
+                                // a PacketExtension, add the class object itself and
+                                // then we'll use reflection later to create instances
+                                // of the class.
+                                try {
+                                    // Add the provider to the map.
+                                    Class<?> provider = this.loadClass(className);
+                                    if (PacketExtensionProvider.class.isAssignableFrom(
+                                            provider)) {
+                                        ProviderManager.getInstance().addExtensionProvider(elementName, namespace, provider.newInstance());
+                                    } else if (PacketExtension.class.isAssignableFrom(
+                                            provider)) {
+                                        ProviderManager.getInstance().addExtensionProvider(elementName, namespace, provider.newInstance());
+                                    }
+                                } catch (ClassNotFoundException cnfe) {
+                                    cnfe.printStackTrace();
+                                }       break;
                             }
-                        } catch (ClassNotFoundException cnfe) {
-                            cnfe.printStackTrace();
-                        }
                     }
                 }
                 eventType = parser.next();
@@ -184,7 +188,7 @@ public class PluginClassLoader extends URLClassLoader {
         } finally {
             try {
                 providerStream.close();
-            } catch (Exception e) {
+            } catch (IOException e) {
                 // Nothing to do
             }
         }

@@ -124,7 +124,7 @@ public class RoundLabel extends JPanel {
         if (text != null) {
             g2.setColor(foregroundColor);
 
-            Font vFont = g2.getFont().deriveFont((float) (((float) vButtonHeight) * .6));
+            Font vFont = g2.getFont().deriveFont((float) (vButtonHeight * .6));
             g2.setFont(vFont);
 
             FontMetrics vMetrics = g2.getFontMetrics();

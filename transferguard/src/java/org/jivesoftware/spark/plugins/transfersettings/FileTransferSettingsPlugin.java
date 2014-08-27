@@ -83,10 +83,7 @@ public class FileTransferSettingsPlugin implements Plugin {
         if (settings.getBlockedJIDs().contains(trimJID(request.getRequestor()))) {
             return true;
         }
-        if (settings.getBlockedExtensions().contains(getFileExtensionFromName(request.getFileName()))) {
-            return true;
-        }
-        return false;
+        return settings.getBlockedExtensions().contains(getFileExtensionFromName(request.getFileName()));
 
     }
 
@@ -98,9 +95,9 @@ public class FileTransferSettingsPlugin implements Plugin {
      * @return the extension.
      */
     private String getFileExtensionFromName(String filename) {
-        int dotIdx = filename.lastIndexOf(".");
+        int dotIdx = filename.lastIndexOf('.');
         if (dotIdx > 0 && dotIdx < (filename.length() - 1)) {
-            StringBuffer buffer = new StringBuffer("*");
+            StringBuilder buffer = new StringBuilder("*");
             buffer.append(filename.substring(dotIdx));
             return buffer.toString();
         }

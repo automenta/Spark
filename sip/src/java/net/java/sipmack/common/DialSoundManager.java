@@ -53,7 +53,7 @@ public class DialSoundManager {
             public void run() {
                 while (running) {
                     try {
-                        if (playQueue.size() == 0) {
+                        if (playQueue.isEmpty()) {
                             synchronized (playQueue) {
                                 playQueue.wait();
                             }
@@ -124,15 +124,18 @@ public class DialSoundManager {
 
     protected void play(String s) {
         int n = -1;
-        if (s.equals("*")) {
-            n = 10;
-        } else if (s.equals("#")) {
-            n = 11;
-        } else {
-            try {
-                n = Integer.parseInt(s);
-            } catch (Exception e) {
-            }
+        switch (s) {
+            case "*":
+                n = 10;
+                break;
+            case "#":
+                n = 11;
+                break;
+            default:
+                try {
+                    n = Integer.parseInt(s);
+                } catch (NumberFormatException e) {
+                }   break;
         }
         if (n >= 0 && n <= 11) {
             play(n);

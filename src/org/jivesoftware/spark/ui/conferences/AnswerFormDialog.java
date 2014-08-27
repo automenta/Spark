@@ -35,6 +35,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.text.JTextComponent;
 import org.jivesoftware.resource.Res;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smackx.Form;
@@ -87,11 +88,14 @@ public class AnswerFormDialog {
             String type = formfield.getType();
 
             JComponent comp = null;
-            if (type.equals(FormField.TYPE_TEXT_SINGLE)) {
-                comp = new JTextField();
-            } else if (type.equals(FormField.TYPE_TEXT_MULTI)) {
-                comp = new JTextArea();
-                comp.setBorder(new JTextField().getBorder());
+            switch (type) {
+                case FormField.TYPE_TEXT_SINGLE:
+                    comp = new JTextField();
+                    break;
+                case FormField.TYPE_TEXT_MULTI:
+                    comp = new JTextArea();
+                    comp.setBorder(new JTextField().getBorder());
+                    break;
             }
 
             if (comp != null) {
@@ -166,9 +170,9 @@ public class AnswerFormDialog {
         Component comp = _map.get(label);
 
         if (comp instanceof JTextField) {
-            return ((JTextField) comp).getText();
+            return ((JTextComponent) comp).getText();
         } else if (comp instanceof JTextArea) {
-            return ((JTextArea) comp).getText();
+            return ((JTextComponent) comp).getText();
         } else {
             return null;
         }

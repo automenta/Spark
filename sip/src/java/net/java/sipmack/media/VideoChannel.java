@@ -23,6 +23,7 @@ import java.awt.Component;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
@@ -188,7 +189,7 @@ public class VideoChannel {
 
             });
             mediaStream.start();
-        } catch (Exception e) {
+        } catch (SocketException e) {
             e.printStackTrace();
         }
         return null;

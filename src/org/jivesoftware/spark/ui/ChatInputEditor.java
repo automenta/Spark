@@ -94,8 +94,8 @@ public class ChatInputEditor extends ChatArea implements DocumentListener {
                     String preCaret = getText()
                             .substring(0, getCaretPosition());
 
-                    int lastSpace = preCaret.lastIndexOf(" ") != -1 ? preCaret
-                            .lastIndexOf(" ") : 0;
+                    int lastSpace = preCaret.lastIndexOf(' ') != -1 ? preCaret
+                            .lastIndexOf(' ') : 0;
 
                     if (lastSpace != -1 && lastSpace != 0) {
                         // Do we have anymore spaces before the current one?
@@ -115,7 +115,7 @@ public class ChatInputEditor extends ChatArea implements DocumentListener {
 
                     // We are at the end and will remove until the next SPACE
                 } else if (getText().contains(" ")) {
-                    int untilhere = getText().lastIndexOf(" ");
+                    int untilhere = getText().lastIndexOf(' ');
 
                     // Do we have anymore spaces before the last one?
                     for (int i = untilhere; getText().charAt(i) == ' '; --i) {

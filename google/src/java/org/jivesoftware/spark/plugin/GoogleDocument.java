@@ -27,7 +27,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -83,7 +85,7 @@ public class GoogleDocument extends JPanel {
                         // Assume it's .html
                         Desktop.getDesktop().browse(new URI(result.getURL()));
                     }
-                } catch (Exception e1) {
+                } catch (IOException | URISyntaxException e1) {
                     // Nothing to do
                 }
             }

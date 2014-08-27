@@ -570,7 +570,7 @@ public class EmoticonManager {
                 }
             }
             zipFile.close();
-        } catch (Exception e) {
+        } catch (IOException e) {
             Log.error("Error unzipping emoticon pack", e);
         }
 

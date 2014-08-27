@@ -23,6 +23,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -52,7 +53,7 @@ public class URLFileSystem {
     public static String getContents(InputStream is) {
         byte[] buffer = new byte[2048];
         int length;
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         try {
             while ((length = is.read(buffer)) != -1) {
                 sb.append(new String(buffer, 0, length));
@@ -190,7 +191,7 @@ public class URLFileSystem {
         try {
             final URLConnection urlConnection = url.openConnection();
             return urlConnection.getDoInput();
-        } catch (Exception e) {
+        } catch (IOException e) {
             return false;
         }
     }
@@ -209,7 +210,7 @@ public class URLFileSystem {
         try {
             final URLConnection urlConnection = url.openConnection();
             return urlConnection.getDoOutput();
-        } catch (Exception e) {
+        } catch (IOException e) {
             return false;
         }
     }
@@ -323,7 +324,7 @@ public class URLFileSystem {
         try {
             final URLConnection urlConnection = url.openConnection();
             return urlConnection.getContentLength();
-        } catch (Exception e) {
+        } catch (IOException e) {
             return -1;
         }
     }
@@ -425,8 +426,8 @@ public class URLFileSystem {
      */
     public String getPathNoExt(URL url) {
         final String path = getPath(url);
-        final int lastSlash = path.lastIndexOf("/");
-        final int lastDot = path.lastIndexOf(".");
+        final int lastSlash = path.lastIndexOf('/');
+        final int lastDot = path.lastIndexOf('.');
         if (lastDot <= lastSlash) {
             //  When the lastDot < lastSlash, it means that one of the
             //  directories has an extension, but the filename itself has
@@ -544,7 +545,7 @@ public class URLFileSystem {
             //  the URL.set(...) method is used.  --jdijamco
             urlSet.invoke(seed, args);
             return seed;
-        } catch (Exception e) {
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | MalformedURLException e) {
             Log.error(e);
             return null;
         }
@@ -602,7 +603,7 @@ public class URLFileSystem {
         if (parentFile != null && !file.equals(parentFile)) {
             try {
                 return parentFile.toURI().toURL();
-            } catch (Exception ex) {
+            } catch (MalformedURLException ex) {
                 return null;
             }
         }

@@ -29,6 +29,7 @@ import javax.sip.address.URI;
 import javax.sip.message.Request;
 import javax.sip.message.Response;
 import net.java.sipmack.common.Log;
+import net.java.sipmack.sip.CommunicationsException;
 import net.java.sipmack.sip.SIPConfig;
 import net.java.sipmack.sip.SipManager;
 
@@ -164,7 +165,7 @@ public class SipSecurityManager {
                 // make sure that if such credentials exist they get removed.
                 // The
                 // challenge means that there's something wrong with them.
-                ccEntry = (CredentialsCacheEntry) cachedCredentials
+                ccEntry = cachedCredentials
                         .remove(realm);
 
                 // Try to guess user name and facilitate user
@@ -248,7 +249,7 @@ public class SipSecurityManager {
             }
 
             return retryTran;
-        } catch (Exception e) {
+        } catch (NullPointerException | SecurityException | CommunicationsException e) {
             Log.debug("ERRO REG: " + e.toString());
             return null;
         }

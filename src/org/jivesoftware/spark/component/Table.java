@@ -27,11 +27,13 @@ import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
@@ -88,7 +90,7 @@ public abstract class Table extends JXTable {
         String tooltipValue = null;
 
         if (value instanceof JLabel) {
-            tooltipValue = ((JLabel) value).getToolTipText();
+            tooltipValue = ((JComponent) value).getToolTipText();
         }
 
         if (value instanceof JLabel && tooltipValue == null) {
@@ -360,10 +362,10 @@ public abstract class Table extends JXTable {
         }
 
         public Component getTableCellRendererComponent(JTable table, Object color, boolean isSelected, boolean hasFocus, int row, int column) {
-            final String text = ((JButton) color).getText();
+            final String text = ((AbstractButton) color).getText();
             setText(text);
 
-            final Icon icon = ((JButton) color).getIcon();
+            final Icon icon = ((AbstractButton) color).getIcon();
             setIcon(icon);
 
             if (isSelected) {

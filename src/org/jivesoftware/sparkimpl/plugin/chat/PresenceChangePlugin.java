@@ -20,6 +20,7 @@ package org.jivesoftware.sparkimpl.plugin.chat;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -187,7 +188,7 @@ public class PresenceChangePlugin implements Plugin {
                             }
                         }
                     });
-                } catch (Exception ex) {
+                } catch (InterruptedException | InvocationTargetException ex) {
                     ex.printStackTrace();
                 }
             }

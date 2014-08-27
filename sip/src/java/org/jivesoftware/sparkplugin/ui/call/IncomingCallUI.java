@@ -135,7 +135,7 @@ public class IncomingCallUI extends JPanel {
         }
 
         final StringBuilder builder = new StringBuilder();
-        builder.append(PhoneRes.getIString("phone.lastcalled") + ": ");
+        builder.append(PhoneRes.getIString("phone.lastcalled")).append(": ");
         if (lastDate == null) {
             builder.append(PhoneRes.getIString("phone.never"));
             durationLabel.setVisible(false);

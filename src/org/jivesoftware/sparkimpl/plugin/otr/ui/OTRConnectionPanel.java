@@ -13,10 +13,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.text.StyledDocument;
 import org.jivesoftware.resource.SparkRes;
-import org.jivesoftware.sparkimpl.plugin.otr.OTRManager;
-import org.jivesoftware.sparkimpl.plugin.otr.util.OTRResources;
 import org.jivesoftware.spark.ui.TranscriptWindow;
 import org.jivesoftware.spark.ui.rooms.ChatRoomImpl;
+import org.jivesoftware.sparkimpl.plugin.otr.OTRManager;
+import org.jivesoftware.sparkimpl.plugin.otr.util.OTRResources;
 
 /**
  * Shows StyledDocuments in transcript window for info if the session

@@ -41,6 +41,7 @@ import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
@@ -776,7 +777,7 @@ public final class GraphicUtils {
 
             // Get large icon
             return new ImageIcon(sf.getIcon(true), sf.getFolderType());
-        } catch (Exception e) {
+        } catch (FileNotFoundException e) {
             try {
                 return new JFileChooser().getIcon(file);
             } catch (Exception e1) {

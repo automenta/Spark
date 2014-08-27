@@ -27,6 +27,7 @@ import org.jivesoftware.spark.component.tabbedPane.SparkTab;
 import org.jivesoftware.spark.plugin.phone.resource.PhoneRes;
 import org.jivesoftware.spark.ui.ChatFrame;
 import org.jivesoftware.spark.ui.ChatRoom;
+import org.jivesoftware.spark.ui.ContainerComponent;
 import org.jivesoftware.spark.ui.SparkTabHandler;
 
 /**
@@ -93,7 +94,7 @@ public class SoftPhoneTabHandler extends SparkTabHandler {
         // Handle title frame
         if (isSelectedTab && component instanceof PhonePanel) {
             final ChatFrame chatFrame = SparkManager.getChatManager().getChatContainer().getChatFrame();
-            chatFrame.setTitle(((PhonePanel) component).getFrameTitle());
+            chatFrame.setTitle(((ContainerComponent) component).getFrameTitle());
         }
     }
 

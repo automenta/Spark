@@ -53,7 +53,7 @@ class CredentialsCache {
      * none could be found.
      */
     CredentialsCacheEntry get(String realm) {
-        return (CredentialsCacheEntry) this.authenticatedRealms.get(realm);
+        return this.authenticatedRealms.get(realm);
     }
 
     /**
@@ -65,7 +65,7 @@ class CredentialsCache {
      * none could be found.
      */
     CredentialsCacheEntry remove(String realm) {
-        return (CredentialsCacheEntry) this.authenticatedRealms.remove(realm);
+        return this.authenticatedRealms.remove(realm);
     }
 
 }

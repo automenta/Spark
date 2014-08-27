@@ -103,30 +103,43 @@ public class SipAccountPacket extends IQ {
             while (!done) {
                 int eventType = parser.next();
                 if (eventType == XmlPullParser.START_TAG) {
-                    if (parser.getName().equals("username")) {
-                        sip.setSipUsername(parser.nextText());
-                    } else if (parser.getName().equals("authUsername")) {
-                        sip.setAuthUsername(parser.nextText());
-                    } else if (parser.getName().equals("displayPhoneNum")) {
-                        sip.setDisplayName(parser.nextText());
-                    } else if (parser.getName().equals("password")) {
-                        sip.setPassword(parser.nextText());
-                    } else if (parser.getName().equals("server")) {
-                        sip.setServer(parser.nextText());
-                    } else if (parser.getName().equals("voicemail")) {
-                        sip.setVoiceMailNumber(parser.nextText());
-                    } else if (parser.getName().equals("stunServer")) {
-                        sip.setStunServer(parser.nextText());
-                    } else if (parser.getName().equals("useStun")) {
-                        sip.setUseStun(Boolean.parseBoolean(parser.nextText()));
-                    } else if (parser.getName().equals("stunPort")) {
-                        sip.setStunPort(parser.nextText());
-                    } else if (parser.getName().equals("enabled")) {
-                        sip.setEnabled(Boolean.parseBoolean(parser.nextText()));
-                    } else if (parser.getName().equals("outboundproxy")) {
-                        sip.setOutboundproxy(parser.nextText());
-                    } else if (parser.getName().equals("promptCredentials")) {
-                        sip.setPromptCredentials(Boolean.parseBoolean(parser.nextText()));
+                    switch (parser.getName()) {
+                        case "username":
+                            sip.setSipUsername(parser.nextText());
+                            break;
+                        case "authUsername":
+                            sip.setAuthUsername(parser.nextText());
+                            break;
+                        case "displayPhoneNum":
+                            sip.setDisplayName(parser.nextText());
+                            break;
+                        case "password":
+                            sip.setPassword(parser.nextText());
+                            break;
+                        case "server":
+                            sip.setServer(parser.nextText());
+                            break;
+                        case "voicemail":
+                            sip.setVoiceMailNumber(parser.nextText());
+                            break;
+                        case "stunServer":
+                            sip.setStunServer(parser.nextText());
+                            break;
+                        case "useStun":
+                            sip.setUseStun(Boolean.parseBoolean(parser.nextText()));
+                            break;
+                        case "stunPort":
+                            sip.setStunPort(parser.nextText());
+                            break;
+                        case "enabled":
+                            sip.setEnabled(Boolean.parseBoolean(parser.nextText()));
+                            break;
+                        case "outboundproxy":
+                            sip.setOutboundproxy(parser.nextText());
+                            break;
+                        case "promptCredentials":
+                            sip.setPromptCredentials(Boolean.parseBoolean(parser.nextText()));
+                            break;
                     }
 
                 } else if (eventType == XmlPullParser.END_TAG) {

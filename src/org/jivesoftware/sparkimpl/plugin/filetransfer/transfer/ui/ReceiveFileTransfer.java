@@ -30,6 +30,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -194,7 +195,7 @@ public class ReceiveFileTransfer extends JPanel {
                 try {
                     Downloads.checkDownloadDirectory();
                     acceptRequest(request);
-                } catch (Exception ex) {
+                } catch (FileNotFoundException | NullPointerException | SecurityException ex) {
                     // this means there is a problem with the download directory
                     request.reject();
 
@@ -680,8 +681,8 @@ public class ReceiveFileTransfer extends JPanel {
     private static URI getFileURI(String filePath) {
         URI uri = null;
         filePath = filePath.trim();
-        if (filePath.indexOf("http") == 0 || filePath.indexOf("\\") == 0) {
-            if (filePath.indexOf("\\") == 0) {
+        if (filePath.indexOf("http") == 0 || filePath.indexOf('\\') == 0) {
+            if (filePath.indexOf('\\') == 0) {
                 filePath = "file:" + filePath;
             }
             try {
@@ -734,7 +735,7 @@ public class ReceiveFileTransfer extends JPanel {
         Desktop dt = Desktop.getDesktop();
         try {
             dt.browse(getFileURI(filePath));
-        } catch (Exception ex) {
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
     }

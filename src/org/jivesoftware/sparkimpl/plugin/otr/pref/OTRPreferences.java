@@ -2,9 +2,9 @@ package org.jivesoftware.sparkimpl.plugin.otr.pref;
 
 import javax.swing.Icon;
 import javax.swing.JComponent;
+import org.jivesoftware.spark.preference.Preference;
 import org.jivesoftware.sparkimpl.plugin.otr.util.OTRProperties;
 import org.jivesoftware.sparkimpl.plugin.otr.util.OTRResources;
-import org.jivesoftware.spark.preference.Preference;
 
 /**
  * Implementation of Preference interface provided by Spark

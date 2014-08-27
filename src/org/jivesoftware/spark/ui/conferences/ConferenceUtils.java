@@ -338,10 +338,10 @@ public class ConferenceUtils {
         if (!useTextField) {
             try {
                 rooms = retrieveBookmarkedConferences();
-            } catch (Exception ex) {
+            } catch (XMPPException ex) {
                 Log.error(ex);
             }
-            useTextField = !randomName || (rooms == null || rooms.size() == 0);
+            useTextField = !randomName || (rooms == null || rooms.isEmpty());
         }
         InvitationDialog inviteDialog = new InvitationDialog(useTextField);
         inviteDialog.inviteUsersToRoom(serviceName, rooms, roomName, jids);

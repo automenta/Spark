@@ -1,9 +1,9 @@
 package org.jivesoftware.sparkimpl.plugin.otr;
 
 import org.jivesoftware.spark.SparkManager;
-import org.jivesoftware.sparkimpl.plugin.otr.pref.OTRPreferences;
 import org.jivesoftware.spark.plugin.Plugin;
 import org.jivesoftware.spark.preference.Preference;
+import org.jivesoftware.sparkimpl.plugin.otr.pref.OTRPreferences;
 
 /**
  * OTR Plugin

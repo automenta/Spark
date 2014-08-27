@@ -24,6 +24,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import org.jivesoftware.resource.SparkRes;
 import org.jivesoftware.smack.ConnectionListener;
+import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.spark.SparkManager;
 import org.jivesoftware.spark.component.RolloverButton;
 import org.jivesoftware.spark.util.SwingTimerTask;
@@ -101,7 +102,7 @@ public class ReconnectPanelIcon implements ConnectionListener {
             } else {
                 SparkManager.getMainWindow().logout(false);
             }
-        } catch (Exception ex) {
+        } catch (XMPPException ex) {
             ex.printStackTrace();
         }
     }

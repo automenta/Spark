@@ -77,7 +77,7 @@ public class AudioMediaSession {
         this.local = local;
         this.remote = remote;
         this.audioFormat = audioFormat;
-        if (locator != null && !locator.equals("")) {
+        if (locator != null && !locator.isEmpty()) {
             this.locator = locator;
         }
 

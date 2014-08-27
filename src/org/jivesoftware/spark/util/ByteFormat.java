@@ -70,13 +70,13 @@ public class ByteFormat extends Format {
                 buf.append(formatter.format((double) numBytes)).append(" bytes");
             } else if (numBytes < 1024 * 1024) {
                 DecimalFormat formatter = new DecimalFormat("#,##0.0");
-                buf.append(formatter.format((double) numBytes / 1024.0)).append(" K");
+                buf.append(formatter.format(numBytes / 1024.0)).append(" K");
             } else if (numBytes < 1024 * 1024 * 1024) {
                 DecimalFormat formatter = new DecimalFormat("#,##0.0");
-                buf.append(formatter.format((double) numBytes / (1024.0 * 1024.0))).append(" MB");
+                buf.append(formatter.format(numBytes / (1024.0 * 1024.0))).append(" MB");
             } else {
                 DecimalFormat formatter = new DecimalFormat("#,##0.0");
-                buf.append(formatter.format((double) numBytes / (1024.0 * 1024.0 * 1024.0))).append(" GB");
+                buf.append(formatter.format(numBytes / (1024.0 * 1024.0 * 1024.0))).append(" GB");
             }
         }
         return buf;

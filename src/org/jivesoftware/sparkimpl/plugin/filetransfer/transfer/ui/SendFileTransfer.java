@@ -30,6 +30,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import javax.swing.BorderFactory;
@@ -284,7 +285,7 @@ public class SendFileTransfer extends JPanel {
                         progressBar.setValue(Math.round(p));
                     }
                 });
-            } catch (Exception e) {
+            } catch (InterruptedException | InvocationTargetException e) {
                 Log.error(e);
             }
 

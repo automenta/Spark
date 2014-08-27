@@ -18,11 +18,13 @@
 package org.jivesoftware.sparkimpl.plugin.layout;
 
 import java.awt.Dimension;
+import java.awt.HeadlessException;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Properties;
 import org.jivesoftware.Spark;
 import org.jivesoftware.spark.util.GraphicUtils;
@@ -95,7 +97,7 @@ public class LayoutSettingsManager {
 
         try {
             props.store(new FileOutputStream(getSettingsFile()), "Storing Spark Layout Settings");
-        } catch (Exception e) {
+        } catch (IOException e) {
             Log.error("Error saving settings.", e);
         }
     }
@@ -213,7 +215,7 @@ public class LayoutSettingsManager {
             settings.setPreferencesFrameHeight(preferencesFrameHeightInt);
 
             return settings;
-        } catch (Exception e) {
+        } catch (HeadlessException | IOException | NumberFormatException e) {
             Log.error(e);
             return new LayoutSettings();
         }

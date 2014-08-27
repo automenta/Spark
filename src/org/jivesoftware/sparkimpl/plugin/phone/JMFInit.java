@@ -20,10 +20,12 @@ package org.jivesoftware.sparkimpl.plugin.phone;
 import com.sun.media.ExclusiveUse;
 import com.sun.media.util.Registry;
 import java.awt.Frame;
+import java.io.IOException;
 import java.util.Vector;
 import javax.media.Format;
 import javax.media.PlugInManager;
 import javax.media.Renderer;
+import javax.media.ResourceUnavailableException;
 import javax.media.format.AudioFormat;
 import org.jivesoftware.spark.util.log.Log;
 
@@ -41,7 +43,7 @@ public class JMFInit extends Frame implements Runnable {
 
         try {
             Registry.commit();
-        } catch (Exception e) {
+        } catch (IOException e) {
 
             message("Failed to commit to JMFRegistry!");
         }
@@ -78,7 +80,7 @@ public class JMFInit extends Frame implements Runnable {
                 Registry.commit();
 
                 message("Updated registry");
-            } catch (Exception e) {
+            } catch (IOException e) {
                 message("Couldn't update registry!");
             }
         }
@@ -94,7 +96,7 @@ public class JMFInit extends Frame implements Runnable {
             message("Finished detecting DirectSound capturer");
         } catch (ThreadDeath td) {
             throw td;
-        } catch (Throwable t) {
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException t) {
             // Nothing to do
         }
 
@@ -105,7 +107,7 @@ public class JMFInit extends Frame implements Runnable {
             message("Finished detecting javasound capturer");
         } catch (ThreadDeath td) {
             throw td;
-        } catch (Throwable t) {
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException t) {
             message("JavaSound capturer detection failed!");
         }
 
@@ -194,10 +196,10 @@ public class JMFInit extends Frame implements Runnable {
                     // Log.debug("registered");
                 }
                 rend.close();
-            } catch (Throwable t) {
+            } catch (IOException | ResourceUnavailableException t) {
                 // Log.debug("Error " + t);
             }
-        } catch (Throwable tt) {
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException tt) {
             // Nothing to do
         }
     }
@@ -225,7 +227,7 @@ public class JMFInit extends Frame implements Runnable {
                 String rname;
 
                 for (int i = 0; i < listSize; i++) {
-                    rname = (String) (rendList.elementAt(i));
+                    rname = (rendList.elementAt(i));
                     if (rname.equals(dar)) { // DAR is in the registry
                         found = true;
                         rendList.removeElementAt(i);
@@ -239,7 +241,7 @@ public class JMFInit extends Frame implements Runnable {
                     PlugInManager.commit();
                 }
             }
-        } catch (Throwable tt) {
+        } catch (IOException | ClassNotFoundException | IllegalAccessException | InstantiationException tt) {
             // Nothing to do
         }
     }

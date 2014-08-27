@@ -195,11 +195,7 @@ public abstract class TransportCandidate {
             return true;
         } else if (ip.length() == 0) {
             return true;
-        } else if (port < 0) {
-            return true;
-        } else {
-            return false;
-        }
+        } else return port < 0;
     }
 
     /**
@@ -290,10 +286,7 @@ public abstract class TransportCandidate {
         } else if (!getName().equals(other.getName())) {
             return false;
         }
-        if (getPort() != other.getPort()) {
-            return false;
-        }
-        return true;
+        return getPort() == other.getPort();
     }
 
     /**
@@ -360,18 +353,19 @@ public abstract class TransportCandidate {
                 return UDP;
             }
             value = value.toLowerCase();
-            if (value.equals("udp")) {
-                return UDP;
-            } else if (value.equals("tcp")) {
-                return TCP;
-            } else if (value.equals("tcp-act")) {
-                return TCPACT;
-            } else if (value.equals("tcp-pass")) {
-                return TCPPASS;
-            } else if (value.equals("ssltcp")) {
-                return SSLTCP;
-            } else {
-                return UDP;
+            switch (value) {
+                case "udp":
+                    return UDP;
+                case "tcp":
+                    return TCP;
+                case "tcp-act":
+                    return TCPACT;
+                case "tcp-pass":
+                    return TCPPASS;
+                case "ssltcp":
+                    return SSLTCP;
+                default:
+                    return UDP;
             }
         }
 
@@ -409,11 +403,7 @@ public abstract class TransportCandidate {
         public boolean isNull() {
             if (value == null) {
                 return true;
-            } else if (value.length() == 0) {
-                return true;
-            } else {
-                return false;
-            }
+            } else return value.length() == 0;
         }
     }
 
@@ -444,12 +434,13 @@ public abstract class TransportCandidate {
                 return MYRTPVOICE;
             }
             value = value.toLowerCase();
-            if (value.equals("myrtpvoice")) {
-                return MYRTPVOICE;
-            } else if (value.equals("tcp")) {
-                return MYRTCPVOICE;
-            } else {
-                return MYRTPVOICE;
+            switch (value) {
+                case "myrtpvoice":
+                    return MYRTPVOICE;
+                case "tcp":
+                    return MYRTCPVOICE;
+                default:
+                    return MYRTPVOICE;
             }
         }
 
@@ -487,11 +478,7 @@ public abstract class TransportCandidate {
         public boolean isNull() {
             if (value == null) {
                 return true;
-            } else if (value.length() == 0) {
-                return true;
-            } else {
-                return false;
-            }
+            } else return value.length() == 0;
         }
     }
 

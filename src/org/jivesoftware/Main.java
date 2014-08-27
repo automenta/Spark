@@ -23,8 +23,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Pack200;
 
@@ -90,7 +93,7 @@ public class Main {
 
             Method startupMethod = sparkClass.getMethod("startup");
             startupMethod.invoke(instanceOfSpark);
-        } catch (Exception e) {
+        } catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException | MalformedURLException e) {
             e.printStackTrace();
         }
     }
@@ -161,7 +164,7 @@ public class Main {
                 out.close();
                 packedFile.delete();
                 unpacked = true;
-            } catch (Exception e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }

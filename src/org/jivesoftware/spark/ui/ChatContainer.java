@@ -30,6 +30,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -817,7 +818,7 @@ public class ChatContainer extends SparkTabbedPane implements MessageListener, C
     }
 
     public String toString() {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         for (ChatRoom room : chatRoomList) {
             buf.append("Roomname=").append(room.getRoomname()).append("\n");
         }
@@ -1192,7 +1193,7 @@ public class ChatContainer extends SparkTabbedPane implements MessageListener, C
                     Method m = c
                             .getMethod("setAutoRequestFocus", boolean.class);
                     m.invoke(chatFrame, false);
-                } catch (Exception e) {
+                } catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
                     Log.error(e);
                 }
             }

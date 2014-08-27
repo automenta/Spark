@@ -19,6 +19,7 @@ package org.jivesoftware.spark.util;
 
 import java.awt.Desktop;
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 
 public class BrowserLauncher {
@@ -35,7 +36,7 @@ public class BrowserLauncher {
             if (f.exists() && Desktop.isDesktopSupported()) {
                 try {
                     Desktop.getDesktop().open(f);
-                } catch (Exception ex) {
+                } catch (IOException ex) {
                     if (!url.toLowerCase().startsWith("//")) {
                         url = "//" + url;
                     }

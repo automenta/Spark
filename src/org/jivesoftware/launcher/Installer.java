@@ -24,6 +24,7 @@ import com.install4j.api.context.UserCanceledException;
 import com.install4j.api.windows.RegistryRoot;
 import com.install4j.api.windows.WinRegistry;
 import java.io.File;
+import java.io.IOException;
 
 /**
  * The installer class is used by the Install4j Installer to setup registry
@@ -52,7 +53,7 @@ public class Installer implements InstallAction {
             sparkDirectory = new File(installerContext.getInstallationDirectory(), "Spark.exe");
             sparkPath = sparkDirectory.getCanonicalPath();
 
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 

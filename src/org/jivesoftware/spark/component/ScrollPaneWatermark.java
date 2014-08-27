@@ -21,6 +21,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.TexturePaint;
+import java.io.IOException;
 import javax.swing.JComponent;
 import javax.swing.JViewport;
 import org.jivesoftware.spark.util.GraphicUtils;
@@ -39,7 +40,7 @@ public class ScrollPaneWatermark extends JViewport {
         Rectangle rect = new Rectangle(0, 0, backgroundImage.getWidth(null), backgroundImage.getHeight(null));
         try {
             new TexturePaint(GraphicUtils.convert(backgroundImage), rect);
-        } catch (Exception e) {
+        } catch (IOException | InterruptedException e) {
             Log.error(e);
         }
     }

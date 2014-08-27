@@ -41,6 +41,7 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
+import java.awt.dnd.InvalidDnDOperationException;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -537,7 +538,7 @@ public class SparkTabbedPane extends JPanel {
                 dragTabIndex = pane.indexAtLocation(event.getDragOrigin().x, event.getDragOrigin().y);
                 try {
                     event.startDrag(DragSource.DefaultMoveDrop, t, dsl);
-                } catch (Exception idoe) {
+                } catch (InvalidDnDOperationException idoe) {
                     Log.error(idoe);
                 }
             }

@@ -19,6 +19,7 @@ package org.jivesoftware.sparkimpl.preference.notifications;
 
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TimerTask;
@@ -157,7 +158,7 @@ public class NotificationPlugin implements Plugin, PacketListener {
                     toaster.hideTitle();
                 }
             });
-        } catch (Exception ex) {
+        } catch (InterruptedException | InvocationTargetException ex) {
             Log.error(ex);
         }
     }
@@ -192,7 +193,7 @@ public class NotificationPlugin implements Plugin, PacketListener {
                     toaster.hideTitle();
                 }
             });
-        } catch (Exception ex) {
+        } catch (InterruptedException | InvocationTargetException ex) {
             Log.error(ex);
         }
     }

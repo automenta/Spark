@@ -1,6 +1,7 @@
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Properties;
@@ -61,7 +62,7 @@ public class CompareLocales {
         try {
 
             props.load(new FileInputStream(file));
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.err.println("error with file");
         }
 

@@ -44,8 +44,8 @@ public class PluginDependency {
 
                     // convert to integer
                     try {
-                        int originalVersNumber = Integer.valueOf(originalVersion[i]).intValue();
-                        int checkVersNumber = Integer.valueOf(checkVersion[i]).intValue();
+                        int originalVersNumber = Integer.valueOf(originalVersion[i]);
+                        int checkVersNumber = Integer.valueOf(checkVersion[i]);
 
                         // check the numbers
                         if (checkVersNumber > originalVersNumber) {
@@ -53,7 +53,7 @@ public class PluginDependency {
                         } else if (checkVersNumber < originalVersNumber) {
                             return false;
                         }
-                    } catch (Exception e) {
+                    } catch (NumberFormatException e) {
                         Log.error("Version " + checkVersion + " contains letters.", e);
                         return false;
                     }

@@ -133,11 +133,11 @@ public class TransferUtils {
             String s = string.replace(".", "T").split("T")[1];
 
             if (s.length() >= significantdigits) {
-                return string.substring(0, string.indexOf(".") + 1
+                return string.substring(0, string.indexOf('.') + 1
                         + significantdigits);
             } else {
                 return string
-                        .substring(0, string.indexOf(".") + 1 + s.length());
+                        .substring(0, string.indexOf('.') + 1 + s.length());
             }
         } else {
             return string;

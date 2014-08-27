@@ -27,7 +27,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -136,7 +138,7 @@ public class ContactDetailsPanel extends JPanel implements ActionListener, Mouse
             try {
                 uriMailTo = new URI("mailto", emailLabel.getText(), null);
                 Desktop.getDesktop().mail(uriMailTo);
-            } catch (Exception e1) {
+            } catch (IOException | URISyntaxException e1) {
                 Log.error(e1);
             }
         } else if (e.getSource() == viewProfileLabel) {

@@ -81,7 +81,7 @@ public class TransferProcessing {
         String excessiveChars = SIPConfig.getExcessiveURIChar();
 
         if (excessiveChars != null) {
-            StringBuffer calleeBuff = new StringBuffer(callee);
+            StringBuilder calleeBuff = new StringBuilder(callee);
             for (int i = 0; i < excessiveChars.length(); i++) {
                 String charToDeleteStr = excessiveChars.substring(i, i + 1);
 
@@ -103,7 +103,7 @@ public class TransferProcessing {
         }
 
         // Let's be uri fault tolerant
-        if (callee.toLowerCase().indexOf("sip:") == -1 // no sip scheme
+        if (!callee.toLowerCase().contains("sip:") // no sip scheme
                 && callee.indexOf('@') != -1 // most probably a sip uri
                 ) {
             callee = "sip:" + callee;

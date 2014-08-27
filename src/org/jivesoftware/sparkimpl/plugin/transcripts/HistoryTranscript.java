@@ -338,19 +338,21 @@ public class HistoryTranscript extends SwingWorker {
             long yearOld = Math.round((double) cal.get(Calendar.YEAR));
             long monthOld = Math.round((double) cal.get(Calendar.MONTH));
 
-            if (searchPeriod.equals(period_oneMonth)) {
-                // for one month, we only check if the month and the year is equal
-                if ((monthOld == monthNew) && (yearOld == yearNew)) {
+            switch (searchPeriod) {
+                case period_oneMonth:
+                    // for one month, we only check if the month and the year is equal
+                    if ((monthOld == monthNew) && (yearOld == yearNew)) {
+                        result = true;
+                    }   break;
+                case period_oneYear:
+                    // for one year, we only check if the year is the same
+                    if ((yearOld == yearNew)) {
+                        result = true;
+                    }   break;
+                case period_noPeriod:
+                    // for unfiltered list, we return true all the time
                     result = true;
-                }
-            } else if (searchPeriod.equals(period_oneYear)) {
-                // for one year, we only check if the year is the same
-                if ((yearOld == yearNew)) {
-                    result = true;
-                }
-            } else if (searchPeriod.equals(period_noPeriod)) {
-                // for unfiltered list, we return true all the time
-                result = true;
+                    break;
             }
             return result;
         }
@@ -455,7 +457,7 @@ public class HistoryTranscript extends SwingWorker {
             // if we searching for a string or not
             if (Res.getString("message.search.for.history").equals(
                     searchField.getText())
-                    || searchField.getText().equals("")) {
+                    || searchField.getText().isEmpty()) {
                 searchString = null;
             }
 

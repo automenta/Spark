@@ -38,6 +38,7 @@ import javax.swing.JTextArea;
 import javax.swing.JWindow;
 import org.jivesoftware.resource.Res;
 import org.jivesoftware.resource.SparkRes;
+import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.util.StringUtils;
 import org.jivesoftware.smackx.LastActivityManager;
@@ -192,7 +193,7 @@ public class ContactInfoWindow extends JPanel {
         final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int actualX = x;
         int actualY = y - 5;
-        if ((int) screenSize.getWidth() - getPreferredSize().getWidth() < x) {
+        if (screenSize.getWidth() - getPreferredSize().getWidth() < x) {
             actualX = (int) mainWindowLocation.getX() - (int) getPreferredSize().getWidth();
         }
 
@@ -225,8 +226,8 @@ public class ContactInfoWindow extends JPanel {
                 if (!status.equals(Res.getString("offline"))) {
                     //If user is away (not offline), last activity request is sent to client
                     client = contactItem.getPresence().getFrom();
-                    if ((client != null) && (client.lastIndexOf("/") != -1)) {
-                        client = client.substring(client.lastIndexOf("/"));
+                    if ((client != null) && (client.lastIndexOf('/') != -1)) {
+                        client = client.substring(client.lastIndexOf('/'));
                     } else {
                         client = "/";
                     }
@@ -255,7 +256,7 @@ public class ContactInfoWindow extends JPanel {
                         status += Res.getString("message.idle.for", time);
                     }
                 }
-            } catch (Exception e1) {
+            } catch (XMPPException e1) {
             }
         }
         statusLabel.setText(status);

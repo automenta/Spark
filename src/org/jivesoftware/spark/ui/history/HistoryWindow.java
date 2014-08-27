@@ -281,7 +281,7 @@ public class HistoryWindow extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                String searchText = findTextField.getText().toString().trim();
+                String searchText = findTextField.getText().trim();
                 if (EMPTY.equals(searchText)) {
                     historyTree.setModel(historyOriginalModel);
                     selectVeryFirstLeaf();
@@ -289,7 +289,7 @@ public class HistoryWindow extends JFrame {
                 }
 
                 List<HistoryEntry> results = historyFile.search(findTextField
-                        .getText().toString());
+                        .getText());
 
                 HistoryTreeNode top = new HistoryTreeNode(searchText);
 

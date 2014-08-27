@@ -49,7 +49,7 @@ public class TranslatorPlugin implements Plugin {
             public void chatRoomOpened(ChatRoom room) {
                 // only do the translation for single chat
                 if (room instanceof ChatRoom) {
-                    final ChatRoom roo = (ChatRoom) room;
+                    final ChatRoom roo = room;
 
                     // Create a new ChatRoomButton.
                     final JComboBox translatorBox = new JComboBox(TranslatorUtil.TranslationType.getTypes());

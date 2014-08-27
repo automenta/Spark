@@ -8,8 +8,8 @@ import net.java.otr4j.session.SessionID;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.util.StringUtils;
 import org.jivesoftware.spark.SparkManager;
-import org.jivesoftware.sparkimpl.plugin.otr.OTRManager;
 import org.jivesoftware.spark.ui.rooms.ChatRoomImpl;
+import org.jivesoftware.sparkimpl.plugin.otr.OTRManager;
 
 /**
  *

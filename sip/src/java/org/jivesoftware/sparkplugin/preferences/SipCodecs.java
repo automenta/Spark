@@ -150,7 +150,7 @@ public class SipCodecs extends JPanel {
      */
     public void setAvailable(String avail) {
         _listAvailableModel.removeAllElements();
-        if (avail == null || avail.equals("")) {
+        if (avail == null || avail.isEmpty()) {
             return;
         }
 

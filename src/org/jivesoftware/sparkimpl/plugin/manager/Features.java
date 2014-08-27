@@ -54,7 +54,7 @@ public class Features implements PacketExtension {
     }
 
     public String toXML() {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append("<event xmlns=\"" + NAMESPACE + "\"").append("</event>");
         return buf.toString();
     }

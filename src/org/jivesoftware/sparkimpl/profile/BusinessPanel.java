@@ -25,6 +25,7 @@ import java.awt.Insets;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.text.JTextComponent;
 import org.jivesoftware.resource.Res;
 import org.jivesoftware.spark.component.focus.SpecifiedOrderFocusTraversalPolicy;
 import org.jivesoftware.spark.util.ResourceUtils;
@@ -238,7 +239,7 @@ public class BusinessPanel extends JPanel {
             for (int i = 0; i < no; i++) {
                 Component comp = comps[i];
                 if (comp instanceof JTextField) {
-                    ((JTextField) comp).setEditable(allowEditing);
+                    ((JTextComponent) comp).setEditable(allowEditing);
                 }
             }
         }

@@ -94,7 +94,7 @@ public class TaskNotification {
 
                 boolean hasItems = false;
                 while (taskIter.hasNext()) {
-                    Task task = (Task) taskIter.next();
+                    Task task = taskIter.next();
                     if (task.isCompleted()) {
                         continue;
                     }

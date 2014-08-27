@@ -33,6 +33,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTabbedPane;
 import javax.swing.JToggleButton;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import net.java.sipmack.sip.InterlocutorUI;
 import net.java.sipmack.softphone.gui.DefaultGuiManager;
 import org.jivesoftware.spark.component.RolloverButton;
@@ -139,15 +140,15 @@ public class PhoneControl extends JPanel {
         try {
             String classname = UIManager.getSystemLookAndFeelClassName();
 
-            if (classname.indexOf("Windows") != -1) {
+            if (classname.contains("Windows")) {
                 UIManager.setLookAndFeel(new com.jgoodies.looks.windows.WindowsLookAndFeel());
-            } else if (classname.indexOf("mac") != -1 || classname.indexOf("apple") != -1) {
+            } else if (classname.contains("mac") || classname.contains("apple")) {
                 UIManager.setLookAndFeel(classname);
             } else {
                 UIManager.setLookAndFeel(new com.jgoodies.looks.plastic.Plastic3DLookAndFeel());
             }
 
-        } catch (Exception e) {
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) {
             Log.error(e);
         }
 

@@ -141,7 +141,7 @@ public class PluginViewer extends JPanel implements Plugin {
                 tabbedPane.addChangeListener(new ChangeListener() {
                     public void stateChanged(ChangeEvent changeEvent) {
                         if (tabbedPane.getSelectedComponent().equals(
-                                ((JViewport) availablePanel.getParent()).getParent())) {
+                                availablePanel.getParent().getParent())) {
                             loadAvailablePlugins();
                             loaded = true;
                         }
@@ -291,7 +291,7 @@ public class PluginViewer extends JPanel implements Plugin {
                     }
 
                     pluginList = getPluginList(post.getResponseBodyAsStream());
-                } catch (Exception ex) {
+                } catch (IOException ex) {
                     // Nothing to do
                 }
                 return "ok";

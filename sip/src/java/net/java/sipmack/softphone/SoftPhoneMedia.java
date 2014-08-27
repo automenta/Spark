@@ -18,6 +18,7 @@
 package net.java.sipmack.softphone;
 
 import java.awt.Dimension;
+import java.awt.HeadlessException;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import net.java.sipmack.common.Log;
@@ -53,7 +54,7 @@ public class SoftPhoneMedia implements MediaListener {
                 videoFrame.setVisible(true);
                 videoFrame.setAlwaysOnTop(true);
             }
-        } catch (Exception e) {
+        } catch (HeadlessException | SecurityException e) {
             Log.error("playerStarting", e);
         }
     }

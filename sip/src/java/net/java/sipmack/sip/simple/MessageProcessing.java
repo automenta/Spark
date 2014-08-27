@@ -137,7 +137,7 @@ public class MessageProcessing {
             }
 
             // Let's be uri fault tolerant
-            if (to.toLowerCase().indexOf("sip:") == -1 // no sip scheme
+            if (!to.toLowerCase().contains("sip:") // no sip scheme
                     && to.indexOf('@') != -1 // most probably a sip uri
                     ) {
                 to = "sip:" + to;
@@ -294,7 +294,7 @@ public class MessageProcessing {
             }
 
             // Let's be uri fault tolerant
-            if (to.toLowerCase().indexOf("sip:") == -1 // no sip scheme
+            if (!to.toLowerCase().contains("sip:") // no sip scheme
                     && to.indexOf('@') != -1 // most probably a sip uri
                     ) {
                 to = "sip:" + to;

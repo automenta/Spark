@@ -21,6 +21,7 @@ import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +63,7 @@ import net.java.sipmack.softphone.listeners.RegisterEvent;
 import net.java.sipmack.softphone.listeners.SoftPhoneListener;
 import org.jivesoftware.resource.Res;
 import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.provider.ProviderManager;
 import org.jivesoftware.smack.util.StringUtils;
 import org.jivesoftware.smackx.packet.VCard;
@@ -118,7 +120,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
 
     protected String msgBuffer = "";
 
-    protected Integer unregistrationLock = Integer.valueOf(0);
+    protected Integer unregistrationLock = 0;
 
     private SipRegisterStatus status = SipRegisterStatus.Unregistered;
 
@@ -173,7 +175,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
                     registerMenu = new JCheckBoxMenuItem(PhoneRes.getIString("phone.enabled"));
                 }
             });
-        } catch (Exception e) {
+        } catch (InterruptedException | InvocationTargetException e) {
             Log.error(e);
         }
 
@@ -200,7 +202,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
                     missedCalls = new MissedCalls();
                 }
             });
-        } catch (Exception e) {
+        } catch (InterruptedException | InvocationTargetException e) {
             Log.error(e);
         }
 
@@ -326,7 +328,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
 
         try {
             sipManager.stop();
-        } catch (Exception exc) {
+        } catch (CommunicationsException exc) {
             Log.error("destroySoftPhone", exc);
         }
     }
@@ -366,7 +368,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
             try {
                 sipManager.endAllCalls();
                 sipManager.unregister();
-            } catch (Exception e) {
+            } catch (CommunicationsException e) {
                 Log.error("handleUnregisterRequest", e);
             }
         }
@@ -377,7 +379,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
      * user has successfully registered beforeat least once before.
      */
     public void handleReRegisterRequest() {
-        if (this.password != null && !this.username.equals("")) {
+        if (this.password != null && !this.username.isEmpty()) {
             try {
                 sipManager.startRegisterProcess(username, authUserName, password);
             } catch (CommunicationsException exc) {
@@ -631,14 +633,13 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
             Call call = evt.getSourceCall();
             Log.debug("callStateChanged", evt.getOldState() + " -> "
                     + evt.getNewState());
-            if (evt.getNewState() == Call.CONNECTED) {
-                //sipManager.setBusy(true);
-
-                if (call.getAudioReceiverChannel() != null) {
-                    call.getAudioReceiverChannel().stop();
-                }
-
-                if (evt.getOldState() == Call.MOVING_REMOTELY) {
+            switch (evt.getNewState()) {
+                case Call.CONNECTED:
+                    {
+                        //sipManager.setBusy(true);
+                        if (call.getAudioReceiverChannel() != null) {
+                            call.getAudioReceiverChannel().stop();
+                        }       if (evt.getOldState() == Call.MOVING_REMOTELY) {
                     AudioMediaSession audioMediaSession = evt.getSourceCall().getAudioMediaSession();
                     if (call.getAudioReceiverChannel() != null) {
                         call.getAudioReceiverChannel().stop();
@@ -654,99 +655,80 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
                         videoMediaSession.stopReceive();
                     }
                     PhoneManager.setUsingMediaLocator(false);
-                }
-
-                int localAudioPort = -1;
+                }       int localAudioPort = -1;
                 int localVideoPort = -1;
-
-                Vector<MediaDescription> mediaDescriptions = call.getLocalSdpDescription().getMediaDescriptions(true);
-                for (MediaDescription mediaDescription : mediaDescriptions) {
-                    if (mediaDescription.getMedia().getMediaType().equals("audio")) {
-                        localAudioPort = mediaDescription.getMedia().getMediaPort();
-                    } else if (mediaDescription.getMedia().getMediaType().equals("video")) {
-                        localVideoPort = mediaDescription.getMedia().getMediaPort();
-                    }
-
-                }
-
-                AudioMediaSession audioMediaSession = mediaManager.createAudioMediaSession(call.getRemoteSdpDescription().toString(), localAudioPort);
+                        Vector<MediaDescription> mediaDescriptions = call.getLocalSdpDescription().getMediaDescriptions(true);
+                        for (MediaDescription mediaDescription : mediaDescriptions) {
+                            if (mediaDescription.getMedia().getMediaType().equals("audio")) {
+                                localAudioPort = mediaDescription.getMedia().getMediaPort();
+                            } else if (mediaDescription.getMedia().getMediaType().equals("video")) {
+                                localVideoPort = mediaDescription.getMedia().getMediaPort();
+                            }
+                            
+                        }       AudioMediaSession audioMediaSession = mediaManager.createAudioMediaSession(call.getRemoteSdpDescription().toString(), localAudioPort);
                 call.setAudioMediaSession(audioMediaSession);
-
-                if (audioMediaSession != null) {
-                    audioMediaSession.startTrasmit();
-                    audioMediaSession.startReceive();
-                }
-
-                // If remote client have video
-                if (localVideoPort > 0) {
-                    if (SettingsManager.getLocalPreferences().getVideoDevice() != null && !"".equals(SettingsManager.getLocalPreferences().getVideoDevice())) {
-                        VideoMediaSession videoMediaSession = mediaManager.createVideoMediaSession(call.getRemoteSdpDescription().toString(), localVideoPort);
-                        if (videoMediaSession != null) {
-                            videoMediaSession.startTrasmit();
-                            videoMediaSession.startReceive();
-                            call.setVideoMediaSession(videoMediaSession);
-                        }
-                    }
-                }
-
-                evt.getSourceCall().start();
-
+                        if (audioMediaSession != null) {
+                            audioMediaSession.startTrasmit();
+                            audioMediaSession.startReceive();
+                        }       // If remote client have video
+                        if (localVideoPort > 0) {
+                            if (SettingsManager.getLocalPreferences().getVideoDevice() != null && !"".equals(SettingsManager.getLocalPreferences().getVideoDevice())) {
+                                VideoMediaSession videoMediaSession = mediaManager.createVideoMediaSession(call.getRemoteSdpDescription().toString(), localVideoPort);
+                                if (videoMediaSession != null) {
+                                    videoMediaSession.startTrasmit();
+                                    videoMediaSession.startReceive();
+                                    call.setVideoMediaSession(videoMediaSession);
+                                }
+                            }
+                        }       evt.getSourceCall().start();
                 Log.debug("MEDIA STREAMS OPENED");
-
-            } else if (evt.getNewState() == Call.RINGING) {
-
-                if (call.getRemoteSdpDescription() != null
-                        && !call.getRemoteSdpDescription().equals("")) {
-
-                    Log.debug("STATE", call.getRemoteSdpDescription().toString());
-
-                    int localPort = ((MediaDescription) (call.getLocalSdpDescription().getMediaDescriptions(true).get(0))).getMedia().getMediaPort();
-                    int destPort = ((MediaDescription) (call.getRemoteSdpDescription().getMediaDescriptions(true).get(0))).getMedia().getMediaPort();
-                    String destIp = call.getRemoteSdpDescription().getConnection().getAddress();
-
-                    AudioReceiverChannel audioReceiverChannel = mediaManager.createAudioReceiverChannel(localPort, destIp, destPort, (destPort + 1));
-                    call.setAudioReceiverChannel(audioReceiverChannel);
-
-                    if (audioReceiverChannel != null) {
-                        audioReceiverChannel.start();
+                        break;
                     }
-
-                }
-
-            } else if (evt.getNewState() == Call.DISCONNECTED) {
-                sipManager.setBusy(false);
-
-                AudioMediaSession audioMediaSession = evt.getSourceCall().getAudioMediaSession();
-                if (audioMediaSession != null) {
-                    audioMediaSession.stopTrasmit();
-                    audioMediaSession.stopReceive();
-                }
-                if (call.getAudioReceiverChannel() != null) {
+                case Call.RINGING:
+                    if (call.getRemoteSdpDescription() != null
+                            && !call.getRemoteSdpDescription().equals("")) {
+                        
+                        Log.debug("STATE", call.getRemoteSdpDescription().toString());
+                        
+                        int localPort = ((MediaDescription) (call.getLocalSdpDescription().getMediaDescriptions(true).get(0))).getMedia().getMediaPort();
+                        int destPort = ((MediaDescription) (call.getRemoteSdpDescription().getMediaDescriptions(true).get(0))).getMedia().getMediaPort();
+                        String destIp = call.getRemoteSdpDescription().getConnection().getAddress();
+                        
+                        AudioReceiverChannel audioReceiverChannel = mediaManager.createAudioReceiverChannel(localPort, destIp, destPort, (destPort + 1));
+                        call.setAudioReceiverChannel(audioReceiverChannel);
+                        
+                        if (audioReceiverChannel != null) {
+                            audioReceiverChannel.start();
+                        }
+                        
+                    }   break;
+                case Call.DISCONNECTED:
+                    {
+                        sipManager.setBusy(false);
+                        AudioMediaSession audioMediaSession = evt.getSourceCall().getAudioMediaSession();
+                        if (audioMediaSession != null) {
+                            audioMediaSession.stopTrasmit();
+                            audioMediaSession.stopReceive();
+                        }       if (call.getAudioReceiverChannel() != null) {
                     call.getAudioReceiverChannel().stop();
-                }
-                VideoMediaSession videoMediaSession = evt.getSourceCall().getVideoMediaSession();
+                }       VideoMediaSession videoMediaSession = evt.getSourceCall().getVideoMediaSession();
                 if (videoMediaSession != null) {
                     videoMediaSession.stopTrasmit();
                     videoMediaSession.stopReceive();
-                }
-                PhoneManager.setUsingMediaLocator(false);
-
-            } else if (evt.getNewState() == Call.FAILED) {
-                call.setState(Call.DISCONNECTED);
-                if (call.getAudioReceiverChannel() != null) {
-                    call.getAudioReceiverChannel().stop();
-                }
-
-                CallRejectedEvent rejectEvt = new CallRejectedEvent("Disconnected", call.getLastRequest(), call);
-
+                }       PhoneManager.setUsingMediaLocator(false);
+                        break;
+                    }
+                case Call.FAILED:
+                    call.setState(Call.DISCONNECTED);
+                    if (call.getAudioReceiverChannel() != null) {
+                        call.getAudioReceiverChannel().stop();
+                    }   CallRejectedEvent rejectEvt = new CallRejectedEvent("Disconnected", call.getLastRequest(), call);
                 for (SoftPhoneListener softPhoneListener : softPhoneListeners) {
                     softPhoneListener.callRejectedRemotely(rejectEvt);
-                }
-
-                PhoneManager.setUsingMediaLocator(false);
-
+                }   PhoneManager.setUsingMediaLocator(false);
+                    break;
             }
-        } catch (Exception e) {
+        } catch (MediaException e) {
             Log.error("callStateChanged", e);
         }
 
@@ -764,19 +746,19 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
                 sipManager.endAllCalls();
             } catch (CommunicationsException exc) {
                 Log.error("handleExitRequest", exc);
-            } catch (Throwable exc) {
+            } catch ( exc) {
                 Log.error("handleExitRequest", exc);
             }
             try {
                 sipManager.unregister();
             } catch (CommunicationsException exc) {
                 Log.error("handleExitRequest", exc);
-            } catch (Throwable exc) {
+            } catch ( exc) {
                 Log.error("handleExitRequest", exc);
             }
             try {
                 sipManager.stop();
-            } catch (Exception exc) {
+            } catch (CommunicationsException exc) {
                 Log.error("handleExitRequest", exc);
             }
         }
@@ -794,7 +776,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
 
         try {
             sipManager.hold(iui.getID(), mediaManager.generateHoldSdpDescription(mic, mic, iui.getCall()), mic, cam);
-        } catch (Exception e) {
+        } catch (MediaException | CommunicationsException e) {
             Log.error("handleHold", e);
         }
 
@@ -913,7 +895,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
             interlocutor.setCall(call);
 
             guiManager.addInterlocutor(interlocutor);
-        } catch (Exception e) {
+        } catch (MediaException | CommunicationsException e) {
             Log.error("handleDialRequest", e);
         }
     }
@@ -1048,7 +1030,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
                 }
             }
 
-        } catch (Exception e) {
+        } catch (XMPPException e) {
             Log.error("setupRemotePreferences", e);
         }
 

@@ -32,8 +32,8 @@ import org.jivesoftware.Spark;
  */
 public class Log {
 
-    private java.util.logging.Logger ERROR_LOGGER;
-    private Logger WARNING_LOGGER;
+    private static final java.util.logging.Logger ERROR_LOGGER = java.util.logging.Logger.getAnonymousLogger();
+    private static final Logger WARNING_LOGGER = java.util.logging.Logger.getAnonymousLogger();
 
     private volatile static Log singleton = null;
 
@@ -52,8 +52,6 @@ public class Log {
         if (!Spark.getLogDirectory().exists()) {
             Spark.getLogDirectory().mkdirs();
         }
-        ERROR_LOGGER = java.util.logging.Logger.getAnonymousLogger();
-        WARNING_LOGGER = java.util.logging.Logger.getAnonymousLogger();
 
         File ERROR_LOG_FILE = new File(Spark.getLogDirectory(), "errors.log");
         File WARNING_LOG_FILE = new File(Spark.getLogDirectory(), "warn.log");

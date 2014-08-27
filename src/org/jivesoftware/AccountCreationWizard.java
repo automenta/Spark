@@ -319,7 +319,7 @@ public class AccountCreationWizard extends JPanel {
 
         String serverName = getServer();
 
-        int checkForPort = serverName.indexOf(":");
+        int checkForPort = serverName.indexOf(':');
         if (checkForPort != -1) {
             String portString = serverName.substring(checkForPort + 1);
             if (ModelUtil.hasLength(portString)) {

@@ -28,6 +28,7 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -83,12 +84,12 @@ public class CustomMessages {
         if (customMessages.exists()) {
             try {
                 list = (List<CustomStatusItem>) xstream.fromXML(new FileReader(customMessages));
-            } catch (Exception e) {
+            } catch (FileNotFoundException e) {
                 xstream.alias("list", List.class);
                 xstream.alias("com.jivesoftware.workspaces.CustomStatusItem", CustomStatusItem.class);
                 try {
                     list = (List<CustomStatusItem>) xstream.fromXML(new FileReader(customMessages));
-                } catch (Exception e1) {
+                } catch (FileNotFoundException e1) {
                     Log.error(e1);
                 }
             }

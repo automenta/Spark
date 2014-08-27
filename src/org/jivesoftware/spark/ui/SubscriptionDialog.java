@@ -316,7 +316,7 @@ public class SubscriptionDialog {
 
         boolean isSubscribed = true;
         if (userEntry != null) {
-            isSubscribed = userEntry.getGroups().size() == 0;
+            isSubscribed = userEntry.getGroups().isEmpty();
         }
 
         if (isSubscribed) {

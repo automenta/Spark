@@ -95,7 +95,7 @@ public class Restarter {
      */
     public static boolean isMac() {
         String lcOSName = System.getProperty("os.name").toLowerCase();
-        return lcOSName.indexOf("mac") != -1;
+        return lcOSName.contains("mac");
     }
 
     /**

@@ -21,6 +21,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,6 +31,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -348,7 +350,7 @@ public class ContactList extends JPanel implements ActionListener,
         // If online, check to see if they are in the offline group.
         // If so, remove from offline group and add to all groups they
         // belong to.
-        if (presence.getType() == Presence.Type.available && offlineGroup.getContactItemByJID(bareJID) != null || (presence.getFrom().indexOf("workgroup.") != -1)) {
+        if (presence.getType() == Presence.Type.available && offlineGroup.getContactItemByJID(bareJID) != null || (presence.getFrom().contains("workgroup."))) {
             changeOfflineToOnline(bareJID, entry, presence);
         } else if (presence.getType() == Presence.Type.available) {
             updateContactItemsPresence(presence, entry, bareJID);
@@ -612,7 +614,7 @@ public class ContactList extends JPanel implements ActionListener,
                                     contactItem = UIComponentRegistry.createContactItem(name, null, user);
                                 }
                             });
-                        } catch (Exception ex) {
+                        } catch (InterruptedException | InvocationTargetException ex) {
                             ex.printStackTrace();
                         }
                     }
@@ -656,7 +658,7 @@ public class ContactList extends JPanel implements ActionListener,
                     }
 
                 });
-            } catch (Exception e) {
+            } catch (InterruptedException | InvocationTargetException e) {
                 Log.error("moveToOffilne", e);
             }
         }
@@ -822,7 +824,7 @@ public class ContactList extends JPanel implements ActionListener,
                         final Set<String> userGroupSet = new HashSet<String>();
                         jids = addresses.iterator();
                         while (jids.hasNext()) {
-                            jid = (String) jids.next();
+                            jid = jids.next();
                             rosterEntry = roster.getEntry(jid);
 
                             boolean unfiled = true;
@@ -1012,7 +1014,7 @@ public class ContactList extends JPanel implements ActionListener,
 
         ContactGroup rootGroup = null;
         ContactGroup lastGroup = null;
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
 
         boolean groupAdded = false;
         while (tkn.hasMoreTokens()) {
@@ -1305,7 +1307,7 @@ public class ContactList extends JPanel implements ActionListener,
                 }
                 contactGroup.removeContactItem(contactGroup.getContactItemByJID(item.getJID()));
                 checkGroup(contactGroup);
-            } catch (Exception e) {
+            } catch (XMPPException e) {
                 Log.error("Error removing user from contact list.", e);
             }
         }
@@ -1578,8 +1580,8 @@ public class ContactList extends JPanel implements ActionListener,
                     String client = "";
                     if (item.getPresence().getType() != Presence.Type.unavailable) {
                         client = item.getPresence().getFrom();
-                        if ((client != null) && (client.lastIndexOf("/") != -1)) {
-                            client = client.substring(client.lastIndexOf("/"));
+                        if ((client != null) && (client.lastIndexOf('/') != -1)) {
+                            client = client.substring(client.lastIndexOf('/'));
                         } else {
                             client = "/";
                         }
@@ -1589,7 +1591,7 @@ public class ContactList extends JPanel implements ActionListener,
                     long idleTime = (activity.getIdleTime() * 1000);
                     String time = ModelUtil.getTimeFromLong(idleTime);
                     JOptionPane.showMessageDialog(getGUI(), Res.getString("message.idle.for", time), Res.getString("title.last.activity"), JOptionPane.INFORMATION_MESSAGE);
-                } catch (Exception e1) {
+                } catch (HeadlessException | XMPPException e1) {
                     JOptionPane.showMessageDialog(getGUI(), Res.getString("message.unable.to.retrieve.last.activity", item.getJID()), Res.getString("title.error"), JOptionPane.ERROR_MESSAGE);
                 }
 
@@ -1681,7 +1683,7 @@ public class ContactList extends JPanel implements ActionListener,
     }
 
     private void sendMessages(Collection<ContactItem> items) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         InputDialog dialog = new InputDialog();
         final String messageText = dialog.getInput(Res.getString("title.broadcast.message"), Res.getString("message.enter.broadcast.message"), SparkRes.getImageIcon(SparkRes.BLANK_IMAGE), SparkManager.getMainWindow());
         if (ModelUtil.hasLength(messageText)) {
@@ -2299,13 +2301,17 @@ public class ContactList extends JPanel implements ActionListener,
             StreamError error = xmppEx.getStreamError();
             String reason = error.getCode();
 
-            if ("conflict".equals(reason)) {
-                errorMessage = Res
-                        .getString("message.disconnected.conflict.error");
-            } else if ("system-shutdown".equals(reason)) {
-                errorMessage = Res.getString("message.disconnected.shutdown");
-            } else {
-                errorMessage = Res.getString("message.general.error", reason);
+            if (null != reason) switch (reason) {
+                case "conflict":
+                    errorMessage = Res
+                            .getString("message.disconnected.conflict.error");
+                    break;
+                case "system-shutdown":
+                    errorMessage = Res.getString("message.disconnected.shutdown");
+                    break;
+                default:
+                    errorMessage = Res.getString("message.general.error", reason);
+                    break;
             }
         }
 
@@ -2449,7 +2455,7 @@ public class ContactList extends JPanel implements ActionListener,
                             addContactGroup(unfiledGroup);
                         }
                     });
-                } catch (Exception ex) {
+                } catch (InterruptedException | InvocationTargetException ex) {
                     ex.printStackTrace();
                 }
             }

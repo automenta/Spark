@@ -98,7 +98,7 @@ public class FrequentContactsPlugin implements Plugin {
 
                     contacts.setSelectedIndex(contacts.locationToIndex(e
                             .getPoint()));
-                    String user = jidMap.get((JLabel) contacts
+                    String user = jidMap.get((Object) contacts
                             .getSelectedValue());
                     ContactItem contact = SparkManager.getContactList()
                             .getContactItemByJID(user);

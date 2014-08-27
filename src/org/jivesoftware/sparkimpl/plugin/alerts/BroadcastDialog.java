@@ -40,6 +40,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import org.jivesoftware.resource.Res;
@@ -296,10 +297,10 @@ public class BroadcastDialog extends JPanel {
             checkTree.expandTree();
             for (CheckNode node : nodes) {
                 if (node.getParent() == null) {
-                    child = (CheckNode) NodesGroups.get(i).get(1);
+                    child = (DefaultMutableTreeNode) NodesGroups.get(i).get(1);
                     ((DefaultTreeModel) checkTree.getTree().getModel())
-                            .insertNodeInto(child, ((CheckNode) NodesGroups
-                                    .get(i).get(0)), ((CheckNode) NodesGroups
+                            .insertNodeInto(child, ((MutableTreeNode) NodesGroups
+                                    .get(i).get(0)), ((TreeNode) NodesGroups
                                     .get(i).get(0)).getChildCount());
                     path = ((DefaultTreeModel) checkTree.getTree().getModel())
                             .getPathToRoot(node);
@@ -326,7 +327,7 @@ public class BroadcastDialog extends JPanel {
             }
         }
 
-        if (jids.size() == 0) {
+        if (jids.isEmpty()) {
             JOptionPane.showMessageDialog(dlg, Res.getString("message.broadcast.no.user.selected"), Res.getString("title.error"), JOptionPane.ERROR_MESSAGE);
             return false;
         }

@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.AbstractAction;
+import javax.swing.AbstractButton;
 import javax.swing.Action;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -129,7 +130,7 @@ public class ContactListAssistantPlugin implements Plugin {
                     int index = -1;
                     for (int i = 0; i < popup.getComponentCount(); i++) {
                         Object o = popup.getComponent(i);
-                        if (o instanceof JMenuItem && ((JMenuItem) o).getText().equals(Res.getString("menuitem.rename"))) {
+                        if (o instanceof JMenuItem && ((AbstractButton) o).getText().equals(Res.getString("menuitem.rename"))) {
                             index = i;
                             break;
                         }

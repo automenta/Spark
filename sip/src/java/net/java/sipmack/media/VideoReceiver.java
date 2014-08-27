@@ -19,9 +19,11 @@ package net.java.sipmack.media;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.io.IOException;
 import javax.media.ControllerErrorEvent;
 import javax.media.ControllerEvent;
 import javax.media.ControllerListener;
+import javax.media.NoPlayerException;
 import javax.media.Player;
 import javax.media.RealizeCompleteEvent;
 import javax.media.protocol.DataSource;
@@ -86,7 +88,7 @@ public class VideoReceiver implements ReceiveStreamListener, SessionListener,
         } else if (evt instanceof NewReceiveStreamEvent) {
 
             try {
-                stream = ((NewReceiveStreamEvent) evt).getReceiveStream();
+                stream = evt.getReceiveStream();
                 DataSource ds = stream.getDataSource();
 
                 System.out.println("DataSource:" + ds);
@@ -122,7 +124,7 @@ public class VideoReceiver implements ReceiveStreamListener, SessionListener,
 
                 System.out.println("Start2");
 
-            } catch (Exception e) {
+            } catch (IOException | NoPlayerException e) {
                 System.err.println("NewReceiveStreamEvent exception " + e.getMessage());
                 return;
             }

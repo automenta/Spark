@@ -20,13 +20,16 @@ package org.jivesoftware.spark.ui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
@@ -460,7 +463,7 @@ public class TranscriptWindow extends ChatArea implements ContextMenuListener {
                 JOptionPane.showMessageDialog(SparkManager.getMainWindow(), "Chat transcript has been saved.",
                         "Chat Transcript Saved", JOptionPane.INFORMATION_MESSAGE);
             }
-        } catch (Exception ex) {
+        } catch (HeadlessException | IOException ex) {
             Log.error("Unable to save chat transcript.", ex);
             JOptionPane.showMessageDialog(SparkManager.getMainWindow(), "Could not save transcript.", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -517,7 +520,7 @@ public class TranscriptWindow extends ChatArea implements ContextMenuListener {
                     e.printStackTrace();
                 }
 
-                int ok = JOptionPane.showConfirmDialog((TranscriptWindow) object,
+                int ok = JOptionPane.showConfirmDialog((Component) object,
                         Res.getString("delete.permanently"), Res.getString("delete.log.permanently"),
                         JOptionPane.YES_NO_OPTION,
                         JOptionPane.QUESTION_MESSAGE);
@@ -560,7 +563,7 @@ public class TranscriptWindow extends ChatArea implements ContextMenuListener {
                     HistoryWindow hw = new HistoryWindow(SparkManager.getUserDirectory(), room.getRoomname());
                     hw.showWindow();
 
-                } catch (Exception e1) {
+                } catch (FileNotFoundException | ChatRoomNotFoundException e1) {
                     e1.printStackTrace();
                 }
             }

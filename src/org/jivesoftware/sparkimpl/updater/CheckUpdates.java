@@ -229,7 +229,7 @@ public class CheckUpdates {
 
                     UPDATING = false;
                     frame.dispose();
-                } catch (Exception ex) {
+                } catch (IOException ex) {
                     // Nothing to do
                 } finally {
                     timer.cancel();
@@ -395,7 +395,7 @@ public class CheckUpdates {
 
             // Otherwise updates are available
             String downloadURL = serverVersion.getDownloadURL();
-            String filename = downloadURL.substring(downloadURL.lastIndexOf("/") + 1);
+            String filename = downloadURL.substring(downloadURL.lastIndexOf('/') + 1);
 
             if (filename.indexOf('=') != -1) {
                 filename = filename.substring(filename.indexOf('=') + 1);
@@ -468,12 +468,12 @@ public class CheckUpdates {
      * @return returns true if the first version is greater than the second.
      */
     public static boolean isGreater(String firstVersion, String secondVersion) {
-        int indexOne = firstVersion.indexOf("_");
+        int indexOne = firstVersion.indexOf('_');
         if (indexOne != -1) {
             firstVersion = firstVersion.substring(indexOne + 1);
         }
 
-        int indexTwo = secondVersion.indexOf("_");
+        int indexTwo = secondVersion.indexOf('_');
         if (indexTwo != -1) {
             secondVersion = secondVersion.substring(indexTwo + 1);
         }
@@ -503,7 +503,7 @@ public class CheckUpdates {
     }
 
     public static String getVersion(String version) {
-        int lastIndexOf = version.lastIndexOf(".");
+        int lastIndexOf = version.lastIndexOf('.');
         if (lastIndexOf != -1) {
             return version.substring(0, lastIndexOf);
         }
@@ -557,7 +557,7 @@ public class CheckUpdates {
             DiscoverItems items = SparkManager.getSessionManager().getDiscoveredItems();
             Iterator<DiscoverItems.Item> iter = items.getItems();
             while (iter.hasNext()) {
-                DiscoverItems.Item item = (DiscoverItems.Item) iter.next();
+                DiscoverItems.Item item = iter.next();
                 if ("Spark Updater".equals(item.getName())) {
                     return true;
                 }
@@ -620,11 +620,11 @@ public class CheckUpdates {
                     File file = files[i];
                     String fileName = file.getName();
                     if (fileName.endsWith(".exe")) {
-                        int index = fileName.indexOf("_");
+                        int index = fileName.indexOf('_');
 
                         // Add version number
                         String versionNumber = fileName.substring(index + 1);
-                        int indexOfPeriod = versionNumber.indexOf(".");
+                        int indexOfPeriod = versionNumber.indexOf('.');
 
                         versionNumber = versionNumber.substring(0, indexOfPeriod);
                         versionNumber = versionNumber.replaceAll("_online", "");

@@ -46,7 +46,7 @@ public class VoiceMail {
         if (a > 0) {
 
             a += match.length();
-            int b = body.indexOf("\n", a);
+            int b = body.indexOf('\n', a);
 
             String msgs[] = body.substring(a, b - 1).trim().split("\\(")[0]
                     .split("/");

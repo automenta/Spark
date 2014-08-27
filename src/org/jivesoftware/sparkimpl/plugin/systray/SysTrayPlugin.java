@@ -17,6 +17,8 @@
  */
 package org.jivesoftware.sparkimpl.plugin.systray;
 
+import java.awt.AWTException;
+import java.awt.Frame;
 import java.awt.MouseInfo;
 import java.awt.SystemTray;
 import java.awt.TrayIcon;
@@ -330,7 +332,7 @@ public class SysTrayPlugin implements Plugin, NativeHandler, ChatManagerListener
                 });
 
                 tray.add(trayIcon);
-            } catch (Exception e) {
+            } catch (AWTException e) {
                 // Not Supported
             }
         } else {
@@ -443,8 +445,8 @@ public class SysTrayPlugin implements Plugin, NativeHandler, ChatManagerListener
         if (pref.isSystemTrayNotificationEnabled()) {
             trayIcon.setImage(newMessageIcon.getImage());
             if (window instanceof JFrame) {
-                ((JFrame) window).setTitle(getCounteredTitle(
-                        ((JFrame) window).getTitle(), chatMessageHandler.getUnreadMessages()));
+                ((Frame) window).setTitle(getCounteredTitle(
+                        ((Frame) window).getTitle(), chatMessageHandler.getUnreadMessages()));
             }
             newMessage = true;
         }

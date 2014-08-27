@@ -20,6 +20,7 @@ package net.java.sipmack.media;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Vector;
@@ -119,7 +120,7 @@ public class AudioChannel {
                             new InetSocketAddress(this.ipAddress, this.remoteRTCPPort)));
             mediaStream.setName(MediaType.AUDIO.toString());
             mediaStream.start();
-        } catch (Exception e) {
+        } catch (SocketException e) {
             e.printStackTrace();
         }
         return null;

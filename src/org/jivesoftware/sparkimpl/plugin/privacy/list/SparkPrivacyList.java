@@ -87,10 +87,7 @@ public class SparkPrivacyList {
      * @return is user blocked
      */
     public boolean isBlockedItem(String jid) {
-        if (searchPrivacyItem(jid) != null) {
-            return true;
-        }
-        return false;
+        return searchPrivacyItem(jid) != null;
     }
 
     /**

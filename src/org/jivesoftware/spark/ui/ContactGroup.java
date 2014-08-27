@@ -31,6 +31,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -227,7 +228,7 @@ public class ContactGroup extends CollapsiblePane implements MouseListener {
                         insertOfflineContactItem(offlineItem);
                     }
                 });
-            } catch (Exception ex) {
+            } catch (InterruptedException | InvocationTargetException ex) {
                 Log.error(ex);
             }
         }
@@ -916,7 +917,7 @@ public class ContactGroup extends CollapsiblePane implements MouseListener {
      * @return true if the group is nested.
      */
     public boolean isSubGroup(String groupName) {
-        return groupName.indexOf("::") != -1;
+        return groupName.contains("::");
     }
 
     /**

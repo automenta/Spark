@@ -106,7 +106,7 @@ public class ContactUri implements Comparable<ContactUri> {
 
     @Override
     public int compareTo(ContactUri o) {
-        return -(((int) (getPriority() * 1000)) - (int) (((ContactUri) o)
+        return -(((int) (getPriority() * 1000)) - (int) (o
                 .getPriority() * 1000));
     }
 }

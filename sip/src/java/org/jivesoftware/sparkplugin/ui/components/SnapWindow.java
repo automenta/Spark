@@ -105,7 +105,7 @@ public class SnapWindow extends JWindow implements ComponentListener, WindowList
             x = (int) mainWindowLocation.getX() - width;
         }
 
-        setSize(preferredWidth, (int) parentFrame.getHeight());
+        setSize(preferredWidth, parentFrame.getHeight());
         setLocation(x, (int) mainWindowLocation.getY());
     }
 

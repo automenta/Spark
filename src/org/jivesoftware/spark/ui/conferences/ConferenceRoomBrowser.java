@@ -392,7 +392,7 @@ public class ConferenceRoomBrowser extends JPanel implements ActionListener,
                     try {
                         roomInfo = MultiUserChat.getRoomInfo(
                                 SparkManager.getConnection(), roomJID);
-                    } catch (Exception e) {
+                    } catch (XMPPException e) {
                         // Nothing to do
                     }
 
@@ -434,7 +434,7 @@ public class ConferenceRoomBrowser extends JPanel implements ActionListener,
         try {
             final RoomInfo roomInfo = MultiUserChat.getRoomInfo(SparkManager.getConnection(), roomJID);
             persistent = roomInfo.isPersistent();
-        } catch (Exception e) {
+        } catch (XMPPException e) {
             // Do not return
             Log.error("This room does not exist. Probably this room was temporary and was closed");
         }
@@ -563,7 +563,7 @@ public class ConferenceRoomBrowser extends JPanel implements ActionListener,
                                     try {
                                         roomInfo = MultiUserChat.getRoomInfo(
                                                 SparkManager.getConnection(), roomJID);
-                                    } catch (Exception e) {
+                                    } catch (XMPPException e) {
                                         // Nothing to do
                                     }
 

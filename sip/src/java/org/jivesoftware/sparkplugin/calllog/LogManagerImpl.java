@@ -155,7 +155,7 @@ public class LogManagerImpl implements SoftPhoneListener, LogManager {
             try {
                 SipAccountPacket.setSipRegisterStatus(SparkManager
                         .getConnection(), evt.getStatus());
-            } catch (Exception e) {
+            } catch (XMPPException e) {
                 Log.error("registerStatusChanged", e);
             }
         }

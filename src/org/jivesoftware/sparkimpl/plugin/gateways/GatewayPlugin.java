@@ -18,6 +18,7 @@
 package org.jivesoftware.sparkimpl.plugin.gateways;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -145,7 +146,7 @@ public class GatewayPlugin implements Plugin, ContactItemHandler {
 
         Iterator<DiscoverItems.Item> items = discoItems.getItems();
         while (items.hasNext()) {
-            item = (Item) items.next();
+            item = items.next();
             String entityName = item.getEntityID();
             if (entityName != null) {
                 if (entityName.startsWith("aim.")) {
@@ -197,7 +198,7 @@ public class GatewayPlugin implements Plugin, ContactItemHandler {
         GatewayItem item = null;
         if (useTab) {
             item = new GatewayTabItem(transport);
-            transferTab.add((GatewayTabItem) item);
+            transferTab.add((Component) item);
         } else {
             item = new GatewayButton(transport);
         }

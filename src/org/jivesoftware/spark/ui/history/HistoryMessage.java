@@ -1,6 +1,7 @@
 package org.jivesoftware.spark.ui.history;
 
 import java.text.MessageFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -154,7 +155,7 @@ public class HistoryMessage {
     private static Date parseHistoryDate(String dateToParse) {
         try {
             return dateFormat.parse(dateToParse);
-        } catch (Exception e) {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
         return Calendar.getInstance().getTime();

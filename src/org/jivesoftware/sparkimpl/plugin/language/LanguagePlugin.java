@@ -19,6 +19,7 @@ package org.jivesoftware.sparkimpl.plugin.language;
 
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
@@ -82,7 +83,7 @@ public class LanguagePlugin implements Plugin {
                 // Ignore any manifest.mf entries.
                 if (propertiesName.endsWith(".properties")) {
                     int lastIndex = propertiesName.lastIndexOf("i18n_");
-                    int period = propertiesName.lastIndexOf(".");
+                    int period = propertiesName.lastIndexOf('.');
                     if (lastIndex == -1 && propertiesName.contains("spark_i18n")) {
                         addLanguage("en");
                     } else {
@@ -92,7 +93,7 @@ public class LanguagePlugin implements Plugin {
                 }
             }
             zipFile.close();
-        } catch (Throwable e) {
+        } catch (IOException e) {
             Log.error("Error unzipping plugin", e);
         }
 

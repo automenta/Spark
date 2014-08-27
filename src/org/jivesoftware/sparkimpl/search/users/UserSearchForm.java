@@ -208,7 +208,7 @@ public class UserSearchForm extends JPanel {
                     public Object construct() {
                         try {
                             Thread.sleep(50);
-                        } catch (Exception e) {
+                        } catch (InterruptedException e) {
                             Log.error("Problem sleeping thread.", e);
                         }
                         return "ok";

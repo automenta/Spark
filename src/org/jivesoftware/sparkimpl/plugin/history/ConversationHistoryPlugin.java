@@ -68,6 +68,7 @@ import org.jivesoftware.spark.util.GraphicUtils;
 import org.jivesoftware.spark.util.log.Log;
 import org.xmlpull.mxp1.MXParser;
 import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 
 /**
  * Allows users to see the last 10 people they have talked with.
@@ -112,7 +113,7 @@ public class ConversationHistoryPlugin implements Plugin {
 
                     contacts.setSelectedIndex(contacts.locationToIndex(e
                             .getPoint()));
-                    String user = jidMap.get((JLabel) contacts
+                    String user = jidMap.get((Object) contacts
                             .getSelectedValue());
                     ContactItem contact = SparkManager.getContactList()
                             .getContactItemByJID(user);
@@ -274,7 +275,7 @@ public class ConversationHistoryPlugin implements Plugin {
                     done = true;
                 }
             }
-        } catch (Exception e) {
+        } catch (IOException | XmlPullParserException e) {
             Log.error(e);
         }
     }

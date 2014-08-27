@@ -30,6 +30,7 @@ import javax.swing.SwingUtilities;
 import org.jivesoftware.resource.Res;
 import org.jivesoftware.resource.SparkRes;
 import org.jivesoftware.smack.ConnectionListener;
+import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.spark.SparkManager;
 import org.jivesoftware.spark.util.SwingTimerTask;
 import org.jivesoftware.spark.util.TaskEngine;
@@ -138,7 +139,7 @@ public class ReconnectPanelSmall extends ContactGroup implements
             } else {
                 SparkManager.getMainWindow().logout(false);
             }
-        } catch (Exception ex) {
+        } catch (XMPPException ex) {
             ex.printStackTrace();
         }
     }

@@ -289,13 +289,13 @@ public class CallHistoryUI extends JPanel implements ActionListener, ListSelecti
 
             if (call.getGroupName().equals(CallLog.Type.dialed.toString())) {
                 setBackground(new Color(40, 147, 40).brighter().brighter());
-                sb.append(PhoneRes.getIString("phone.placecallto") + " ");
+                sb.append(PhoneRes.getIString("phone.placecallto")).append(" ");
             } else if (call.getGroupName().equals(CallLog.Type.received.toString())) {
                 setBackground(Color.blue);
-                sb.append(PhoneRes.getIString("phone.receivedcallfrom") + " ");
+                sb.append(PhoneRes.getIString("phone.receivedcallfrom")).append(" ");
             } else if (call.getGroupName().equals(CallLog.Type.missed.toString())) {
                 setBackground(Color.red);
-                sb.append(PhoneRes.getIString("phone.missedcallfrom") + " ");
+                sb.append(PhoneRes.getIString("phone.missedcallfrom")).append(" ");
             }
 
             sb.append(title);
@@ -310,7 +310,7 @@ public class CallHistoryUI extends JPanel implements ActionListener, ListSelecti
             builder.append(" ");
 
             if (duration > 0) {
-                builder.append(PhoneRes.getIString("phone.duration") + ": ");
+                builder.append(PhoneRes.getIString("phone.duration")).append(": ");
                 builder.append(ModelUtil.getTimeFromLong(duration * 1000));
             }
 
@@ -354,7 +354,7 @@ public class CallHistoryUI extends JPanel implements ActionListener, ListSelecti
             int[] selected = activeList.getSelectedIndices();
             for (int i = selected.length - 1; i >= 0; i--) {
                 int modelindex = activeList.convertIndexToModel(selected[i]);
-                logManager.deleteCall(((CallEntry) model.elementAt(modelindex)).getCall());
+                logManager.deleteCall(model.elementAt(modelindex).getCall());
                 model.remove(modelindex);
             }
         }

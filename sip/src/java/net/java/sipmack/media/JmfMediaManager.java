@@ -242,16 +242,20 @@ public class JmfMediaManager {
             // START TRANSMISSION
             try {
                 remoteAddresses.add(mediaRemoteAddress);
-                ports.add(new Integer(mediaPort));
+                ports.add(mediaPort);
                 contents.add(mediaType);
 
                 // Selecting local ports for NAT
-                if (mediaType.trim().equals("video")) {
-                    localPorts.add(Integer.valueOf(22444));
-                } else if (mediaType.trim().equals("audio")) {
-                    localPorts.add(Integer.valueOf(localPort));
-                } else {
-                    localPorts.add(Integer.valueOf(mediaPort));
+                switch (mediaType.trim()) {
+                    case "video":
+                        localPorts.add(22444);
+                        break;
+                    case "audio":
+                        localPorts.add(localPort);
+                        break;
+                    default:
+                        localPorts.add(mediaPort);
+                        break;
                 }
 
                 System.out.println("==> SDP FORMATS: " + sdpFormats);
@@ -267,7 +271,7 @@ public class JmfMediaManager {
         }
         if (atLeastOneTransmitterStarted) {
 
-            TransportCandidate.Fixed remote = new TransportCandidate.Fixed(remoteAddresses.get(0).toString(), (Integer) ports.get(0));
+            TransportCandidate.Fixed remote = new TransportCandidate.Fixed(remoteAddresses.get(0).toString(), ports.get(0));
             TransportCandidate.Fixed local = new TransportCandidate.Fixed(NetworkAddressManager.getLocalHost().getHostAddress(), localPort);
 
             // TODO : FORCED TO JPEG_RTP -> deteced format
@@ -403,16 +407,20 @@ public class JmfMediaManager {
             // START TRANSMISSION
             try {
                 remoteAddresses.add(mediaRemoteAddress);
-                ports.add(new Integer(mediaPort));
+                ports.add(mediaPort);
                 contents.add(mediaType);
 
                 // Selecting local ports for NAT
-                if (mediaType.trim().equals("video")) {
-                    localPorts.add(Integer.valueOf(22445));
-                } else if (mediaType.trim().equals("audio")) {
-                    localPorts.add(Integer.valueOf(localPort));
-                } else {
-                    localPorts.add(Integer.valueOf(mediaPort));
+                switch (mediaType.trim()) {
+                    case "video":
+                        localPorts.add(22445);
+                        break;
+                    case "audio":
+                        localPorts.add(localPort);
+                        break;
+                    default:
+                        localPorts.add(mediaPort);
+                        break;
                 }
 
                 //formatSets
@@ -432,7 +440,7 @@ public class JmfMediaManager {
 
             System.out.println("Remote Port: " + ports.get(0));
 
-            TransportCandidate.Fixed remote = new TransportCandidate.Fixed(remoteAddresses.get(0).toString(), (Integer) ports.get(0));
+            TransportCandidate.Fixed remote = new TransportCandidate.Fixed(remoteAddresses.get(0).toString(), ports.get(0));
             TransportCandidate.Fixed local = new TransportCandidate.Fixed(NetworkAddressManager.getLocalHost().getHostAddress(), localPort);
 
             MediaFormat mediaFormat = (formatSets.get(0)).get(0);
@@ -503,7 +511,7 @@ public class JmfMediaManager {
                 jmfFormats.add(mediaFormat);
             }
         }
-        if (jmfFormats.size() == 0) {
+        if (jmfFormats.isEmpty()) {
             throw new MediaException(
                     "None of the supplied sdp formats for is supported by SIP COMMUNICATOR");
         }

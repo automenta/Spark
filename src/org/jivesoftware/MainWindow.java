@@ -27,6 +27,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TimerTask;
@@ -334,7 +335,7 @@ public final class MainWindow extends ChatFrame implements ActionListener {
         File jarFile;
         try {
             jarFile = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-        } catch (Exception e) {
+        } catch (URISyntaxException e) {
             Log.error("Cannot get jar file containing the startup class", e);
             return null;
         }
@@ -353,7 +354,7 @@ public final class MainWindow extends ChatFrame implements ActionListener {
         StringBuilder classpath = new StringBuilder();
         for (String file : files) {
             if (file.endsWith(".jar")) {
-                classpath.append(libPath + File.separatorChar + file + File.pathSeparatorChar);
+                classpath.append(libPath).append(File.separatorChar).append(file).append(File.pathSeparatorChar);
             }
         }
         return classpath.toString();
@@ -403,7 +404,7 @@ public final class MainWindow extends ChatFrame implements ActionListener {
             String toExec[] = new String[]{
                 javaBin, "-cp", getClasspath(), "org.jivesoftware.launcher.Startup"};
             Runtime.getRuntime().exec(toExec);
-        } catch (Exception e) {
+        } catch (IOException e) {
             Log.error("Error trying to restart application with java", e);
             return false;
         }

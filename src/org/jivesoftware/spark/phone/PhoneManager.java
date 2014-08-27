@@ -19,6 +19,7 @@ package org.jivesoftware.spark.phone;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -27,6 +28,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import javax.media.CaptureDeviceInfo;
 import javax.media.CaptureDeviceManager;
 import javax.media.MediaLocator;
+import javax.media.NoDataSourceException;
 import javax.media.format.AudioFormat;
 import javax.media.format.VideoFormat;
 import javax.media.protocol.DataSource;
@@ -316,7 +318,7 @@ public class PhoneManager implements ChatRoomListener, ContextMenuListener {
 
             try {
                 ds = javax.media.Manager.createDataSource(getMediaLocator(locator));
-            } catch (Exception e) {
+            } catch (IOException | NoDataSourceException e) {
                 e.printStackTrace();
                 return null;
             }
@@ -332,7 +334,7 @@ public class PhoneManager implements ChatRoomListener, ContextMenuListener {
 
             try {
                 ds = javax.media.Manager.createDataSource(locator);
-            } catch (Exception e) {
+            } catch (IOException | NoDataSourceException e) {
                 e.printStackTrace();
                 return null;
             }

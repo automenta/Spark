@@ -20,6 +20,7 @@ package org.jivesoftware.spark.plugin;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import org.jivesoftware.resource.SparkRes;
 import org.jivesoftware.spark.util.URLFileSystem;
 import org.jivesoftware.spark.util.WinRegistry;
@@ -54,11 +56,11 @@ public class GoogleSearch {
 
         // Google Desktop API tosearch
         try {
-            searchUrl = (String) WinRegistry.readString(WinRegistry.HKEY_CURRENT_USER, "Software\\Google\\Google Desktop\\API", "search_url");
+            searchUrl = WinRegistry.readString(WinRegistry.HKEY_CURRENT_USER, "Software\\Google\\Google Desktop\\API", "search_url");
             searchBase = searchUrl.substring(0, searchUrl.indexOf('/', 8));
 
             db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        } catch (Exception e) {
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | ParserConfigurationException e) {
             // Nothing to do
         }
     }
@@ -118,7 +120,7 @@ public class GoogleSearch {
                 GoogleSearchResult result = new GoogleSearchResult(searchBase, query, relevance, (Element) elems.item(i));
                 list.add(result);
             }
-        } catch (Exception e1) {
+        } catch (NumberFormatException e1) {
             Log.error(e1);
         }
 
@@ -160,14 +162,14 @@ public class GoogleSearch {
             for (int i = 0; i < elems.getLength(); i++) {
                 int relevance = (int) ((double) (count - i) / count * 100);
                 GoogleSearchResult result = new GoogleSearchResult(searchBase, query, relevance, (Element) elems.item(i));
-                if (result.getURL().indexOf("googlemail") == -1) {
+                if (!result.getURL().contains("googlemail")) {
                     list.add(result);
                 }
                 if (list.size() == maxDocuments) {
                     break;
                 }
             }
-        } catch (Exception e1) {
+        } catch (NumberFormatException e1) {
             Log.error(e1);
         }
 
@@ -210,7 +212,7 @@ public class GoogleSearch {
                 GoogleSearchResult result = new GoogleSearchResult(searchBase, query, relevance, (Element) elems.item(i));
                 list.add(result);
             }
-        } catch (Exception e1) {
+        } catch (NumberFormatException e1) {
             Log.error(e1);
         }
 
@@ -272,7 +274,7 @@ public class GoogleSearch {
                     }
                 }
             }
-        } catch (Exception e1) {
+        } catch (NumberFormatException e1) {
             Log.error(e1);
         }
 

@@ -20,6 +20,7 @@ package org.jivesoftware.spark.component;
 import java.awt.Color;
 import java.awt.Component;
 import java.util.List;
+import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JButton;
@@ -178,10 +179,10 @@ public class JiveTable extends JTable {
         }
 
         public Component getTableCellRendererComponent(JTable table, Object color, boolean isSelected, boolean hasFocus, int row, int column) {
-            final String text = ((JButton) color).getText();
+            final String text = ((AbstractButton) color).getText();
             setText(text);
 
-            final Icon icon = ((JButton) color).getIcon();
+            final Icon icon = ((AbstractButton) color).getIcon();
             setIcon(icon);
 
             if (isSelected) {

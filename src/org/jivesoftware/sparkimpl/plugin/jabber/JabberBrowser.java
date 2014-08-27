@@ -168,7 +168,7 @@ public class JabberBrowser implements Plugin {
             list.add(entity);
         }
 
-        GraphicUtils.makeSameSize((JComponent[]) list.toArray(new JComponent[list.size()]));
+        GraphicUtils.makeSameSize(list.toArray(new JComponent[list.size()]));
 
         browsePanel.invalidate();
         browsePanel.validate();

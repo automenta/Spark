@@ -50,11 +50,7 @@ public class OTRKeyTable extends JPanel {
 
         @Override
         public boolean isCellEditable(int row, int column) {
-            if (column == 2) {
-                return true;
-            } else {
-                return false;
-            }
+            return column == 2;
 
         }
 

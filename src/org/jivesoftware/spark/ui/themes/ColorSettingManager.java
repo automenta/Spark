@@ -88,7 +88,7 @@ public class ColorSettingManager {
         try {
             props.store(new FileOutputStream(getSettingsFile()),
                     "Storing Spark Color Settings");
-        } catch (Exception e) {
+        } catch (IOException e) {
             Log.error("Error saving settings.", e);
         }
     }
@@ -103,7 +103,7 @@ public class ColorSettingManager {
         // load from file
         loadSettingsToMap(file);
 
-        if (_propertyHashMap.size() == 0) {
+        if (_propertyHashMap.isEmpty()) {
 
             Properties p = new Properties();
             try {

@@ -8,14 +8,14 @@ import net.java.otr4j.session.SessionID;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.spark.ChatManager;
 import org.jivesoftware.spark.SparkManager;
-import org.jivesoftware.sparkimpl.plugin.otr.impl.MyOtrKeyManager;
-import org.jivesoftware.sparkimpl.plugin.otr.impl.OTRSession;
-import org.jivesoftware.sparkimpl.plugin.otr.util.OTRProperties;
 import org.jivesoftware.spark.ui.ChatRoom;
 import org.jivesoftware.spark.ui.ChatRoomListenerAdapter;
 import org.jivesoftware.spark.ui.ContactItem;
 import org.jivesoftware.spark.ui.ContactItemHandler;
 import org.jivesoftware.spark.ui.rooms.ChatRoomImpl;
+import org.jivesoftware.sparkimpl.plugin.otr.impl.MyOtrKeyManager;
+import org.jivesoftware.sparkimpl.plugin.otr.impl.OTRSession;
+import org.jivesoftware.sparkimpl.plugin.otr.util.OTRProperties;
 
 /**
  * OTRManager controls the whole OTR process. It checks if a new chat window is

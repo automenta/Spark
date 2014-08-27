@@ -17,6 +17,7 @@
  */
 package org.jivesoftware.spark.util;
 
+import java.io.IOException;
 import org.jivesoftware.spark.util.log.Log;
 
 /**
@@ -60,12 +61,12 @@ public class Base64 {
     /**
      * The equals sign (=) as a byte.
      */
-    private final static byte EQUALS_SIGN = (byte) '=';
+    private final static byte EQUALS_SIGN = '=';
 
     /**
      * The new line character (\n) as a byte.
      */
-    private final static byte NEW_LINE = (byte) '\n';
+    private final static byte NEW_LINE = '\n';
 
     /**
      * Preferred encoding.
@@ -307,22 +308,22 @@ public class Base64 {
         finally {
             try {
                 oos.close();
-            } catch (Exception e) {
+            } catch (IOException e) {
                 // Nothing to do
             }
             try {
                 gzos.close();
-            } catch (Exception e) {
+            } catch (IOException e) {
                 // Nothing to do
             }
             try {
                 b64os.close();
-            } catch (Exception e) {
+            } catch (IOException e) {
                 // Nothing to do
             }
             try {
                 baos.close();
-            } catch (Exception e) {
+            } catch (IOException e) {
                 // Nothing to do
             }
         }   // end finally
@@ -438,17 +439,17 @@ public class Base64 {
             finally {
                 try {
                     gzos.close();
-                } catch (Exception e) {
+                } catch (IOException e) {
                     // Nothing to do
                 }
                 try {
                     b64os.close();
-                } catch (Exception e) {
+                } catch (IOException e) {
                     // Nothing to do
                 }
                 try {
                     baos.close();
-                } catch (Exception e) {
+                } catch (IOException e) {
                     // Nothing to do
                 }
             }   // end finally
@@ -681,17 +682,17 @@ public class Base64 {
                 finally {
                     try {
                         baos.close();
-                    } catch (Exception e) {
+                    } catch (IOException e) {
                         // Nothing to do
                     }
                     try {
                         gzis.close();
-                    } catch (Exception e) {
+                    } catch (IOException e) {
                         // Nothing to do
                     }
                     try {
                         bais.close();
-                    } catch (Exception e) {
+                    } catch (IOException e) {
                         // Nothing to do
                     }
                 }   // end finally
@@ -737,14 +738,14 @@ public class Base64 {
                 if (bais != null) {
                     bais.close();
                 }
-            } catch (Exception e) {
+            } catch (IOException e) {
                 // Nothing to do
             }
             try {
                 if (ois != null) {
                     ois.close();
                 }
-            } catch (Exception e) {
+            } catch (IOException e) {
                 // Nothing to do
             }
         }   // end finally

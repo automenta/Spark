@@ -87,7 +87,7 @@ public class MyOtrKeyManager implements OtrKeyManager {
             properties.setProperty(id, "true");
             try {
                 this.store();
-            } catch (Exception e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -102,7 +102,7 @@ public class MyOtrKeyManager implements OtrKeyManager {
             properties.setProperty(id, new String(Base64.encode(value)));
             try {
                 this.store();
-            } catch (Exception e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -111,7 +111,7 @@ public class MyOtrKeyManager implements OtrKeyManager {
             properties.remove(id);
             try {
                 this.store();
-            } catch (Exception e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }

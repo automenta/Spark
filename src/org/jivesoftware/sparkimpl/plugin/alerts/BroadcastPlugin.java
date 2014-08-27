@@ -246,7 +246,7 @@ public class BroadcastPlugin extends SparkTabHandler implements Plugin, PacketLi
         final String body = message.getBody();
         String subject = message.getSubject();
 
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         if (subject != null) {
             buf.append(Res.getString("subject")).append(": ").append(subject);
             buf.append("\n\n");

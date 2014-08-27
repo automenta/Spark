@@ -67,7 +67,7 @@ public class JavaMixer {
 
     public JavaMixer() {
         List<Mixer> portMixers = getPortMixers();
-        if (portMixers.size() == 0) {
+        if (portMixers.isEmpty()) {
             System.err.println("No Mixers Found.");
         }
         for (Mixer mixer : portMixers) {
@@ -204,7 +204,7 @@ public class JavaMixer {
                         }
                     } catch (LineUnavailableException e) {
                         // Do Nothing
-                    } catch (Exception e) {
+                    } catch ( e) {
                         // Do Nothing
                     }
                 }
@@ -227,13 +227,13 @@ public class JavaMixer {
         infos = mixer.getSourceLineInfo();
         for (Line.Info info : infos) {
             if (info instanceof Port.Info || info instanceof DataLine.Info) {
-                portInfoList.add((Line.Info) info);
+                portInfoList.add(info);
             }
         }
         infos = mixer.getTargetLineInfo();
         for (Line.Info info1 : infos) {
             if (info1 instanceof Port.Info || info1 instanceof DataLine.Info) {
-                portInfoList.add((Line.Info) info1);
+                portInfoList.add(info1);
             }
         }
         return portInfoList.toArray(EMPTY_PORT_INFO_ARRAY);
@@ -406,7 +406,7 @@ public class JavaMixer {
 
         public void setValue(int nValue) {
             super.setValue(nValue);
-            control.setValue((float) nValue / getScaleFactor());
+            control.setValue(nValue / getScaleFactor());
         }
 
         public int getValue() {
@@ -469,7 +469,7 @@ public class JavaMixer {
                 boolean find;
 
                 if (byName) {
-                    find = n.toString().toUpperCase().indexOf(nodes[depth].toString().toUpperCase()) > -1;
+                    find = n.toString().toUpperCase().contains(nodes[depth].toString().toUpperCase());
                 } else {
                     find = n.equals(nodes[depth]);
                 }

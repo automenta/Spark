@@ -122,13 +122,16 @@ public class ConferenceServiceBrowser {
         PropertyChangeListener changeListener = new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent e) {
                 String value = (String) pane.getValue();
-                if ("Close".equals(value)) {
-                    list.clearSelection();
-                    pane.removePropertyChangeListener(this);
-                    dlg.dispose();
-                } else if ("Ok".equals(value)) {
-                    pane.removePropertyChangeListener(this);
-                    dlg.dispose();
+                if (null != value) switch (value) {
+                    case "Close":
+                        list.clearSelection();
+                        pane.removePropertyChangeListener(this);
+                        dlg.dispose();
+                        break;
+                    case "Ok":
+                        pane.removePropertyChangeListener(this);
+                        dlg.dispose();
+                        break;
                 }
             }
         };

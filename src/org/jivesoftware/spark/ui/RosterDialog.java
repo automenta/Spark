@@ -36,6 +36,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
+import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JButton;
@@ -196,7 +197,7 @@ public class RosterDialog implements ActionListener {
 
         groupBox.setEditable(true);
 
-        if (groupModel.size() == 0) {
+        if (groupModel.isEmpty()) {
             groupBox.addItem("Friends");
         }
 
@@ -216,7 +217,7 @@ public class RosterDialog implements ActionListener {
                 if (!publicBox.isSelected()) {
                     // This is not a transport.
                     String fullJID = getJID();
-                    if (fullJID.indexOf("@") == -1) {
+                    if (!fullJID.contains("@")) {
                         fullJID = fullJID + "@" + SparkManager.getConnection().getServiceName();
                     }
 
@@ -371,7 +372,7 @@ public class RosterDialog implements ActionListener {
         }
         if (transport == null) {
             String jid = getJID();
-            if (jid.indexOf("@") == -1) {
+            if (!jid.contains("@")) {
                 jid = jid + "@" + SparkManager.getConnection().getServiceName();
             }
             String nickname = nicknameField.getText();
@@ -433,7 +434,7 @@ public class RosterDialog implements ActionListener {
             throws XMPPException {
 
         if (byname.contains("@")) {
-            byname = byname.substring(0, byname.indexOf("@"));
+            byname = byname.substring(0, byname.indexOf('@'));
         }
 
         if (byname.length() <= 4) {
@@ -470,7 +471,7 @@ public class RosterDialog implements ActionListener {
                 ArrayList<String> columnnames = new ArrayList<String>();
                 Iterator<Column> columns = data.getColumns();
                 while (columns.hasNext()) {
-                    ReportedData.Column column = (ReportedData.Column) columns
+                    ReportedData.Column column = columns
                             .next();
                     String label = column.getLabel();
                     columnnames.add(label);
@@ -478,7 +479,7 @@ public class RosterDialog implements ActionListener {
 
                 Iterator<Row> rows = data.getRows();
                 while (rows.hasNext()) {
-                    ReportedData.Row row = (ReportedData.Row) rows.next();
+                    ReportedData.Row row = rows.next();
                     if (row.getValues(columnnames.get(0)).hasNext()) {
                         String s = (String) row.getValues(columnnames.get(0))
                                 .next();
@@ -501,8 +502,8 @@ public class RosterDialog implements ActionListener {
                 popup.setVisible(true);
                 popup.show(_searchForName, event.getX(), event.getY());
             } else if (popup.getComponentCount() == 2) {
-                jidField.setText(((JMenuItem) popup.getComponent(1)).getText());
-                nicknameField.setText(StringUtils.parseName(((JMenuItem) popup
+                jidField.setText(((AbstractButton) popup.getComponent(1)).getText());
+                nicknameField.setText(StringUtils.parseName(((AbstractButton) popup
                         .getComponent(1)).getText()));
             } else {
                 JOptionPane.showMessageDialog(jidField,
@@ -529,7 +530,7 @@ public class RosterDialog implements ActionListener {
 
         boolean isSubscribed = true;
         if (userEntry != null) {
-            isSubscribed = userEntry.getGroups().size() == 0;
+            isSubscribed = userEntry.getGroups().isEmpty();
         }
 
         if (isSubscribed) {

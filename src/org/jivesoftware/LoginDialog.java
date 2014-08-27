@@ -38,6 +38,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -213,7 +214,7 @@ public class LoginDialog {
     protected ConnectionConfiguration retrieveConnectionConfiguration() {
         int port = localPref.getXmppPort();
 
-        int checkForPort = loginServer.indexOf(":");
+        int checkForPort = loginServer.indexOf(':');
         if (checkForPort != -1) {
             String portString = loginServer.substring(checkForPort + 1);
             if (ModelUtil.hasLength(portString)) {
@@ -250,16 +251,19 @@ public class LoginDialog {
         if (localPref.isPKIEnabled()) {
             SASLAuthentication.supportSASLMechanism("EXTERNAL");
             config.setKeystoreType(localPref.getPKIStore());
-            if (localPref.getPKIStore().equals("PKCS11")) {
-                config.setPKCS11Library(localPref.getPKCS11Library());
-            } else if (localPref.getPKIStore().equals("JKS")) {
-                config.setKeystoreType("JKS");
-                config.setKeystorePath(localPref.getJKSPath());
-
-            } else if (localPref.getPKIStore().equals("X509")) {
-                //do something
-            } else if (localPref.getPKIStore().equals("Apple")) {
-                config.setKeystoreType("Apple");
+            switch (localPref.getPKIStore()) {
+                case "PKCS11":
+                    config.setPKCS11Library(localPref.getPKCS11Library());
+                    break;
+                case "JKS":
+                    config.setKeystoreType("JKS");
+                    config.setKeystorePath(localPref.getJKSPath());
+                    break;
+                case "X509":
+                    break;
+                case "Apple":
+                    config.setKeystoreType("Apple");
+                    break;
             }
         }
 
@@ -701,7 +705,7 @@ public class LoginDialog {
 
         public void keyPressed(KeyEvent e) {
             if (e.getKeyCode() == KeyEvent.VK_RIGHT
-                    && ((JTextField) e.getSource()).getCaretPosition() == ((JTextField) e.getSource()).getText().length()) {
+                    && ((JTextComponent) e.getSource()).getCaretPosition() == ((JTextComponent) e.getSource()).getText().length()) {
                 getPopup().show(otherUsers, 0, 0);
             }
         }
@@ -892,7 +896,7 @@ public class LoginDialog {
                     for (Principal p : mySubject.getPrincipals()) {
                         //TODO: check if principal is a kerberos principal first...
                         String name = p.getName();
-                        int indexOne = name.indexOf("@");
+                        int indexOne = name.indexOf('@');
                         if (indexOne != -1) {
                             princName = name.substring(0, indexOne);
                             accountNameLabel.setText(name);
@@ -907,22 +911,25 @@ public class LoginDialog {
                 }
 
                 String ssoKdc;
-                if (ssoMethod.equals("dns")) {
-                    if (princRealm != null) { //princRealm is null if we got a LoginException above.
-                        ssoKdc = getDnsKdc(princRealm);
+                switch (ssoMethod) {
+                    case "dns":
+                        if (princRealm != null) { //princRealm is null if we got a LoginException above.
+                            ssoKdc = getDnsKdc(princRealm);
+                            System.setProperty("java.security.krb5.realm", princRealm);
+                            System.setProperty("java.security.krb5.kdc", ssoKdc);
+                        }   break;
+                    case "manual":
+                        princRealm = localPref.getSSORealm();
+                        ssoKdc = localPref.getSSOKDC();
                         System.setProperty("java.security.krb5.realm", princRealm);
                         System.setProperty("java.security.krb5.kdc", ssoKdc);
-                    }
-                } else if (ssoMethod.equals("manual")) {
-                    princRealm = localPref.getSSORealm();
-                    ssoKdc = localPref.getSSOKDC();
-                    System.setProperty("java.security.krb5.realm", princRealm);
-                    System.setProperty("java.security.krb5.kdc", ssoKdc);
-                } else {
-                    //Assume "file" method.  We don't have to do anything special,
-                    //java takes care of it for us. Unset the props if they are set
-                    System.clearProperty("java.security.krb5.realm");
-                    System.clearProperty("java.security.krb5.kdc");
+                        break;
+                    default:
+                        //Assume "file" method.  We don't have to do anything special,
+                        //java takes care of it for us. Unset the props if they are set
+                        System.clearProperty("java.security.krb5.realm");
+                        System.clearProperty("java.security.krb5.kdc");
+                        break;
                 }
 
                 String userName = localPref.getLastUsername();
@@ -1013,7 +1020,7 @@ public class LoginDialog {
                     sessionManager.setServerAddress(connection.getServiceName());
                     sessionManager.initializeSession(connection, getLoginUsername(), getLoginPassword());
                     sessionManager.setJID(connection.getUser());
-                } catch (Exception xee) {
+                } catch (InterruptedException | InvocationTargetException | XMPPException xee) {
                     if (!loginDialog.isVisible()) {
                         loginDialog.setVisible(true);
                     }

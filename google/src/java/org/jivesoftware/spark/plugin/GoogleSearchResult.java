@@ -32,6 +32,7 @@ import org.jivesoftware.spark.component.browser.BrowserFactory;
 import org.jivesoftware.spark.component.browser.BrowserViewer;
 import org.jivesoftware.spark.util.StringUtils;
 import org.jivesoftware.spark.util.log.Log;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 
 /**
@@ -70,7 +71,7 @@ public class GoogleSearchResult {
     private String getContent(String field, Element element) {
         try {
             return (element.getElementsByTagName(field).item(0)).getChildNodes().item(0).getNodeValue();
-        } catch (Exception e) {
+        } catch (DOMException e) {
             return null;
         }
     }

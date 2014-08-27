@@ -86,7 +86,7 @@ public class SparkVersion extends IQ {
     }
 
     public String getChildElementXML() {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append("<query xmlns=\"jabber:iq:spark\">");
 
         // Add os specific information
@@ -120,15 +120,20 @@ public class SparkVersion extends IQ {
             while (!done) {
                 int eventType = parser.next();
                 if (eventType == XmlPullParser.START_TAG) {
-                    if (parser.getName().equals("version")) {
-                        version.setVersion(parser.nextText());
-                    } else if (parser.getName().equals("updatedTime")) {
-                        Long time = Long.valueOf(parser.nextText());
-                        version.setUpdateTime(time);
-                    } else if (parser.getName().equals("downloadURL")) {
-                        version.setDownloadURL(parser.nextText());
-                    } else if (parser.getName().equals("displayMessage")) {
-                        version.setDisplayMessage(parser.nextText());
+                    switch (parser.getName()) {
+                        case "version":
+                            version.setVersion(parser.nextText());
+                            break;
+                        case "updatedTime":
+                            Long time = Long.valueOf(parser.nextText());
+                            version.setUpdateTime(time);
+                            break;
+                        case "downloadURL":
+                            version.setDownloadURL(parser.nextText());
+                            break;
+                        case "displayMessage":
+                            version.setDisplayMessage(parser.nextText());
+                            break;
                     }
                 } else if (eventType == XmlPullParser.END_TAG) {
                     if (parser.getName().equals(ELEMENT_NAME)) {

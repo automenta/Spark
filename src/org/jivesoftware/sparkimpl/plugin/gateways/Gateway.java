@@ -62,7 +62,7 @@ public class Gateway extends IQ {
     public static final String NAMESPACE = "jabber:iq:gateway";
 
     public String getChildElementXML() {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append("<query xmlns=\"").append(NAMESPACE).append("\">");
         buf.append("<prompt>").append(username).append("</prompt>");
         buf.append("</query>");
@@ -87,10 +87,13 @@ public class Gateway extends IQ {
             while (!done) {
                 int eventType = parser.next();
                 if (eventType == XmlPullParser.START_TAG) {
-                    if (parser.getName().equals("jid")) {
-                        version.setJid(parser.nextText());
-                    } else if (parser.getName().equals("username")) {
-                        version.setUsername(parser.nextText());
+                    switch (parser.getName()) {
+                        case "jid":
+                            version.setJid(parser.nextText());
+                            break;
+                        case "username":
+                            version.setUsername(parser.nextText());
+                            break;
                     }
                 } else if (eventType == XmlPullParser.END_TAG) {
                     if (parser.getName().equals(ELEMENT_NAME)) {

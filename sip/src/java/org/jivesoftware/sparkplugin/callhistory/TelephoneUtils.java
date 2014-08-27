@@ -36,7 +36,7 @@ public class TelephoneUtils {
 
     public static String formatPattern(String number, String pattern) {
 
-        StringBuffer str = new StringBuffer();
+        StringBuilder str = new StringBuilder();
         number = removeInvalidChars(number);
 
         for (int i = 0, j = 0; i < number.length(); j++) {

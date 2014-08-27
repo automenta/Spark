@@ -60,7 +60,7 @@ public class LogPacket extends IQ {
     }
 
     public String getChildElementXML() {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append("<" + ELEMENT_NAME + " xmlns='" + NAMESPACE + "'>");
         buf.append(this.getExtensionsXML());
         buf.append("</" + ELEMENT_NAME + ">");

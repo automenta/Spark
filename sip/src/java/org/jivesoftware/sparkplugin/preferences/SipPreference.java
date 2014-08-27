@@ -20,8 +20,11 @@ package org.jivesoftware.sparkplugin.preferences;
 import com.thoughtworks.xstream.XStream;
 import java.awt.EventQueue;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import net.java.sipmack.common.Log;
@@ -61,7 +64,7 @@ public class SipPreference implements Preference {
                     panel = new SipPreferencePanel();
                 }
             });
-        } catch (Exception e) {
+        } catch (InterruptedException | InvocationTargetException e) {
             e.printStackTrace();
         }
 
@@ -121,7 +124,7 @@ public class SipPreference implements Preference {
             try {
                 FileReader reader = new FileReader(settingsFile);
                 preferences = (SipPreferences) getXStream().fromXML(reader);
-            } catch (Exception e) {
+            } catch (FileNotFoundException e) {
                 Log.error("Error loading Sound Preferences.", e);
                 preferences = new SipPreferences();
             }
@@ -222,7 +225,7 @@ public class SipPreference implements Preference {
         try {
             FileWriter writer = new FileWriter(getSipSettingsFile());
             getXStream().toXML(preferences, writer);
-        } catch (Exception e) {
+        } catch (IOException e) {
             Log.error("Error saving sound settings.", e);
         }
     }

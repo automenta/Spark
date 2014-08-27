@@ -40,6 +40,7 @@ import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.HeadlessException;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Rectangle;
@@ -48,6 +49,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.lang.reflect.InvocationTargetException;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -314,7 +316,7 @@ public class SparkToaster {
                             toaster.setVisible(true);
                         }
                     });
-                } catch (Exception e) {
+                } catch (InterruptedException | InvocationTargetException e) {
                     Log.error(e);
                 }
                 if (useAlwaysOnTop) {
@@ -350,7 +352,7 @@ public class SparkToaster {
                 currentNumberOfToaster--;
                 toaster.setVisible(false);
                 toaster.dispose();
-            } catch (Exception e) {
+            } catch (HeadlessException | InterruptedException | SecurityException e) {
                 Log.error(e);
             }
         }

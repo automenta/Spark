@@ -21,6 +21,7 @@ import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
@@ -174,7 +175,7 @@ public class CallManager implements InterlocutorListener {
                     });
                 }
             });
-        } catch (Exception e) {
+        } catch (InterruptedException | InvocationTargetException e) {
             Log.error(e);
         }
 
@@ -221,24 +222,26 @@ public class CallManager implements InterlocutorListener {
                 callNumber = SoftPhoneManager.getNumbersFromPhone(callNumber);
                 PhonePanel panel = calls.get(callNumber);
 
-                if (callState.equals(Call.CONNECTED)) {
-                    closeToaster(interlocutorUI);
-                    showCallAnswered(interlocutorUI);
-                } else if (callState.equals(Call.DISCONNECTED)) {
-                    closeToaster(interlocutorUI);
-
-                    if (panel != null) {
-                        panel.callEnded();
-                    }
-
-                    PhoneManager.getInstance().removeCurrentCall(callNumber);
-                } else if (callState.equals(Call.RINGING)) {
-
-                } else if (callState.equals(Call.BUSY)) {
-                    closeToaster(interlocutorUI);
-                } else if (callState.equals(Call.ALERTING)) {
-                    showIncomingCall(interlocutorUI);
-                    PhoneManager.getInstance().addCurrentCall(callNumber);
+                switch (callState) {
+                    case Call.CONNECTED:
+                        closeToaster(interlocutorUI);
+                        showCallAnswered(interlocutorUI);
+                        break;
+                    case Call.DISCONNECTED:
+                        closeToaster(interlocutorUI);
+                        if (panel != null) {
+                            panel.callEnded();
+                        }   PhoneManager.getInstance().removeCurrentCall(callNumber);
+                        break;
+                    case Call.RINGING:
+                        break;
+                    case Call.BUSY:
+                        closeToaster(interlocutorUI);
+                        break;
+                    case Call.ALERTING:
+                        showIncomingCall(interlocutorUI);
+                        PhoneManager.getInstance().addCurrentCall(callNumber);
+                        break;
                 }
             }
         });
@@ -297,13 +300,13 @@ public class CallManager implements InterlocutorListener {
                     }
                 }
             });
-        } catch (Exception e) {
+        } catch (InterruptedException | InvocationTargetException e) {
             Log.error(e);
         }
     }
 
     public void interlocutorRemoved(final InterlocutorUI interlocutorUI) {
-        if (softPhone.getInterlocutors().size() == 0) {
+        if (softPhone.getInterlocutors().isEmpty()) {
 
             if (offPhonePresence == null) {
 

@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -79,7 +80,7 @@ public class SettingsManager {
 
         try {
             props.store(new FileOutputStream(getSettingsFile()), "Spark Settings");
-        } catch (Exception e) {
+        } catch (IOException e) {
             Log.error("Error saving settings.", e);
         }
 
@@ -99,7 +100,7 @@ public class SettingsManager {
                                 file.getAbsolutePath());
                     }
                 }
-            } catch (Exception e) {
+            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
                 e.printStackTrace();
             }
         } else {
@@ -116,7 +117,7 @@ public class SettingsManager {
                                 "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
                                 SparkRes.getString(SparkRes.APP_NAME));
                     }
-                } catch (Exception e) {
+                } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
                     Log.error("Can not delete registry entry", e);
                 }
             }

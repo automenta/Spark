@@ -717,7 +717,7 @@ public class ChatRoomImpl extends ChatRoom {
                     nickname = personalNickname;
                 } else {
                     try {
-                        nickname = message.getFrom().substring(message.getFrom().indexOf("/") + 1);
+                        nickname = message.getFrom().substring(message.getFrom().indexOf('/') + 1);
                     } catch (Exception e) {
                         nickname = StringUtils.parseName(nickname);
                     }

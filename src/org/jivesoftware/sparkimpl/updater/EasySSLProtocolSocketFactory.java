@@ -49,6 +49,9 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import org.apache.commons.httpclient.ConnectTimeoutException;
@@ -128,7 +131,7 @@ public class EasySSLProtocolSocketFactory implements ProtocolSocketFactory {
                     new TrustManager[]{new EasyX509TrustManager(null)},
                     null);
             return context;
-        } catch (Exception e) {
+        } catch (KeyManagementException | KeyStoreException | NoSuchAlgorithmException e) {
             LOG.error(e.getMessage(), e);
             throw new HttpClientError(e.toString());
         }

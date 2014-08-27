@@ -166,7 +166,7 @@ public class Call implements ReceiveStreamListener {
      * @param data the remoteSdpDescription to set.
      */
     void setRemoteSdpDescription(String data) {
-        if (data == null || data.equals("")) {
+        if (data == null || data.isEmpty()) {
             return;
         }
         try {

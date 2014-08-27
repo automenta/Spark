@@ -19,6 +19,7 @@ package org.jivesoftware.spark.component;
 
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DragGestureEvent;
 import java.awt.dnd.DragGestureListener;
@@ -31,7 +32,9 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
+import java.awt.dnd.InvalidDnDOperationException;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import javax.swing.JFrame;
 import org.jivesoftware.spark.util.log.Log;
@@ -100,7 +103,7 @@ public abstract class DroppableFrame extends JFrame implements DropTargetListene
             } else {
                 dropTargetDropEvent.rejectDrop();
             }
-        } catch (Exception io) {
+        } catch (UnsupportedFlavorException | InvalidDnDOperationException | IOException io) {
             Log.error(io);
             dropTargetDropEvent.rejectDrop();
         }

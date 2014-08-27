@@ -18,6 +18,7 @@
 package org.jivesoftware.spark.util;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import org.jivesoftware.LoginDialog;
@@ -324,7 +325,7 @@ public final class UIComponentRegistry {
             final Method m = contactInfoWindowClass.getMethod("getInstance");
             final Object o = m.invoke(contactInfoWindowClass);
             instance = contactInfoWindowClass.cast(o);
-        } catch (final Exception e) {
+        } catch (final IllegalAccessException | IllegalArgumentException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
             // not pretty but we're catching 5 exceptions we can do little about
             Log.error(
                     "Error calling getInstance for "
@@ -376,7 +377,7 @@ public final class UIComponentRegistry {
      * @return
      */
     public static SparkTabbedPane createWorkspaceTabPanel(int tabPosition) {
-        return instantiate(workspaceTabPaneClass, new Integer(tabPosition));
+        return instantiate(workspaceTabPaneClass, tabPosition);
     }
 
     /**
@@ -467,7 +468,7 @@ public final class UIComponentRegistry {
             final Method m = buttonFactoryClass.getMethod("getInstance");
             final Object o = m.invoke(buttonFactoryClass);
             instance = buttonFactoryClass.cast(o);
-        } catch (final Exception e) {
+        } catch (final IllegalAccessException | IllegalArgumentException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
             // not pretty but we're catching 5 exceptions we can do little about
             Log.error("Error calling getInstance for " + buttonFactoryClass.getName(), e);
         }
@@ -498,7 +499,7 @@ public final class UIComponentRegistry {
                 final Constructor<? extends T> ctor = currentClass.getDeclaredConstructor();
                 instance = ctor.newInstance();
             }
-        } catch (final Exception e) {
+        } catch (final IllegalAccessException | IllegalArgumentException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
             // not pretty but we're catching several exceptions we can do little
             // about
             Log.error("Error calling constructor for " + currentClass.getName(), e);

@@ -366,7 +366,7 @@ public class SparkRes {
         JEditorPane pane = new JEditorPane();
         frame.getContentPane().add(new JScrollPane(pane));
 
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         Enumeration<String> enumeration = prb.getKeys();
         while (enumeration.hasMoreElements()) {
             String token = enumeration.nextElement();
@@ -396,7 +396,7 @@ public class SparkRes {
                 boolean exists = false;
                 Enumeration<String> enumeration = prb.getKeys();
                 while (enumeration.hasMoreElements()) {
-                    String token = (String) enumeration.nextElement();
+                    String token = enumeration.nextElement();
                     String value = prb.getString(token);
                     if (value.endsWith(name)) {
                         exists = true;

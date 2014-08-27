@@ -32,6 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -45,6 +46,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.text.JTextComponent;
 import org.jivesoftware.resource.Res;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smackx.Form;
@@ -98,63 +100,68 @@ public class DataFormDialog extends JPanel {
                     valueList.add(iter.next());
                 }
 
-                if (type.equals(FormField.TYPE_BOOLEAN)) {
-                    String o = (String) valueList.get(0);
-                    boolean isSelected = o.equals("1");
-                    JCheckBox box = new JCheckBox(label);
-                    box.setSelected(isSelected);
-                    addField(label, box, variable);
-                } else if (type.equals(FormField.TYPE_TEXT_SINGLE)
-                        || type.equals(FormField.TYPE_JID_SINGLE)) {
-                    String value = (String) valueList.get(0);
-                    addField(label, new JTextField(value), variable);
-                } else if (type.equals(FormField.TYPE_TEXT_MULTI)
-                        || type.equals(FormField.TYPE_JID_MULTI)) {
-                    StringBuffer buf = new StringBuffer();
-                    iter = field.getValues();
-
-                    while (iter.hasNext()) {
-                        buf.append((String) iter.next());
-
-                        if (iter.hasNext()) {
-                            buf.append(",");
+                switch (type) {
+                    case FormField.TYPE_BOOLEAN:
+                        {
+                            String o = (String) valueList.get(0);
+                            boolean isSelected = o.equals("1");
+                            JCheckBox box = new JCheckBox(label);
+                            box.setSelected(isSelected);
+                            addField(label, box, variable);
+                            break;
                         }
-                    }
-                    addField(label, new JTextArea(buf.toString()), variable);
-                } else if (type.equals(FormField.TYPE_TEXT_PRIVATE)) {
-                    addField(label, new JPasswordField(), variable);
-                } else if (type.equals(FormField.TYPE_LIST_SINGLE)) {
-                    JComboBox box = new JComboBox();
-                    iter = field.getOptions();
-                    while (iter.hasNext()) {
-                        FormField.Option option = (FormField.Option) iter.next();
-                        String value = option.getValue();
-                        box.addItem(value);
-                    }
-                    if (valueList.size() > 0) {
-                        String defaultValue = (String) valueList.get(0);
-                        box.setSelectedItem(defaultValue);
-                    }
-
-                    addField(label, box, variable);
-                } else if (type.equals(FormField.TYPE_LIST_MULTI)) {
-                    CheckBoxList checkBoxList = new CheckBoxList();
-                    Iterator<Option> options = field.getOptions();
-                    Option option = null;
-                    String optionLabel = null;
-                    String optionValue = null;
-                    Iterator<?> i = field.getValues();
-                    List<String> values = new ArrayList<String>();
-                    while (i.hasNext()) {
-                        values.add((String) i.next());
-                    }
-                    while (options.hasNext()) {
+                    case FormField.TYPE_TEXT_SINGLE:
+                    case FormField.TYPE_JID_SINGLE:
+                        String value = (String) valueList.get(0);
+                        addField(label, new JTextField(value), variable);
+                        break;
+                    case FormField.TYPE_TEXT_MULTI:
+                    case FormField.TYPE_JID_MULTI:
+                        StringBuilder buf = new StringBuilder();
+                        iter = field.getValues();
+                        while (iter.hasNext()) {
+                            buf.append((String) iter.next());
+                            
+                            if (iter.hasNext()) {
+                                buf.append(",");
+                            }
+                        }   addField(label, new JTextArea(buf.toString()), variable);
+                        break;
+                    case FormField.TYPE_TEXT_PRIVATE:
+                        addField(label, new JPasswordField(), variable);
+                        break;
+                    case FormField.TYPE_LIST_SINGLE:
+                        {
+                            JComboBox box = new JComboBox();
+                            iter = field.getOptions();
+                            while (iter.hasNext()) {
+                                FormField.Option option = (FormField.Option) iter.next();
+                                String v2 = option.getValue();
+                                box.addItem(v2);
+                            }       
+                        if (valueList.size() > 0) {
+                            String defaultValue = (String) valueList.get(0);
+                            box.setSelectedItem(defaultValue);
+                        }       addField(label, box, variable);
+                            break;
+                        }
+                    case FormField.TYPE_LIST_MULTI:
+                        CheckBoxList checkBoxList = new CheckBoxList();
+                        Iterator<Option> options = field.getOptions();
+                        Option option = null;
+                        String optionLabel = null;
+                        String optionValue = null;
+                        Iterator<?> i = field.getValues();
+                        List<String> values = new ArrayList<String>();
+                        while (i.hasNext()) {
+                            values.add((String) i.next());
+                        }   while (options.hasNext()) {
                         option = options.next();
                         optionLabel = option.getLabel();
                         optionValue = option.getValue();
                         checkBoxList.addCheckBox(new JCheckBox(optionLabel, values.contains(optionValue)), optionValue);
-                    }
-                    addField(label, checkBoxList, variable);
+                    }   addField(label, checkBoxList, variable);
+                        break;
                 }
             }
         } catch (NullPointerException e) {
@@ -207,11 +214,11 @@ public class DataFormDialog extends JPanel {
             String answer = (String) o1;
             Object o = valueMap.get(answer);
             if (o instanceof JCheckBox) {
-                boolean isSelected = ((JCheckBox) o).isSelected();
+                boolean isSelected = ((AbstractButton) o).isSelected();
                 submitForm.setAnswer(answer, isSelected);
             } else if (o instanceof JTextArea) {
                 List<String> list = new ArrayList<String>();
-                String value = ((JTextArea) o).getText();
+                String value = ((JTextComponent) o).getText();
                 StringTokenizer tokenizer = new StringTokenizer(value, ", ", false);
                 while (tokenizer.hasMoreTokens()) {
                     list.add(tokenizer.nextToken());
@@ -220,7 +227,7 @@ public class DataFormDialog extends JPanel {
                     submitForm.setAnswer(answer, list);
                 }
             } else if (o instanceof JTextField) {
-                String value = ((JTextField) o).getText();
+                String value = ((JTextComponent) o).getText();
                 if (ModelUtil.hasLength(value)) {
                     submitForm.setAnswer(answer, value);
                 }
@@ -281,7 +288,7 @@ public class DataFormDialog extends JPanel {
         }
 
         if (comp instanceof JTextField) {
-            return ((JTextField) comp).getText();
+            return ((JTextComponent) comp).getText();
         }
         return null;
     }

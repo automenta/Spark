@@ -58,7 +58,7 @@ public class WinRegistryReader {
             }
 
             return result.substring(p + REGSTR_TOKEN.length()).trim();
-        } catch (Exception e) {
+        } catch (IOException | InterruptedException e) {
             return null;
         }
     }

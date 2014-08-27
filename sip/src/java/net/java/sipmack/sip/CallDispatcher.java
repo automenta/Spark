@@ -42,13 +42,13 @@ class CallDispatcher implements CallListener {
         call.setDialog(dialog);
         call.setInitialRequest(initialRequest);
         // call.setState(Call.DIALING);
-        calls.put(Integer.valueOf(call.getID()), call);
+        calls.put(call.getID(), call);
         call.addStateChangeListener(this);
         return call;
     }
 
     Call getCall(int id) {
-        return (Call) calls.get(Integer.valueOf(id));
+        return calls.get(id);
     }
 
     /**
@@ -64,7 +64,7 @@ class CallDispatcher implements CallListener {
         synchronized (calls) {
             Enumeration<Call> callsEnum = calls.elements();
             while (callsEnum.hasMoreElements()) {
-                Call item = (Call) callsEnum.nextElement();
+                Call item = callsEnum.nextElement();
                 if (item.getDialog().getCallId().equals(dialog.getCallId())) {
                     return item;
                 }
@@ -86,7 +86,7 @@ class CallDispatcher implements CallListener {
         synchronized (calls) {
             Enumeration<Call> callsEnum = calls.elements();
             while (callsEnum.hasMoreElements()) {
-                Call item = (Call) callsEnum.nextElement();
+                Call item = callsEnum.nextElement();
                 if (item.getDialog().getCallId().equals(callId)) {
                     return item;
                 }
@@ -101,7 +101,7 @@ class CallDispatcher implements CallListener {
     }
 
     private void removeCall(Call call) {
-        calls.remove(Integer.valueOf(call.getID()));
+        calls.remove(call.getID());
     }
 
     // ================================ DialogListener =================

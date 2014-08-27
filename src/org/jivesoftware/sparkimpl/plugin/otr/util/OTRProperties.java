@@ -57,7 +57,7 @@ public class OTRProperties {
     public void save() {
         try {
             props.store(new FileOutputStream(getConfigFile()), "Storing OTRPlugin properties");
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

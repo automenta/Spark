@@ -109,7 +109,7 @@ public class NetworkAddressManager {
         int i = 0;
 
         // Try to get the Preferred IP Address
-        if (SIPConfig.getPreferredNetworkAddress() != null && !SIPConfig.getPreferredNetworkAddress().equals("")) {
+        if (SIPConfig.getPreferredNetworkAddress() != null && !SIPConfig.getPreferredNetworkAddress().isEmpty()) {
             //Preferred is local host
 
             try {
@@ -120,7 +120,7 @@ public class NetworkAddressManager {
 
         }
 
-        if (SIPConfig.getPreferredNetworkAddress() != null && !SIPConfig.getPreferredNetworkAddress().equals("")) {
+        if (SIPConfig.getPreferredNetworkAddress() != null && !SIPConfig.getPreferredNetworkAddress().isEmpty()) {
 
             try {
                 ifaces = NetworkInterface.getNetworkInterfaces();
@@ -130,7 +130,7 @@ public class NetworkAddressManager {
 
             while (ifaces.hasMoreElements()) {
 
-                NetworkInterface iface = (NetworkInterface) ifaces.nextElement();
+                NetworkInterface iface = ifaces.nextElement();
                 Enumeration<InetAddress> iaddresses = iface.getInetAddresses();
 
                 while (iaddresses.hasMoreElements()) {
@@ -153,11 +153,11 @@ public class NetworkAddressManager {
         // Try to get best IP ( not loopback, not linklocal and not sitelocal )
         while (ifaces.hasMoreElements()) {
 
-            NetworkInterface iface = (NetworkInterface) ifaces.nextElement();
+            NetworkInterface iface = ifaces.nextElement();
             Enumeration<InetAddress> iaddresses = iface.getInetAddresses();
 
             while (iaddresses.hasMoreElements()) {
-                InetAddress iaddress = (InetAddress) iaddresses.nextElement();
+                InetAddress iaddress = iaddresses.nextElement();
                 if (!iaddress.isLoopbackAddress() && !iaddress.isLinkLocalAddress() && !iaddress.isSiteLocalAddress() && !(iaddress instanceof java.net.Inet6Address)) {
                     addresses.add(new InetAddressWrapper(iaddress, i++));
                 }
@@ -173,11 +173,11 @@ public class NetworkAddressManager {
         // Try to get best IP ( not loopback and not linklocal )
         while (ifaces.hasMoreElements()) {
 
-            NetworkInterface iface = (NetworkInterface) ifaces.nextElement();
+            NetworkInterface iface = ifaces.nextElement();
             Enumeration<InetAddress> iaddresses = iface.getInetAddresses();
 
             while (iaddresses.hasMoreElements()) {
-                InetAddress iaddress = (InetAddress) iaddresses.nextElement();
+                InetAddress iaddress = iaddresses.nextElement();
                 if (!iaddress.isLoopbackAddress() && !iaddress.isLinkLocalAddress() && !(iaddress instanceof java.net.Inet6Address)) {
                     addresses.add(new InetAddressWrapper(iaddress, i++));
                 }
@@ -271,10 +271,7 @@ public class NetworkAddressManager {
                 && address[1] <= 31) {
             return true;
         }
-        if ((address[0] & 0xFF) == 192 && (address[1] & 0xFF) == 168) {
-            return true;
-        }
-        return false;
+        return (address[0] & 0xFF) == 192 && (address[1] & 0xFF) == 168;
     }
 
     /**

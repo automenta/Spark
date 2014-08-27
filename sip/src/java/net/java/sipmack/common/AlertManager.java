@@ -65,7 +65,7 @@ public class AlertManager {
     }
 
     private AudioClip getAlertClip(String alertResourceName, boolean create) {
-        AudioClip clip = (AudioClip) alertClips.get(alertResourceName);
+        AudioClip clip = alertClips.get(alertResourceName);
         if (clip == null && create) {
             clip = Applet.newAudioClip(PhoneRes.getURL(alertResourceName));
             if (clip != null) {

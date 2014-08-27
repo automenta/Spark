@@ -23,9 +23,11 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import javax.swing.ImageIcon;
 import org.jivesoftware.MainWindow;
@@ -297,7 +299,7 @@ public final class SparkManager {
             if (t != null && t.isDataFlavorSupported(DataFlavor.stringFlavor)) {
                 return (String) t.getTransferData(DataFlavor.stringFlavor);
             }
-        } catch (Exception e) {
+        } catch (UnsupportedFlavorException | IOException e) {
             Log.error("Could not retrieve info from clipboard.", e);
         }
         return null;

@@ -40,6 +40,7 @@ import org.jivesoftware.phone.client.event.PhoneEventPacketExtensionProvider;
 import org.jivesoftware.resource.Res;
 import org.jivesoftware.resource.SparkRes;
 import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.provider.ProviderManager;
 import org.jivesoftware.smack.util.StringUtils;
@@ -83,7 +84,7 @@ public class PhonePlugin implements Plugin {
 
                     // Add BaseListener
                     phoneClient.addEventListener(new PhoneListener());
-                } catch (Exception e) {
+                } catch (XMPPException e) {
                     // Ignore because the user does not have support.
                     //Log.debug(e);
                 }
@@ -159,7 +160,7 @@ public class PhonePlugin implements Plugin {
                     boolean phoneEnabled = false;
                     try {
                         phoneEnabled = phoneClient.isPhoneEnabled(StringUtils.parseBareAddress(chatRoom.getParticipantJID()));
-                    } catch (Exception e) {
+                    } catch (XMPPException e) {
                         Log.error(e);
                     }
 
@@ -185,7 +186,7 @@ public class PhonePlugin implements Plugin {
 
                     try {
                         phoneEnabled = phoneClient.isPhoneEnabled(item.getJID());
-                    } catch (Exception e) {
+                    } catch (XMPPException e) {
                         Log.error("There was an error retrieving phone information.", e);
                     }
 

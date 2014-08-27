@@ -249,7 +249,7 @@ public class GenericURI {
      * @return the String representation of this URI.
      */
     public String toString() {
-        StringBuffer buffer = new StringBuffer(getScheme().toString());
+        StringBuilder buffer = new StringBuilder(getScheme().toString());
 
         buffer.append(':').append(getAddressPart());
 

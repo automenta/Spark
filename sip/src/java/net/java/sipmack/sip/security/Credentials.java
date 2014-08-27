@@ -67,7 +67,7 @@ public class Credentials {
      * @return the user name.
      */
     public String getAuthUserName() {
-        return Credentials.authUserName != null && !Credentials.authUserName.equals("") ? Credentials.authUserName
+        return Credentials.authUserName != null && !Credentials.authUserName.isEmpty() ? Credentials.authUserName
                 : Credentials.userName;
     }
 

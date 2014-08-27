@@ -695,14 +695,19 @@ public class LoginSettingDialog implements PropertyChangeListener {
 
             String method = localPreferences.getSSOMethod();
             if (ModelUtil.hasLength(method)) {
-                if (method.equals("file")) {
-                    ssoMethodFileRadio.setSelected(true);
-                } else if (method.equals("dns")) {
-                    ssoMethodDNSRadio.setSelected(true);
-                } else if (method.equals("manual")) {
-                    ssoMethodManualRadio.setSelected(true);
-                } else {
-                    ssoMethodFileRadio.setSelected(true);
+                switch (method) {
+                    case "file":
+                        ssoMethodFileRadio.setSelected(true);
+                        break;
+                    case "dns":
+                        ssoMethodDNSRadio.setSelected(true);
+                        break;
+                    case "manual":
+                        ssoMethodManualRadio.setSelected(true);
+                        break;
+                    default:
+                        ssoMethodFileRadio.setSelected(true);
+                        break;
                 }
             } else {
                 ssoMethodFileRadio.setSelected(true);
@@ -825,7 +830,7 @@ public class LoginSettingDialog implements PropertyChangeListener {
 
             for (Principal p : mySubject.getPrincipals()) {
                 String name = p.getName();
-                int indexOne = name.indexOf("@");
+                int indexOne = name.indexOf('@');
                 if (indexOne != -1) {
                     return name;
                 }
@@ -930,32 +935,34 @@ public class LoginSettingDialog implements PropertyChangeListener {
             usePKIBox.setSelected(localPreferences.isPKIEnabled());
 
             if (ModelUtil.hasLength(localPreferences.getPKIStore())) {
-                if (localPreferences.getPKIStore().equals("PKCS11")) {
-                    pkiStore.setSelectedItem("PKCS#11");
-                    if (ModelUtil
-                            .hasLength(localPreferences.getPKCS11Library())) {
-                        fileField.setText(localPreferences.getPKCS11Library());
-                    } else {
+                switch (localPreferences.getPKIStore()) {
+                    case "PKCS11":
+                        pkiStore.setSelectedItem("PKCS#11");
+                        if (ModelUtil
+                                .hasLength(localPreferences.getPKCS11Library())) {
+                            fileField.setText(localPreferences.getPKCS11Library());
+                        } else {
+                            fileField.setText("");
+                        }   break;
+                    case "X509":
+                        pkiStore.setSelectedItem("X.509 PEM File");
+                        // if(ModelUtil.hasLength(localPreferences.getPEMFile())) {
+                        // fileField.setText(localPreferences.getPEMFile());
+                        // }
+                        // else {
                         fileField.setText("");
-                    }
-                } else if (localPreferences.getPKIStore().equals("X509")) {
-                    pkiStore.setSelectedItem("X.509 PEM File");
-                    // if(ModelUtil.hasLength(localPreferences.getPEMFile())) {
-                    // fileField.setText(localPreferences.getPEMFile());
-                    // }
-                    // else {
-                    fileField.setText("");
-                    // }
-                } else if (localPreferences.getPKIStore().equals(
-                        "Apple KeyChain")) {
-                    fileField.setText("");
-                } else {
-                    pkiStore.setSelectedItem("Java Keystore");
-                    if (ModelUtil.hasLength(localPreferences.getJKSPath())) {
-                        fileField.setText(localPreferences.getJKSPath());
-                    } else {
+                        // }
+                        break;
+                    case "Apple KeyChain":
                         fileField.setText("");
-                    }
+                        break;
+                    default:
+                        pkiStore.setSelectedItem("Java Keystore");
+                        if (ModelUtil.hasLength(localPreferences.getJKSPath())) {
+                            fileField.setText(localPreferences.getJKSPath());
+                        } else {
+                            fileField.setText("");
+                        }   break;
                 }
             } else {
                 pkiStore.setSelectedItem("Java Keystore");

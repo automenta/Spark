@@ -93,7 +93,7 @@ public class LocalPreference implements Preference {
             Integer.parseInt(panel.getTimeout());
             Integer.parseInt(panel.getPort());
             Integer.parseInt(panel.getIdleTime());
-        } catch (Exception ex) {
+        } catch (NumberFormatException ex) {
             errorMessage = Res.getString("message.specify.valid.time.error");
             return false;
         }

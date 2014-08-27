@@ -35,6 +35,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javax.swing.AbstractAction;
+import javax.swing.AbstractButton;
 import javax.swing.Action;
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
@@ -378,8 +379,8 @@ public class GroupChatParticipantList extends JPanel {
             String[] args = pack.toXML().split(" ");
 
             for (String ss : args) {
-                int first = ss.indexOf("\"");
-                int last = ss.lastIndexOf("\"");
+                int first = ss.indexOf('"');
+                int last = ss.lastIndexOf('"');
                 if (ss.contains("affiliation")) {
                     if (first >= 0 && first < last) {
                         affi = ss.substring(first + 1, last);
@@ -393,10 +394,10 @@ public class GroupChatParticipantList extends JPanel {
             }
         }
 
-        if (affi.equals("")) {
+        if (affi.isEmpty()) {
             affi = "none";
         }
-        if (role.equals("")) {
+        if (role.isEmpty()) {
             role = "participant";
         }
 
@@ -1023,7 +1024,7 @@ public class GroupChatParticipantList extends JPanel {
                 private static final long serialVersionUID = 3672121864443182872L;
 
                 public void actionPerformed(ActionEvent actionEvent) {
-                    String jid = ((JMenuItem) actionEvent.getSource())
+                    String jid = ((AbstractButton) actionEvent.getSource())
                             .getText();
                     unbanUser(jid);
                 }

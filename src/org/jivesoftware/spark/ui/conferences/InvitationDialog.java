@@ -130,7 +130,7 @@ final class InvitationDialog extends JPanel {
             public void actionPerformed(ActionEvent actionEvent) {
                 String jid = jidField.getText();
                 String server = StringUtils.parseBareAddress(jid);
-                if (server == null || server.indexOf("@") == -1) {
+                if (server == null || !server.contains("@")) {
                     JOptionPane.showMessageDialog(dlg, Res.getString("message.enter.valid.jid"), Res.getString("title.error"), JOptionPane.ERROR_MESSAGE);
                     jidField.setText("");
                     jidField.requestFocus();

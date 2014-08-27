@@ -394,8 +394,8 @@ public abstract class ChatRoom extends BackgroundPanel implements ActionListener
         if (name.length() < 1) {
             return;
         } else if (name.contains(" ")) {
-            if (name.substring(name.lastIndexOf(" ") + 1).length() > 0) {
-                name = name.substring(name.lastIndexOf(" ") + 1);
+            if (name.substring(name.lastIndexOf(' ') + 1).length() > 0) {
+                name = name.substring(name.lastIndexOf(' ') + 1);
             }
         }
 
@@ -409,7 +409,7 @@ public abstract class ChatRoom extends BackgroundPanel implements ActionListener
         ArrayList<String> namelist = new ArrayList<String>();
 
         for (String lol : groupchatlist) {
-            lol = lol.substring(lol.lastIndexOf("/") + 1);
+            lol = lol.substring(lol.lastIndexOf('/') + 1);
             if (lol.toLowerCase().startsWith(name.toLowerCase())) {
                 if (newname == null) {
                     newname = lol;

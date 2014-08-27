@@ -175,7 +175,7 @@ class RegisterProcessing {
                     .toString());
             sipManCallback.fireCommunicationsError(new CommunicationsException(
                     "Authorization failed!", exc));
-        } catch (Exception exc) {
+        } catch (ParseException exc) {
             // tell the others we couldn't register
             sipManCallback.fireUnregistered(((FromHeader) clientTransaction
                     .getRequest().getHeader(FromHeader.NAME)).getAddress()
@@ -327,7 +327,7 @@ class RegisterProcessing {
                         "Could not send out the register request!", ex);
             }
             this.registerRequest = request;
-        } catch (Exception e) {
+        } catch (CommunicationsException e) {
             Log.error("register", e);
             sipManCallback.fireRegistrationFailed(registrarAddress == null ? "" : registrarAddress, RegistrationEvent.Type.TimeOut);
         }
@@ -393,7 +393,7 @@ class RegisterProcessing {
                 throw new CommunicationsException(
                         "Failed to send unregister request", ex);
             }
-        } catch (Exception e) {
+        } catch (CommunicationsException e) {
             Log.error("unregister", e);
         }
     }
@@ -596,7 +596,7 @@ class RegisterProcessing {
                 if (sipManCallback.isRegistered()) {
                     try {
                         sipManCallback.messageProcessing.sendKeepAlive();// .sendMessage("","0".getBytes(),"text/plain",null);
-                    } catch (Exception e) {
+                    } catch (CommunicationsException e) {
                         Log.error("KeepAliveTask", e);
                     }
                 }

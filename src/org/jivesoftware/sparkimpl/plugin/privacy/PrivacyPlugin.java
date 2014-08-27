@@ -109,7 +109,7 @@ public class PrivacyPlugin implements Plugin {
                                     @Override
                                     public void actionPerformed(ActionEvent ae) {
                                         if (item != null) {
-                                            activeList.removeItem(((ContactItem) item).getJID()); // Add
+                                            activeList.removeItem(item.getJID()); // Add
                                             // to
                                             // block
                                             // list

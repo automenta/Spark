@@ -88,7 +88,7 @@ public class JinglePlugin implements Plugin, Phone, ConnectionListener {
         final LocalPreferences localPref = SettingsManager.getLocalPreferences();
 
         //If there is a server entered in spark.properties use it as fallback
-        if (!localPref.getStunFallbackHost().equals("")) {
+        if (!localPref.getStunFallbackHost().isEmpty()) {
             fallbackStunEnabled = true;
         }
 

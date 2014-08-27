@@ -54,9 +54,9 @@ public class EntryFrame extends JFrame {
         btnOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (tfName.getText() != null
-                        && !tfName.getText().trim().equals("")
+                        && !tfName.getText().trim().isEmpty()
                         && tfNumber.getText() != null
-                        && !tfNumber.getText().trim().equals("")) {
+                        && !tfNumber.getText().trim().isEmpty()) {
                     // choose between edit or add
                     if (typ == TYP_EDIT) {
                         // if there where problems, don't close the dialog

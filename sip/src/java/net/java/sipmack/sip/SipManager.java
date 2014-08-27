@@ -282,7 +282,7 @@ public class SipManager implements SipListener {
 
             try {
                 sipStack = sipFactory.createSipStack(System.getProperties());
-                ((SipCommRouter) sipStack.getRouter())
+                sipStack.getRouter()
                         .setOutboundProxy(SIPConfig.getOutboundProxy());
             } catch (PeerUnavailableException ex) {
                 Log.error("start", ex);
@@ -321,7 +321,7 @@ public class SipManager implements SipListener {
                         localPort = (int) ((65000 - 1024) * Math.random()) + 1024;
                         try {
                             Thread.sleep(1000);
-                        } catch (Exception e) {
+                        } catch (InterruptedException e) {
 
                         }
 
@@ -540,10 +540,9 @@ public class SipManager implements SipListener {
             // Handle default domain name (i.e. transform 1234 -> 1234@sip.com
             String defaultDomainName = SIPConfig.getDefaultDomain();
 
-            if (sipServerAddress.toLowerCase().indexOf("sipphone.com") != -1
-                    || (defaultDomainName != null && defaultDomainName
-                    .indexOf("sipphone.com") != -1)) {
-                StringBuffer buff = new StringBuffer(sipServerAddress);
+            if (sipServerAddress.toLowerCase().contains("sipphone.com")
+                    || (defaultDomainName != null && defaultDomainName.contains("sipphone.com"))) {
+                StringBuilder buff = new StringBuilder(sipServerAddress);
                 int nameEnd = sipServerAddress.indexOf('@');
                 nameEnd = nameEnd == -1 ? Integer.MAX_VALUE : nameEnd;
                 nameEnd = Math.min(nameEnd, buff.length()) - 1;
@@ -575,7 +574,7 @@ public class SipManager implements SipListener {
             this.currentlyUsedURI = sipServerAddress;
 
             registerProcessing.register(registrarAddress, registrarPort, registrarTransport, registrationsExpiration);
-        } catch (Exception e) {
+        } catch (CommunicationsException e) {
             fireRegistrationFailed(registrarAddress, RegistrationEvent.Type.TimeOut);
             Log.error("register", e);
         }
@@ -624,7 +623,7 @@ public class SipManager implements SipListener {
             //initialCredentials.setUserName(((SipURI) getFromHeader().getAddress().getURI()).getUser());
             cacheCredentials(realm, initialCredentials);
 
-        } catch (Exception ee) {
+        } catch (CommunicationsException ee) {
             Log.error("startRegisterProcess", ee);
         }
     }
@@ -647,7 +646,7 @@ public class SipManager implements SipListener {
             }
             registerProcessing.unregister();
             fireUnregistered(registrarAddress == null ? "" : registrarAddress);
-        } catch (Exception e) {
+        } catch (CommunicationsException e) {
             Log.error("unregister", e);
         }
     }
@@ -671,7 +670,7 @@ public class SipManager implements SipListener {
                     return false;
                 }
             }
-        } catch (Exception e) {
+        } catch (CommunicationsException e) {
             Log.error("unregister", e);
         }
         return true;
@@ -774,7 +773,7 @@ public class SipManager implements SipListener {
             }
             Object[] keys = callProcessing.getCallDispatcher().getAllCalls();
             for (int i = 0; i < keys.length; i++) {
-                endCall(((Integer) keys[i]).intValue());
+                endCall(((Number) keys[i]).intValue());
             }
         } finally {
             setBusy(false);
@@ -1129,7 +1128,7 @@ public class SipManager implements SipListener {
 //            String routerPath = SIPConfig.getRouterPath();
             transport = SIPConfig.getTransport();
 
-            if (transport.equals("")) {
+            if (transport.isEmpty()) {
                 transport = DEFAULT_TRANSPORT;
             }
             try {
@@ -1188,7 +1187,7 @@ public class SipManager implements SipListener {
         try {
             CallEvent evt = new CallEvent(call);
             for (int i = listeners.size() - 1; i >= 0; i--) {
-                ((CommunicationsListener) listeners.get(i)).callReceived(evt);
+                listeners.get(i).callReceived(evt);
             }
         } catch (Exception e) {
             Log.error("fireCallReceived", e);
@@ -1199,7 +1198,7 @@ public class SipManager implements SipListener {
         try {
             CallEvent evt = new CallEvent(call);
             for (int i = listeners.size() - 1; i >= 0; i--) {
-                ((CommunicationsListener) listeners.get(i)).callEnded(evt);
+                listeners.get(i).callEnded(evt);
             }
         } catch (Exception e) {
             Log.error("fireCallEnded", e);
@@ -1211,7 +1210,7 @@ public class SipManager implements SipListener {
 
         MessageEvent evt = new MessageEvent(message);
         for (int i = listeners.size() - 1; i >= 0; i--) {
-            ((CommunicationsListener) listeners.get(i))
+            listeners.get(i)
                     .messageReceived(evt);
         }
     } // call received
@@ -1227,7 +1226,7 @@ public class SipManager implements SipListener {
         }
         RegistrationEvent evt = new RegistrationEvent(address);
         for (int i = listeners.size() - 1; i >= 0; i--) {
-            ((CommunicationsListener) listeners.get(i)).registered(evt);
+            listeners.get(i).registered(evt);
         }
     } // call received
 
@@ -1235,7 +1234,7 @@ public class SipManager implements SipListener {
     void fireRegistering(String address) {
         RegistrationEvent evt = new RegistrationEvent(address);
         for (int i = listeners.size() - 1; i >= 0; i--) {
-            ((CommunicationsListener) listeners.get(i)).registering(evt);
+            listeners.get(i).registering(evt);
         }
     } // call received
 
@@ -1243,7 +1242,7 @@ public class SipManager implements SipListener {
     public void fireUnregistered(String address) {
         RegistrationEvent evt = new RegistrationEvent(address);
         for (int i = listeners.size() - 1; i >= 0; i--) {
-            ((CommunicationsListener) listeners.get(i)).unregistered(evt);
+            listeners.get(i).unregistered(evt);
         }
     }
 
@@ -1251,7 +1250,7 @@ public class SipManager implements SipListener {
         if (registrationFailed(type)) {
             RegistrationEvent evt = new RegistrationEvent(address, type);
             for (int i = listeners.size() - 1; i >= 0; i--) {
-                ((CommunicationsListener) listeners.get(i)).registrationFailed(evt);
+                listeners.get(i).registrationFailed(evt);
             }
         }
     }
@@ -1259,7 +1258,7 @@ public class SipManager implements SipListener {
     void fireUnregistering(String address) {
         RegistrationEvent evt = new RegistrationEvent(address);
         for (int i = listeners.size() - 1; i >= 0; i--) {
-            ((CommunicationsListener) listeners.get(i)).unregistering(evt);
+            listeners.get(i).unregistering(evt);
         }
     }
 
@@ -1267,7 +1266,7 @@ public class SipManager implements SipListener {
     void fireUnknownMessageReceived(Message message) {
         UnknownMessageEvent evt = new UnknownMessageEvent(message);
         for (int i = listeners.size() - 1; i >= 0; i--) {
-            ((CommunicationsListener) listeners.get(i))
+            listeners.get(i)
                     .receivedUnknownMessage(evt);
         }
     }
@@ -1276,7 +1275,7 @@ public class SipManager implements SipListener {
     public void fireCallRejectedLocally(String reason, Message invite, Call call) {
         CallRejectedEvent evt = new CallRejectedEvent(reason, invite, call);
         for (int i = listeners.size() - 1; i >= 0; i--) {
-            ((CommunicationsListener) listeners.get(i))
+            listeners.get(i)
                     .callRejectedLocally(evt);
         }
     }
@@ -1284,7 +1283,7 @@ public class SipManager implements SipListener {
     void fireCallRejectedRemotely(String reason, Message invite, Call call) {
         CallRejectedEvent evt = new CallRejectedEvent(reason, invite, call);
         for (int i = listeners.size() - 1; i >= 0; i--) {
-            ((CommunicationsListener) listeners.get(i))
+            listeners.get(i)
                     .callRejectedRemotely(evt);
         }
 
@@ -1297,7 +1296,7 @@ public class SipManager implements SipListener {
             CommunicationsErrorEvent evt = new CommunicationsErrorEvent(
                     throwable);
             for (int i = listeners.size() - 1; i >= 0; i--) {
-                ((CommunicationsListener) listeners.get(i)).communicationsErrorOccurred(evt);
+                listeners.get(i).communicationsErrorOccurred(evt);
             }
         } catch (Throwable e) {
             Log.error("fireCommunicationsError", e);
@@ -1347,7 +1346,7 @@ public class SipManager implements SipListener {
                 e.printStackTrace();
             } catch (SipException e) {
                 e.printStackTrace();
-            } catch (Exception e) {
+            } catch ( e) {
                 e.printStackTrace();
             }
 

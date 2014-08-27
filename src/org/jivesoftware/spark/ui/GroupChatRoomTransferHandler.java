@@ -19,6 +19,8 @@ package org.jivesoftware.spark.ui;
 
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
 import javax.swing.JComponent;
 import javax.swing.TransferHandler;
 import org.jivesoftware.spark.ui.rooms.GroupChatRoom;
@@ -76,7 +78,7 @@ public class GroupChatRoomTransferHandler extends TransferHandler {
 
                     return true;
                 }
-            } catch (Exception e) {
+            } catch (UnsupportedFlavorException | IOException e) {
                 Log.error(e);
             }
         }

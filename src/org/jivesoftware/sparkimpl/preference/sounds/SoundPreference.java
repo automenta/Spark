@@ -25,9 +25,11 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JButton;
@@ -90,7 +92,7 @@ public class SoundPreference implements Preference {
                         soundPanel = new SoundPanel();
                     }
                 });
-            } catch (Exception e) {
+            } catch (InterruptedException | InvocationTargetException e) {
                 e.printStackTrace();
             }
 
@@ -112,7 +114,7 @@ public class SoundPreference implements Preference {
             try {
                 FileReader reader = new FileReader(settingsFile);
                 preferences = (SoundPreferences) getXStream().fromXML(reader);
-            } catch (Exception e) {
+            } catch (FileNotFoundException e) {
                 Log.error("Error loading Sound Preferences.", e);
                 preferences = new SoundPreferences();
             }
@@ -352,7 +354,7 @@ public class SoundPreference implements Preference {
         try {
             FileWriter writer = new FileWriter(getSoundSettingsFile());
             getXStream().toXML(preferences, writer);
-        } catch (Exception e) {
+        } catch (IOException e) {
             Log.error("Error saving sound settings.", e);
         }
     }

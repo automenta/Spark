@@ -468,21 +468,24 @@ public class BookmarksUI extends JPanel {
                             try {
                                 discoInfo = discoManager.discoverInfo(conferenceService);
                                 Iterator<Identity> iter = discoInfo.getIdentities();
+                                OUTER:
                                 while (iter.hasNext()) {
-                                    DiscoverInfo.Identity identity = (DiscoverInfo.Identity) iter.next();
-                                    if ("conference".equals(identity.getCategory())) {
-                                        serviceList.add(conferenceService);
-                                        break;
-                                    } else if ("server".equals(identity.getCategory())) {
-                                        try {
-                                            Collection<String> services = getConferenceServices(conferenceService);
-                                            for (String service : services) {
-                                                serviceList.add(service);
-                                            }
-                                        } catch (Exception e1) {
-                                            Log.error("Unable to load conference services in server.", e1);
+                                    DiscoverInfo.Identity identity = iter.next();
+                                    if (null != identity.getCategory()) {
+                                        switch (identity.getCategory()) {
+                                            case "conference":
+                                                serviceList.add(conferenceService);
+                                                break OUTER;
+                                            case "server":
+                                                try {
+                                                    Collection<String> services = getConferenceServices(conferenceService);
+                                                    for (String service : services) {
+                                                        serviceList.add(service);
+                                                    }
+                                                } catch (Exception e1) {
+                                                    Log.error("Unable to load conference services in server.", e1);
+                                                }       break;
                                         }
-
                                     }
                                 }
                             } catch (XMPPException e1) {
@@ -534,7 +537,7 @@ public class BookmarksUI extends JPanel {
         ServiceDiscoveryManager discoManager = ServiceDiscoveryManager.getInstanceFor(SparkManager.getConnection());
         DiscoverItems items = discoManager.discoverItems(server);
         for (Iterator<DiscoverItems.Item> it = items.getItems(); it.hasNext();) {
-            DiscoverItems.Item item = (DiscoverItems.Item) it.next();
+            DiscoverItems.Item item = it.next();
             if (item.getEntityID().startsWith("conference") || item.getEntityID().startsWith("private")) {
                 answer.add(item.getEntityID());
             } else {

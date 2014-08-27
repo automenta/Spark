@@ -24,8 +24,10 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -196,7 +198,7 @@ public class PluginManager implements MainWindowListener {
 
                             }
 
-                        } catch (Exception e) {
+                        } catch (IOException | NoSuchAlgorithmException e) {
                             Log.error("No such file", e);
                         }
                     }
@@ -397,10 +399,10 @@ public class PluginManager implements MainWindowListener {
                     publicPlugins.add(publicPlugin);
 
                     registerPlugin(pluginClass);
-                } catch (Throwable e) {
+                } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
                     Log.error("Unable to load plugin " + clazz + ".", e);
                 }
-            } catch (Exception ex) {
+            } catch (NumberFormatException ex) {
                 Log.error("Unable to load plugin " + clazz + ".", ex);
             }
 
@@ -445,7 +447,7 @@ public class PluginManager implements MainWindowListener {
                         Log.debug(name + " has been loaded. Internal plugin.");
 
                         registerPlugin(pluginClass);
-                    } catch (Throwable ex) {
+                    } catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
                         Log.error("Unable to load plugin " + clazz + ".", ex);
                     }
                 }
@@ -772,7 +774,7 @@ public class PluginManager implements MainWindowListener {
             for (File file : dependencies) {
                 loadPlugin(classLoader, file);
             }
-        } catch (Throwable e) {
+        } catch (MalformedURLException e) {
             Log.error("Unable to load dirs", e);
         }
     }
@@ -808,7 +810,7 @@ public class PluginManager implements MainWindowListener {
                     pluginClass.initialize();
                 }
             });
-        } catch (Exception e) {
+        } catch (InterruptedException | InvocationTargetException e) {
             Log.error(e);
         }
 
@@ -851,7 +853,7 @@ public class PluginManager implements MainWindowListener {
                 }
             }
             zipFile.close();
-        } catch (Throwable e) {
+        } catch (IOException e) {
             Log.error("Error unzipping plugin", e);
         }
     }

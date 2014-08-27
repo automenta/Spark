@@ -19,6 +19,7 @@ package org.jivesoftware.sparkimpl.plugin.filetransfer.transfer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import javax.swing.JFileChooser;
 import org.jivesoftware.Spark;
 import org.jivesoftware.resource.Res;
@@ -74,7 +75,7 @@ public class Downloads {
         try {
             File x = File.createTempFile("dltemp", null, Downloads.getDownloadDirectory());
             x.delete();
-        } catch (Exception cantWriteDir) {
+        } catch (IOException cantWriteDir) {
             throw new SecurityException(Res.getString("message.file.transfer.cantwritedir"));
         }
         return true;

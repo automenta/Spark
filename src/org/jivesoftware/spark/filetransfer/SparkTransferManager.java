@@ -26,6 +26,7 @@ import java.awt.FileDialog;
 import java.awt.Frame;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.HeadlessException;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
@@ -254,8 +255,8 @@ public class SparkTransferManager {
     private static URI getFileURI(String filePath) {
         URI uri = null;
         filePath = filePath.trim();
-        if (filePath.indexOf("http") == 0 || filePath.indexOf("\\") == 0) {
-            if (filePath.indexOf("\\") == 0) {
+        if (filePath.indexOf("http") == 0 || filePath.indexOf('\\') == 0) {
+            if (filePath.indexOf('\\') == 0) {
                 filePath = "file:" + filePath;
             }
             try {
@@ -375,7 +376,7 @@ public class SparkTransferManager {
                     Thread.sleep(1000);
                     Rectangle area = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
                     return robot.createScreenCapture(area);
-                } catch (Throwable e) {
+                } catch (HeadlessException | InterruptedException e) {
                     Log.error(e);
 
                     if (mainWindowVisible) {
@@ -734,7 +735,7 @@ public class SparkTransferManager {
         Desktop dt = Desktop.getDesktop();
         try {
             dt.browse(getFileURI(filePath));
-        } catch (Exception ex) {
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
     }

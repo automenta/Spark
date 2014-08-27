@@ -98,22 +98,29 @@ public class Interlocutor implements InterlocutorUI, CallListener {
                 guiCallback.remove(this);
             }
             if (evt.getNewState() != evt.getOldState()) {
-                if (evt.getOldState() == Call.ALERTING) {
-                    guiCallback.stopAlert(ALERTING);
-                } else if (evt.getOldState() == Call.RINGING) {
-                    guiCallback.stopAlert(RINGING);
-                } else if (evt.getOldState() == Call.BUSY) {
-                    guiCallback.stopAlert(BUSY);
-                    // Start current alert
+                switch (evt.getOldState()) {
+                    case Call.ALERTING:
+                        guiCallback.stopAlert(ALERTING);
+                        break;
+                    case Call.RINGING:
+                        guiCallback.stopAlert(RINGING);
+                        break;
+                    case Call.BUSY:
+                        guiCallback.stopAlert(BUSY);
+                        // Start current alert
+                        break;
                 }
-                if (evt.getNewState() == Call.ALERTING) {
-                    guiCallback.startAlert(ALERTING);
-                } else if (evt.getNewState() == Call.RINGING) {
-                    if (evt.getSourceCall().getRemoteSdpDescription() == null || evt.getSourceCall().getRemoteSdpDescription().toString() == "") {
-                        guiCallback.startAlert(RINGING);
-                    }
-                } else if (evt.getNewState() == Call.BUSY) {
-                    guiCallback.startAlert(BUSY);
+                switch (evt.getNewState()) {
+                    case Call.ALERTING:
+                        guiCallback.startAlert(ALERTING);
+                        break;
+                    case Call.RINGING:
+                        if (evt.getSourceCall().getRemoteSdpDescription() == null || evt.getSourceCall().getRemoteSdpDescription().toString() == "") {
+                            guiCallback.startAlert(RINGING);
+                        }   break;
+                    case Call.BUSY:
+                        guiCallback.startAlert(BUSY);
+                        break;
                 }
             }
         } catch (Exception e) {

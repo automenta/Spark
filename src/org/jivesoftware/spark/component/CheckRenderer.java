@@ -64,7 +64,7 @@ public class CheckRenderer extends JPanel implements TreeCellRenderer {
         label.setSelected(isSelected);
         label.setFocus(hasFocus);
         if (leaf) {
-            Icon icon = ((CheckNode) value).getIcon();
+            Icon icon = ((JiveTreeNode) value).getIcon();
             label.setIcon(icon);
         } else if (expanded) {
             label.setIcon(UIManager.getIcon("Tree.openIcon"));
