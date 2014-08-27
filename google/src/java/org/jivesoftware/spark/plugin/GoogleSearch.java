@@ -90,7 +90,7 @@ public class GoogleSearch {
      * @param showFiles Show the files
      */
     public void search(String query, boolean showFiles) {
-        final List<GoogleSearchResult> list = new ArrayList<GoogleSearchResult>();
+        final List<GoogleSearchResult> list = new ArrayList<>();
 
         if (query == null || "".equals(query)) {
             return;
@@ -138,7 +138,7 @@ public class GoogleSearch {
      * @return List containing search resilts.
      */
     public List<GoogleSearchResult> searchText(String query, int maxDocuments) {
-        final List<GoogleSearchResult> list = new ArrayList<GoogleSearchResult>();
+        final List<GoogleSearchResult> list = new ArrayList<>();
 
         if (query == null || "".equals(query)) {
             return null;
@@ -182,7 +182,7 @@ public class GoogleSearch {
      * @param query the query to search on.
      */
     public void searchConversations(String query) {
-        final List<GoogleSearchResult> list = new ArrayList<GoogleSearchResult>();
+        final List<GoogleSearchResult> list = new ArrayList<>();
 
         if (query == null || "".equals(query)) {
             return;
@@ -230,7 +230,7 @@ public class GoogleSearch {
      * @return Collection of search documents retreived.
      */
     public Collection<GoogleSearchResult> searchDocuments(String query) {
-        final Set<GoogleSearchResult> set = new HashSet<GoogleSearchResult>();
+        final Set<GoogleSearchResult> set = new HashSet<>();
 
         if (query == null || "".equals(query)) {
             return null;

@@ -59,6 +59,7 @@ public class JContactItemField extends JPanel {
         list = new JList(model) {
             private static final long serialVersionUID = -9031169221430835595L;
 
+            @Override
             public String getToolTipText(MouseEvent e) {
                 int row = locationToIndex(e.getPoint());
                 if (row >= 0) {
@@ -76,6 +77,7 @@ public class JContactItemField extends JPanel {
         add(textField, BorderLayout.CENTER);
 
         textField.addKeyListener(new KeyAdapter() {
+            @Override
             public void keyReleased(KeyEvent keyEvent) {
                 char ch = keyEvent.getKeyChar();
                 if (validateChar(ch)) {
@@ -97,6 +99,7 @@ public class JContactItemField extends JPanel {
                 dispatchEvent(keyEvent);
             }
 
+            @Override
             public void keyPressed(KeyEvent e) {
                 if (isArrowKey(e)) {
                     list.dispatchEvent(e);
@@ -106,9 +109,11 @@ public class JContactItemField extends JPanel {
         });
 
         textField.addFocusListener(new FocusListener() {
+            @Override
             public void focusGained(FocusEvent e) {
             }
 
+            @Override
             public void focusLost(FocusEvent e) {
                 textField.requestFocusInWindow();
             }
@@ -121,6 +126,7 @@ public class JContactItemField extends JPanel {
 
         list.setCellRenderer(new PopupRenderer());
         list.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     int index = list.getSelectedIndex();
@@ -151,7 +157,7 @@ public class JContactItemField extends JPanel {
 
         String typedItem = textField.getText();
 
-        final List<ContactItem> validItems = new ArrayList<ContactItem>();
+        final List<ContactItem> validItems = new ArrayList<>();
         for (ContactItem contactItem : items) {
             String nickname = contactItem.getDisplayName().toLowerCase();
             if (nickname.startsWith(typedItem.toLowerCase())) {
@@ -259,6 +265,7 @@ public class JContactItemField extends JPanel {
             this.setHorizontalAlignment(JLabel.LEFT);
         }
 
+        @Override
         public Component getListCellRendererComponent(JList list,
                 Object value,
                 int index,

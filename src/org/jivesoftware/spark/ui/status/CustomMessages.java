@@ -65,8 +65,8 @@ import org.jivesoftware.spark.util.log.Log;
 
 public class CustomMessages {
 
-    private static File customMessages = new File(SparkManager.getUserDirectory(), "custom_messages.xml");
-    private static XStream xstream = new XStream();
+    private static final File customMessages = new File(SparkManager.getUserDirectory(), "custom_messages.xml");
+    private static final XStream xstream = new XStream();
 
     private CustomMessages() {
 
@@ -96,11 +96,12 @@ public class CustomMessages {
         }
 
         if (list == null) {
-            list = new ArrayList<CustomStatusItem>();
+            list = new ArrayList<>();
         }
 
         // Sort Custom Messages
         Collections.sort(list, new Comparator<CustomStatusItem>() {
+            @Override
             public int compare(final CustomStatusItem a, final CustomStatusItem b) {
                 return (a.getStatus().compareToIgnoreCase(b.getStatus()));
             }
@@ -170,6 +171,7 @@ public class CustomMessages {
         optionsDialog.setLocationRelativeTo(SparkManager.getMainWindow());
 
         optionPane.addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
             public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
                 String value = (String) optionPane.getValue();
                 if (Res.getString("close").equals(value)) {
@@ -183,10 +185,12 @@ public class CustomMessages {
         }
 
         tree.addMouseListener(new MouseAdapter() {
+            @Override
             public void mousePressed(MouseEvent mouseEvent) {
                 checkPopup(mouseEvent);
             }
 
+            @Override
             public void mouseReleased(MouseEvent mouseEvent) {
                 checkPopup(mouseEvent);
             }
@@ -210,6 +214,7 @@ public class CustomMessages {
                     Action addAction = new AbstractAction() {
                         private static final long serialVersionUID = 2187174931315380754L;
 
+                        @Override
                         public void actionPerformed(ActionEvent actionEvent) {
                             CustomStatus status = new CustomStatus();
                             String type = (String) selectedNode.getUserObject();
@@ -233,8 +238,9 @@ public class CustomMessages {
                     Action deleteAction = new AbstractAction() {
                         private static final long serialVersionUID = -4421868467918912876L;
 
+                        @Override
                         public void actionPerformed(ActionEvent actionEvent) {
-                            List<CustomStatusItem> list = new ArrayList<CustomStatusItem>();
+                            List<CustomStatusItem> list = new ArrayList<>();
                             //Refresh customItems list
                             List<CustomStatusItem> customItems = load();
                             Iterator<CustomStatusItem> iter = customItems.iterator();
@@ -259,6 +265,7 @@ public class CustomMessages {
                     Action editAction = new AbstractAction() {
                         private static final long serialVersionUID = 39916149252596354L;
 
+                        @Override
                         public void actionPerformed(ActionEvent actionEvent) {
                             List<CustomStatusItem> newItems = load();
                             Iterator<CustomStatusItem> iter = newItems.iterator();
@@ -323,16 +330,16 @@ public class CustomMessages {
     private static class CustomStatus extends JPanel {
 
         private static final long serialVersionUID = 1117350001209641469L;
-        private JLabel typeLabel = new JLabel();
-        private JComboBox typeBox = new JComboBox();
+        private final JLabel typeLabel = new JLabel();
+        private final JComboBox typeBox = new JComboBox();
 
-        private JLabel statusLabel = new JLabel();
-        private JTextField statusField = new JTextField();
+        private final JLabel statusLabel = new JLabel();
+        private final JTextField statusField = new JTextField();
 
-        private JLabel priorityLabel = new JLabel();
-        private JTextField priorityField = new JTextField();
+        private final JLabel priorityLabel = new JLabel();
+        private final JTextField priorityField = new JTextField();
 
-        private JCheckBox persistBox = new JCheckBox();
+        private final JCheckBox persistBox = new JCheckBox();
 
         public CustomStatus() {
             StatusBar statusBar = SparkManager.getWorkspace().getStatusBar();
@@ -427,6 +434,7 @@ public class CustomMessages {
 
             optionsDialog.setLocationRelativeTo(SparkManager.getMainWindow());
             optionPane.addPropertyChangeListener(new PropertyChangeListener() {
+                @Override
                 public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
                     String value = (String) optionPane.getValue();
                     if (Res.getString("cancel").equals(value)) {
@@ -513,6 +521,7 @@ public class CustomMessages {
 
             optionsDialog.setLocationRelativeTo(SparkManager.getMainWindow());
             optionPane.addPropertyChangeListener(new PropertyChangeListener() {
+                @Override
                 public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
                     String value = (String) optionPane.getValue();
                     if (Res.getString("cancel").equals(value)) {

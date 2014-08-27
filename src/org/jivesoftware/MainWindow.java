@@ -79,7 +79,7 @@ public final class MainWindow extends ChatFrame implements ActionListener {
 
     private static final long serialVersionUID = -6062104959613603510L;
 
-    private final Set<MainWindowListener> listeners = new HashSet<MainWindowListener>();
+    private final Set<MainWindowListener> listeners = new HashSet<>();
 
     private final JMenu connectMenu = new JMenu();
     private final JMenu contactsMenu = new JMenu();
@@ -94,7 +94,7 @@ public final class MainWindow extends ChatFrame implements ActionListener {
 
     private boolean focused;
 
-    private JToolBar topToolbar = new JToolBar();
+    private final JToolBar topToolbar = new JToolBar();
 
     private JSplitPane splitPane;
 
@@ -164,6 +164,7 @@ public final class MainWindow extends ChatFrame implements ActionListener {
              *
              * @param e WindowEvent is not used.
              */
+            @Override
             public void windowActivated(WindowEvent e) {
                 fireWindowActivated();
             }
@@ -171,6 +172,7 @@ public final class MainWindow extends ChatFrame implements ActionListener {
             /**
              * Invoked when a window is de-activated.
              */
+            @Override
             public void windowDeactivated(WindowEvent e) {
             }
 
@@ -180,6 +182,7 @@ public final class MainWindow extends ChatFrame implements ActionListener {
              *
              * @param e WindowEvent is not used.
              */
+            @Override
             public void windowIconified(WindowEvent e) {
             }
 
@@ -189,6 +192,7 @@ public final class MainWindow extends ChatFrame implements ActionListener {
              *
              * @param e WindowEvent is never used.
              */
+            @Override
             public void windowClosing(WindowEvent e) {
                 saveLayout();
                 setVisible(false);
@@ -247,6 +251,7 @@ public final class MainWindow extends ChatFrame implements ActionListener {
      *
      * @param e the ActionEvent
      */
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(preferenceMenuItem)) {
             SparkManager.getPreferenceManager().showPreferences();
@@ -443,6 +448,7 @@ public final class MainWindow extends ChatFrame implements ActionListener {
         alwaysOnTopItem = new JCheckBoxMenuItem();
         ResourceUtils.resButton(alwaysOnTopItem, Res.getString("menuitem.always.on.top"));
         alwaysOnTopItem.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if (alwaysOnTopItem.isSelected()) {
                     SettingsManager.getLocalPreferences().setMainWindowAlwaysOnTop(true);
@@ -469,6 +475,7 @@ public final class MainWindow extends ChatFrame implements ActionListener {
         JMenuItem logoutMenuItem = new JMenuItem();
         ResourceUtils.resButton(logoutMenuItem, Res.getString("menuitem.logout.no.status"));
         logoutMenuItem.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 logout(false);
             }
@@ -477,6 +484,7 @@ public final class MainWindow extends ChatFrame implements ActionListener {
         JMenuItem logoutWithStatus = new JMenuItem();
         ResourceUtils.resButton(logoutWithStatus, Res.getString("menuitem.logout.with.status"));
         logoutWithStatus.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 logout(true);
             }
@@ -506,6 +514,7 @@ public final class MainWindow extends ChatFrame implements ActionListener {
         final Action viewErrors = new AbstractAction() {
             private static final long serialVersionUID = -420926784631340112L;
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 File logDir = new File(Spark.getLogDirectory(), "errors.log");
                 if (!logDir.exists()) {
@@ -523,6 +532,7 @@ public final class MainWindow extends ChatFrame implements ActionListener {
             final String url = Default.getString(Default.HELP_USER_GUIDE);
             private static final long serialVersionUID = 2680369963282231348L;
 
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
 
@@ -564,6 +574,7 @@ public final class MainWindow extends ChatFrame implements ActionListener {
         exitMenuItem.addActionListener(new AbstractAction() {
             private static final long serialVersionUID = -2301236575241532698L;
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 shutdown();
             }
@@ -587,6 +598,7 @@ public final class MainWindow extends ChatFrame implements ActionListener {
         if (!Default.getBoolean("DISABLE_UPDATES")) {
             // Execute spark update checker after one minute.
             final TimerTask task = new SwingTimerTask() {
+                @Override
                 public void doRun() {
                     checkForUpdates(false);
                 }
@@ -649,16 +661,19 @@ public final class MainWindow extends ChatFrame implements ActionListener {
      *
      * @return true if the Spark window is in focus.
      */
+    @Override
     public boolean isInFocus() {
         return focused;
     }
 
     private class MainWindowFocusListener implements WindowFocusListener {
 
+        @Override
         public void windowGainedFocus(WindowEvent e) {
             focused = true;
         }
 
+        @Override
         public void windowLostFocus(WindowEvent e) {
             focused = false;
         }
@@ -682,6 +697,7 @@ public final class MainWindow extends ChatFrame implements ActionListener {
         final CheckUpdates updater = new CheckUpdates();
         try {
             final SwingWorker updateThread = new SwingWorker() {
+                @Override
                 public Object construct() {
                     try {
                         Thread.sleep(50);
@@ -691,6 +707,7 @@ public final class MainWindow extends ChatFrame implements ActionListener {
                     return "ok";
                 }
 
+                @Override
                 public void finished() {
                     try {
                         updater.checkForUpdate(forced);
@@ -732,6 +749,7 @@ public final class MainWindow extends ChatFrame implements ActionListener {
         frame.add(copyButton, BorderLayout.SOUTH);
 
         copyButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 SparkManager.setClipboard(errorLogs);
                 copyButton.setEnabled(false);
@@ -748,6 +766,7 @@ public final class MainWindow extends ChatFrame implements ActionListener {
     /**
      * Saves the layout on closing of the main window.
      */
+    @Override
     public void saveLayout() {
         try {
             LayoutSettings settings = LayoutSettingsManager.getLayoutSettings();

@@ -51,6 +51,7 @@ public class CallLog {
 
         dialed, received, missed;
 
+        @Override
         public String toString() {
             switch (this) {
                 case dialed:

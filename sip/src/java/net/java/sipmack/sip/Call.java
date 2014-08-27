@@ -98,7 +98,7 @@ public class Call implements ReceiveStreamListener {
     private String callState = "";
 
     // Event Management
-    List<CallListener> listeners = new CopyOnWriteArrayList<CallListener>();
+    List<CallListener> listeners = new CopyOnWriteArrayList<>();
 
     public SessionDescription getLocalSdpDescription() {
         return localSdpDescription;
@@ -289,6 +289,7 @@ public class Call implements ReceiveStreamListener {
         return dialog.getDialogId();
     }
 
+    @Override
     public String toString() {
         return "[ Call " + getID() + "\nde " + getRemoteName() + "@"
                 + getAddress() + "\nSDP:" + getRemoteSdpDescription() + "]";
@@ -342,6 +343,7 @@ public class Call implements ReceiveStreamListener {
     }
 
     // ====================== RECEIVE STREAMS EVENTS ==========================
+    @Override
     public void update(ReceiveStreamEvent receiveStreamEvent) {
 
     }

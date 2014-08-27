@@ -38,22 +38,22 @@ import org.jivesoftware.spark.util.ResourceUtils;
 public class LocalPreferencePanel extends JPanel {
 
     private static final long serialVersionUID = -1675058807882383560L;
-    private JLabel _portLabel = new JLabel();
-    private JLabel _idleLabel = new JLabel();
-    private JLabel _timeOutLabel = new JLabel();
-    private JLabel _idleStatusLabel = new JLabel();
+    private final JLabel _portLabel = new JLabel();
+    private final JLabel _idleLabel = new JLabel();
+    private final JLabel _timeOutLabel = new JLabel();
+    private final JLabel _idleStatusLabel = new JLabel();
 
-    private JTextField _portField = new JTextField();
-    private JTextField _timeOutField = new JTextField();
+    private final JTextField _portField = new JTextField();
+    private final JTextField _timeOutField = new JTextField();
     private JTextField _idleField = new JTextField();
-    private JTextField _idleStatusText;
+    private final JTextField _idleStatusText;
 
     private JCheckBox _autoLoginBox = new JCheckBox();
     private JCheckBox _savePasswordBox = new JCheckBox();
     private JCheckBox _idleBox = new JCheckBox();
     private JCheckBox _launchOnStartupBox = new JCheckBox();
-    private JCheckBox _startMinimizedBox = new JCheckBox();
-    private JCheckBox _useSingleTrayClick = new JCheckBox();
+    private final JCheckBox _startMinimizedBox = new JCheckBox();
+    private final JCheckBox _useSingleTrayClick = new JCheckBox();
 
     /**
      * Construct Local Preference UI.
@@ -73,6 +73,7 @@ public class LocalPreferencePanel extends JPanel {
         _idleStatusText = new JTextField(preferences.getIdleMessage());
 
         _savePasswordBox.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 _autoLoginBox.setEnabled(_savePasswordBox.isSelected());
                 if (!_savePasswordBox.isSelected()) {
@@ -82,6 +83,7 @@ public class LocalPreferencePanel extends JPanel {
         });
 
         _autoLoginBox.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if (_autoLoginBox.isSelected()) {
                     _savePasswordBox.setSelected(true);
@@ -90,6 +92,7 @@ public class LocalPreferencePanel extends JPanel {
         });
 
         _idleBox.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 _idleField.setEnabled(_idleBox.isSelected());
             }
@@ -142,6 +145,7 @@ public class LocalPreferencePanel extends JPanel {
         if (Spark.isWindows()) {
             inputPanel.add(_launchOnStartupBox, new GridBagConstraints(0, 7, 2, 1, 0.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 50, 0));
             _launchOnStartupBox.addActionListener(new ActionListener() {
+                @Override
                 public void actionPerformed(ActionEvent e) {
                     setStartOnStartup(_launchOnStartupBox.isSelected());
                 }

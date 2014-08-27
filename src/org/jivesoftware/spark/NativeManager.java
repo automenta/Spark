@@ -30,7 +30,7 @@ import org.jivesoftware.spark.util.ModelUtil;
  */
 public class NativeManager {
 
-    private List<NativeHandler> nativeHandlers = new ArrayList<NativeHandler>();
+    private final List<NativeHandler> nativeHandlers = new ArrayList<>();
 
     public NativeManager() {
 

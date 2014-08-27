@@ -29,7 +29,7 @@ import javax.swing.ImageIcon;
  */
 public class JinglePhoneRes {
 
-    private static PropertyResourceBundle prb;
+    private static final PropertyResourceBundle prb;
 
     private JinglePhoneRes() {
 

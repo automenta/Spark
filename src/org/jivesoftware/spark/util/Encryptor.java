@@ -33,7 +33,7 @@ import org.jivesoftware.spark.util.log.Log;
  */
 public class Encryptor {
 
-    private static String secretKey = "ugfpV1dMC5jyJtqwVAfTpHkxqJ0+E0ae";
+    private static final String secretKey = "ugfpV1dMC5jyJtqwVAfTpHkxqJ0+E0ae";
 
     private static Cipher ecipher;
     private static Cipher dcipher;

@@ -84,19 +84,19 @@ import org.jivesoftware.sparkimpl.plugin.gateways.transports.TransportUtils;
  */
 public class RosterDialog implements ActionListener {
 
-    private JPanel panel;
+    private final JPanel panel;
     private JTextField jidField;
     private JTextField nicknameField;
-    private final Vector<String> groupModel = new Vector<String>();
+    private final Vector<String> groupModel = new Vector<>();
     private final JPanel networkPanel = new JPanel(new GridBagLayout());
 
-    private JComboBox groupBox;
+    private final JComboBox groupBox;
     private JComboBox accounts;
     private JDialog dialog;
-    private ContactList contactList;
+    private final ContactList contactList;
     private JCheckBox publicBox;
-    private JButton _searchForName;
-    private Collection<String> _usersearchservice;
+    private final JButton _searchForName;
+    private final Collection<String> _usersearchservice;
 
     /**
      * Create a new instance of RosterDialog.
@@ -206,10 +206,12 @@ public class RosterDialog implements ActionListener {
         }
 
         jidField.addFocusListener(new FocusListener() {
+            @Override
             public void focusGained(FocusEvent e) {
 
             }
 
+            @Override
             public void focusLost(FocusEvent e) {
                 String jid = getJID();
                 String vcardNickname = null;
@@ -249,6 +251,7 @@ public class RosterDialog implements ActionListener {
         }
 
         publicBox.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 accounts.setEnabled(publicBox.isSelected());
             }
@@ -289,6 +292,7 @@ public class RosterDialog implements ActionListener {
         nicknameField.setText(nickname);
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         String group = JOptionPane.showInputDialog(dialog, Res.getString("label.enter.group.name") + ":", Res.getString("title.new.roster.group"), 3);
         if (group != null && group.length() > 0 && !groupModel.contains(group)) {
@@ -310,6 +314,7 @@ public class RosterDialog implements ActionListener {
         JPanel mainPanel = new JPanel() {
             private static final long serialVersionUID = -7489967438182277375L;
 
+            @Override
             public Dimension getPreferredSize() {
                 final Dimension size = super.getPreferredSize();
                 size.width = 450;
@@ -407,10 +412,12 @@ public class RosterDialog implements ActionListener {
 
     private void addRosterEntry(final String jid, final String nickname, final String group) {
         final SwingWorker rosterEntryThread = new SwingWorker() {
+            @Override
             public Object construct() {
                 return addEntry(jid, nickname, group);
             }
 
+            @Override
             public void finished() {
                 if (get() == null) {
                     JOptionPane.showMessageDialog(dialog, Res.getString("label.unable.to.add.contact"), Res.getString("title.error"), JOptionPane.ERROR_MESSAGE);
@@ -468,7 +475,7 @@ public class RosterDialog implements ActionListener {
 
                 data = usersearchManager.getSearchResults(answer, search);
 
-                ArrayList<String> columnnames = new ArrayList<String>();
+                ArrayList<String> columnnames = new ArrayList<>();
                 Iterator<Column> columns = data.getColumns();
                 while (columns.hasNext()) {
                     ReportedData.Column column = columns
@@ -564,7 +571,7 @@ public class RosterDialog implements ActionListener {
     }
 
     public List<AccountItem> getAccounts() {
-        List<AccountItem> list = new ArrayList<AccountItem>();
+        List<AccountItem> list = new ArrayList<>();
 
         for (Transport transport : TransportUtils.getTransports()) {
             if (TransportUtils.isRegistered(SparkManager.getConnection(), transport)) {
@@ -654,7 +661,7 @@ public class RosterDialog implements ActionListener {
     class AccountItem extends JPanel {
 
         private static final long serialVersionUID = -7657731912529801653L;
-        private Transport transport;
+        private final Transport transport;
 
         public AccountItem(Icon icon, String name, Transport transport) {
             setLayout(new GridBagLayout());

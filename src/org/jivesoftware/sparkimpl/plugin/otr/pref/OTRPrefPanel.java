@@ -32,7 +32,7 @@ import org.jivesoftware.sparkimpl.plugin.otr.util.OTRResources;
 public class OTRPrefPanel extends JPanel {
 
     private static final long serialVersionUID = -7125162190413040003L;
-    private OTRManager _manager;
+    private final OTRManager _manager;
     private JCheckBox _enableOTR;
     private JCheckBox _closeSessionOff;
     private JCheckBox _closeSessionOnWindowClose;
@@ -40,8 +40,8 @@ public class OTRPrefPanel extends JPanel {
     private JButton _renewPrivateKey;
     private OTRKeyTable _keytable;
     private JTextField _privateKey;
-    private MyOtrKeyManager _keyManager;
-    private OTRProperties _properties;
+    private final MyOtrKeyManager _keyManager;
+    private final OTRProperties _properties;
 
     public OTRPrefPanel() {
 

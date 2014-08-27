@@ -52,44 +52,54 @@ public class Interlocutor implements InterlocutorUI, CallListener {
      * @return Returns the call.
      * @uml.property name="call"
      */
+    @Override
     public Call getCall() {
         return call;
     }
 
     // InterlocutorUI
+    @Override
     public boolean isCaller() {
         return call.isIncoming();
     }
 
+    @Override
     public boolean onHoldMic() {
         return call.onHoldMic();
     }
 
+    @Override
     public boolean onHoldCam() {
         return call.onHoldCam();
     }
 
+    @Override
     public String getAddress() {
         return call.getAddress();
     }
 
+    @Override
     public String getName() {
         return call.getRemoteName();
     }
 
+    @Override
     public int getID() {
         return call.getID();
     }
 
+    @Override
     public String getCallState() {
         return call.getState();
     }
 
+    @Override
     public void setCallback(GuiCallback callback) {
         this.guiCallback = callback;
     }
 
     // CallListener
+    @Override
     public void callStateChanged(CallStateEvent evt) {
         try {
             guiCallback.update(this);

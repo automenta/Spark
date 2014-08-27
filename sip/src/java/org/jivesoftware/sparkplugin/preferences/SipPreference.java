@@ -74,38 +74,47 @@ public class SipPreference implements Preference {
         this.preferences = sipPreferences;
     }
 
+    @Override
     public Object getData() {
         return preferences;
     }
 
+    @Override
     public String getErrorMessage() {
         return "Invalid SIP Settings";
     }
 
+    @Override
     public JComponent getGUI() {
         return panel;
     }
 
+    @Override
     public Icon getIcon() {
         return PhoneRes.getImageIcon("ANSWER_PHONE_IMAGE");
     }
 
+    @Override
     public String getListName() {
         return "Phone";
     }
 
+    @Override
     public String getNamespace() {
         return "SIP";
     }
 
+    @Override
     public String getTitle() {
         return "Phone Settings";
     }
 
+    @Override
     public String getTooltip() {
         return "Phone Settings";
     }
 
+    @Override
     public boolean isDataValid() {
         return true;
     }
@@ -131,14 +140,17 @@ public class SipPreference implements Preference {
         }
     }
 
+    @Override
     public void load() {
         SwingWorker worker = new SwingWorker() {
 
+            @Override
             public Object construct() {
                 loadFromFile();
                 return preferences;
             }
 
+            @Override
             public void finished() {
 
                 panel
@@ -171,6 +183,7 @@ public class SipPreference implements Preference {
 
     }
 
+    @Override
     public void commit() {
         if (commitSettings) {
             preferences.setUserName(panel.getUserName());
@@ -192,6 +205,7 @@ public class SipPreference implements Preference {
 
     }
 
+    @Override
     public void shutdown() {
         preferences.setPreferredAddress(SIPConfig.getPreferredNetworkAddress());
         saveSipFile();

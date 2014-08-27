@@ -54,26 +54,26 @@ import org.jivesoftware.sparkimpl.settings.local.SettingsManager;
 public class AccountCreationWizard extends JPanel {
 
     private static final long serialVersionUID = -7808507939643878212L;
-    private JLabel usernameLabel = new JLabel();
-    private JTextField usernameField = new JTextField();
+    private final JLabel usernameLabel = new JLabel();
+    private final JTextField usernameField = new JTextField();
 
-    private JLabel passwordLabel = new JLabel();
-    private JPasswordField passwordField = new JPasswordField();
+    private final JLabel passwordLabel = new JLabel();
+    private final JPasswordField passwordField = new JPasswordField();
 
-    private JLabel confirmPasswordLabel = new JLabel();
-    private JPasswordField confirmPasswordField = new JPasswordField();
+    private final JLabel confirmPasswordLabel = new JLabel();
+    private final JPasswordField confirmPasswordField = new JPasswordField();
 
-    private JLabel serverLabel = new JLabel();
-    private JTextField serverField = new JTextField();
+    private final JLabel serverLabel = new JLabel();
+    private final JTextField serverField = new JTextField();
 
-    private JButton createAccountButton = new JButton();
-    private JButton closeButton = new JButton();
+    private final JButton createAccountButton = new JButton();
+    private final JButton closeButton = new JButton();
 
     private JDialog dialog;
 
     private boolean registered;
     private XMPPConnection connection = null;
-    private JProgressBar progressBar;
+    private final JProgressBar progressBar;
 
     /**
      * Construct the AccountCreationWizard UI.
@@ -111,12 +111,14 @@ public class AccountCreationWizard extends JPanel {
         add(closeButton, new GridBagConstraints(3, 5, 1, 1, 0.0, 0.0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0));
 
         createAccountButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 createAccount();
             }
         });
 
         closeButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 dialog.dispose();
             }
@@ -216,6 +218,7 @@ public class AccountCreationWizard extends JPanel {
         final SwingWorker worker = new SwingWorker() {
             int errorCode;
 
+            @Override
             public Object construct() {
                 try {
                     createAccountButton.setEnabled(false);
@@ -238,6 +241,7 @@ public class AccountCreationWizard extends JPanel {
                 return "ok";
             }
 
+            @Override
             public void finished() {
                 progressBar.setVisible(false);
                 if (connection == null) {

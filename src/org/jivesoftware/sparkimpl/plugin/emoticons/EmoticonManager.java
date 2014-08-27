@@ -59,8 +59,8 @@ public class EmoticonManager {
     private static EmoticonManager singleton;
     private static final Object LOCK = new Object();
 
-    private Map<String, Collection<Emoticon>> emoticonMap = new HashMap<String, Collection<Emoticon>>();
-    private Map<String, ImageIcon> imageMap = new HashMap<String, ImageIcon>();
+    private Map<String, Collection<Emoticon>> emoticonMap = new HashMap<>();
+    private Map<String, ImageIcon> imageMap = new HashMap<>();
 
     /**
      * The root emoticon directory.
@@ -285,7 +285,7 @@ public class EmoticonManager {
             setActivePack("Default");
         }
 
-        List<Emoticon> emoticons = new ArrayList<Emoticon>();
+        List<Emoticon> emoticons = new ArrayList<>();
 
         final File plist = new File(emoticonSet, "Emoticons.plist");
 
@@ -350,7 +350,7 @@ public class EmoticonManager {
             String name = dict.selectSingleNode("string").getText();
 
             // Load equivilants
-            final List<String> equivs = new ArrayList<String>();
+            final List<String> equivs = new ArrayList<>();
             final List<?> equivilants = dict.selectNodes("array/string");
             for (Object equivilant1 : equivilants) {
                 Element equivilant = (Element) equivilant1;
@@ -457,7 +457,7 @@ public class EmoticonManager {
      * @return Collection of Emoticon Pack names.
      */
     public Collection<String> getEmoticonPacks() {
-        final List<String> emoticonList = new ArrayList<String>();
+        final List<String> emoticonList = new ArrayList<>();
 
         File[] dirs = EMOTICON_DIRECTORY.listFiles();
 

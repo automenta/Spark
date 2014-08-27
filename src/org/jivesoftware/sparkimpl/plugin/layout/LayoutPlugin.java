@@ -24,10 +24,12 @@ import org.jivesoftware.spark.plugin.Plugin;
 
 public class LayoutPlugin implements Plugin {
 
+    @Override
     public void initialize() {
         final MainWindow mainWindow = SparkManager.getMainWindow();
 
         SparkManager.getMainWindow().addMainWindowListener(new MainWindowListener() {
+            @Override
             public void shutdown() {
                 int x = mainWindow.getX();
                 int y = mainWindow.getY();
@@ -48,24 +50,29 @@ public class LayoutPlugin implements Plugin {
                 LayoutSettingsManager.saveLayoutSettings();
             }
 
+            @Override
             public void mainWindowActivated() {
 
             }
 
+            @Override
             public void mainWindowDeactivated() {
 
             }
         });
     }
 
+    @Override
     public void shutdown() {
 
     }
 
+    @Override
     public boolean canShutDown() {
         return true;
     }
 
+    @Override
     public void uninstall() {
         // Do nothing.
     }

@@ -32,12 +32,12 @@ import org.jivesoftware.sparkimpl.plugin.otr.util.OTRResources;
 public class OTRSession {
 
     private ChatRoomImpl _chatRoom;
-    private String _myJID;
-    private String _remoteJID;
-    private OtrEngineHost _otrEngineHost;
+    private final String _myJID;
+    private final String _remoteJID;
+    private final OtrEngineHost _otrEngineHost;
     private SessionID _mySession;
     private OtrEngineImpl _engine;
-    private OTRManager _manager = OTRManager.getInstance();
+    private final OTRManager _manager = OTRManager.getInstance();
     final ChatRoomButton _otrButton = UIComponentRegistry.getButtonFactory().createOtrButton();
     private OTRConnectionPanel _conPanel;
     private MessageEventListener _msgEvnt;

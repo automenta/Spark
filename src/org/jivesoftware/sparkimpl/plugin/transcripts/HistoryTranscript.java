@@ -53,24 +53,24 @@ import org.jivesoftware.sparkimpl.settings.local.SettingsManager;
  */
 public class HistoryTranscript extends SwingWorker {
 
-    private Semaphore token = new Semaphore(1);
+    private final Semaphore token = new Semaphore(1);
     private int pageIndex = 0;
     private int maxPages = 0;
     private final String period_oneMonth = "message.search.period.month.one";
     private final String period_oneYear = "message.search.period.year.one";
     private final String period_noPeriod = "message.search.period.none";
     private String searchPeriod = "";
-    private List<String> periods = new ArrayList<String>();
+    private final List<String> periods = new ArrayList<>();
     private final timerTranscript transcriptTask = new timerTranscript();
-    private JLabel pageCounter = new JLabel("0 / 0");
-    private JButton pageLeft = new JButton("<");
-    private JButton pageRight = new JButton(">");
+    private final JLabel pageCounter = new JLabel("0 / 0");
+    private final JButton pageLeft = new JButton("<");
+    private final JButton pageRight = new JButton(">");
     private String jid = null;
     private SimpleDateFormat notificationDateFormatter = null;
     private SimpleDateFormat messageDateFormatter = null;
     private final AtomicBoolean isInitialized = new AtomicBoolean(false);
 
-    private LocalPreferences pref = SettingsManager.getLocalPreferences();
+    private final LocalPreferences pref = SettingsManager.getLocalPreferences();
     private final JComboBox periodChooser = new JComboBox();
     private final JPanel filterPanel = new JPanel();
     private final JPanel mainPanel = new BackgroundPanel();
@@ -84,9 +84,9 @@ public class HistoryTranscript extends SwingWorker {
     private final JScrollPane pane = new JScrollPane(window);
     private final JFrame frame = new JFrame(Res.getString("title.history.for", jid));
     private final StringBuilder builder = new StringBuilder();
-    private List<ChatTranscript> searchFilteredList = new ArrayList<ChatTranscript>();
-    private List<ChatTranscript> dateFilteredUnfilteredList = new ArrayList<ChatTranscript>();
-    private AtomicBoolean isHistoryLoaded = new AtomicBoolean(false);
+    private List<ChatTranscript> searchFilteredList = new ArrayList<>();
+    private List<ChatTranscript> dateFilteredUnfilteredList = new ArrayList<>();
+    private final AtomicBoolean isHistoryLoaded = new AtomicBoolean(false);
     private boolean sortDateAsc = false;
 
     /**
@@ -365,7 +365,7 @@ public class HistoryTranscript extends SwingWorker {
          * the messages of the giving period
          */
         private List<ChatTranscript> getDateSortedTranscript(ChatTranscript transcript) {
-            List<ChatTranscript> tmpList = new ArrayList<ChatTranscript>();
+            List<ChatTranscript> tmpList = new ArrayList<>();
 
             if (transcript.size() > 0) {
                 ChatTranscript sortedTranscript = new ChatTranscript();
@@ -461,7 +461,7 @@ public class HistoryTranscript extends SwingWorker {
                 searchString = null;
             }
 
-            List<ChatTranscript> tmpList = new ArrayList<ChatTranscript>();
+            List<ChatTranscript> tmpList = new ArrayList<>();
             ChatTranscript tmpTranscript = null;
 
             for (int i = 0; i < dateFilteredUnfilteredList.size(); i++) {
@@ -506,6 +506,7 @@ public class HistoryTranscript extends SwingWorker {
     /**
      * Set the layout settings
      */
+    @Override
     public void finished() {
         pageLeft.addActionListener(new ActionListener() {
             @Override
@@ -520,6 +521,7 @@ public class HistoryTranscript extends SwingWorker {
             }
         });
         periodChooser.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 handlePeriodChange(periods.get(periodChooser.getSelectedIndex()));
             }
@@ -629,12 +631,14 @@ public class HistoryTranscript extends SwingWorker {
             }
         });
         searchField.addFocusListener(new FocusListener() {
+            @Override
             public void focusGained(FocusEvent e) {
                 searchField.setText("");
                 searchField.setForeground((Color) UIManager
                         .get("TextField.foreground"));
             }
 
+            @Override
             public void focusLost(FocusEvent e) {
                 searchField.setForeground((Color) UIManager
                         .get("TextField.lightforeground"));
@@ -647,6 +651,7 @@ public class HistoryTranscript extends SwingWorker {
         periodChooser.setSelectedIndex(index);
 
         frame.addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 window.setText("");
             }

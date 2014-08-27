@@ -84,11 +84,13 @@ public class VCardViewer extends JPanel {
         final SwingWorker vcardLoader = new SwingWorker() {
             VCard vcard = null;
 
+            @Override
             public Object construct() {
                 vcard = SparkManager.getVCardManager().getVCard(jid);
                 return vcard;
             }
 
+            @Override
             public void finished() {
                 if (vcard == null) {
                     // Do nothing.
@@ -171,16 +173,19 @@ public class VCardViewer extends JPanel {
         final String hoverText = "<html><body><font color=red><u>" + emailAddress + "</u></font></body></html>";
         final JLabel emailTime = new JLabel(unselectedText);
         emailTime.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
                 startEmailClient(emailAddress);
             }
 
+            @Override
             public void mouseEntered(MouseEvent e) {
                 emailTime.setText(hoverText);
                 setCursor(LINK_CURSOR);
 
             }
 
+            @Override
             public void mouseExited(MouseEvent e) {
                 emailTime.setText(unselectedText);
                 setCursor(DEFAULT_CURSOR);
@@ -194,15 +199,18 @@ public class VCardViewer extends JPanel {
         final JLabel jidLabel = new JLabel("<html><body>JID: <font color=" + GraphicUtils.toHTMLColor(linkColor) + "><u>" + jid + "</u></font></body></html>");
         jidLabel.setToolTipText("Click to copy jid to clipboard.");
         jidLabel.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseEntered(MouseEvent mouseEvent) {
                 jidLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
             }
 
+            @Override
             public void mouseExited(MouseEvent mouseEvent) {
                 jidLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 
             }
 
+            @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 SparkManager.setClipboard(jid);
             }

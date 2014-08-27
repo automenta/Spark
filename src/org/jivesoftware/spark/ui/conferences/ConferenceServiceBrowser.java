@@ -81,6 +81,7 @@ public class ConferenceServiceBrowser {
 
         // Add Listener to find button
         findButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 String address = serverAddress.getText();
                 if (ModelUtil.hasLength(address)) {
@@ -120,6 +121,7 @@ public class ConferenceServiceBrowser {
         dlg.setLocationRelativeTo(SparkManager.getMainWindow());
 
         PropertyChangeListener changeListener = new PropertyChangeListener() {
+            @Override
             public void propertyChange(PropertyChangeEvent e) {
                 String value = (String) pane.getValue();
                 if (null != value) switch (value) {
@@ -145,7 +147,7 @@ public class ConferenceServiceBrowser {
     }
 
     public Collection<String> getConferenceServices(String server) throws Exception {
-        List<String> answer = new ArrayList<String>();
+        List<String> answer = new ArrayList<>();
         ServiceDiscoveryManager discoManager = ServiceDiscoveryManager.getInstanceFor(SparkManager.getConnection());
         DiscoverItems items = discoManager.discoverItems(server);
         for (Iterator<Item> it = items.getItems(); it.hasNext();) {

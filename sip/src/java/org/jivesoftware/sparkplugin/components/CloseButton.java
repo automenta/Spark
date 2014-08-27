@@ -31,9 +31,9 @@ import org.jivesoftware.spark.plugin.phone.resource.PhoneRes;
 public class CloseButton extends JButton implements MouseListener {
 
     private static final long serialVersionUID = -439443751174954392L;
-    private Icon normalIcon;
-    private Icon hoverIcon;
-    private Icon downIcon;
+    private final Icon normalIcon;
+    private final Icon hoverIcon;
+    private final Icon downIcon;
 
     public CloseButton() {
         super();
@@ -58,22 +58,27 @@ public class CloseButton extends JButton implements MouseListener {
         setMargin(new Insets(0, 0, 0, 0));
     }
 
+    @Override
     public void mouseClicked(MouseEvent e) {
     }
 
+    @Override
     public void mousePressed(MouseEvent e) {
         setIcon(downIcon);
     }
 
+    @Override
     public void mouseReleased(MouseEvent e) {
         setIcon(normalIcon);
     }
 
+    @Override
     public void mouseEntered(MouseEvent e) {
         setIcon(hoverIcon);
         setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
+    @Override
     public void mouseExited(MouseEvent e) {
         setIcon(normalIcon);
         setCursor(new Cursor(Cursor.DEFAULT_CURSOR));

@@ -46,12 +46,12 @@ import org.jivesoftware.sparkplugin.callhistory.TelephoneUtils;
 public class IncomingCallUI extends JPanel {
 
     private static final long serialVersionUID = -7451049865930942296L;
-    private JLabel avatarLabel = new JLabel();
-    private JLabel titleLabel = new JLabel();
-    private JLabel professionLabel = new JLabel();
-    private JLabel phoneLabel = new JLabel();
-    private JLabel lastCalledLabel = new JLabel();
-    private JLabel durationLabel = new JLabel();
+    private final JLabel avatarLabel = new JLabel();
+    private final JLabel titleLabel = new JLabel();
+    private final JLabel professionLabel = new JLabel();
+    private final JLabel phoneLabel = new JLabel();
+    private final JLabel lastCalledLabel = new JLabel();
+    private final JLabel durationLabel = new JLabel();
 
     private RolloverButton acceptButton;
     private RolloverButton rejectButton;
@@ -225,6 +225,7 @@ public class IncomingCallUI extends JPanel {
         return rejectButton;
     }
 
+    @Override
     public void paintComponent(Graphics g) {
         BufferedImage cache = new BufferedImage(2, getHeight(), BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = cache.createGraphics();

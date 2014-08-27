@@ -248,6 +248,7 @@ public class GenericURI {
      *
      * @return the String representation of this URI.
      */
+    @Override
     public String toString() {
         StringBuilder buffer = new StringBuilder(getScheme().toString());
 
@@ -274,6 +275,7 @@ public class GenericURI {
      * an instance cannot be cloned.
      * @todo Implement this java.lang.Object method
      */
+    @Override
     protected Object clone() {
         GenericURI clone = new GenericURI();
 
@@ -322,6 +324,7 @@ public class GenericURI {
             this.scheme = scheme.toLowerCase();
         }
 
+        @Override
         public String toString() {
             return scheme;
         }

@@ -34,11 +34,11 @@ import javax.swing.JButton;
 public class CallPanelButton extends JButton implements MouseListener {
 
     private static final long serialVersionUID = -2299269454442767625L;
-    private Icon normalIcon;
-    private Icon hoverIcon;
-    private Icon downIcon;
-    private Image backgroundImage;
-    private String text;
+    private final Icon normalIcon;
+    private final Icon hoverIcon;
+    private final Icon downIcon;
+    private final Image backgroundImage;
+    private final String text;
 
     private boolean selected;
 
@@ -72,13 +72,16 @@ public class CallPanelButton extends JButton implements MouseListener {
         setMargin(new Insets(0, 0, 0, 0));
     }
 
+    @Override
     public void mouseClicked(MouseEvent e) {
     }
 
+    @Override
     public void mousePressed(MouseEvent e) {
         setIcon(downIcon);
     }
 
+    @Override
     public void mouseReleased(MouseEvent e) {
         if (!selected) {
             setIcon(normalIcon);
@@ -86,6 +89,7 @@ public class CallPanelButton extends JButton implements MouseListener {
 
     }
 
+    @Override
     public void mouseEntered(MouseEvent e) {
         if (!selected) {
             setIcon(hoverIcon);
@@ -93,6 +97,7 @@ public class CallPanelButton extends JButton implements MouseListener {
         setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
+    @Override
     public void mouseExited(MouseEvent e) {
         if (!selected) {
             setIcon(normalIcon);
@@ -109,6 +114,7 @@ public class CallPanelButton extends JButton implements MouseListener {
         }
     }
 
+    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         int width = getWidth();
@@ -133,6 +139,7 @@ public class CallPanelButton extends JButton implements MouseListener {
 
     }
 
+    @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
         if (!enabled) {

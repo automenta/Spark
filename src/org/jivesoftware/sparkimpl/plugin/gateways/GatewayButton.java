@@ -47,7 +47,7 @@ public class GatewayButton extends JPanel implements GatewayItem {
 
     private static final long serialVersionUID = -2692869826501622612L;
     private final RolloverButton button = new RolloverButton();
-    private Transport transport;
+    private final Transport transport;
     private boolean signedIn;
 
     public GatewayButton(final Transport transport) {
@@ -69,12 +69,14 @@ public class GatewayButton extends JPanel implements GatewayItem {
         commandPanel.add(button);
 
         button.addMouseListener(new MouseAdapter() {
+            @Override
             public void mousePressed(MouseEvent mouseEvent) {
                 handlePopup(mouseEvent);
             }
         });
         commandPanel.updateUI();
         final Runnable registerThread = new Runnable() {
+            @Override
             public void run() {
                 // Send directed presence if registered with this transport.
                 final boolean isRegistered = TransportUtils.isRegistered(SparkManager.getConnection(), transport);
@@ -105,6 +107,7 @@ public class GatewayButton extends JPanel implements GatewayItem {
         // Create action to sign off of transport.
         final JMenuItem signOutMenu = new JMenuItem(Res.getString("menuitem.sign.out"));
         signOutMenu.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 final Presence offlinePresence = new Presence(Presence.Type.unavailable);
                 offlinePresence.setTo(transport.getServiceName());
@@ -116,6 +119,7 @@ public class GatewayButton extends JPanel implements GatewayItem {
         // Create menu to sign in.
         final JMenuItem signInMenu = new JMenuItem(Res.getString("menuitem.sign.in"));
         signInMenu.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 final Presence onlinePresence = new Presence(Presence.Type.available);
                 onlinePresence.setTo(transport.getServiceName());
@@ -127,6 +131,7 @@ public class GatewayButton extends JPanel implements GatewayItem {
         final JCheckBoxMenuItem signInAtLoginMenu = new JCheckBoxMenuItem();
         signInAtLoginMenu.setText(Res.getString("menuitem.sign.in.at.login"));
         signInAtLoginMenu.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 TransportUtils.setAutoJoin(transport.getServiceName(), signInAtLoginMenu.isSelected());
             }
@@ -134,6 +139,7 @@ public class GatewayButton extends JPanel implements GatewayItem {
 
         final JMenuItem registerMenu = new JMenuItem(Res.getString("menuitem.enter.login.information"));
         registerMenu.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 TransportRegistrationDialog registrationDialog = new TransportRegistrationDialog(transport.getServiceName());
                 registrationDialog.invoke();
@@ -143,6 +149,7 @@ public class GatewayButton extends JPanel implements GatewayItem {
         // Create action to delete login information
         final JMenuItem unregisterMenu = new JMenuItem(Res.getString("menuitem.delete.login.information"));
         unregisterMenu.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 int confirm = JOptionPane.showConfirmDialog(SparkManager.getMainWindow(), Res.getString("message.disable.transport", transport.getName()), Res.getString("title.disable.transport"), JOptionPane.YES_NO_OPTION);
                 if (confirm == JOptionPane.YES_OPTION) {
@@ -183,6 +190,7 @@ public class GatewayButton extends JPanel implements GatewayItem {
         popupMenu.show((Component) event.getSource(), event.getX(), event.getY());
     }
 
+    @Override
     public void signedIn(boolean signedIn) {
         if (!signedIn) {
             button.setIcon(transport.getInactiveIcon());
@@ -193,6 +201,7 @@ public class GatewayButton extends JPanel implements GatewayItem {
         this.signedIn = signedIn;
     }
 
+    @Override
     public boolean isLoggedIn() {
         return signedIn;
     }

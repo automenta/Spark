@@ -48,21 +48,21 @@ import org.jivesoftware.sparkplugin.ui.components.JavaMixer;
 public class PhoneControl extends JPanel {
 
     private static final long serialVersionUID = 5275596365479885608L;
-    private JLabel stateLabel = new JLabel(PhoneRes.getIString("phone.connected") + ":");
-    private JLabel callerIDLabel = new JLabel();
-    private JLabel phoneNumberLabel = new JLabel();
+    private final JLabel stateLabel = new JLabel(PhoneRes.getIString("phone.connected") + ":");
+    private final JLabel callerIDLabel = new JLabel();
+    private final JLabel phoneNumberLabel = new JLabel();
 
     final private InterlocutorUI interlocutorUI;
 
-    private RolloverButton chatButton;
+    private final RolloverButton chatButton;
     private JToggleButton muteButton;
-    private RolloverButton transferButton;
-    private RolloverButton endCallButton;
+    private final RolloverButton transferButton;
+    private final RolloverButton endCallButton;
 
-    private RolloverButton dialButton;
+    private final RolloverButton dialButton;
 
     private RolloverButton speakerButton;
-    private RolloverButton micButton;
+    private final RolloverButton micButton;
 
     private JavaMixer javaMixer = new JavaMixer();
 
@@ -103,12 +103,14 @@ public class PhoneControl extends JPanel {
         add(javaMixer.getPrefferedInputVolume(), new GridBagConstraints(4, 0, 1, 3, 0.0, 0.0, GridBagConstraints.EAST, GridBagConstraints.VERTICAL, new Insets(1, 1, 1, 1), 0, 0));
 
         dialButton.addMouseListener(new MouseAdapter() {
+            @Override
             public void mousePressed(MouseEvent mouseEvent) {
                 //  phonePad.showDialpad(null, dialButton, mouseEvent);
             }
         });
 
         speakerButton.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 final JPopupMenu menu = new JPopupMenu();
                 menu.add(javaMixer.getPrefferedMasterVolume());
@@ -117,12 +119,14 @@ public class PhoneControl extends JPanel {
         });
 
         endCallButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 defaultGuiManager.hangup(interlocutorUI);
             }
         });
 
         muteButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 defaultGuiManager.mute(interlocutorUI, !muteButton.isSelected());
             }
@@ -167,6 +171,7 @@ public class PhoneControl extends JPanel {
         f.setVisible(true);
     }
 
+    @Override
     public Dimension getPreferredSize() {
         final Dimension dim = super.getPreferredSize();
         dim.height = 75;

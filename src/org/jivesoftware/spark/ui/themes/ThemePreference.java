@@ -39,26 +39,32 @@ public class ThemePreference implements Preference {
 
     }
 
+    @Override
     public String getTitle() {
         return Res.getString("title.appearance.preferences");
     }
 
+    @Override
     public Icon getIcon() {
         return SparkRes.getImageIcon(SparkRes.PALETTE_24x24_IMAGE);
     }
 
+    @Override
     public String getTooltip() {
         return Res.getString("tooltip.appearance");
     }
 
+    @Override
     public String getListName() {
         return Res.getString("title.appearance");
     }
 
+    @Override
     public String getNamespace() {
         return NAMESPACE;
     }
 
+    @Override
     public JComponent getGUI() {
         panel = new MainThemePanel();
         return panel;
@@ -79,22 +85,27 @@ public class ThemePreference implements Preference {
 
     }
 
+    @Override
     public void load() {
 
     }
 
+    @Override
     public boolean isDataValid() {
         return true;
     }
 
+    @Override
     public String getErrorMessage() {
         return null;
     }
 
+    @Override
     public Object getData() {
         return null;
     }
 
+    @Override
     public void commit() {
         final String pack = panel.getThemePanel().getSelectedEmoticonPack();
         boolean emotEnabled = panel.getThemePanel().areEmoticonsEnabled();
@@ -123,6 +134,7 @@ public class ThemePreference implements Preference {
         SettingsManager.saveSettings();
     }
 
+    @Override
     public void shutdown() {
 
     }

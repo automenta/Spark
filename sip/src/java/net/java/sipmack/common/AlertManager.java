@@ -30,7 +30,7 @@ import org.jivesoftware.spark.plugin.phone.resource.PhoneRes;
  */
 public class AlertManager {
 
-    private Hashtable<String, AudioClip> alertClips = new Hashtable<String, AudioClip>();
+    private final Hashtable<String, AudioClip> alertClips = new Hashtable<>();
 
     public AlertManager() {
     }

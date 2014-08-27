@@ -44,8 +44,8 @@ import org.jivesoftware.sparkplugin.calllog.LogManager;
 public class RecentCallsPanel extends JPanel {
 
     private static final long serialVersionUID = 7759582394286918370L;
-    private DefaultListModel model = new DefaultListModel();
-    private JList list = new JList(model);
+    private final DefaultListModel model = new DefaultListModel();
+    private final JList list = new JList(model);
 
     public RecentCallsPanel(InterlocutorUI ic) {
         setLayout(new GridBagLayout());

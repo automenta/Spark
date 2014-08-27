@@ -32,26 +32,32 @@ public class IRCTransport implements Transport {
         this.serviceName = serviceName;
     }
 
+    @Override
     public String getTitle() {
         return Res.getString("title.irc.registration");
     }
 
+    @Override
     public String getInstructions() {
         return Res.getString("message.enter.irc");
     }
 
+    @Override
     public Icon getIcon() {
         return SparkRes.getImageIcon(SparkRes.IRC_TRANSPORT_ACTIVE_IMAGE);
     }
 
+    @Override
     public Icon getInactiveIcon() {
         return SparkRes.getImageIcon(SparkRes.IRC_TRANSPORT_INACTIVE_IMAGE);
     }
 
+    @Override
     public String getServiceName() {
         return serviceName;
     }
 
+    @Override
     public String getName() {
         return "IRC";
     }
@@ -60,14 +66,17 @@ public class IRCTransport implements Transport {
         this.serviceName = serviceName;
     }
 
+    @Override
     public Boolean requiresUsername() {
         return true;
     }
 
+    @Override
     public Boolean requiresPassword() {
         return false;
     }
 
+    @Override
     public Boolean requiresNickname() {
         return true;
     }

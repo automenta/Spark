@@ -34,8 +34,8 @@ import org.jivesoftware.spark.util.ResourceUtils;
 public class DialPanel extends JPanel {
 
     private static final long serialVersionUID = 2460254947711336776L;
-    private JButton dialButton;
-    private JTextField dialField;
+    private final JButton dialButton;
+    private final JTextField dialField;
     final JLabel iconLabel;
     final JPanel dialPanel = new JPanel();
 

@@ -57,13 +57,13 @@ public class GroupChatInvitationUI extends JPanel implements ActionListener {
 
     private static final long serialVersionUID = 6066796370413837508L;
 
-    private RolloverButton acceptButton;
+    private final RolloverButton acceptButton;
 
-    private String room;
-    private String inviter;
-    private String password;
+    private final String room;
+    private final String inviter;
+    private final String password;
 
-    private String invitationDateFormat = ((SimpleDateFormat) SimpleDateFormat.getTimeInstance(SimpleDateFormat.MEDIUM)).toPattern();
+    private final String invitationDateFormat = ((SimpleDateFormat) SimpleDateFormat.getTimeInstance(SimpleDateFormat.MEDIUM)).toPattern();
 
     public GroupChatInvitationUI(String room, String inviter, String password, String reason) {
         setLayout(new GridBagLayout());
@@ -123,6 +123,7 @@ public class GroupChatInvitationUI extends JPanel implements ActionListener {
         rejectButton.addActionListener(this);
     }
 
+    @Override
     public void actionPerformed(ActionEvent event) {
         if (event.getSource() == acceptButton) {
             acceptInvitation();
@@ -140,6 +141,7 @@ public class GroupChatInvitationUI extends JPanel implements ActionListener {
         ConferenceUtils.enterRoomOnSameThread(name, room, password);
 
         final TimerTask removeUITask = new SwingTimerTask() {
+            @Override
             public void doRun() {
                 removeUI();
             }

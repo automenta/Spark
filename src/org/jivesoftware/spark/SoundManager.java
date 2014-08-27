@@ -35,8 +35,8 @@ import org.jivesoftware.spark.util.log.Log;
  */
 public class SoundManager {
 
-    private final Map<String, AudioClip> clipMap = new HashMap<String, AudioClip>();
-    private final Map<URL, AudioClip> fileMap = new HashMap<URL, AudioClip>();
+    private final Map<String, AudioClip> clipMap = new HashMap<>();
+    private final Map<URL, AudioClip> fileMap = new HashMap<>();
 
     /**
      * Default constructor
@@ -70,6 +70,7 @@ public class SoundManager {
     public void playClip(final AudioClip clip) {
 
         final Runnable playThread = new Runnable() {
+            @Override
             public void run() {
                 try {
                     clip.play();
@@ -103,6 +104,7 @@ public class SoundManager {
      */
     public void playClip(final File soundFile) {
         final Runnable playThread = new Runnable() {
+            @Override
             public void run() {
                 try {
                     final URL url = soundFile.toURI().toURL();

@@ -85,6 +85,7 @@ public class SparkVersion extends IQ {
 
     }
 
+    @Override
     public String getChildElementXML() {
         StringBuilder buf = new StringBuilder();
         buf.append("<query xmlns=\"jabber:iq:spark\">");
@@ -113,6 +114,7 @@ public class SparkVersion extends IQ {
             super();
         }
 
+        @Override
         public IQ parseIQ(XmlPullParser parser) throws Exception {
             SparkVersion version = new SparkVersion();
 

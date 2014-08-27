@@ -43,15 +43,15 @@ import org.jivesoftware.spark.util.log.Log;
 public class IncomingCallUI extends JPanel {
 
     private static final long serialVersionUID = -7758898282948774412L;
-    private JLabel avatarLabel = new JLabel();
-    private JLabel titleLabel = new JLabel();
-    private JLabel professionLabel = new JLabel();
+    private final JLabel avatarLabel = new JLabel();
+    private final JLabel titleLabel = new JLabel();
+    private final JLabel professionLabel = new JLabel();
 
     private RolloverButton acceptButton;
     private RolloverButton rejectButton;
 
-    private VCard vcard;
-    private String jid;
+    private final VCard vcard;
+    private final String jid;
 
     public IncomingCallUI(String jid) {
         setLayout(new GridBagLayout());
@@ -210,6 +210,7 @@ public class IncomingCallUI extends JPanel {
         return rejectButton;
     }
 
+    @Override
     public void paintComponent(Graphics g) {
         BufferedImage cache = new BufferedImage(2, getHeight(), BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = cache.createGraphics();

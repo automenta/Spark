@@ -39,32 +39,39 @@ public class LocalPreference implements Preference {
         preferences = SettingsManager.getLocalPreferences();
     }
 
+    @Override
     public String getTitle() {
         return Res.getString("title.login.settings");
     }
 
+    @Override
     public String getListName() {
         return Res.getString("title.login");
     }
 
+    @Override
     public String getTooltip() {
         return Res.getString("title.login.settings");
     }
 
+    @Override
     public Icon getIcon() {
         return SparkRes.getImageIcon(SparkRes.LOGIN_KEY_IMAGE);
     }
 
+    @Override
     public void load() {
         preferences = SettingsManager.getLocalPreferences();
     }
 
+    @Override
     public void commit() {
         getData();
 
         SettingsManager.saveSettings();
     }
 
+    @Override
     public Object getData() {
         preferences = SettingsManager.getLocalPreferences();
         preferences.setAutoLogin(panel.getAutoLogin());
@@ -81,10 +88,12 @@ public class LocalPreference implements Preference {
         return preferences;
     }
 
+    @Override
     public String getErrorMessage() {
         return errorMessage;
     }
 
+    @Override
     public boolean isDataValid() {
         preferences.setTimeOut(Integer.parseInt(panel.getTimeout()));
         preferences.setXmppPort(Integer.parseInt(panel.getPort()));
@@ -107,16 +116,19 @@ public class LocalPreference implements Preference {
         return true;
     }
 
+    @Override
     public JComponent getGUI() {
         panel = new LocalPreferencePanel();
 
         return panel;
     }
 
+    @Override
     public String getNamespace() {
         return "LOGIN";
     }
 
+    @Override
     public void shutdown() {
         // Commit to file.
         SettingsManager.saveSettings();

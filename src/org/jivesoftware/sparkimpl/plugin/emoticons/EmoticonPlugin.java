@@ -44,6 +44,7 @@ public class EmoticonPlugin implements Plugin, ChatRoomListener {
     private EmoticonManager emoticonManager;
     private ChatManager chatManager;
 
+    @Override
     public void initialize() {
         emoticonManager = EmoticonManager.getInstance();
         chatManager = SparkManager.getChatManager();
@@ -62,6 +63,7 @@ public class EmoticonPlugin implements Plugin, ChatRoomListener {
                 .addPreference(new ThemePreference());
     }
 
+    @Override
     public void chatRoomOpened(final ChatRoom room) {
         // Check to see if emoticons are enabled.
         if (!SettingsManager.getLocalPreferences().areEmoticonsEnabled()) {
@@ -82,12 +84,14 @@ public class EmoticonPlugin implements Plugin, ChatRoomListener {
             room.addEditorComponent(emoticonPicker);
 
             emoticonPicker.addMouseListener(new MouseAdapter() {
+                @Override
                 public void mouseClicked(MouseEvent e) {
                     // Show popup
                     final JPopupMenu popup = new JPopupMenu();
                     EmoticonUI emoticonUI = new EmoticonUI();
                     emoticonUI
                             .setEmoticonPickListener(new EmoticonPickListener() {
+                        @Override
                                 public void emoticonPicked(String emoticon) {
                                     try {
                                         popup.setVisible(false);
@@ -113,6 +117,7 @@ public class EmoticonPlugin implements Plugin, ChatRoomListener {
             });
 
             room.addClosingListener(new ChatRoomClosingListener() {
+                @Override
                 public void closing() {
                     room.removeEditorComponent(emoticonPicker);
                 }
@@ -120,29 +125,37 @@ public class EmoticonPlugin implements Plugin, ChatRoomListener {
         }
     }
 
+    @Override
     public void chatRoomLeft(ChatRoom room) {
     }
 
+    @Override
     public void chatRoomClosed(ChatRoom room) {
     }
 
+    @Override
     public void chatRoomActivated(ChatRoom room) {
     }
 
+    @Override
     public void userHasJoined(ChatRoom room, String userid) {
     }
 
+    @Override
     public void userHasLeft(ChatRoom room, String userid) {
     }
 
+    @Override
     public void shutdown() {
 
     }
 
+    @Override
     public boolean canShutDown() {
         return false;
     }
 
+    @Override
     public void uninstall() {
         // Do nothing.
     }

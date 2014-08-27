@@ -36,9 +36,11 @@ public class Installer implements InstallAction {
         return 0;
     }
 
+    @Override
     public void init(Context context) {
     }
 
+    @Override
     public boolean install(InstallerContext installerContext) throws UserCanceledException {
         final String osName = System.getProperty("os.name").toLowerCase();
         boolean isWindows = osName.startsWith("windows");
@@ -68,6 +70,7 @@ public class Installer implements InstallAction {
         return true;
     }
 
+    @Override
     public void rollback(InstallerContext installerContext) {
         WinRegistry.deleteValue(RegistryRoot.HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Run", "Spark");
     }

@@ -96,7 +96,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
     private static final Object LOCK = new Object();
     private SipAccount saccount;
 
-    private final List<SoftPhoneListener> softPhoneListeners = new CopyOnWriteArrayList<SoftPhoneListener>();
+    private final List<SoftPhoneListener> softPhoneListeners = new CopyOnWriteArrayList<>();
 
     // TODO REMOVE
     @SuppressWarnings("unused")
@@ -142,7 +142,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
     // Define UIs
     private JCheckBoxMenuItem registerMenu;
 
-    private Map<Component, CallRoomState> callRooms = new HashMap<Component, CallRoomState>();
+    private final Map<Component, CallRoomState> callRooms = new HashMap<>();
 
     /**
      * Private constructor of the class.
@@ -180,6 +180,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
         }
 
         registerMenu.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if (getStatus() == SipRegisterStatus.Unregistered
                         || getStatus() == SipRegisterStatus.RegistrationFailed) {
@@ -261,6 +262,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
      *
      * @param softPhoneListener the listener.
      */
+    @Override
     public void addSoftPhoneListener(SoftPhoneListener softPhoneListener) {
         softPhoneListeners.add(softPhoneListener);
     }
@@ -270,6 +272,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
      *
      * @param interlocutorListener the listener.
      */
+    @Override
     public void addInterlocutorListener(InterlocutorListener interlocutorListener) {
         guiManager.addInterlocutorListener(interlocutorListener);
     }
@@ -279,6 +282,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
      *
      * @param interlocutorListener the listener
      */
+    @Override
     public void removeInterlocutorListener(InterlocutorListener interlocutorListener) {
         guiManager.removeInterlocutorListener(interlocutorListener);
     }
@@ -286,6 +290,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
     /**
      * Return the DefaultGuiManager
      */
+    @Override
     public DefaultGuiManager getDefaultGuiManager() {
         return guiManager;
     }
@@ -293,6 +298,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
     /**
      * Create the softphone handlers and stack
      */
+    @Override
     public void createSoftPhone(String server) throws MediaException {
 
         this.server = server;
@@ -324,6 +330,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
     /**
      * Destroys the softphone handlers and stack
      */
+    @Override
     public void destroySoftPhone() {
 
         try {
@@ -338,6 +345,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
      *
      * @return status
      */
+    @Override
     public SipRegisterStatus getStatus() {
         return status;
     }
@@ -347,6 +355,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
      *
      * @return The current connection username
      */
+    @Override
     public String getUsername() {
         return username;
     }
@@ -356,6 +365,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
      *
      * @return The current connection server
      */
+    @Override
     public String getServer() {
         return server;
     }
@@ -363,6 +373,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
     /**
      * Handle an UnregisterRequest
      */
+    @Override
     public void handleUnregisterRequest() {
         if (sipManager != null) {
             try {
@@ -378,6 +389,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
      * Handle a Re-Register Request. This method will only have effect if the
      * user has successfully registered beforeat least once before.
      */
+    @Override
     public void handleReRegisterRequest() {
         if (this.password != null && !this.username.isEmpty()) {
             try {
@@ -394,6 +406,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
      * @param username username
      * @param password password
      */
+    @Override
     public void handleRegisterRequest(String username, String password) {
         handleRegisterRequest(username, null, password);
     }
@@ -405,6 +418,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
      * @param authUserName Authorization username
      * @param password password
      */
+    @Override
     public void handleRegisterRequest(String username, String authUserName, String password) {
 
         this.authUserName = authUserName;
@@ -423,6 +437,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
      *
      * @param communicationsListener CommunicationsListener
      */
+    @Override
     public void addCommunicationsListener(CommunicationsListener communicationsListener) {
         sipManager.addCommunicationsListener(communicationsListener);
     }
@@ -432,6 +447,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
      *
      * @param evt CallEvent
      */
+    @Override
     public void callEnded(CallEvent evt) {
         AudioMediaSession audioMediaSession = evt.getSourceCall().getAudioMediaSession();
         if (audioMediaSession != null) {
@@ -449,6 +465,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
      *
      * @param evt CallEvent
      */
+    @Override
     public void callReceived(CallEvent evt) {
         try {
             Call call = evt.getSourceCall();
@@ -467,6 +484,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
      *
      * @param evt MessageEvent
      */
+    @Override
     public void messageReceived(MessageEvent evt) {
         for (SoftPhoneListener sfl : softPhoneListeners) {
             sfl.messageReceived(evt);
@@ -478,6 +496,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
      *
      * @param evt CallRejectedEvent
      */
+    @Override
     public void callRejectedLocally(CallRejectedEvent evt) {
 //        String reason = evt.getReason();
 //        String detailedReason = evt.getDetailedReason();
@@ -488,6 +507,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
      *
      * @param evt CallRejectedEvent
      */
+    @Override
     public void callRejectedRemotely(CallRejectedEvent evt) {
         for (SoftPhoneListener softPhoneListener : softPhoneListeners) {
             softPhoneListener.callRejectedRemotely(evt);
@@ -499,6 +519,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
      *
      * @param evt RegistrationEvent
      */
+    @Override
     public void registered(RegistrationEvent evt) {
         status = SipRegisterStatus.Registered;
 
@@ -513,6 +534,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
         registerMenu.setSelected(true);
     }
 
+    @Override
     public void registrationFailed(RegistrationEvent evt) {
         status = SipRegisterStatus.RegistrationFailed;
         registerStatusChanged(new RegisterEvent(this, SipRegisterStatus.RegistrationFailed, evt.getReason()));
@@ -524,6 +546,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
      *
      * @param evt RegistrationEvent
      */
+    @Override
     public void registering(RegistrationEvent evt) {
         status = SipRegisterStatus.Registering;
         registerStatusChanged(new RegisterEvent(this, SipRegisterStatus.Registering, evt.getReason()));
@@ -534,6 +557,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
      *
      * @param evt RegistrationEvent
      */
+    @Override
     public void unregistered(RegistrationEvent evt) {
         try {
             status = SipRegisterStatus.Unregistered;
@@ -557,6 +581,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
      *
      * @param evt RegistrationEvent
      */
+    @Override
     public void unregistering(RegistrationEvent evt) {
         status = SipRegisterStatus.Unregistered;
 
@@ -596,6 +621,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
      *
      * @return List<InterlocutorUI>
      */
+    @Override
     public List<InterlocutorUI> getInterlocutors() {
         return guiManager.getInterlocutors();
     }
@@ -605,6 +631,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
      *
      * @param evt RegistrationEvent
      */
+    @Override
     public void receivedUnknownMessage(UnknownMessageEvent evt) {
         // TODO Do something with the error.
     }
@@ -614,6 +641,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
      *
      * @param evt CommunicationsErrorEvent
      */
+    @Override
     public void communicationsErrorOccurred(CommunicationsErrorEvent evt) {
 
     }
@@ -623,6 +651,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
      *
      * @param evt CallStateEvent
      */
+    @Override
     public void callStateChanged(CallStateEvent evt) {
         try {
 
@@ -737,6 +766,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
     /**
      * Handle a exit request
      */
+    @Override
     public void handleExitRequest() {
         if (mediaManager != null) {
         }
@@ -772,6 +802,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
      * @param mic true to place on hold.
      * @param cam true to place camera on hold.
      */
+    @Override
     public void handleHold(InterlocutorUI iui, boolean mic, boolean cam) {
 
         try {
@@ -794,6 +825,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
      * @param iui the InterlocutorUI
      * @param mic true to place on mute.
      */
+    @Override
     public void handleMute(InterlocutorUI iui, boolean mic) {
         try {
             AudioMediaSession audioMediaSession = iui.getCall().getAudioMediaSession();
@@ -810,6 +842,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
      *
      * @param iui the InterlocutorUI
      */
+    @Override
     public void handleDTMF(InterlocutorUI iui, String digit) {
         try {
             sendDTMFDigit(iui.getID(), digit);
@@ -835,6 +868,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
     /**
      * Handle a answer request
      */
+    @Override
     public boolean handleAnswerRequest(Interlocutor interlocutor) {
 
         // cancel call request if no Media Locator
@@ -868,6 +902,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
     /**
      * Handle a dial request
      */
+    @Override
     public void handleDialRequest(String phoneNumber) {
         try {
 
@@ -903,6 +938,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
     /**
      * Handle a hangup request
      */
+    @Override
     public boolean handleHangupRequest(Interlocutor interlocutor) {
         boolean hangupOk = true;
         try {
@@ -920,6 +956,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
      */
     public void register() {
         Thread registerThread = new Thread(new Runnable() {
+            @Override
             public void run() {
                 if (preferences != null) {
                     String user = preferences.getUserName();

@@ -20,7 +20,7 @@ import org.xmlpull.v1.XmlPullParser;
 public class PhonebookManager implements BookManager {
 
     private static final PhonebookManager instance = new PhonebookManager();
-    private List<PhoneNumber> phonenumbers = new ArrayList<PhoneNumber>();
+    private final List<PhoneNumber> phonenumbers = new ArrayList<>();
 
     public PhonebookManager() {
 
@@ -33,6 +33,7 @@ public class PhonebookManager implements BookManager {
     /**
      * makes a new Phonenumber-Object and write it into the file
      */
+    @Override
     public boolean add(String name, String number) {
         if (getPhonebookEntry(name, number) != null) {
             return false;
@@ -55,6 +56,7 @@ public class PhonebookManager implements BookManager {
      * @param entry: Phonenumber
      * @return
      */
+    @Override
     public PhoneNumber getPhonebookEntry(String name, String number) {
         PhoneNumber entry = new PhoneNumber();
         entry.setName(name);
@@ -69,6 +71,7 @@ public class PhonebookManager implements BookManager {
         return null;
     }
 
+    @Override
     public void deleteEntry(String name, String number) {
         PhoneNumber existing = getPhonebookEntry(name, number);
         if (existing != null) {
@@ -77,6 +80,7 @@ public class PhonebookManager implements BookManager {
         }
     }
 
+    @Override
     public List<PhoneNumber> getPhoneNumbers() {
         // if there are no entries, read the phonebook
         if (phonenumbers == null
@@ -177,6 +181,7 @@ public class PhonebookManager implements BookManager {
         }
     }
 
+    @Override
     public boolean update(PhoneNumber original, String name, String number) {
         // if the entry was added succesfully
         if (add(name, number)) {

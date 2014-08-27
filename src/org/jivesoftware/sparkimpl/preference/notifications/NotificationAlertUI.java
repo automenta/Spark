@@ -46,15 +46,15 @@ import org.jivesoftware.spark.util.log.Log;
 public class NotificationAlertUI extends JPanel {
 
     private static final long serialVersionUID = 3359608942567718697L;
-    private JLabel avatarLabel = new JLabel();
-    private JLabel titleLabel = new JLabel();
-    private JLabel emailAddressLabel = new JLabel();
-    private JLabel professionLabel = new JLabel();
+    private final JLabel avatarLabel = new JLabel();
+    private final JLabel titleLabel = new JLabel();
+    private final JLabel emailAddressLabel = new JLabel();
+    private final JLabel professionLabel = new JLabel();
 
-    private VCard vcard;
-    private String jid;
+    private final VCard vcard;
+    private final String jid;
 
-    private boolean available;
+    private final boolean available;
 
     final JLabel topLabel = new JLabel();
 
@@ -171,10 +171,12 @@ public class NotificationAlertUI extends JPanel {
             final String unselectedText = "<html><body><font color=" + GraphicUtils.toHTMLColor(linkColor) + "><u>" + emailAddress + "</u></font></body></html>";
             final String hoverText = "<html><body><font color=red><u>" + emailAddress + "</u></font></body></html>";
             emailAddressLabel.addMouseListener(new MouseAdapter() {
+                @Override
                 public void mouseEntered(MouseEvent e) {
                     emailAddressLabel.setText(hoverText);
                 }
 
+                @Override
                 public void mouseExited(MouseEvent e) {
                     emailAddressLabel.setText(unselectedText);
                 }
@@ -208,6 +210,7 @@ public class NotificationAlertUI extends JPanel {
         repaint();
     }
 
+    @Override
     public void paintComponent(Graphics g) {
         BufferedImage cache = new BufferedImage(2, getHeight(), BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = cache.createGraphics();

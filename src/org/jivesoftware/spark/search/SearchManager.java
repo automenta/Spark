@@ -30,7 +30,7 @@ import org.jivesoftware.sparkimpl.search.users.UserSearchService;
  */
 public class SearchManager {
 
-    private List<Searchable> searchServices = new ArrayList<Searchable>();
+    private List<Searchable> searchServices = new ArrayList<>();
     private SearchService ui;
     private Collection<String> _searchservicesHosts;
 
@@ -64,11 +64,13 @@ public class SearchManager {
         SwingWorker worker = new SwingWorker() {
             UserSearchService searchWizard;
 
+            @Override
             public Object construct() {
                 searchWizard = new UserSearchService();
                 return searchWizard;
             }
 
+            @Override
             public void finished() {
                 if (searchWizard.getSearchServices() != null) {
                     ui.setActiveSearchService(searchWizard);

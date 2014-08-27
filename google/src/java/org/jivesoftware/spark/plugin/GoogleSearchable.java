@@ -25,24 +25,29 @@ import org.jivesoftware.spark.search.Searchable;
 
 public class GoogleSearchable implements Searchable {
 
+    @Override
     public Icon getIcon() {
         ClassLoader cl = getClass().getClassLoader();
         URL url = cl.getResource("images/google.gif");
         return new ImageIcon(url);
     }
 
+    @Override
     public String getName() {
         return "Google";
     }
 
+    @Override
     public String getDefaultText() {
         return "Find Documents on your computer.";
     }
 
+    @Override
     public String getToolTip() {
         return "Search for documents on your computer using Google Desktop.";
     }
 
+    @Override
     public void search(String query) {
         GoogleSearch search = new GoogleSearch();
         Collection<GoogleSearchResult> list = search.searchDocuments(query);

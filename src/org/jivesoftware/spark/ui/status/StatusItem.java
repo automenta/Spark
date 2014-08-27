@@ -27,7 +27,7 @@ import org.jivesoftware.smack.packet.Presence;
 public class StatusItem extends JLabel {
 
     private static final long serialVersionUID = 725324886254656704L;
-    private Presence presence;
+    private final Presence presence;
 
     /**
      * Creates a single StatusItem UI object.

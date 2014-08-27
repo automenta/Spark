@@ -32,7 +32,7 @@ import java.util.Hashtable;
 class CredentialsCache {
 
     // Contains call->realms mappings
-    private Hashtable<String, CredentialsCacheEntry> authenticatedRealms = new Hashtable<String, CredentialsCacheEntry>();
+    private final Hashtable<String, CredentialsCacheEntry> authenticatedRealms = new Hashtable<>();
 
     /**
      * Cache credentials for the specified call and realm

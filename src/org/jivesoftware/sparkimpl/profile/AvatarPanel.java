@@ -83,6 +83,7 @@ public class AvatarPanel extends JPanel implements ActionListener {
         ResourceUtils.resButton(clearButton, Res.getString("button.clear"));
 
         clearButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 avatar.setIcon(null);
                 bytes = null;
@@ -157,6 +158,7 @@ public class AvatarPanel extends JPanel implements ActionListener {
         return avatarFile;
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         // init file chooser (if not already done)
         initFileChooser();
@@ -180,6 +182,7 @@ public class AvatarPanel extends JPanel implements ActionListener {
 
     private void changeAvatar(final File selectedFile, final Component parent) {
         SwingWorker worker = new SwingWorker() {
+            @Override
             public Object construct() {
                 try {
                     ImageIcon imageOnDisk = new ImageIcon(selectedFile.getCanonicalPath());
@@ -194,6 +197,7 @@ public class AvatarPanel extends JPanel implements ActionListener {
                 return null;
             }
 
+            @Override
             public void finished() {
                 Image avatarImage = (Image) get();
 
@@ -227,6 +231,7 @@ public class AvatarPanel extends JPanel implements ActionListener {
         public final String png = "png";
 
         //Accept all directories and all gif, jpg, tiff, or png files.
+        @Override
         public boolean accept(File f, String string) {
             if (f.isDirectory()) {
                 return true;

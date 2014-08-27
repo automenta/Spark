@@ -38,18 +38,18 @@ import org.jivesoftware.spark.plugin.phone.resource.PhoneRes;
 public class DialButton extends JButton implements MouseListener {
 
     private static final long serialVersionUID = 1025696002616464711L;
-    private Icon normalIcon;
-    private Icon hoverIcon;
-    private Icon downIcon;
-    private String textOnTop;
+    private final Icon normalIcon;
+    private final Icon hoverIcon;
+    private final Icon downIcon;
+    private final String textOnTop;
 
     private boolean block;
 
-    private String number;
+    private final String number;
 
     private boolean selected;
 
-    private Action action;
+    private final Action action;
 
     public DialButton(String topText, final Action action) {
         super();
@@ -81,9 +81,11 @@ public class DialButton extends JButton implements MouseListener {
         setMargin(new Insets(0, 0, 0, 0));
     }
 
+    @Override
     public void mouseClicked(MouseEvent e) {
     }
 
+    @Override
     public void mousePressed(MouseEvent e) {
         setIcon(downIcon);
         if (block) {
@@ -92,6 +94,7 @@ public class DialButton extends JButton implements MouseListener {
         action.actionPerformed(null);
     }
 
+    @Override
     public void mouseReleased(MouseEvent e) {
         if (!selected) {
             setIcon(normalIcon);
@@ -99,6 +102,7 @@ public class DialButton extends JButton implements MouseListener {
 
     }
 
+    @Override
     public void mouseEntered(MouseEvent e) {
         if (!selected) {
             setIcon(hoverIcon);
@@ -106,6 +110,7 @@ public class DialButton extends JButton implements MouseListener {
         setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
+    @Override
     public void mouseExited(MouseEvent e) {
         if (!selected) {
             setIcon(normalIcon);
@@ -122,6 +127,7 @@ public class DialButton extends JButton implements MouseListener {
         }
     }
 
+    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         int width = getWidth();
@@ -156,6 +162,7 @@ public class DialButton extends JButton implements MouseListener {
         Action action = new AbstractAction() {
             private static final long serialVersionUID = -6243205463327629493L;
 
+            @Override
             public void actionPerformed(ActionEvent e) {
             }
         };

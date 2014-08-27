@@ -83,6 +83,7 @@ public class MyOtrKeyManager implements OtrKeyManager {
             return configFile;
         }
 
+        @Override
         public void setProperty(String id, boolean value) {
             properties.setProperty(id, "true");
             try {
@@ -98,6 +99,7 @@ public class MyOtrKeyManager implements OtrKeyManager {
             out.close();
         }
 
+        @Override
         public void setProperty(String id, byte[] value) {
             properties.setProperty(id, new String(Base64.encode(value)));
             try {
@@ -107,6 +109,7 @@ public class MyOtrKeyManager implements OtrKeyManager {
             }
         }
 
+        @Override
         public void removeProperty(String id) {
             properties.remove(id);
             try {
@@ -116,6 +119,7 @@ public class MyOtrKeyManager implements OtrKeyManager {
             }
         }
 
+        @Override
         public byte[] getPropertyBytes(String id) {
             String value = properties.getProperty(id);
             if (value == null) {
@@ -124,6 +128,7 @@ public class MyOtrKeyManager implements OtrKeyManager {
             return Base64.decode(value);
         }
 
+        @Override
         public boolean getPropertyBoolean(String id, boolean defaultValue) {
             try {
                 return Boolean.valueOf(properties.get(id).toString());
@@ -144,11 +149,12 @@ public class MyOtrKeyManager implements OtrKeyManager {
         this.store = new DefaultPropertiesStore(filepath);
     }
 
-    private List<OtrKeyManagerListener> listeners = new Vector<OtrKeyManagerListener>();
+    private List<OtrKeyManagerListener> listeners = new Vector<>();
 
     /**
      * Adds listener to key manager
      */
+    @Override
     public void addListener(OtrKeyManagerListener l) {
         synchronized (listeners) {
             if (!listeners.contains(l)) {
@@ -160,6 +166,7 @@ public class MyOtrKeyManager implements OtrKeyManager {
     /**
      * Remove listener from key manager
      */
+    @Override
     public void removeListener(OtrKeyManagerListener l) {
         synchronized (listeners) {
             listeners.remove(l);
@@ -172,6 +179,7 @@ public class MyOtrKeyManager implements OtrKeyManager {
      *
      * @param sessionID the sessionID that is identified with the local machine
      */
+    @Override
     public void generateLocalKeyPair(SessionID sessionID) {
         if (sessionID == null) {
             return;
@@ -206,6 +214,7 @@ public class MyOtrKeyManager implements OtrKeyManager {
      *
      * @return the local finger print for this sessionID
      */
+    @Override
     public String getLocalFingerprint(SessionID sessionID) {
         KeyPair keyPair = loadLocalKeyPair(sessionID);
 
@@ -228,6 +237,7 @@ public class MyOtrKeyManager implements OtrKeyManager {
      *
      * @return finger print for remote contact
      */
+    @Override
     public String getRemoteFingerprint(SessionID sessionID) {
         PublicKey remotePublicKey = loadRemotePublicKey(sessionID);
         if (remotePublicKey == null) {
@@ -245,6 +255,7 @@ public class MyOtrKeyManager implements OtrKeyManager {
      * check if the specified sessionID is verified for this machine
      *
      */
+    @Override
     public boolean isVerified(SessionID sessionID) {
         if (sessionID == null) {
             return false;
@@ -258,6 +269,7 @@ public class MyOtrKeyManager implements OtrKeyManager {
      *
      * @param sessionID sessionID for currect machine
      */
+    @Override
     public KeyPair loadLocalKeyPair(SessionID sessionID) {
         if (sessionID == null) {
             return null;
@@ -304,6 +316,7 @@ public class MyOtrKeyManager implements OtrKeyManager {
      * Loads the public key for the specified sessionID. If there is no key
      * stored, you will get 'null'
      */
+    @Override
     public PublicKey loadRemotePublicKey(SessionID sessionID) {
         if (sessionID == null) {
             return null;
@@ -338,6 +351,7 @@ public class MyOtrKeyManager implements OtrKeyManager {
      * @param sessionID sessionID to identifiy the owner of the key
      * @param pubKey the key which should be stored
      */
+    @Override
     public void savePublicKey(SessionID sessionID, PublicKey pubKey) {
         if (sessionID == null) {
             return;
@@ -354,6 +368,7 @@ public class MyOtrKeyManager implements OtrKeyManager {
     /**
      * Removes the verification for the specified sessionID
      */
+    @Override
     public void unverify(SessionID sessionID) {
         if (sessionID == null) {
             return;
@@ -373,6 +388,7 @@ public class MyOtrKeyManager implements OtrKeyManager {
     /**
      * Verify the specified sessionID
      */
+    @Override
     public void verify(SessionID sessionID) {
         if (sessionID == null) {
             return;

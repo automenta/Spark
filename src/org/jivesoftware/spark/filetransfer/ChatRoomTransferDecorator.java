@@ -46,9 +46,9 @@ import org.jivesoftware.spark.util.log.Log;
  */
 public class ChatRoomTransferDecorator implements KeyListener, FileDropListener, ChatRoomClosingListener, ActionListener {
 
-    private ChatRoom chatRoom;
-    private ChatRoomButton sendFileButton;
-    private ChatRoomButton sendScreenShotButton;
+    private final ChatRoom chatRoom;
+    private final ChatRoomButton sendFileButton;
+    private final ChatRoomButton sendScreenShotButton;
 
     public ChatRoomTransferDecorator(final ChatRoom chatRoom) {
         this.chatRoom = chatRoom;
@@ -70,9 +70,11 @@ public class ChatRoomTransferDecorator implements KeyListener, FileDropListener,
         sendScreenShotButton.addActionListener(this);
     }
 
+    @Override
     public void keyTyped(KeyEvent e) {
     }
 
+    @Override
     public void keyPressed(KeyEvent ke) {
         if (ke.getKeyCode() == KeyEvent.VK_V) {
             int i = ke.getModifiers();
@@ -88,6 +90,7 @@ public class ChatRoomTransferDecorator implements KeyListener, FileDropListener,
         }
     }
 
+    @Override
     public void keyReleased(KeyEvent e) {
     }
 
@@ -106,6 +109,7 @@ public class ChatRoomTransferDecorator implements KeyListener, FileDropListener,
         }
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == sendScreenShotButton) {
             SparkManager.getTransferManager().sendScreenshot(sendScreenShotButton, chatRoom);
@@ -116,6 +120,7 @@ public class ChatRoomTransferDecorator implements KeyListener, FileDropListener,
 
     private void showFilePicker() {
         SwingWorker worker = new SwingWorker() {
+            @Override
             public Object construct() {
                 try {
                     Thread.sleep(10);
@@ -125,6 +130,7 @@ public class ChatRoomTransferDecorator implements KeyListener, FileDropListener,
                 return true;
             }
 
+            @Override
             public void finished() {
                 FileDialog fileChooser = SparkManager.getTransferManager().getFileChooser(SparkManager.getChatManager().getChatContainer().getChatFrame(), Res.getString("title.select.file.to.send"));
                 fileChooser.setVisible(true);
@@ -145,6 +151,7 @@ public class ChatRoomTransferDecorator implements KeyListener, FileDropListener,
         worker.start();
     }
 
+    @Override
     public void closing() {
         chatRoom.removeFileDropListener(this);
         chatRoom.getChatInputEditor().removeKeyListener(this);

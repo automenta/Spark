@@ -59,6 +59,7 @@ public class LogPacket extends IQ {
     public LogPacket() {
     }
 
+    @Override
     public String getChildElementXML() {
         StringBuilder buf = new StringBuilder();
         buf.append("<" + ELEMENT_NAME + " xmlns='" + NAMESPACE + "'>");
@@ -78,6 +79,7 @@ public class LogPacket extends IQ {
             super();
         }
 
+        @Override
         public IQ parseIQ(XmlPullParser parser) throws Exception {
             boolean done = false;
             LogPacket lp = new LogPacket();

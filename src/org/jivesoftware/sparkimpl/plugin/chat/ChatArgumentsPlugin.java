@@ -25,6 +25,7 @@ import org.jivesoftware.spark.ui.conferences.ConferenceUtils;
 
 public class ChatArgumentsPlugin implements Plugin {
 
+    @Override
     public void initialize() {
         String start_chat_jid = Spark.getArgumentValue("start_chat_jid");
         String start_chat_muc = Spark.getArgumentValue("start_chat_muc");
@@ -40,14 +41,17 @@ public class ChatArgumentsPlugin implements Plugin {
 
     }
 
+    @Override
     public void shutdown() {
 
     }
 
+    @Override
     public boolean canShutDown() {
         return false;
     }
 
+    @Override
     public void uninstall() {
         // Do nothing.
     }

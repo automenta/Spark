@@ -10,7 +10,7 @@ import java.util.ResourceBundle;
  */
 public class TGuardRes {
 
-    private static PropertyResourceBundle prb;
+    private static final PropertyResourceBundle prb;
 
     private TGuardRes() {
 

@@ -31,7 +31,7 @@ import org.xmlpull.v1.XmlPullParser;
  */
 public class GatewayPrivateData implements PrivateData {
 
-    private final Map<String, String> loginSettingsMap = new HashMap<String, String>();
+    private final Map<String, String> loginSettingsMap = new HashMap<>();
 
     public static final String ELEMENT = "gateway-settings";
     public static final String NAMESPACE = "http://www.jivesoftware.org/spark";
@@ -49,14 +49,17 @@ public class GatewayPrivateData implements PrivateData {
         return Boolean.parseBoolean(str);
     }
 
+    @Override
     public String getElementName() {
         return ELEMENT;
     }
 
+    @Override
     public String getNamespace() {
         return NAMESPACE;
     }
 
+    @Override
     public String toXML() {
         StringBuilder buf = new StringBuilder();
         buf.append("<").append(getElementName()).append(" xmlns=\"").append(getNamespace()).append("\">");
@@ -79,6 +82,7 @@ public class GatewayPrivateData implements PrivateData {
         public ConferencePrivateDataProvider() {
         }
 
+        @Override
         public PrivateData parsePrivateData(XmlPullParser parser) throws Exception {
             GatewayPrivateData data = new GatewayPrivateData();
 

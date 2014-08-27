@@ -28,8 +28,9 @@ public class SettingsDataProvider implements PrivateDataProvider {
     public SettingsDataProvider() {
     }
 
+    @Override
     public PrivateData parsePrivateData(XmlPullParser parser) throws Exception {
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<>();
         parser.getEventType();
         parser.nextTag();
         for (String text = parser.getName(); text.equals("entry"); text = parser.getName()) {

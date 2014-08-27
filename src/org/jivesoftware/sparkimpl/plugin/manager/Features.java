@@ -25,7 +25,7 @@ import org.xmlpull.v1.XmlPullParser;
 
 public class Features implements PacketExtension {
 
-    private List<String> availableFeatures = new ArrayList<String>();
+    private final List<String> availableFeatures = new ArrayList<>();
 
     public List<String> getAvailableFeatures() {
         return availableFeatures;
@@ -45,14 +45,17 @@ public class Features implements PacketExtension {
      */
     public static final String NAMESPACE = "http://jabber.org/protocol/disco#info";
 
+    @Override
     public String getElementName() {
         return ELEMENT_NAME;
     }
 
+    @Override
     public String getNamespace() {
         return NAMESPACE;
     }
 
+    @Override
     public String toXML() {
         StringBuilder buf = new StringBuilder();
         buf.append("<event xmlns=\"" + NAMESPACE + "\"").append("</event>");
@@ -61,6 +64,7 @@ public class Features implements PacketExtension {
 
     public static class Provider implements PacketExtensionProvider {
 
+        @Override
         public PacketExtension parseExtension(XmlPullParser parser) throws Exception {
 
             Features features = new Features();

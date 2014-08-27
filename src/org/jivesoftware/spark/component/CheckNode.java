@@ -157,6 +157,7 @@ public class CheckNode extends JiveTreeNode {
      *
      * @return the associated object.
      */
+    @Override
     public Object getAssociatedObject() {
         return associatedObject;
     }
@@ -166,6 +167,7 @@ public class CheckNode extends JiveTreeNode {
      *
      * @param associatedObject the associated object set.
      */
+    @Override
     public void setAssociatedObject(Object associatedObject) {
         this.associatedObject = associatedObject;
     }

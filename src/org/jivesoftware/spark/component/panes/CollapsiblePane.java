@@ -44,7 +44,7 @@ public class CollapsiblePane extends JPanel {
     private BaseCollapsibleTitlePane titlePane;
     private JPanel mainPanel;
 
-    private List<CollapsiblePaneListener> listeners = new ArrayList<CollapsiblePaneListener>();
+    private List<CollapsiblePaneListener> listeners = new ArrayList<>();
 
     private boolean subPane;
 
@@ -60,6 +60,7 @@ public class CollapsiblePane extends JPanel {
         mainPanel.setLayout(new BorderLayout());
 
         titlePane.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.isPopupTrigger()) {
                     return;

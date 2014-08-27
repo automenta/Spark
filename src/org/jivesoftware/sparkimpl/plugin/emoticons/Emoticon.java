@@ -30,8 +30,8 @@ public class Emoticon {
 
     private String imageName;
     private String emoticonName;
-    private File emoticonDirectory;
-    private List<String> equivalants = new ArrayList<String>();
+    private final File emoticonDirectory;
+    private List<String> equivalants = new ArrayList<>();
 
     /**
      * Creates a single Emoticon entry.

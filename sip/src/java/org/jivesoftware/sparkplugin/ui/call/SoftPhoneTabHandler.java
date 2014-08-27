@@ -35,12 +35,13 @@ import org.jivesoftware.spark.ui.SparkTabHandler;
  */
 public class SoftPhoneTabHandler extends SparkTabHandler {
 
-    private SoftPhoneManager manager;
+    private final SoftPhoneManager manager;
 
     public SoftPhoneTabHandler() {
         manager = SoftPhoneManager.getInstance();
     }
 
+    @Override
     public boolean isTabHandled(SparkTab tab, Component component, boolean isSelectedTab, boolean chatFrameFocused) {
         CallRoomState callState = manager.getCallRoomState(component);
         if (callState != null) {

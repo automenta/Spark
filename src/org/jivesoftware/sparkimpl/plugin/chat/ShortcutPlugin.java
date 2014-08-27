@@ -30,21 +30,26 @@ import org.jivesoftware.spark.util.ModelUtil;
  */
 public class ShortcutPlugin implements Plugin, TranscriptWindowInterceptor {
 
+    @Override
     public void initialize() {
         // Add TranscriptWindowInterceptor
         SparkManager.getChatManager().addTranscriptWindowInterceptor(this);
     }
 
+    @Override
     public void shutdown() {
     }
 
+    @Override
     public boolean canShutDown() {
         return false;
     }
 
+    @Override
     public void uninstall() {
     }
 
+    @Override
     public boolean isMessageIntercepted(TranscriptWindow window, String userid, Message message) {
         String body = message.getBody();
         if (ModelUtil.hasLength(body) && body.startsWith("/me ")) {

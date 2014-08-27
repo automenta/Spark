@@ -45,16 +45,16 @@ import org.jitsi.service.neomedia.format.MediaFormat;
 
 public class AudioChannel {
 
-    private MediaLocator inLocator;
-    private String localIpAddress;
-    private String ipAddress;
-    private int localPort;
+    private final MediaLocator inLocator;
+    private final String localIpAddress;
+    private final String ipAddress;
+    private final int localPort;
     private int localRTCPPort;
-    private int remotePort;
+    private final int remotePort;
     private int remoteRTCPPort;
-    private MediaFormat format;
+    private final MediaFormat format;
     private StreamConnector connector;
-    private boolean started = false;
+    private final boolean started = false;
     MediaStream mediaStream = null;
 
     /**

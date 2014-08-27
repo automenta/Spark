@@ -44,10 +44,10 @@ import org.jivesoftware.spark.util.log.Log;
 public class SearchForm extends JPanel {
 
     private static final long serialVersionUID = -6935368899659597477L;
-    private UserSearchResults searchResults;
-    private DataFormUI questionForm;
+    private final UserSearchResults searchResults;
+    private final DataFormUI questionForm;
     private UserSearchManager searchManager;
-    private String serviceName;
+    private final String serviceName;
     private Form searchForm;
 
     public SearchForm(String service) {
@@ -62,6 +62,8 @@ public class SearchForm extends JPanel {
         } catch (XMPPException e) {
             Log.error("Unable to load search services.", e);
             JOptionPane.showMessageDialog(SparkManager.getMainWindow(), Res.getString("message.search.service.not.available"), Res.getString("title.notification"), JOptionPane.ERROR_MESSAGE);
+            searchResults = null;
+            questionForm = null;
             return;
         }
 
@@ -77,6 +79,7 @@ public class SearchForm extends JPanel {
         add(searchButton, new GridBagConstraints(0, 1, 3, 1, 1.0, 0.0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0));
 
         searchButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 performSearch();
             }
@@ -91,6 +94,7 @@ public class SearchForm extends JPanel {
         getActionMap().put("enter", new AbstractAction("enter") {
             private static final long serialVersionUID = -7308854327447291219L;
 
+            @Override
             public void actionPerformed(ActionEvent evt) {
                 performSearch();
             }
@@ -119,6 +123,7 @@ public class SearchForm extends JPanel {
         SwingWorker worker = new SwingWorker() {
             ReportedData data;
 
+            @Override
             public Object construct() {
                 try {
                     Form answerForm = questionForm.getFilledForm();
@@ -130,6 +135,7 @@ public class SearchForm extends JPanel {
                 return data;
             }
 
+            @Override
             public void finished() {
                 if (data != null) {
                     searchResults.showUsersFound(data);

@@ -97,10 +97,10 @@ public class CallHistoryUI extends JPanel implements ActionListener, ListSelecti
 
         logManager = SoftPhoneManager.getInstance().getLogManager();
 
-        List<HistoryCall> calls = new ArrayList<HistoryCall>(logManager.getCallHistory());
+        List<HistoryCall> calls = new ArrayList<>(logManager.getCallHistory());
         Collections.sort(calls, itemComparator);
 
-        model = new DefaultListModel<CallEntry>();
+        model = new DefaultListModel<>();
         for (HistoryCall call : calls) {
             final CallEntry callEntry = new CallEntry(call);
             model.addElement(callEntry);
@@ -140,12 +140,15 @@ public class CallHistoryUI extends JPanel implements ActionListener, ListSelecti
         deleteButton.addActionListener(this);
 
         tabs.addSparkTabbedPaneListener(new SparkTabbedPaneListener() {
+            @Override
             public void tabRemoved(SparkTab tab, Component component, int index) {
             }
 
+            @Override
             public void tabAdded(SparkTab tab, Component component, int index) {
             }
 
+            @Override
             public void tabSelected(SparkTab tab, Component component, int index) {
                 JScrollPane pane = (JScrollPane) component;
                 JXList list = (JXList) pane.getViewport().getView();
@@ -156,9 +159,11 @@ public class CallHistoryUI extends JPanel implements ActionListener, ListSelecti
                 deleteButton.setEnabled(selections);
             }
 
+            @Override
             public void allTabsRemoved() {
             }
 
+            @Override
             public boolean canTabClose(SparkTab tab, Component component) {
                 return false;
             }
@@ -171,6 +176,7 @@ public class CallHistoryUI extends JPanel implements ActionListener, ListSelecti
         list.setCellRenderer(renderer);
 
         list.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 if (mouseEvent.getClickCount() == 2) {
                     CallEntry entry = (CallEntry) list.getSelectedValue();
@@ -188,6 +194,7 @@ public class CallHistoryUI extends JPanel implements ActionListener, ListSelecti
         list.addListSelectionListener(this);
         list.setCellRenderer(renderer);
         list.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 if (mouseEvent.getClickCount() == 2) {
                     CallEntry entry = (CallEntry) list.getSelectedValue();
@@ -196,7 +203,7 @@ public class CallHistoryUI extends JPanel implements ActionListener, ListSelecti
                 }
             }
         });
-        List<RowFilter<Object, Object>> filters = new ArrayList<RowFilter<Object, Object>>();
+        List<RowFilter<Object, Object>> filters = new ArrayList<>();
         filters.add(RowFilter.regexFilter(CallLog.Type.dialed.toString(), 1));
         filters.add(RowFilter.regexFilter(CallLog.Type.dialed.toString(), 2));
         filters.add(RowFilter.regexFilter(CallLog.Type.dialed.toString(), 3));
@@ -211,6 +218,7 @@ public class CallHistoryUI extends JPanel implements ActionListener, ListSelecti
         list.addListSelectionListener(this);
         list.setCellRenderer(renderer);
         list.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 if (mouseEvent.getClickCount() == 2) {
                     CallEntry entry = (CallEntry) list.getSelectedValue();
@@ -220,7 +228,7 @@ public class CallHistoryUI extends JPanel implements ActionListener, ListSelecti
             }
         });
 
-        List<RowFilter<Object, Object>> filters = new ArrayList<RowFilter<Object, Object>>();
+        List<RowFilter<Object, Object>> filters = new ArrayList<>();
         filters.add(RowFilter.regexFilter(CallLog.Type.received.toString(), 1));
         filters.add(RowFilter.regexFilter(CallLog.Type.received.toString(), 2));
         filters.add(RowFilter.regexFilter(CallLog.Type.received.toString(), 3));
@@ -235,6 +243,7 @@ public class CallHistoryUI extends JPanel implements ActionListener, ListSelecti
         list.addListSelectionListener(this);
         list.setCellRenderer(renderer);
         list.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 if (mouseEvent.getClickCount() == 2) {
                     CallEntry entry = (CallEntry) list.getSelectedValue();
@@ -244,7 +253,7 @@ public class CallHistoryUI extends JPanel implements ActionListener, ListSelecti
             }
         });
 
-        List<RowFilter<Object, Object>> filters = new ArrayList<RowFilter<Object, Object>>();
+        List<RowFilter<Object, Object>> filters = new ArrayList<>();
         filters.add(RowFilter.regexFilter(CallLog.Type.missed.toString(), 1));
         filters.add(RowFilter.regexFilter(CallLog.Type.missed.toString(), 2));
         filters.add(RowFilter.regexFilter(CallLog.Type.missed.toString(), 3));
@@ -266,8 +275,8 @@ public class CallHistoryUI extends JPanel implements ActionListener, ListSelecti
 
         private static final long serialVersionUID = -5942381098669018012L;
         private String number;
-        private HistoryCall call;
-        private String type;
+        private final HistoryCall call;
+        private final String type;
 
         public CallEntry(HistoryCall call) {
             setLayout(new GridBagLayout());
@@ -340,11 +349,13 @@ public class CallHistoryUI extends JPanel implements ActionListener, ListSelecti
         }
 
         // needed by PatternFilter
+        @Override
         public String toString() {
             return type;
         }
     }
 
+    @Override
     public void actionPerformed(ActionEvent actionEvent) {
         if (actionEvent.getSource() == callButton) {
             // Get Selected Call Entry
@@ -361,6 +372,7 @@ public class CallHistoryUI extends JPanel implements ActionListener, ListSelecti
     }
 
     final Comparator<HistoryCall> itemComparator = new Comparator<HistoryCall>() {
+        @Override
         public int compare(HistoryCall contactItemOne, HistoryCall contactItemTwo) {
             final HistoryCall time1 = contactItemOne;
             final HistoryCall time2 = contactItemTwo;
@@ -374,6 +386,7 @@ public class CallHistoryUI extends JPanel implements ActionListener, ListSelecti
         }
     };
 
+    @Override
     public void valueChanged(ListSelectionEvent listSelectionEvent) {
         if (listSelectionEvent.getValueIsAdjusting()) {
             return;
@@ -393,6 +406,7 @@ public class CallHistoryUI extends JPanel implements ActionListener, ListSelecti
 
         private static final long serialVersionUID = 6992445460154181873L;
 
+        @Override
         public Component getListCellRendererComponent(JList list,
                 Object value,
                 int index,

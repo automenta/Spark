@@ -32,7 +32,7 @@ import org.jivesoftware.spark.util.log.Log;
 public class GroupChatRoomTransferHandler extends TransferHandler {
 
     private static final long serialVersionUID = -192689038331188379L;
-    private GroupChatRoom groupChatRoom;
+    private final GroupChatRoom groupChatRoom;
     private static final DataFlavor flavors[] = {DataFlavor.imageFlavor};
 
     /**
@@ -44,10 +44,12 @@ public class GroupChatRoomTransferHandler extends TransferHandler {
         this.groupChatRoom = chatRoom;
     }
 
+    @Override
     public int getSourceActions(JComponent c) {
         return TransferHandler.COPY;
     }
 
+    @Override
     public boolean canImport(JComponent comp, DataFlavor flavor[]) {
         for (int i = 0, n = flavor.length; i < n; i++) {
             for (int j = 0, m = flavors.length; j < m; j++) {
@@ -59,13 +61,16 @@ public class GroupChatRoomTransferHandler extends TransferHandler {
         return false;
     }
 
+    @Override
     protected void exportDone(JComponent c, Transferable data, int action) {
     }
 
+    @Override
     public Transferable createTransferable(JComponent comp) {
         return null;
     }
 
+    @Override
     public boolean importData(JComponent comp, Transferable t) {
         if (t.isDataFlavorSupported(flavors[0])) {
             try {

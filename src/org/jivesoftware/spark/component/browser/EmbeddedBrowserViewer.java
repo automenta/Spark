@@ -31,7 +31,7 @@ import org.lobobrowser.main.PlatformInit;
 public class EmbeddedBrowserViewer extends BrowserViewer implements ContentListener {
 
     private static final long serialVersionUID = -8055149462713514766L;
-    private FramePanel browser;
+    private final FramePanel browser;
 
     /**
      * Constructs a new LobobrowserViewer
@@ -57,6 +57,7 @@ public class EmbeddedBrowserViewer extends BrowserViewer implements ContentListe
     /**
      * Implementation of "Back"-button
      */
+    @Override
     public void goBack() {
         browser.back();
     }
@@ -64,6 +65,7 @@ public class EmbeddedBrowserViewer extends BrowserViewer implements ContentListe
     /**
      * Initialization of the BrowserViewer
      */
+    @Override
     public void initializeBrowser() {
         this.setLayout(new BorderLayout());
         this.add(browser, BorderLayout.CENTER);
@@ -72,6 +74,7 @@ public class EmbeddedBrowserViewer extends BrowserViewer implements ContentListe
     /**
      * Load the given URL
      */
+    @Override
     public void loadURL(String url) {
         try {
             browser.navigate(url);
@@ -83,6 +86,7 @@ public class EmbeddedBrowserViewer extends BrowserViewer implements ContentListe
     /**
      * React to an event by updating the address bar
      */
+    @Override
     public void contentSet(ContentEvent event) {
         if (browser == null || browser.getCurrentNavigationEntry() == null) {
             return;

@@ -88,8 +88,9 @@ import org.jivesoftware.sparkimpl.settings.local.SettingsManager;
  */
 public class BroadcastPlugin extends SparkTabHandler implements Plugin, PacketListener {
 
-    private Set<ChatRoom> broadcastRooms = new HashSet<ChatRoom>();
+    private final Set<ChatRoom> broadcastRooms = new HashSet<>();
 
+    @Override
     public void initialize() {
         boolean enabled = Enterprise.containsFeature(Enterprise.BROADCAST_FEATURE);
         if (!enabled) {
@@ -108,6 +109,7 @@ public class BroadcastPlugin extends SparkTabHandler implements Plugin, PacketLi
         ResourceUtils.resButton(broadcastMenu, Res.getString("title.broadcast.message"));
         actionsMenu.add(broadcastMenu);
         broadcastMenu.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 broadcastToRoster();
             }
@@ -118,6 +120,7 @@ public class BroadcastPlugin extends SparkTabHandler implements Plugin, PacketLi
         ResourceUtils.resButton(startConversationtMenu, Res.getString("menuitem.start.a.chat"));
         actionsMenu.add(startConversationtMenu, 0);
         startConversationtMenu.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 ContactList contactList = SparkManager.getWorkspace().getContactList();
                 Collection<ContactItem> selectedUsers = contactList.getSelectedUsers();
@@ -147,12 +150,14 @@ public class BroadcastPlugin extends SparkTabHandler implements Plugin, PacketLi
         // Add send to selected users.
         final ContactList contactList = SparkManager.getWorkspace().getContactList();
         contactList.addContextMenuListener(new ContextMenuListener() {
+            @Override
             public void poppingUp(Object component, JPopupMenu popup) {
                 if (component instanceof ContactGroup) {
                     final ContactGroup group = (ContactGroup) component;
                     Action broadcastMessageAction = new AbstractAction() {
                         private static final long serialVersionUID = -6411248110270296726L;
 
+                        @Override
                         public void actionPerformed(ActionEvent e) {
                             broadcastToGroup(group);
                         }
@@ -164,10 +169,12 @@ public class BroadcastPlugin extends SparkTabHandler implements Plugin, PacketLi
                 }
             }
 
+            @Override
             public void poppingDown(JPopupMenu popup) {
 
             }
 
+            @Override
             public boolean handleDefaultAction(MouseEvent e) {
                 return false;
             }
@@ -184,22 +191,27 @@ public class BroadcastPlugin extends SparkTabHandler implements Plugin, PacketLi
         statusBar.repaint();
 
         broadcastToRosterButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 broadcastToRoster();
             }
         });
     }
 
+    @Override
     public void shutdown() {
 
     }
 
+    @Override
     public boolean canShutDown() {
         return false;
     }
 
+    @Override
     public void processPacket(final Packet packet) {
         SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 try {
                     final Message message = (Message) packet;
@@ -350,10 +362,12 @@ public class BroadcastPlugin extends SparkTabHandler implements Plugin, PacketLi
         chatRoom.addMessageListener(new MessageListener() {
             boolean waiting = true;
 
+            @Override
             public void messageReceived(ChatRoom room, Message message) {
                 removeAsBroadcast(room);
             }
 
+            @Override
             public void messageSent(ChatRoom room, Message message) {
                 removeAsBroadcast(room);
             }
@@ -388,10 +402,12 @@ public class BroadcastPlugin extends SparkTabHandler implements Plugin, PacketLi
         broadcastDialog.invokeDialog(group);
     }
 
+    @Override
     public void uninstall() {
         // Do nothing.
     }
 
+    @Override
     public boolean isTabHandled(SparkTab tab, Component component, boolean isSelectedTab, boolean chatFrameFocused) {
         if (component instanceof ChatRoom) {
             ChatRoom chatroom = (ChatRoom) component;

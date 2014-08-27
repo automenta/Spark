@@ -22,7 +22,7 @@ public class Credentials {
     private static String userName = null;
     private static char[] password = null;
     private static String authUserName = null;
-    private static String displayName = null;
+    private static final String displayName = null;
 
     /**
      * Sets the user name.

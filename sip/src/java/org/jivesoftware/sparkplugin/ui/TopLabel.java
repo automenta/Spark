@@ -34,8 +34,8 @@ import org.jivesoftware.spark.plugin.phone.resource.PhoneRes;
 public class TopLabel extends JPanel {
 
     private static final long serialVersionUID = -820396327537797012L;
-    private JLabel label;
-    private Image backgroundImage;
+    private final JLabel label;
+    private final Image backgroundImage;
 
     public TopLabel(String text) {
         setLayout(new BorderLayout());
@@ -53,6 +53,7 @@ public class TopLabel extends JPanel {
         label.setText(text);
     }
 
+    @Override
     public void paintComponent(Graphics g) {
         double scaleX = getWidth() / (double) backgroundImage.getWidth(null);
         double scaleY = getHeight() / (double) backgroundImage.getHeight(null);

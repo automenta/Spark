@@ -109,14 +109,14 @@ import org.jivesoftware.sparkimpl.plugin.manager.Enterprise;
  */
 public class SparkTransferManager {
 
-    private List<FileTransferListener> listeners = new ArrayList<FileTransferListener>();
+    private List<FileTransferListener> listeners = new ArrayList<>();
     private File defaultDirectory;
 
     private static SparkTransferManager singleton;
     private static final Object LOCK = new Object();
 
     private FileTransferManager transferManager;
-    private Map<String, ArrayList<File>> waitMap = new HashMap<String, ArrayList<File>>();
+    private Map<String, ArrayList<File>> waitMap = new HashMap<>();
     private BufferedImage bufferedImage;
     private ImageSelectionPanel selectionPanel;
     private Robot robot;
@@ -148,20 +148,25 @@ public class SparkTransferManager {
         }
 
         SparkManager.getConnection().addConnectionListener(new ConnectionListener() {
+            @Override
             public void connectionClosed() {
             }
 
+            @Override
             public void connectionClosedOnError(Exception e) {
             }
 
+            @Override
             public void reconnectingIn(int seconds) {
             }
 
+            @Override
             public void reconnectionSuccessful() {
                 // Re-create transfer manager.
                 transferManager = new FileTransferManager(SparkManager.getConnection());
             }
 
+            @Override
             public void reconnectionFailed(Exception e) {
             }
         });
@@ -183,6 +188,7 @@ public class SparkTransferManager {
         actionsMenu.addSeparator();
         actionsMenu.add(downloadsMenu);
         downloadsMenu.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 launchFile(Downloads.getDownloadDirectory());
             }
@@ -194,8 +200,10 @@ public class SparkTransferManager {
 
         // Create the listener
         transferManager.addFileTransferListener(new org.jivesoftware.smackx.filetransfer.FileTransferListener() {
+            @Override
             public void fileTransferRequest(final FileTransferRequest request) {
                 SwingUtilities.invokeLater(new Runnable() {
+                    @Override
                     public void run() {
                         handleTransferRequest(request, contactList);
                     }
@@ -207,6 +215,7 @@ public class SparkTransferManager {
         addSendFileButton();
 
         contactList.addFileDropListener(new FileDropListener() {
+            @Override
             public void filesDropped(Collection<File> files, Component component) {
                 if (component instanceof ContactItem) {
                     ContactItem item = (ContactItem) component;
@@ -301,6 +310,7 @@ public class SparkTransferManager {
         receivingMessageUI.acceptFileTransfer(request);
 
         chatRoom.addClosingListener(new ChatRoomClosingListener() {
+            @Override
             public void closing() {
                 receivingMessageUI.cancelTransfer();
             }
@@ -337,6 +347,7 @@ public class SparkTransferManager {
         final ChatManager chatManager = SparkManager.getChatManager();
         chatManager.addChatRoomListener(new ChatRoomListenerAdapter() {
 
+            @Override
             public void chatRoomOpened(final ChatRoom room) {
                 if (!(room instanceof ChatRoomImpl)) {
                     return;
@@ -346,6 +357,7 @@ public class SparkTransferManager {
                 new ChatRoomTransferDecorator(room);
             }
 
+            @Override
             public void chatRoomClosed(ChatRoom room) {
 
             }
@@ -371,6 +383,7 @@ public class SparkTransferManager {
         }
 
         final SwingWorker worker = new SwingWorker() {
+            @Override
             public Object construct() {
                 try {
                     Thread.sleep(1000);
@@ -391,6 +404,7 @@ public class SparkTransferManager {
                 return null;
             }
 
+            @Override
             public void finished() {
                 bufferedImage = (BufferedImage) get();
                 if (bufferedImage == null) {
@@ -404,6 +418,7 @@ public class SparkTransferManager {
                 selectionPanel.setImage(bufferedImage);
                 selectionPanel.validate();
                 selectionPanel.addMouseListener(new MouseAdapter() {
+                    @Override
                     public void mouseReleased(MouseEvent e) {
                         Rectangle clip = selectionPanel.getClip();
                         BufferedImage newImage = null;
@@ -435,6 +450,7 @@ public class SparkTransferManager {
                 });
 
                 frame.addKeyListener(new KeyAdapter() {
+                    @Override
                     public void keyReleased(KeyEvent e) {
                         if (e.getKeyChar() == KeyEvent.VK_ESCAPE) {
                             frame.dispose();
@@ -471,6 +487,7 @@ public class SparkTransferManager {
 
     private void addPresenceListener() {
         SparkManager.getConnection().addPacketListener(new PacketListener() {
+            @Override
             public void processPacket(Packet packet) {
                 Presence presence = (Presence) packet;
                 if (presence.isAvailable()) {
@@ -535,7 +552,7 @@ public class SparkTransferManager {
         if (!PresenceManager.isOnline(jid)) {
             ArrayList<File> list = waitMap.get(jid);
             if (list == null) {
-                list = new ArrayList<File>();
+                list = new ArrayList<>();
             }
 
             list.add(file);
@@ -577,6 +594,7 @@ public class SparkTransferManager {
         // Add listener to cancel transfer is sending file to user who just went offline.
         AndFilter presenceFilter = new AndFilter(new PacketTypeFilter(Presence.class), new FromContainsFilter(bareJID));
         final PacketListener packetListener = new PacketListener() {
+            @Override
             public void processPacket(Packet packet) {
                 Presence presence = (Presence) packet;
                 if (!presence.isAvailable()) {
@@ -591,6 +609,7 @@ public class SparkTransferManager {
         SparkManager.getConnection().addPacketListener(packetListener, presenceFilter);
 
         chatRoom.addClosingListener(new ChatRoomClosingListener() {
+            @Override
             public void closing() {
                 SparkManager.getConnection().removePacketListener(packetListener);
 
@@ -629,6 +648,7 @@ public class SparkTransferManager {
         room.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
         SwingWorker writeImageThread = new SwingWorker() {
+            @Override
             public Object construct() {
                 try {
                     // Write out file in separate thread.
@@ -639,6 +659,7 @@ public class SparkTransferManager {
                 return true;
             }
 
+            @Override
             public void finished() {
                 ChatRoomImpl roomImpl = (ChatRoomImpl) room;
                 sendFile(imageFile, roomImpl.getParticipantJID());
@@ -692,7 +713,7 @@ public class SparkTransferManager {
     }
 
     private boolean fireTransferListeners(FileTransferRequest request) {
-        for (FileTransferListener listener : new ArrayList<FileTransferListener>(listeners)) {
+        for (FileTransferListener listener : new ArrayList<>(listeners)) {
             boolean accepted = listener.handleTransfer(request);
             if (accepted) {
                 return true;

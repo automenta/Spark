@@ -92,10 +92,12 @@ public class SearchService extends JPanel {
         findField.setToolTipText(Res.getString("message.search.for.contacts"));
 
         findField.getTextComponent().addKeyListener(new KeyListener() {
+            @Override
             public void keyTyped(KeyEvent e) {
 
             }
 
+            @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyChar() == KeyEvent.VK_ENTER) {
                     final Icon previousIcon = findField.getIcon();
@@ -105,11 +107,13 @@ public class SearchService extends JPanel {
                     findField.repaint();
 
                     SwingWorker worker = new SwingWorker() {
+                        @Override
                         public Object construct() {
                             activeSearchable.search(findField.getText());
                             return true;
                         }
 
+                        @Override
                         public void finished() {
                             findField.setIcon(previousIcon);
                             findField.setText("");
@@ -120,12 +124,14 @@ public class SearchService extends JPanel {
                 }
             }
 
+            @Override
             public void keyReleased(KeyEvent e) {
 
             }
         });
 
         findField.getTextComponent().addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
                 if (newSearch) {
                     findField.setText("");
@@ -142,6 +148,7 @@ public class SearchService extends JPanel {
         workspace.repaint();
 
         findField.getImageComponent().addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
                 Collection<Searchable> searchables = SparkManager.getSearchManager().getSearchServices();
                 if (searchables.size() <= 1) {
@@ -154,6 +161,7 @@ public class SearchService extends JPanel {
                     Action action = new AbstractAction() {
                         private static final long serialVersionUID = 1289193809077193703L;
 
+                        @Override
                         public void actionPerformed(ActionEvent e) {
                             setActiveSearchService(searchable);
                         }
@@ -181,10 +189,12 @@ public class SearchService extends JPanel {
         findField.setToolTipText(searchable.getToolTip());
 
         findField.getTextComponent().addFocusListener(new FocusListener() {
+            @Override
             public void focusGained(FocusEvent e) {
                 findField.setText("");
             }
 
+            @Override
             public void focusLost(FocusEvent e) {
                 findField.getTextComponent().setForeground((Color) UIManager.get("TextField.lightforeground"));
                 findField.setText(searchable.getDefaultText());

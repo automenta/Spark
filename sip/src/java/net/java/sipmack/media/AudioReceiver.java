@@ -58,6 +58,7 @@ public class AudioReceiver implements ReceiveStreamListener, SessionListener,
     /**
      * JingleSessionListener.
      */
+    @Override
     public synchronized void update(SessionEvent evt) {
         if (evt instanceof NewParticipantEvent) {
             Participant p = ((NewParticipantEvent) evt).getParticipant();
@@ -68,6 +69,7 @@ public class AudioReceiver implements ReceiveStreamListener, SessionListener,
     /**
      * ReceiveStreamListener
      */
+    @Override
     public synchronized void update(ReceiveStreamEvent evt) {
 
         Participant participant = evt.getParticipant();    // could be null.
@@ -141,6 +143,7 @@ public class AudioReceiver implements ReceiveStreamListener, SessionListener,
     /**
      * ControllerListener for the Players.
      */
+    @Override
     public synchronized void controllerUpdate(ControllerEvent ce) {
 
         Player p = (Player) ce.getSourceController();

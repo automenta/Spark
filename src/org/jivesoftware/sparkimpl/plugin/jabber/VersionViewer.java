@@ -84,12 +84,14 @@ public class VersionViewer {
         SwingWorker versionThread = new SwingWorker() {
             IQ result;
 
+            @Override
             public Object construct() {
                 SparkManager.getConnection().sendPacket(versionRequest);
                 result = (IQ) collector.nextResult(5000);
                 return result;
             }
 
+            @Override
             public void finished() {
                 // Wait up to 5 seconds for a result.
                 if (result != null && result.getType() == IQ.Type.RESULT) {
@@ -111,12 +113,14 @@ public class VersionViewer {
         SwingWorker timeThread = new SwingWorker() {
             IQ timeResult = null;
 
+            @Override
             public Object construct() {
                 SparkManager.getConnection().sendPacket(time);
                 timeResult = (IQ) collector2.nextResult(5000);
                 return timeResult;
             }
 
+            @Override
             public void finished() {
                 // Wait up to 5 seconds for a result.
 

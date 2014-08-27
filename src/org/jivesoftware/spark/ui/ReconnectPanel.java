@@ -47,8 +47,8 @@ import org.jivesoftware.spark.util.TaskEngine;
 public class ReconnectPanel extends JPanel implements ConnectionListener {
 
     private static final long serialVersionUID = -7099075581561760774L;
-    private JEditorPane pane;
-    private RolloverButton retryButton;
+    private final JEditorPane pane;
+    private final RolloverButton retryButton;
     private boolean closedOnError;
 
     /**
@@ -68,6 +68,7 @@ public class ReconnectPanel extends JPanel implements ConnectionListener {
         layoutComponents();
 
         retryButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 attemptReconnection();
             }
@@ -85,6 +86,7 @@ public class ReconnectPanel extends JPanel implements ConnectionListener {
         retryButton.setEnabled(false);
 
         TimerTask task = new SwingTimerTask() {
+            @Override
             public void doRun() {
                 reconnect();
             }
@@ -153,24 +155,29 @@ public class ReconnectPanel extends JPanel implements ConnectionListener {
         closedOnError = onError;
     }
 
+    @Override
     public void connectionClosed() {
         retryButton.setVisible(true);
         retryButton.setEnabled(true);
     }
 
+    @Override
     public void connectionClosedOnError(Exception e) {
         retryButton.setVisible(true);
         retryButton.setEnabled(true);
     }
 
+    @Override
     public void reconnectingIn(int seconds) {
     }
 
+    @Override
     public void reconnectionSuccessful() {
         retryButton.setVisible(false);
         retryButton.setEnabled(true);
     }
 
+    @Override
     public void reconnectionFailed(Exception e) {
         retryButton.setVisible(true);
         retryButton.setEnabled(true);

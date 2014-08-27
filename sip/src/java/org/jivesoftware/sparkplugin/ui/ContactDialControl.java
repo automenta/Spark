@@ -120,6 +120,7 @@ public class ContactDialControl extends JPanel implements InterlocutorListener, 
         callHistoryButton.setToolTipText(PhoneRes.getIString("phone.viewcallhistory"));
 
         voiceMailButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 final SoftPhoneManager phoneManager = SoftPhoneManager.getInstance();
                 String voiceMailNumber = phoneManager.getSipAccount().getVoiceMailNumber();
@@ -130,15 +131,18 @@ public class ContactDialControl extends JPanel implements InterlocutorListener, 
         });
 
         callButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 placeCall();
             }
         });
 
         phonebookButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 try {
                     EventQueue.invokeLater(new Runnable() {
+                        @Override
                         public void run() {
                             // open the UI
                             PhonebookUI book = PhonebookUI.getInstance();
@@ -152,6 +156,7 @@ public class ContactDialControl extends JPanel implements InterlocutorListener, 
         });
 
         callHistoryButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 showCallList();
             }
@@ -170,6 +175,7 @@ public class ContactDialControl extends JPanel implements InterlocutorListener, 
         SoftPhoneManager.getInstance().addInterlocutorListener(this);
 
         callField.getTextComponent().addCaretListener(new CaretListener() {
+            @Override
             public void caretUpdate(CaretEvent caretEvent) {
                 callButton.setEnabled(ModelUtil.hasLength(callField.getText()) && callField.isEdited());
                 callField.validateTextField();
@@ -178,6 +184,7 @@ public class ContactDialControl extends JPanel implements InterlocutorListener, 
 
         callField.getTextComponent().addKeyListener(new KeyAdapter() {
 
+            @Override
             public void keyReleased(KeyEvent e) {
                 if (!callField.getTextComponent().isEnabled() || !callField.isEdited() || !ModelUtil.hasLength(callField.getText())) {
                     return;
@@ -217,6 +224,7 @@ public class ContactDialControl extends JPanel implements InterlocutorListener, 
         voiceMailButton.setToolTipText(description);
     }
 
+    @Override
     public void paintComponent(Graphics g) {
         final Image backgroundImage = Default.getImageIcon(Default.TOP_BOTTOM_BACKGROUND_IMAGE).getImage();
         double scaleX = getWidth() / (double) backgroundImage.getWidth(null);
@@ -225,6 +233,7 @@ public class ContactDialControl extends JPanel implements InterlocutorListener, 
         ((Graphics2D) g).drawImage(backgroundImage, xform, this);
     }
 
+    @Override
     public void interlocutorAdded(InterlocutorUI ic) {
         String callState = ic.getCallState();
         if (!ModelUtil.hasLength(callState)) {
@@ -242,6 +251,7 @@ public class ContactDialControl extends JPanel implements InterlocutorListener, 
         }
     }
 
+    @Override
     public void interlocutorRemoved(InterlocutorUI interlocutorUI) {
         enableIt(true);
         incomingCall = false;
@@ -270,6 +280,7 @@ public class ContactDialControl extends JPanel implements InterlocutorListener, 
     }
 
     final Comparator<HistoryCall> itemComparator = new Comparator<HistoryCall>() {
+        @Override
         public int compare(HistoryCall contactItemOne, HistoryCall contactItemTwo) {
             final HistoryCall time1 = contactItemOne;
             final HistoryCall time2 = contactItemTwo;
@@ -289,7 +300,7 @@ public class ContactDialControl extends JPanel implements InterlocutorListener, 
     private class CallAction extends AbstractAction {
 
         private static final long serialVersionUID = -6558494299123278779L;
-        private String number;
+        private final String number;
 
         public CallAction(String label, String number, Icon icon) {
             this.number = number;
@@ -297,6 +308,7 @@ public class ContactDialControl extends JPanel implements InterlocutorListener, 
             putValue(Action.SMALL_ICON, icon);
         }
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             callField.setText(number);
             placeCall();
@@ -308,6 +320,7 @@ public class ContactDialControl extends JPanel implements InterlocutorListener, 
 
     }
 
+    @Override
     public Collection<Action> getPhoneActions(String jid) {
         if (!isVisible()) {
             return Collections.emptyList();
@@ -315,7 +328,7 @@ public class ContactDialControl extends JPanel implements InterlocutorListener, 
 
         final VCard vcard = SparkManager.getVCardManager().getVCardFromMemory(jid);
 
-        final List<Action> actions = new ArrayList<Action>();
+        final List<Action> actions = new ArrayList<>();
         final String workNumber = vcard.getPhoneWork("VOICE");
         final String homeNumber = vcard.getPhoneHome("VOICE");
         final String cellNumber = vcard.getPhoneWork("CELL");

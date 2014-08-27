@@ -47,6 +47,7 @@ public class JiveClassLoader extends URLClassLoader {
         super(new URL[]{libDir.toURI().toURL()}, parent);
 
         File[] jars = libDir.listFiles(new FilenameFilter() {
+            @Override
             public boolean accept(File dir, String name) {
                 boolean accept = false;
                 String smallName = name.toLowerCase();

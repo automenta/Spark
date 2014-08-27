@@ -73,7 +73,7 @@ public class UserSearchResults extends JPanel {
      * @param data the <code>ReportedData</code> returned by the Search Service.
      */
     public void showUsersFound(ReportedData data) {
-        List<String> columnList = new ArrayList<String>();
+        List<String> columnList = new ArrayList<>();
         Iterator<Column> columns = data.getColumns();
         while (columns.hasNext()) {
             Column column = columns.next();
@@ -90,6 +90,7 @@ public class UserSearchResults extends JPanel {
             add(scrollPane, BorderLayout.CENTER);
 
             resultsTable.addMouseListener(new MouseAdapter() {
+                @Override
                 public void mouseClicked(MouseEvent e) {
                     if (e.getClickCount() == 2) {
                         int row = resultsTable.getSelectedRow();
@@ -97,10 +98,12 @@ public class UserSearchResults extends JPanel {
                     }
                 }
 
+                @Override
                 public void mouseReleased(MouseEvent e) {
                     checkPopup(e);
                 }
 
+                @Override
                 public void mousePressed(MouseEvent e) {
                     checkPopup(e);
                 }
@@ -112,7 +115,7 @@ public class UserSearchResults extends JPanel {
         Iterator<Row> rows = data.getRows();
         List<String> modelList;
         while (rows.hasNext()) {
-            modelList = new ArrayList<String>();
+            modelList = new ArrayList<>();
             Row row = rows.next();
             for (int i = 0; i < resultsTable.getColumnCount(); i++) {
                 String tableValue = (String) resultsTable.getTableHeader().getColumnModel().getColumn(i).getHeaderValue();
@@ -146,6 +149,7 @@ public class UserSearchResults extends JPanel {
         Action addContactAction = new AbstractAction() {
             private static final long serialVersionUID = -6377937878941477145L;
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 RosterDialog dialog = new RosterDialog();
                 String jid = (String) resultsTable.getValueAt(row, 0);
@@ -177,6 +181,7 @@ public class UserSearchResults extends JPanel {
         Action chatAction = new AbstractAction() {
             private static final long serialVersionUID = 5651812282020177800L;
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 openChatRoom(row);
             }
@@ -185,6 +190,7 @@ public class UserSearchResults extends JPanel {
         Action profileAction = new AbstractAction() {
             private static final long serialVersionUID = -2014872840628217586L;
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 VCardManager vcardSupport = SparkManager.getVCardManager();
                 String jid = (String) resultsTable.getValueAt(row, 0);

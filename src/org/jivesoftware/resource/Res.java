@@ -30,7 +30,7 @@ import org.jivesoftware.spark.util.log.Log;
  */
 public class Res {
 
-    private static PropertyResourceBundle prb;
+    private static final PropertyResourceBundle prb;
 
     private Res() {
 

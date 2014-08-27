@@ -59,8 +59,8 @@ import org.jivesoftware.sparkimpl.settings.local.SettingsManager;
 
 public class SysTrayPlugin implements Plugin, NativeHandler, ChatManagerListener, ChatStateListener {
 
-    private static String MESSAGE_COUNTER_REG_EXP = "\\[\\d+\\] ";
-    private JPopupMenu popupMenu = new JPopupMenu();
+    private static final String MESSAGE_COUNTER_REG_EXP = "\\[\\d+\\] ";
+    private final JPopupMenu popupMenu = new JPopupMenu();
 
     private JMenuItem openMenu;
     private JMenuItem minimizeMenu;
@@ -68,7 +68,7 @@ public class SysTrayPlugin implements Plugin, NativeHandler, ChatManagerListener
     private JMenu statusMenu;
     private JMenuItem logoutMenu;
 
-    private LocalPreferences pref = SettingsManager.getLocalPreferences();
+    private final LocalPreferences pref = SettingsManager.getLocalPreferences();
     private ImageIcon availableIcon;
     private ImageIcon dndIcon;
     private ImageIcon awayIcon;

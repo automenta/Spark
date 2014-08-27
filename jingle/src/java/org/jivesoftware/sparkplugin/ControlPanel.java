@@ -39,6 +39,7 @@ public class ControlPanel extends JPanel {
         setBorder(BorderFactory.createLineBorder(new Color(197, 213, 230)));
     }
 
+    @Override
     public void paintComponent(Graphics g) {
         final BufferedImage bufferedImage = new BufferedImage(2, getHeight(), BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = bufferedImage.createGraphics();

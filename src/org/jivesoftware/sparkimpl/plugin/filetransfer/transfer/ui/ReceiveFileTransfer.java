@@ -122,32 +122,38 @@ public class ReceiveFileTransfer extends JPanel {
         setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.white));
 
         pathButton.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseEntered(MouseEvent e) {
                 pathButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
             }
 
+            @Override
             public void mouseExited(MouseEvent e) {
                 pathButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         });
 
         acceptButton.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseEntered(MouseEvent e) {
                 acceptButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
             }
 
+            @Override
             public void mouseExited(MouseEvent e) {
                 acceptButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         });
 
         declineButton.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseEntered(MouseEvent e) {
                 declineButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
             }
 
+            @Override
             public void mouseExited(MouseEvent e) {
                 declineButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
@@ -191,6 +197,7 @@ public class ReceiveFileTransfer extends JPanel {
 
         acceptButton.addMouseListener(new MouseAdapter() {
 
+            @Override
             public void mousePressed(MouseEvent e) {
                 try {
                     Downloads.checkDownloadDirectory();
@@ -212,6 +219,7 @@ public class ReceiveFileTransfer extends JPanel {
                     // option to set a new path for the file-download
                     pathButton.setVisible(true);
                     pathButton.addMouseListener(new MouseAdapter() {
+                        @Override
                         public void mousePressed(MouseEvent e) {
                             Preference p = SparkManager.getPreferenceManager().getPreference(
                                     new FileTransferPreference().getNamespace());
@@ -232,6 +240,7 @@ public class ReceiveFileTransfer extends JPanel {
         });
 
         declineButton.addMouseListener(new MouseAdapter() {
+            @Override
             public void mousePressed(MouseEvent e) {
                 rejectRequest(request);
             }
@@ -367,6 +376,7 @@ public class ReceiveFileTransfer extends JPanel {
             progressLabel.setText(Res.getString("label.time", fin));
 
             imageLabel.addMouseListener(new MouseAdapter() {
+                @Override
                 public void mouseClicked(MouseEvent e) {
                     if (e.getClickCount() == 2) {
                         launchFile(downloadedFile);
@@ -375,17 +385,20 @@ public class ReceiveFileTransfer extends JPanel {
             });
 
             imageLabel.addMouseListener(new MouseAdapter() {
+                @Override
                 public void mouseEntered(MouseEvent e) {
                     imageLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
                 }
 
+                @Override
                 public void mouseExited(MouseEvent e) {
                     imageLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 }
             });
 
             titleLabel.addMouseListener(new MouseAdapter() {
+                @Override
                 public void mouseClicked(MouseEvent e) {
                     if (e.getClickCount() == 2) {
                         launchFile(downloadedFile);
@@ -394,10 +407,12 @@ public class ReceiveFileTransfer extends JPanel {
             });
 
             titleLabel.addMouseListener(new MouseAdapter() {
+                @Override
                 public void mouseEntered(MouseEvent e) {
                     titleLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
                 }
 
+                @Override
                 public void mouseExited(MouseEvent e) {
                     titleLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 }
@@ -465,30 +480,36 @@ public class ReceiveFileTransfer extends JPanel {
 
         final File downloadedFile = new File(Downloads.getDownloadDirectory(), request.getFileName());
         openFileButton.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseEntered(MouseEvent e) {
                 openFileButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
             }
 
+            @Override
             public void mouseExited(MouseEvent e) {
                 openFileButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
 
+            @Override
             public void mousePressed(MouseEvent e) {
                 launchFile(Downloads.getDownloadDirectory() + "\\" + request.getFileName());
             }
         });
 
         openFolderButton.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseEntered(MouseEvent e) {
                 openFolderButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
             }
 
+            @Override
             public void mouseExited(MouseEvent e) {
                 openFolderButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
 
+            @Override
             public void mousePressed(MouseEvent event) {
                 launchFile(Downloads.getDownloadDirectory());
             }
@@ -509,10 +530,12 @@ public class ReceiveFileTransfer extends JPanel {
 
         imageLabel.setIcon(GraphicUtils.getIcon(downloadedFile));
         imageLabel.addMouseListener(new MouseAdapter() {
+            @Override
             public void mousePressed(MouseEvent e) {
                 showPopup(e, downloadedFile);
             }
 
+            @Override
             public void mouseReleased(MouseEvent e) {
                 showPopup(e, downloadedFile);
             }
@@ -608,6 +631,7 @@ public class ReceiveFileTransfer extends JPanel {
         cancelButton.setIcon(SparkRes.getImageIcon(SparkRes.SMALL_DELETE));
 
         cancelButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 cancelTransfer();
                 acceptButton.setVisible(false);
@@ -618,11 +642,13 @@ public class ReceiveFileTransfer extends JPanel {
         });
 
         cancelButton.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseEntered(MouseEvent e) {
                 cancelButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
             }
 
+            @Override
             public void mouseExited(MouseEvent e) {
                 cancelButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
@@ -638,6 +664,7 @@ public class ReceiveFileTransfer extends JPanel {
             Action saveAsAction = new AbstractAction() {
                 private static final long serialVersionUID = -3010501340128285438L;
 
+                @Override
                 public void actionPerformed(ActionEvent e) {
                     final JFileChooser chooser = Downloads.getFileChooser();
                     File selectedFile = chooser.getSelectedFile();

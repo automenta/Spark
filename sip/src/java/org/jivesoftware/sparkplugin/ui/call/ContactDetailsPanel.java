@@ -50,10 +50,10 @@ import org.jivesoftware.sparkplugin.ui.TopLabel;
 public class ContactDetailsPanel extends JPanel implements ActionListener, MouseListener {
 
     private static final long serialVersionUID = 7323351117571880259L;
-    private LinkLabel emailLabel;
-    private JLabel contactNameLabel;
-    private JLabel jobTitleLabel;
-    private LinkLabel viewProfileLabel;
+    private final LinkLabel emailLabel;
+    private final JLabel contactNameLabel;
+    private final JLabel jobTitleLabel;
+    private final LinkLabel viewProfileLabel;
 
     public ContactDetailsPanel(InterlocutorUI ic) {
         setLayout(new GridBagLayout());
@@ -132,6 +132,7 @@ public class ContactDetailsPanel extends JPanel implements ActionListener, Mouse
         viewProfileLabel.setVisible(true);
     }
 
+    @Override
     public void mouseClicked(MouseEvent e) {
         URI uriMailTo = null;
         if (e.getSource() == emailLabel) {
@@ -146,18 +147,23 @@ public class ContactDetailsPanel extends JPanel implements ActionListener, Mouse
         }
     }
 
+    @Override
     public void mousePressed(MouseEvent e) {
     }
 
+    @Override
     public void mouseReleased(MouseEvent e) {
     }
 
+    @Override
     public void mouseEntered(MouseEvent e) {
     }
 
+    @Override
     public void mouseExited(MouseEvent e) {
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
 
     }

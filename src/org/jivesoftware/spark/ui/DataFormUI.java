@@ -50,9 +50,9 @@ import org.jivesoftware.spark.util.ModelUtil;
 public class DataFormUI extends JPanel {
 
     private static final long serialVersionUID = -6313707846021436765L;
-    private final Map<String, JComponent> valueMap = new HashMap<String, JComponent>();
+    private final Map<String, JComponent> valueMap = new HashMap<>();
     private int row = 5;
-    private Form searchForm;
+    private final Form searchForm;
 
     /**
      * Creates a new DataFormUI
@@ -78,7 +78,7 @@ public class DataFormUI extends JPanel {
             String type = field.getType();
 
             Iterator<?> iter = field.getValues();
-            List<Object> valueList = new ArrayList<Object>();
+            List<Object> valueList = new ArrayList<>();
             while (iter.hasNext()) {
                 valueList.add(iter.next());
             }
@@ -152,7 +152,7 @@ public class DataFormUI extends JPanel {
                 boolean isSelected = ((AbstractButton) o).isSelected();
                 answerForm.setAnswer(answer, isSelected);
             } else if (o instanceof JTextArea) {
-                List<String> list = new ArrayList<String>();
+                List<String> list = new ArrayList<>();
                 String value = ((JTextComponent) o).getText();
                 StringTokenizer tokenizer = new StringTokenizer(value, ", ", false);
                 while (tokenizer.hasMoreTokens()) {
@@ -174,7 +174,7 @@ public class DataFormUI extends JPanel {
                 } else {
                     value = (String) v;
                 }
-                List<String> list = new ArrayList<String>();
+                List<String> list = new ArrayList<>();
                 list.add(value);
                 if (list.size() > 0) {
                     answerForm.setAnswer(answer, list);

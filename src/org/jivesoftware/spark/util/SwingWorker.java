@@ -125,12 +125,14 @@ public abstract class SwingWorker {
      */
     public SwingWorker() {
         new Runnable() {
+            @Override
             public void run() {
                 finished();
             }
         };
 
         Runnable doConstruct = new Runnable() {
+            @Override
             public void run() {
                 try {
                     setValue(construct());
@@ -138,6 +140,7 @@ public abstract class SwingWorker {
                     threadVar.clear();
                 }
                 SwingUtilities.invokeLater(new Runnable() {
+                    @Override
                     public void run() {
                         finished();
                     }

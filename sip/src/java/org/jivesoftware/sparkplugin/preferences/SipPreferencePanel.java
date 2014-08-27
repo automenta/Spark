@@ -41,37 +41,37 @@ public class SipPreferencePanel extends JPanel {
 
     private static final long serialVersionUID = 3514377990815313963L;
 
-    private JPanel generalPanel = new JPanel();
+    private final JPanel generalPanel = new JPanel();
 
-    private JPanel networkPanel = new JPanel();
+    private final JPanel networkPanel = new JPanel();
 
-    private JTextField userNameField = new JTextField();
+    private final JTextField userNameField = new JTextField();
 
-    private JTextField authUserNameField = new JTextField();
+    private final JTextField authUserNameField = new JTextField();
 
-    private JPasswordField passwordField = new JPasswordField();
+    private final JPasswordField passwordField = new JPasswordField();
 
-    private JTextField serverField = new JTextField();
+    private final JTextField serverField = new JTextField();
 
-    private JCheckBox registerCheckBox = new JCheckBox();
+    private final JCheckBox registerCheckBox = new JCheckBox();
 
-    private JTextField stunServerField = new JTextField();
+    private final JTextField stunServerField = new JTextField();
 
-    private JTextField stunPortField = new JTextField();
+    private final JTextField stunPortField = new JTextField();
 
-    private JCheckBox useStun = new JCheckBox();
+    private final JCheckBox useStun = new JCheckBox();
 
-    private JLabel userNameLabel = new JLabel();
+    private final JLabel userNameLabel = new JLabel();
 
-    private JLabel authUserNameLabel = new JLabel();
+    private final JLabel authUserNameLabel = new JLabel();
 
-    private JLabel passwordLabel = new JLabel();
+    private final JLabel passwordLabel = new JLabel();
 
-    private JLabel serverLabel = new JLabel();
+    private final JLabel serverLabel = new JLabel();
 
-    private JLabel stunServerLabel = new JLabel();
+    private final JLabel stunServerLabel = new JLabel();
 
-    private JLabel stunPortLabel = new JLabel();
+    private final JLabel stunPortLabel = new JLabel();
 
     /**
      * Constructor invokes UI setup.

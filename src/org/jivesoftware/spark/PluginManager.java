@@ -69,9 +69,9 @@ import org.jivesoftware.sparkimpl.settings.local.SettingsManager;
  */
 public class PluginManager implements MainWindowListener {
 
-    private final List<Plugin> plugins = new ArrayList<Plugin>();
+    private final List<Plugin> plugins = new ArrayList<>();
 
-    private final List<PublicPlugin> publicPlugins = new CopyOnWriteArrayList<PublicPlugin>();
+    private final List<PublicPlugin> publicPlugins = new CopyOnWriteArrayList<>();
     private static PluginManager singleton;
     private static final Object LOCK = new Object();
     /**
@@ -82,7 +82,7 @@ public class PluginManager implements MainWindowListener {
     private Plugin pluginClass;
     private PluginClassLoader classLoader;
 
-    private Collection<String> _blacklistPlugins;
+    private final Collection<String> _blacklistPlugins;
 
     /**
      * Returns the singleton instance of <CODE>PluginManager</CODE>, creating it
@@ -413,7 +413,7 @@ public class PluginManager implements MainWindowListener {
 
     private String attachMissingZero(String value) {
         while (value.length() < 5) {
-            value = value + "0";
+            value += "0";
         }
         return value;
     }
@@ -435,6 +435,7 @@ public class PluginManager implements MainWindowListener {
         for (final Object plugin1 : plugins) {
 
             EventQueue.invokeLater(new Runnable() {
+                @Override
                 public void run() {
                     String clazz = null;
                     String name;
@@ -631,6 +632,7 @@ public class PluginManager implements MainWindowListener {
             }
 
             EventQueue.invokeLater(new Runnable() {
+                @Override
                 public void run() {
                     for (Plugin plugin1 : plugins) {
                         long start = System.currentTimeMillis();
@@ -652,6 +654,7 @@ public class PluginManager implements MainWindowListener {
 
     }
 
+    @Override
     public void shutdown() {
         for (Plugin plugin1 : plugins) {
             try {
@@ -662,9 +665,11 @@ public class PluginManager implements MainWindowListener {
         }
     }
 
+    @Override
     public void mainWindowActivated() {
     }
 
+    @Override
     public void mainWindowDeactivated() {
     }
 
@@ -690,6 +695,7 @@ public class PluginManager implements MainWindowListener {
      */
     private void expandNewPlugins() {
         File[] jars = PLUGINS_DIRECTORY.listFiles(new FilenameFilter() {
+            @Override
             public boolean accept(File dir, String name) {
                 boolean accept = false;
                 String smallName = name.toLowerCase();
@@ -742,6 +748,7 @@ public class PluginManager implements MainWindowListener {
         expandNewPlugins();
 
         File[] files = PLUGINS_DIRECTORY.listFiles(new FilenameFilter() {
+            @Override
             public boolean accept(File dir, String name) {
                 return dir.isDirectory();
             }
@@ -754,8 +761,8 @@ public class PluginManager implements MainWindowListener {
         //Make sure to load first the plugins with no dependencies
         //If a plugin with dependencies gets loaded before one of dependencies, 
         //class not found exception may be thrown if a dependency class is used during plugin creation
-        List<File> dependencies = new ArrayList<File>();
-        List<File> nodependencies = new ArrayList<File>();
+        List<File> dependencies = new ArrayList<>();
+        List<File> nodependencies = new ArrayList<>();
         for (File file : files) {
             File pluginXML = new File(file, "plugin.xml");
             if (pluginXML.exists()) {

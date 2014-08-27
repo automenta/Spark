@@ -10,7 +10,7 @@ import org.jivesoftware.smackx.ChatState;
 
 public class ChatStatePanel extends JPanel {
 
-    private JLabel label;
+    private final JLabel label;
 
     public ChatStatePanel(ChatState state, String nickname) {
         setLayout(new FlowLayout(FlowLayout.LEFT, 1, 1));

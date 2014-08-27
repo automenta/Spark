@@ -33,8 +33,8 @@ import javax.swing.border.AbstractBorder;
 public class PartialLineBorder extends AbstractBorder {
 
     private static final long serialVersionUID = -5125856347919451956L;
-    private Color color;
-    private int thickness;
+    private final Color color;
+    private final int thickness;
 
     boolean top,
             left,
@@ -52,10 +52,12 @@ public class PartialLineBorder extends AbstractBorder {
 
     }
 
+    @Override
     public boolean isBorderOpaque() {
         return true;
     }
 
+    @Override
     public Insets getBorderInsets(Component component) {
         return new Insets(2, 2, 2, 2);
     }
@@ -64,6 +66,7 @@ public class PartialLineBorder extends AbstractBorder {
         return thickness;
     }
 
+    @Override
     public void paintBorder(Component component, Graphics g, int x, int y, int width, int height) {
         Graphics2D g2 = (Graphics2D) g;
         g2.setStroke(new BasicStroke(1.0f));

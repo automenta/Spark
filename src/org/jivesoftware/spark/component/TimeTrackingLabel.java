@@ -57,15 +57,16 @@ public class TimeTrackingLabel extends JLabel {
         setText("0 sec");
 
         ActionListener updateTime = new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent evt) {
                 Date currentTime = new Date();
                 long diff = currentTime.getTime() - startTime.getTime();
                 //long numDays = diff / MS_IN_A_DAY;
-                diff = diff % MS_IN_A_DAY;
+                diff %= MS_IN_A_DAY;
                 long numHours = diff / MS_IN_AN_HOUR;
-                diff = diff % MS_IN_AN_HOUR;
+                diff %= MS_IN_AN_HOUR;
                 long numMinutes = diff / MS_IN_A_MINUTE;
-                diff = diff % MS_IN_A_MINUTE;
+                diff %= MS_IN_A_MINUTE;
                 long numSeconds = diff / MS_IN_A_SECOND;
 //                diff = diff % MS_IN_A_SECOND;
                 //long numMilliseconds = diff;
@@ -117,6 +118,7 @@ public class TimeTrackingLabel extends JLabel {
         timer.stop();
     }
 
+    @Override
     public String toString() {
         return getText();
     }

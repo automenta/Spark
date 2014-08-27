@@ -58,6 +58,7 @@ public final class MessageDialog {
      */
     public static void showErrorDialog(final Throwable throwable) {
         EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 JTextPane textPane;
                 final JOptionPane pane;
@@ -93,6 +94,7 @@ public final class MessageDialog {
                 dlg.setLocationRelativeTo(mainWindow);
 
                 PropertyChangeListener changeListener = new PropertyChangeListener() {
+                    @Override
                     public void propertyChange(PropertyChangeEvent e) {
                         String value = (String) pane.getValue();
                         if (Res.getString("close").equals(value)) {
@@ -120,6 +122,7 @@ public final class MessageDialog {
      */
     public static void showAlert(final String message, final String header, final String title, final Icon icon) {
         EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 JTextPane textPane;
                 final JOptionPane pane;
@@ -155,6 +158,7 @@ public final class MessageDialog {
                 dlg.setLocationRelativeTo(SparkManager.getMainWindow());
 
                 PropertyChangeListener changeListener = new PropertyChangeListener() {
+                    @Override
                     public void propertyChange(PropertyChangeEvent e) {
                         String value = (String) pane.getValue();
                         if (Res.getString("close").equals(value)) {
@@ -218,6 +222,7 @@ public final class MessageDialog {
         dlg.setLocationRelativeTo(parent);
 
         PropertyChangeListener changeListener = new PropertyChangeListener() {
+            @Override
             public void propertyChange(PropertyChangeEvent e) {
                 String value;
                 try {

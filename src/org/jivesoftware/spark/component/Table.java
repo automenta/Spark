@@ -67,7 +67,7 @@ public abstract class Table extends JXTable {
      */
     public static final Color TOOLTIP_COLOR = new Color(166, 202, 240);
 
-    private final Map<Integer, Object> objectMap = new HashMap<Integer, Object>();
+    private final Map<Integer, Object> objectMap = new HashMap<>();
 
     /**
      * Empty Constructor.
@@ -75,6 +75,7 @@ public abstract class Table extends JXTable {
     protected Table() {
     }
 
+    @Override
     public String getToolTipText(MouseEvent e) {
         int r = rowAtPoint(e.getPoint());
         int c = columnAtPoint(e.getPoint());
@@ -105,6 +106,7 @@ public abstract class Table extends JXTable {
     }
 
     // Handle image rendering correctly
+    @Override
     public TableCellRenderer getCellRenderer(int row, int column) {
         Object o = getValueAt(row, column);
         if (o != null) {
@@ -139,6 +141,7 @@ public abstract class Table extends JXTable {
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         this.addKeyListener(new KeyListener() {
+            @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyChar() == KeyEvent.VK_ENTER) {
                     e.consume();
@@ -146,15 +149,18 @@ public abstract class Table extends JXTable {
                 }
             }
 
+            @Override
             public void keyReleased(KeyEvent e) {
             }
 
+            @Override
             public void keyTyped(KeyEvent e) {
 
             }
         });
     }
 
+    @Override
     public Component prepareRenderer(TableCellRenderer renderer,
             int rowIndex, int vColIndex) {
         Component c = super.prepareRenderer(renderer, rowIndex, vColIndex);
@@ -251,6 +257,7 @@ public abstract class Table extends JXTable {
          * @param column the column to check.
          * @return true if the cell is editable.
          */
+        @Override
         public boolean isCellEditable(int row, int column) {
             return isEditable;
         }
@@ -276,6 +283,7 @@ public abstract class Table extends JXTable {
             this.isBordered = isBordered;
         }
 
+        @Override
         public Component getTableCellRendererComponent(JTable table, Object color, boolean isSelected, boolean hasFocus, int row, int column) {
             final String text = ((JLabel) color).getText();
             if (text != null) {
@@ -332,6 +340,7 @@ public abstract class Table extends JXTable {
             setFont(font);
         }
 
+        @Override
         public Component getTableCellRendererComponent(JTable jTable, Object obj, boolean isSelected, boolean hasFocus,
                 int row, int column) {
             // set color & border here
@@ -361,6 +370,7 @@ public abstract class Table extends JXTable {
         public JButtonRenderer() {
         }
 
+        @Override
         public Component getTableCellRendererComponent(JTable table, Object color, boolean isSelected, boolean hasFocus, int row, int column) {
             final String text = ((AbstractButton) color).getText();
             setText(text);
@@ -410,6 +420,7 @@ public abstract class Table extends JXTable {
             super(items);
         }
 
+        @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
                 boolean isSelected, boolean hasFocus, int row, int column) {
             if (isSelected) {

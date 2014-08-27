@@ -56,6 +56,7 @@ public class Tree extends JTree implements TreeSelectionListener, MouseMotionLis
      *
      * @param e - the TreeSelectionEvent notifying of a valueChange.
      */
+    @Override
     public void valueChanged(TreeSelectionEvent e) {
         JiveTreeNode node = (JiveTreeNode) getLastSelectedPathComponent();
 
@@ -82,6 +83,7 @@ public class Tree extends JTree implements TreeSelectionListener, MouseMotionLis
      *
      * @param e - the mousedragged event to handle drag and drop from.
      */
+    @Override
     public void mouseDragged(MouseEvent e) {
         final JComponent c = (JComponent) e.getSource();
         JiveTreeNode node = (JiveTreeNode) getLastSelectedPathComponent();
@@ -155,6 +157,7 @@ public class Tree extends JTree implements TreeSelectionListener, MouseMotionLis
         return null;
     }
 
+    @Override
     public void mouseMoved(MouseEvent e) {
     }
 

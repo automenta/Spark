@@ -60,25 +60,31 @@ public class SnapWindow extends JWindow implements ComponentListener, WindowList
         setFocusableWindowState(false);
     }
 
+    @Override
     public void focusGained(FocusEvent e) {
 
     }
 
+    @Override
     public void focusLost(FocusEvent e) {
     }
 
+    @Override
     public void componentResized(ComponentEvent componentEvent) {
         adjustWindow();
     }
 
+    @Override
     public void componentMoved(ComponentEvent componentEvent) {
         adjustWindow();
     }
 
+    @Override
     public void componentShown(ComponentEvent componentEvent) {
         this.setVisible(true);
     }
 
+    @Override
     public void componentHidden(ComponentEvent componentEvent) {
         this.setVisible(false);
     }
@@ -116,24 +122,30 @@ public class SnapWindow extends JWindow implements ComponentListener, WindowList
         dispose();
     }
 
+    @Override
     public void windowOpened(WindowEvent windowEvent) {
     }
 
+    @Override
     public void windowClosing(WindowEvent windowEvent) {
     }
 
+    @Override
     public void windowClosed(WindowEvent windowEvent) {
 
     }
 
+    @Override
     public void windowIconified(WindowEvent windowEvent) {
         setVisible(false);
     }
 
+    @Override
     public void windowDeiconified(WindowEvent windowEvent) {
         setVisible(true);
     }
 
+    @Override
     public void windowActivated(WindowEvent windowEvent) {
         if (!isActive) {
             setVisible(true);
@@ -143,15 +155,18 @@ public class SnapWindow extends JWindow implements ComponentListener, WindowList
         }
     }
 
+    @Override
     public void windowDeactivated(WindowEvent windowEvent) {
         setVisible(false);
         isActive = false;
     }
 
+    @Override
     public void mouseDragged(MouseEvent mouseEvent) {
         adjustWindow();
     }
 
+    @Override
     public void mouseMoved(MouseEvent mouseEvent) {
         adjustWindow();
     }

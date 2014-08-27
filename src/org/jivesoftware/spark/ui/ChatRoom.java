@@ -107,17 +107,17 @@ public abstract class ChatRoom extends BackgroundPanel implements ActionListener
 
     private boolean mousePressed;
 
-    protected List<MessageEventListener> messageEventListeners = new ArrayList<MessageEventListener>();
-    private List<ChatRoomClosingListener> closingListeners = new CopyOnWriteArrayList<ChatRoomClosingListener>();
+    protected List<MessageEventListener> messageEventListeners = new ArrayList<>();
+    private final List<ChatRoomClosingListener> closingListeners = new CopyOnWriteArrayList<>();
 
     private ChatRoomTransferHandler transferHandler;
 
     private final List<String> packetIDList;
     private final List<MessageListener> messageListeners;
-    private List<Message> transcript;
-    private List<FileDropListener> fileDropListeners;
+    private final List<Message> transcript;
+    private final List<FileDropListener> fileDropListeners;
 
-    private MouseAdapter transcriptWindowMouseListener;
+    private final MouseAdapter transcriptWindowMouseListener;
 
     private KeyAdapter chatEditorKeyListener;
     private ChatFrame _chatFrame;
@@ -131,22 +131,23 @@ public abstract class ChatRoom extends BackgroundPanel implements ActionListener
         chatPanel = new JPanel(new GridBagLayout());
         transcriptWindow = UIComponentRegistry.createTranscriptWindow();
         splitPane = new JSplitPane();
-        packetIDList = new ArrayList<String>();
+        packetIDList = new ArrayList<>();
         notificationLabel = new JLabel();
         toolbar = new ChatToolBar();
         bottomPanel = new JPanel();
 
-        messageListeners = new ArrayList<MessageListener>();
-        transcript = new ArrayList<Message>();
+        messageListeners = new ArrayList<>();
+        transcript = new ArrayList<>();
 
         editorWrapperBar = new JPanel(new BorderLayout());
         editorBarLeft = new JPanel(new FlowLayout(FlowLayout.LEFT, 1, 1));
         editorBarRight = new JPanel(new FlowLayout(FlowLayout.RIGHT, 1, 1));
         editorWrapperBar.add(editorBarLeft, BorderLayout.WEST);
         editorWrapperBar.add(editorBarRight, BorderLayout.EAST);
-        fileDropListeners = new ArrayList<FileDropListener>();
+        fileDropListeners = new ArrayList<>();
 
         transcriptWindowMouseListener = new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
 
                 if (e.getClickCount() != 2) {
@@ -154,6 +155,7 @@ public abstract class ChatRoom extends BackgroundPanel implements ActionListener
                 }
             }
 
+            @Override
             public void mouseReleased(MouseEvent e) {
                 mousePressed = false;
                 if (transcriptWindow.getSelectedText() == null) {
@@ -161,6 +163,7 @@ public abstract class ChatRoom extends BackgroundPanel implements ActionListener
                 }
             }
 
+            @Override
             public void mousePressed(MouseEvent e) {
                 mousePressed = true;
             }
@@ -324,6 +327,7 @@ public abstract class ChatRoom extends BackgroundPanel implements ActionListener
 
         // Add Key Listener to Send Field
         chatEditorKeyListener = new KeyAdapter() {
+            @Override
             public void keyPressed(KeyEvent e) {
                 checkForEnter(e);
             }
@@ -335,6 +339,7 @@ public abstract class ChatRoom extends BackgroundPanel implements ActionListener
         getChatInputEditor().getActionMap().put("closeTheRoom", new AbstractAction("closeTheRoom") {
             private static final long serialVersionUID = 1L;
 
+            @Override
             public void actionPerformed(ActionEvent evt) {
                 // Leave this chat.
                 closeChatRoom();
@@ -345,6 +350,7 @@ public abstract class ChatRoom extends BackgroundPanel implements ActionListener
         getChatInputEditor().getActionMap().put("handleCompletion", new AbstractAction("handleCompletion") {
             private static final long serialVersionUID = 1L;
 
+            @Override
             public void actionPerformed(ActionEvent evt) {
                 // handle name completion.
                 try {
@@ -359,6 +365,7 @@ public abstract class ChatRoom extends BackgroundPanel implements ActionListener
         _alwaysOnTopItem = UIComponentRegistry.getButtonFactory().createAlwaysOnTop(_isAlwaysOnTopActive);
 
         _alwaysOnTopItem.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if (!_isAlwaysOnTopActive) {
                     SettingsManager.getLocalPreferences().setChatWindowAlwaysOnTop(true);
@@ -399,14 +406,14 @@ public abstract class ChatRoom extends BackgroundPanel implements ActionListener
             }
         }
 
-        Collection<String> groupchatlist = new ArrayList<String>();
+        Collection<String> groupchatlist = new ArrayList<>();
         Collection<RosterEntry> rosterlist = SparkManager.getConnection().getRoster().getEntries();
 
         if (SparkManager.getChatManager().getChatContainer().getActiveChatRoom() instanceof GroupChatRoom) {
             groupchatlist = ((GroupChatRoom) SparkManager.getChatManager().getChatContainer().getActiveChatRoom()).getParticipants();
         }
         String newname = null;
-        ArrayList<String> namelist = new ArrayList<String>();
+        ArrayList<String> namelist = new ArrayList<>();
 
         for (String lol : groupchatlist) {
             lol = lol.substring(lol.lastIndexOf('/') + 1);
@@ -472,6 +479,7 @@ public abstract class ChatRoom extends BackgroundPanel implements ActionListener
 
     // I would normally use the command pattern, but
     // have no real use when dealing with just a couple options.
+    @Override
     public void actionPerformed(ActionEvent e) {
         sendMessage();
 
@@ -636,6 +644,7 @@ public abstract class ChatRoom extends BackgroundPanel implements ActionListener
      *
      * @param packet - the packet to process
      */
+    @Override
     public void processPacket(Packet packet) {
     }
 
@@ -770,6 +779,7 @@ public abstract class ChatRoom extends BackgroundPanel implements ActionListener
      *
      * @param event the DocumentEvent from the sendField.
      */
+    @Override
     public void removeUpdate(DocumentEvent event) {
         checkForText(event);
     }
@@ -779,6 +789,7 @@ public abstract class ChatRoom extends BackgroundPanel implements ActionListener
      *
      * @param docEvent the document event.
      */
+    @Override
     public void changedUpdate(DocumentEvent docEvent) {
         // Do nothing.
     }
@@ -931,6 +942,7 @@ public abstract class ChatRoom extends BackgroundPanel implements ActionListener
         add(toolbar, new GridBagConstraints(0, 0, 1, 1, 1.0, 0.0, GridBagConstraints.EAST, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
     }
 
+    @Override
     public void insertUpdate(DocumentEvent e) {
         // Meant to be overriden
         checkForText(e);
@@ -949,7 +961,7 @@ public abstract class ChatRoom extends BackgroundPanel implements ActionListener
     public class ChatToolBar extends JPanel {
 
         private static final long serialVersionUID = 5926527530611601841L;
-        private JPanel buttonPanel;
+        private final JPanel buttonPanel;
 
         /**
          * Default Constructor.
@@ -978,7 +990,7 @@ public abstract class ChatRoom extends BackgroundPanel implements ActionListener
             Component[] comps = buttonPanel.getComponents();
             final int no = comps != null ? comps.length : 0;
 
-            final List<Component> buttons = new ArrayList<Component>();
+            final List<Component> buttons = new ArrayList<>();
             for (int i = 0; i < no; i++) {
                 try {
                     Component component = comps[i];
@@ -1152,16 +1164,19 @@ public abstract class ChatRoom extends BackgroundPanel implements ActionListener
         return verticalSplit;
     }
 
+    @Override
     public void focusGained(FocusEvent focusEvent) {
         validate();
         invalidate();
         repaint();
     }
 
+    @Override
     public void poppingUp(Object component, JPopupMenu popup) {
         Action saveAction = new AbstractAction() {
             private static final long serialVersionUID = -3582301239832606653L;
 
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 saveTranscript();
             }
@@ -1172,14 +1187,17 @@ public abstract class ChatRoom extends BackgroundPanel implements ActionListener
         popup.add(saveAction);
     }
 
+    @Override
     public void poppingDown(JPopupMenu popup) {
 
     }
 
+    @Override
     public boolean handleDefaultAction(MouseEvent e) {
         return false;
     }
 
+    @Override
     public void focusLost(FocusEvent focusEvent) {
     }
 
@@ -1192,25 +1210,32 @@ public abstract class ChatRoom extends BackgroundPanel implements ActionListener
      */
     public abstract long getLastActivity();
 
+    @Override
     public void connectionClosed() {
     }
 
+    @Override
     public void connectionClosedOnError(Exception e) {
     }
 
+    @Override
     public void reconnectingIn(int seconds) {
     }
 
+    @Override
     public void reconnectionSuccessful() {
     }
 
+    @Override
     public void reconnectionFailed(Exception e) {
     }
 
+    @Override
     public void updateStatus(boolean active) {
         _alwaysOnTopItem.setSelected(active);
     }
 
+    @Override
     public void registeredToFrame(ChatFrame chatframe) {
         this._chatFrame = chatframe;
         _chatFrame.addWindowToFronListener(this);
@@ -1293,13 +1318,13 @@ public abstract class ChatRoom extends BackgroundPanel implements ActionListener
     }
 
     public void fireOutgoingMessageSending(Message message) {
-        for (MessageEventListener messageEventListener : new ArrayList<MessageEventListener>(messageEventListeners)) {
+        for (MessageEventListener messageEventListener : new ArrayList<>(messageEventListeners)) {
             messageEventListener.sendingMessage(message);
         }
     }
 
     public void fireReceivingIncomingMessage(Message message) {
-        for (MessageEventListener messageEventListener : new ArrayList<MessageEventListener>(messageEventListeners)) {
+        for (MessageEventListener messageEventListener : new ArrayList<>(messageEventListeners)) {
             messageEventListener.receivingMessage(message);
         }
     }

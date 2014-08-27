@@ -26,6 +26,7 @@ public abstract class SwingTimerTask extends java.util.TimerTask {
 
     public abstract void doRun();
 
+    @Override
     public void run() {
         if (!EventQueue.isDispatchThread()) {
             EventQueue.invokeLater(this);

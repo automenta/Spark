@@ -42,6 +42,7 @@ public class BareAddressFilter implements PacketFilter {
         this.from = from.toLowerCase();
     }
 
+    @Override
     public boolean accept(Packet packet) {
         if (packet.getFrom() == null) {
             return false;

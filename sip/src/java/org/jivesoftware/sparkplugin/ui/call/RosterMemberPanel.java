@@ -67,7 +67,7 @@ public class RosterMemberPanel extends PhonePanel {
     private JLabel connectedLabel;
     private String phoneNumber;
     private JLabel phoneLabel;
-    private PreviousConversationPanel historyPanel;
+    private final PreviousConversationPanel historyPanel;
 
     private boolean onHold;
     private boolean muted;
@@ -78,20 +78,20 @@ public class RosterMemberPanel extends PhonePanel {
 
     private RolloverButton hangUpButton;
 
-    private SoftPhoneManager softPhone;
+    private final SoftPhoneManager softPhone;
 
-    private static String CONNECTED = PhoneRes.getIString("phone.connected");
+    private static final String CONNECTED = PhoneRes.getIString("phone.connected");
 
     private InterlocutorUI activeCall;
 
-    private CallManager callManager;
+    private final CallManager callManager;
 
     private final Color greenColor = new Color(91, 175, 41);
     private final Color orangeColor = new Color(229, 139, 11);
 
     private boolean callWasTransferred;
 
-    private JavaMixer javaMixer = new JavaMixer();
+    private final JavaMixer javaMixer = new JavaMixer();
 
     public RosterMemberPanel() {
         setLayout(new GridBagLayout());
@@ -139,6 +139,7 @@ public class RosterMemberPanel extends PhonePanel {
 
         final PhonePad pad = new PhonePad();
         dialPadButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 pad.showDialpad(dialPadButton, true);
             }
@@ -225,6 +226,7 @@ public class RosterMemberPanel extends PhonePanel {
         return mainPanel;
     }
 
+    @Override
     public void setInterlocutorUI(final InterlocutorUI interlocutorUI) {
         this.activeCall = interlocutorUI;
 
@@ -241,12 +243,14 @@ public class RosterMemberPanel extends PhonePanel {
 
     public void setupDefaults() {
         holdButton.addMouseListener(new MouseAdapter() {
+            @Override
             public void mousePressed(MouseEvent mouseEvent) {
                 toggleHold();
             }
         });
 
         muteButton.addMouseListener(new MouseAdapter() {
+            @Override
             public void mousePressed(MouseEvent mouseEvent) {
                 toggleMute();
             }
@@ -254,6 +258,7 @@ public class RosterMemberPanel extends PhonePanel {
         });
 
         transferButton.addMouseListener(new MouseAdapter() {
+            @Override
             public void mousePressed(MouseEvent mouseEvent) {
                 TransferManager ui = new TransferManager();
                 final String number = ui.getNumber(SparkManager.getChatManager().getChatContainer().getChatFrame());
@@ -261,6 +266,7 @@ public class RosterMemberPanel extends PhonePanel {
                     setStatus("Transferring...", blueColor);
                     historyPanel.transferring();
                     SwingWorker transferringThread = new SwingWorker() {
+                        @Override
                         public Object construct() {
                             try {
                                 Thread.sleep(2000);
@@ -270,6 +276,7 @@ public class RosterMemberPanel extends PhonePanel {
                             return true;
                         }
 
+                        @Override
                         public void finished() {
                             setStatus("Transferred", blueColor);
                             historyPanel.transfer(number);
@@ -287,6 +294,7 @@ public class RosterMemberPanel extends PhonePanel {
 
         final SoftPhoneManager manager = SoftPhoneManager.getInstance();
         hangUpButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 manager.getDefaultGuiManager().hangup(activeCall);
                 hangUpButton.setEnabled(false);
@@ -321,6 +329,7 @@ public class RosterMemberPanel extends PhonePanel {
     /**
      * Called when the call is ended. This does basic container cleanup.
      */
+    @Override
     public void callEnded() {
         if (!callWasTransferred) {
             historyPanel.callEnded();
@@ -431,34 +440,42 @@ public class RosterMemberPanel extends PhonePanel {
 
     }
 
+    @Override
     public String getTabTitle() {
         return phoneNumber;
     }
 
+    @Override
     public String getFrameTitle() {
         return PhoneRes.getIString("phone.onphonewith") + " " + phoneNumber;
     }
 
+    @Override
     public ImageIcon getTabIcon() {
         return PhoneRes.getImageIcon("RECEIVER2_IMAGE");
     }
 
+    @Override
     public JComponent getGUI() {
         return this;
     }
 
+    @Override
     public String getToolTipDescription() {
         return phoneNumber;
     }
 
+    @Override
     public boolean closing() {
         return true;
     }
 
+    @Override
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
+    @Override
     public void paintComponent(Graphics g) {
         BufferedImage cache = new BufferedImage(2, getHeight(), BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = cache.createGraphics();
@@ -472,12 +489,14 @@ public class RosterMemberPanel extends PhonePanel {
         g.drawImage(cache, 0, 0, getWidth(), getHeight(), null);
     }
 
+    @Override
     public Dimension getPreferredSize() {
         Dimension dim = super.getPreferredSize();
         dim.width = 0;
         return dim;
     }
 
+    @Override
     public InterlocutorUI getActiveCall() {
         return activeCall;
     }

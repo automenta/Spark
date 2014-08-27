@@ -271,9 +271,9 @@ public final class ModelUtil {
         final long MS_IN_AN_HOUR = 1000 * 60 * 60;
         final long MS_IN_A_MINUTE = 1000 * 60;
         long numDays = diff / MS_IN_A_DAY;
-        diff = diff % MS_IN_A_DAY;
+        diff %= MS_IN_A_DAY;
         long numHours = diff / MS_IN_AN_HOUR;
-        diff = diff % MS_IN_AN_HOUR;
+        diff %= MS_IN_AN_HOUR;
         long numMinutes = diff / MS_IN_A_MINUTE;
 
         StringBuilder buf = new StringBuilder();
@@ -307,7 +307,7 @@ public final class ModelUtil {
      * @return List converted from iterator.
      */
     public static <T> List<T> iteratorAsList(Iterator<T> i) {
-        ArrayList<T> list = new ArrayList<T>(10);
+        ArrayList<T> list = new ArrayList<>(10);
         while (i.hasNext()) {
             list.add(i.next());
         }
@@ -321,7 +321,7 @@ public final class ModelUtil {
      * @return Reversed iterator.
      */
     public static <T> Iterator<T> reverseListIterator(ListIterator<T> i) {
-        return new ReverseListIterator<T>(i);
+        return new ReverseListIterator<>(i);
     }
 }
 
@@ -330,7 +330,7 @@ public final class ModelUtil {
  */
 class ReverseListIterator<T> implements Iterator<T> {
 
-    private ListIterator<T> _i;
+    private final ListIterator<T> _i;
 
     public ReverseListIterator(ListIterator<T> i) {
         _i = i;
@@ -339,14 +339,17 @@ class ReverseListIterator<T> implements Iterator<T> {
         }
     }
 
+    @Override
     public boolean hasNext() {
         return _i.hasPrevious();
     }
 
+    @Override
     public T next() {
         return _i.previous();
     }
 
+    @Override
     public void remove() {
         _i.remove();
     }

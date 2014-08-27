@@ -35,6 +35,7 @@ public class SoftPhoneSecurity implements SecurityAuthority {
      * @return the credentials for the specified realm or null if no credentials
      * could be obtained
      */
+    @Override
     public Credentials obtainCredentials(String realm,
             Credentials defaultValues) {
         try {

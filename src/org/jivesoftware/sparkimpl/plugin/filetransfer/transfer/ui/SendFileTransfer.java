@@ -60,21 +60,21 @@ import org.jivesoftware.spark.util.log.Log;
 public class SendFileTransfer extends JPanel {
 
     private static final long serialVersionUID = -4403839897649365671L;
-    private FileDragLabel imageLabel = new FileDragLabel();
-    private JLabel titleLabel = new JLabel();
-    private JLabel fileLabel = new JLabel();
+    private final FileDragLabel imageLabel = new FileDragLabel();
+    private final JLabel titleLabel = new JLabel();
+    private final JLabel fileLabel = new JLabel();
 
-    private TransferButton cancelButton = new TransferButton();
-    private JProgressBar progressBar = new JProgressBar();
+    private final TransferButton cancelButton = new TransferButton();
+    private final JProgressBar progressBar = new JProgressBar();
     private File fileToSend;
     private OutgoingFileTransfer transfer;
 
-    private TransferButton retryButton = new TransferButton();
+    private final TransferButton retryButton = new TransferButton();
 
     private FileTransferManager transferManager;
     private String fullJID;
     private String nickname;
-    private JLabel progressLabel = new JLabel();
+    private final JLabel progressLabel = new JLabel();
     private long _starttime;
 
     public SendFileTransfer() {
@@ -98,6 +98,7 @@ public class SendFileTransfer extends JPanel {
         retryButton.setVisible(false);
 
         retryButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 try {
                     File file = new File(transfer.getFilePath());
@@ -161,17 +162,20 @@ public class SendFileTransfer extends JPanel {
             imageLabel.setIcon(icon);
         }
         cancelButton.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 transfer.cancel();
             }
         });
 
         cancelButton.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseEntered(MouseEvent e) {
                 cancelButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
             }
 
+            @Override
             public void mouseExited(MouseEvent e) {
                 cancelButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
@@ -185,6 +189,7 @@ public class SendFileTransfer extends JPanel {
 
         SwingWorker worker = new SwingWorker() {
 
+            @Override
             public Object construct() {
                 while (true) {
                     try {
@@ -216,6 +221,7 @@ public class SendFileTransfer extends JPanel {
                 return "";
             }
 
+            @Override
             public void finished() {
                 updateBar(transfer, nickname, "??MB/s");
             }
@@ -231,15 +237,18 @@ public class SendFileTransfer extends JPanel {
         label.setToolTipText(Res.getString("message.click.to.open"));
 
         label.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
                 openFile(fileToSend);
             }
 
+            @Override
             public void mouseEntered(MouseEvent e) {
                 label.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
             }
 
+            @Override
             public void mouseExited(MouseEvent e) {
                 label.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
@@ -278,6 +287,7 @@ public class SendFileTransfer extends JPanel {
 
             try {
                 SwingUtilities.invokeAndWait(new Runnable() {
+                    @Override
                     public void run() {
                         // 100 % = Filesize
                         // x %   = Currentsize	    

@@ -33,8 +33,8 @@ import org.jivesoftware.spark.component.TimeTrackingLabel;
 public class OnPhone extends JPanel {
 
     private static final long serialVersionUID = -7344123390643812061L;
-    private JLabel iconLabel;
-    private TimeTrackingLabel timeLabel;
+    private final JLabel iconLabel;
+    private final TimeTrackingLabel timeLabel;
 
     public OnPhone() {
         setLayout(new BorderLayout());

@@ -61,6 +61,7 @@ public class Gateway extends IQ {
      */
     public static final String NAMESPACE = "jabber:iq:gateway";
 
+    @Override
     public String getChildElementXML() {
         StringBuilder buf = new StringBuilder();
         buf.append("<query xmlns=\"").append(NAMESPACE).append("\">");
@@ -80,6 +81,7 @@ public class Gateway extends IQ {
             super();
         }
 
+        @Override
         public IQ parseIQ(XmlPullParser parser) throws Exception {
             Gateway version = new Gateway();
 

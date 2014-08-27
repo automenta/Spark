@@ -25,22 +25,25 @@ import java.util.List;
 
 public class SpecifiedOrderFocusTraversalPolicy extends FocusTraversalPolicy {
 
-    private List<Component> list;
-    private Component[] order;
+    private final List<Component> list;
+    private final Component[] order;
 
     public SpecifiedOrderFocusTraversalPolicy(Component[] order) {
         this.order = order;
         list = Arrays.asList(order);
     }
 
+    @Override
     public Component getFirstComponent(Container focusCycleRoot) {
         return null;
     }
 
+    @Override
     public Component getLastComponent(Container focusCycleRoot) {
         return null;
     }
 
+    @Override
     public Component getComponentAfter(Container focusCycleRoot,
             Component aComponent) {
         int index = list.indexOf(aComponent);
@@ -50,6 +53,7 @@ public class SpecifiedOrderFocusTraversalPolicy extends FocusTraversalPolicy {
         return order[index + 1];
     }
 
+    @Override
     public Component getComponentBefore(Container focusCycleRoot,
             Component aComponent) {
         int index = list.indexOf(aComponent);
@@ -59,6 +63,7 @@ public class SpecifiedOrderFocusTraversalPolicy extends FocusTraversalPolicy {
         return order[index - 1];
     }
 
+    @Override
     public Component getDefaultComponent(Container focusCycleRoot) {
         return order[0];
     }

@@ -147,7 +147,7 @@ public class JavaMixer {
      * @return List<Mixer> Port Mixers
      */
     private List<Mixer> getPortMixers() {
-        List<Mixer> supportingMixers = new ArrayList<Mixer>();
+        List<Mixer> supportingMixers = new ArrayList<>();
         Mixer.Info[] aMixerInfos = AudioSystem.getMixerInfo();
         for (Mixer.Info aMixerInfo : aMixerInfos) {
             Mixer mixer = AudioSystem.getMixer(aMixerInfo);
@@ -223,7 +223,7 @@ public class JavaMixer {
 
     private Line.Info[] getPortInfo(Mixer mixer) {
         Line.Info[] infos;
-        List<Line.Info> portInfoList = new ArrayList<Line.Info>();
+        List<Line.Info> portInfoList = new ArrayList<>();
         infos = mixer.getSourceLineInfo();
         for (Line.Info info : infos) {
             if (info instanceof Port.Info || info instanceof DataLine.Info) {
@@ -363,21 +363,24 @@ public class JavaMixer {
     public class BooleanControlButtonModel extends DefaultButtonModel {
 
         private static final long serialVersionUID = -8264153878420797906L;
-        private BooleanControl control;
+        private final BooleanControl control;
 
         public BooleanControlButtonModel(BooleanControl control) {
             this.control = control;
             this.addActionListener(new ActionListener() {
+                @Override
                 public void actionPerformed(ActionEvent e) {
                     setSelected(!isSelected());
                 }
             });
         }
 
+        @Override
         public void setSelected(boolean bSelected) {
             control.setValue(bSelected);
         }
 
+        @Override
         public boolean isSelected() {
             return control.getValue();
         }
@@ -386,8 +389,8 @@ public class JavaMixer {
     public class FloatControlBoundedRangeModel extends DefaultBoundedRangeModel {
 
         private static final long serialVersionUID = 7826447995854231838L;
-        private FloatControl control;
-        private float factor;
+        private final FloatControl control;
+        private final float factor;
 
         public FloatControlBoundedRangeModel(FloatControl control) {
             this.control = control;
@@ -404,11 +407,13 @@ public class JavaMixer {
             return factor;
         }
 
+        @Override
         public void setValue(int nValue) {
             super.setValue(nValue);
             control.setValue(nValue / getScaleFactor());
         }
 
+        @Override
         public int getValue() {
             return (int) (control.getValue() * getScaleFactor());
         }
@@ -426,6 +431,7 @@ public class JavaMixer {
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         sm.getTree().addTreeSelectionListener(new TreeSelectionListener() {
+            @Override
             public void valueChanged(TreeSelectionEvent e) {
                 TreePath path = e.getPath();
                 if (path.getLastPathComponent() instanceof JavaMixer.ControlNode) {

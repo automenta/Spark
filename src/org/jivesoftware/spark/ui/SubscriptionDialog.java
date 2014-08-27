@@ -78,8 +78,8 @@ public class SubscriptionDialog {
     private final JLabel groupLabel = new JLabel();
     private final JComboBox groupBox = new JComboBox();
 
-    private JLabel usernameLabel = new JLabel();
-    private JLabel usernameLabelValue = new JLabel();
+    private final JLabel usernameLabel = new JLabel();
+    private final JLabel usernameLabelValue = new JLabel();
 
     private JFrame dialog;
 
@@ -103,6 +103,7 @@ public class SubscriptionDialog {
         groupBox.setEditable(true);
 
         rosterBox.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 nicknameField.setEnabled(rosterBox.isSelected());
                 groupBox.setEnabled(rosterBox.isSelected());
@@ -189,6 +190,7 @@ public class SubscriptionDialog {
         nicknameField.setText(username);
 
         acceptButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if (!rosterBox.isSelected()) {
                     Presence response = new Presence(Presence.Type.subscribed);
@@ -210,6 +212,7 @@ public class SubscriptionDialog {
         });
 
         denyButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 // Send subscribed
                 unsubscribeAndClose();
@@ -217,6 +220,7 @@ public class SubscriptionDialog {
         });
 
         viewInfoButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 SparkManager.getVCardManager().viewProfile(jid, mainPanel);
             }
@@ -225,6 +229,7 @@ public class SubscriptionDialog {
         dialog = new JFrame(Res.getString("title.subscription.request")) {
             private static final long serialVersionUID = 5713933518069623228L;
 
+            @Override
             public Dimension getPreferredSize() {
                 final Dimension dim = super.getPreferredSize();
                 dim.width = 400;

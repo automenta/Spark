@@ -24,7 +24,7 @@ import javax.swing.ImageIcon;
 
 public class SoundsRes {
 
-    private static PropertyResourceBundle prb;
+    private static final PropertyResourceBundle prb;
     public static final String INCOMING_USER = "INCOMING_USER";
     public static final String TRAY_SHOWING = "TRAY_SHOWING";
     public static final String OPENING = "OPENING";

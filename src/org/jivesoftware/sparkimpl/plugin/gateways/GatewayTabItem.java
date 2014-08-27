@@ -43,18 +43,18 @@ public class GatewayTabItem extends CollapsiblePane implements GatewayItem {
 
     private boolean signedIn;
 
-    private Transport _transport;
-    private DefaultListModel model = new DefaultListModel();
-    private JList _transportMenu = new JList(model);
-    private JLabel _status = new JLabel();
-    private JPanel _listPanel = new JPanel(new GridBagLayout());
-    private JLabel _statusIcon = new JLabel();
-    private RolloverButton _signInOut = new RolloverButton();
-    private RolloverButton _registerButton = new RolloverButton();
-    private JCheckBox _autoJoin = new JCheckBox();
+    private final Transport _transport;
+    private final DefaultListModel model = new DefaultListModel();
+    private final JList _transportMenu = new JList(model);
+    private final JLabel _status = new JLabel();
+    private final JPanel _listPanel = new JPanel(new GridBagLayout());
+    private final JLabel _statusIcon = new JLabel();
+    private final RolloverButton _signInOut = new RolloverButton();
+    private final RolloverButton _registerButton = new RolloverButton();
+    private final JCheckBox _autoJoin = new JCheckBox();
     private boolean _transportRegistered = false;
 
-    private RolloverButton _autoJoinButton = new RolloverButton();
+    private final RolloverButton _autoJoinButton = new RolloverButton();
 
     public GatewayTabItem(final Transport transport) {
         this._transport = transport;
@@ -103,6 +103,7 @@ public class GatewayTabItem extends CollapsiblePane implements GatewayItem {
         // Check if autojoin is enabled an join automatically
         final StatusBar statusBar = SparkManager.getWorkspace().getStatusBar();
         final Runnable registerThread = new Runnable() {
+            @Override
             public void run() {
                 // Send directed presence if registered with this transport.
                 final boolean isRegistered = TransportUtils.isRegistered(
@@ -295,6 +296,7 @@ public class GatewayTabItem extends CollapsiblePane implements GatewayItem {
     }
 
     // Change gui if transport signed on or off
+    @Override
     public void signedIn(final boolean signedIn) {
 
         if (!signedIn) {
@@ -318,6 +320,7 @@ public class GatewayTabItem extends CollapsiblePane implements GatewayItem {
         this.signedIn = signedIn;
     }
 
+    @Override
     public boolean isLoggedIn() {
         return signedIn;
     }

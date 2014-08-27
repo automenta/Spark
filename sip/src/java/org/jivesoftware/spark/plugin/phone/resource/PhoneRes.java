@@ -31,8 +31,8 @@ import org.jivesoftware.spark.util.log.Log;
  */
 public class PhoneRes {
 
-    private static PropertyResourceBundle prb;
-    private static PropertyResourceBundle irb;
+    private static final PropertyResourceBundle prb;
+    private static final PropertyResourceBundle irb;
 
     private PhoneRes() {
 

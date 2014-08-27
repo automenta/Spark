@@ -116,6 +116,7 @@ public final class InputTextAreaDialog implements PropertyChangeListener {
 
         // Add Key Listener to Send Field
         textArea.addKeyListener(new KeyAdapter() {
+            @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyChar() == KeyEvent.VK_TAB) {
                     optionPane.requestFocus();
@@ -137,6 +138,7 @@ public final class InputTextAreaDialog implements PropertyChangeListener {
     public Action nextFocusAction = new AbstractAction("Move Focus Forwards") {
         private static final long serialVersionUID = 1238373124060258519L;
 
+        @Override
         public void actionPerformed(ActionEvent evt) {
             ((Component) evt.getSource()).transferFocus();
         }
@@ -148,11 +150,13 @@ public final class InputTextAreaDialog implements PropertyChangeListener {
     public Action prevFocusAction = new AbstractAction("Move Focus Backwards") {
         private static final long serialVersionUID = 7927553016576134725L;
 
+        @Override
         public void actionPerformed(ActionEvent evt) {
             ((Component) evt.getSource()).transferFocusBackward();
         }
     };
 
+    @Override
     public void propertyChange(PropertyChangeEvent e) {
         String value = (String) optionPane.getValue();
         if (Res.getString("cancel").equals(value)) {

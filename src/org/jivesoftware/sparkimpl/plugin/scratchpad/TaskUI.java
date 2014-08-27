@@ -40,9 +40,9 @@ import org.jivesoftware.resource.SparkRes;
 public class TaskUI extends JPanel implements ActionListener {
 
     private static final long serialVersionUID = -8443764502684168188L;
-    private Task task;
-    private JCheckBox box;
-    private String dateShortFormat = ((SimpleDateFormat) SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT)).toPattern();
+    private final Task task;
+    private final JCheckBox box;
+    private final String dateShortFormat = ((SimpleDateFormat) SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT)).toPattern();
 
     public TaskUI(final Task task) {
         setLayout(new BorderLayout());
@@ -90,22 +90,27 @@ public class TaskUI extends JPanel implements ActionListener {
         box.addActionListener(this);
 
         btn_del.addMouseListener(new MouseListener() {
+            @Override
             public void mouseClicked(MouseEvent arg0) {
                 Tasks.deleteTask(task);
             }
 
+            @Override
             public void mouseEntered(MouseEvent e) {
 
             }
 
+            @Override
             public void mouseExited(MouseEvent e) {
 
             }
 
+            @Override
             public void mousePressed(MouseEvent e) {
 
             }
 
+            @Override
             public void mouseReleased(MouseEvent e) {
 
             }
@@ -139,6 +144,7 @@ public class TaskUI extends JPanel implements ActionListener {
         }
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (isSelected()) {
             task.setCompleted(true);

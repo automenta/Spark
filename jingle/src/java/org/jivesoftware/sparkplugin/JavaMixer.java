@@ -147,7 +147,7 @@ public class JavaMixer {
      * @return List<Mixer> Port Mixers
      */
     private List<Mixer> getPortMixers() {
-        List<Mixer> supportingMixers = new ArrayList<Mixer>();
+        List<Mixer> supportingMixers = new ArrayList<>();
         Mixer.Info[] aMixerInfos = AudioSystem.getMixerInfo();
         for (Mixer.Info aMixerInfo : aMixerInfos) {
             Mixer mixer = AudioSystem.getMixer(aMixerInfo);
@@ -222,7 +222,7 @@ public class JavaMixer {
 
     private Line.Info[] getPortInfo(Mixer mixer) {
         Line.Info[] infos;
-        List<Line.Info> portInfoList = new ArrayList<Line.Info>();
+        List<Line.Info> portInfoList = new ArrayList<>();
         infos = mixer.getSourceLineInfo();
         for (Line.Info info : infos) {
             if (info instanceof Port.Info || info instanceof DataLine.Info) {
@@ -273,7 +273,7 @@ public class JavaMixer {
     public class MixerNode extends DefaultMutableTreeNode {
 
         private static final long serialVersionUID = -987278469391244202L;
-        private Mixer mixer;
+        private final Mixer mixer;
 
         public MixerNode(Mixer mixer) {
             super(mixer.getMixerInfo(), true);
@@ -289,7 +289,7 @@ public class JavaMixer {
     public class PortNode extends DefaultMutableTreeNode {
 
         private static final long serialVersionUID = -7774055649714159518L;
-        private Line port;
+        private final Line port;
 
         public PortNode(Line port) {
             super(port.getLineInfo(), true);
@@ -305,8 +305,8 @@ public class JavaMixer {
     public class ControlNode extends DefaultMutableTreeNode {
 
         private static final long serialVersionUID = 2014062750235264630L;
-        private Control control;
-        private Component component;
+        private final Control control;
+        private final Component component;
 
         public ControlNode(Control control) {
             super(control.getType(), true);
@@ -362,21 +362,24 @@ public class JavaMixer {
     public class BooleanControlButtonModel extends DefaultButtonModel {
 
         private static final long serialVersionUID = -4667054823378068382L;
-        private BooleanControl control;
+        private final BooleanControl control;
 
         public BooleanControlButtonModel(BooleanControl control) {
             this.control = control;
             this.addActionListener(new ActionListener() {
+                @Override
                 public void actionPerformed(ActionEvent e) {
                     setSelected(!isSelected());
                 }
             });
         }
 
+        @Override
         public void setSelected(boolean bSelected) {
             control.setValue(bSelected);
         }
 
+        @Override
         public boolean isSelected() {
             return control.getValue();
         }
@@ -385,8 +388,8 @@ public class JavaMixer {
     public class FloatControlBoundedRangeModel extends DefaultBoundedRangeModel {
 
         private static final long serialVersionUID = 4469386606588434901L;
-        private FloatControl control;
-        private float factor;
+        private final FloatControl control;
+        private final float factor;
 
         public FloatControlBoundedRangeModel(FloatControl control) {
             this.control = control;
@@ -403,11 +406,13 @@ public class JavaMixer {
             return factor;
         }
 
+        @Override
         public void setValue(int nValue) {
             super.setValue(nValue);
             control.setValue(nValue / getScaleFactor());
         }
 
+        @Override
         public int getValue() {
             return (int) (control.getValue() * getScaleFactor());
         }
@@ -425,6 +430,7 @@ public class JavaMixer {
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         sm.getTree().addTreeSelectionListener(new TreeSelectionListener() {
+            @Override
             public void valueChanged(TreeSelectionEvent e) {
                 TreePath path = e.getPath();
                 if (path.getLastPathComponent() instanceof JavaMixer.ControlNode) {

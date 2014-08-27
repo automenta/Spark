@@ -49,9 +49,10 @@ import org.jivesoftware.sparkimpl.settings.local.SettingsManager;
  */
 public class NotificationPlugin implements Plugin, PacketListener {
 
-    private Set<String> onlineUsers = new HashSet<String>();
+    private final Set<String> onlineUsers = new HashSet<>();
     private LocalPreferences preferences;
 
+    @Override
     public void initialize() {
         // Add the preferences
         NotificationsPreference notifications = new NotificationsPreference();
@@ -59,6 +60,7 @@ public class NotificationPlugin implements Plugin, PacketListener {
         notifications.load();
 
         final TimerTask registerTask = new SwingTimerTask() {
+            @Override
             public void doRun() {
                 registerListener();
             }
@@ -85,6 +87,7 @@ public class NotificationPlugin implements Plugin, PacketListener {
         SparkManager.getConnection().addPacketListener(this, new PacketTypeFilter(Presence.class));
     }
 
+    @Override
     public void processPacket(Packet packet) {
         final Presence presence = (Presence) packet;
         String jid = presence.getFrom();
@@ -118,13 +121,16 @@ public class NotificationPlugin implements Plugin, PacketListener {
         }
     }
 
+    @Override
     public void shutdown() {
     }
 
+    @Override
     public boolean canShutDown() {
         return true;
     }
 
+    @Override
     public void uninstall() {
         SparkManager.getConnection().removePacketListener(this);
     }
@@ -138,6 +144,7 @@ public class NotificationPlugin implements Plugin, PacketListener {
     private void notifyUserOnline(final String jid, final Presence presence) {
         try {
             EventQueue.invokeAndWait(new Runnable() {
+                @Override
                 public void run() {
                     SparkToaster toaster = new SparkToaster();
                     toaster.setDisplayTime(5000);
@@ -172,6 +179,7 @@ public class NotificationPlugin implements Plugin, PacketListener {
     private void notifyUserOffline(final String jid, final Presence presence) {
         try {
             EventQueue.invokeAndWait(new Runnable() {
+                @Override
                 public void run() {
                     SparkToaster toaster = new SparkToaster();
                     toaster.setCustomAction(new ChatAction(jid));
@@ -201,12 +209,13 @@ public class NotificationPlugin implements Plugin, PacketListener {
     private class ChatAction extends AbstractAction {
 
         private static final long serialVersionUID = 4752515615833181939L;
-        private String jid;
+        private final String jid;
 
         public ChatAction(String jid) {
             this.jid = jid;
         }
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             String nickname = SparkManager.getUserManager().getUserNicknameFromJID(jid);
             SparkManager.getChatManager().activateChat(jid, nickname);

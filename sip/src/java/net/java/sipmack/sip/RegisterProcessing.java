@@ -253,7 +253,7 @@ class RegisterProcessing {
             }
             // User Agent Header
             UserAgentHeader uaHeader = null;
-            ArrayList<String> userAgentList = new ArrayList<String>();
+            ArrayList<String> userAgentList = new ArrayList<>();
             userAgentList.add(SoftPhoneManager.userAgent);
 
             try {
@@ -446,7 +446,7 @@ class RegisterProcessing {
         }
         // User Agent Header
         UserAgentHeader uaHeader = null;
-        ArrayList<String> userAgentList = new ArrayList<String>();
+        ArrayList<String> userAgentList = new ArrayList<>();
         userAgentList.add(SoftPhoneManager.userAgent);
 
         try {
@@ -572,6 +572,7 @@ class RegisterProcessing {
             this.expires = expires;
         }
 
+        @Override
         public void run() {
             try {
                 if (isRegistered()) {
@@ -591,6 +592,7 @@ class RegisterProcessing {
         public KeepAliveTask(int s) {
         }
 
+        @Override
         public void run() {
             try {
                 if (sipManCallback.isRegistered()) {
@@ -645,7 +647,7 @@ class RegisterProcessing {
         // bug report and fix by Willem Romijn (romijn at lucent.com)
         // We keep a margin of 10% when sending re-registrations (1000
         // becomes 900)
-        expires = expires * 900;
+        expires *= 900;
 
         reRegisterTimer.schedule(reRegisterTask, expires);
 

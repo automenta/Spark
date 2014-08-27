@@ -39,6 +39,7 @@ public class WrappedLabel extends JTextArea {
         this.setOpaque(false);
     }
 
+    @Override
     public Dimension getPreferredSize() {
         final Dimension size = super.getPreferredSize();
         size.width = 0;

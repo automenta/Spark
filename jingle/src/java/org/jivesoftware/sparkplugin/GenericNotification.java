@@ -34,8 +34,8 @@ import org.jivesoftware.spark.component.FileDragLabel;
 public class GenericNotification extends JPanel {
 
     private static final long serialVersionUID = -90291335105747619L;
-    private FileDragLabel imageLabel = new FileDragLabel();
-    private JLabel titleLabel = new JLabel();
+    private final FileDragLabel imageLabel = new FileDragLabel();
+    private final JLabel titleLabel = new JLabel();
 
     /**
      * Creates a generic notification panel.

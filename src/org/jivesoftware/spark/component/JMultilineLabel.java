@@ -33,7 +33,7 @@ public class JMultilineLabel extends JComponent {
 
     private static final long serialVersionUID = 3061233171993075054L;
     private String text;
-    private Insets margin = new Insets(1, 1, 1, 1);
+    private final Insets margin = new Insets(1, 1, 1, 1);
     private int maxWidth = Integer.MAX_VALUE;
     private boolean justify;
     private final FontRenderContext frc = new FontRenderContext(null, false, false);
@@ -85,14 +85,17 @@ public class JMultilineLabel extends JComponent {
         }
     }
 
+    @Override
     public Dimension getPreferredSize() {
         return paintOrGetSize(null, getMaxWidth());
     }
 
+    @Override
     public Dimension getMinimumSize() {
         return getPreferredSize();
     }
 
+    @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         paintOrGetSize((Graphics2D) g, getWidth());

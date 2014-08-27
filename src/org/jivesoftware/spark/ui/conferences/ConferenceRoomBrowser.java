@@ -110,17 +110,17 @@ public class ConferenceRoomBrowser extends JPanel implements ActionListener,
     private final RolloverButton showHiddenButtons = new RolloverButton(
             SparkRes.getImageIcon(SparkRes.PANE_UP_ARROW_IMAGE));
 
-    private JMenuItem joinRoomItem;
-    private JMenuItem addRoomItem;
-    private JMenuItem createItem;
-    private JMenuItem refreshItem;
+    private final JMenuItem joinRoomItem;
+    private final JMenuItem addRoomItem;
+    private final JMenuItem createItem;
+    private final JMenuItem refreshItem;
 
-    private ChatManager chatManager;
+    private final ChatManager chatManager;
 
     private JDialog dlg;
 
-    private BookmarksUI conferences;
-    private String serviceName;
+    private final BookmarksUI conferences;
+    private final String serviceName;
 
     private int allButtonWidth;
     private int threeButtonWidth;
@@ -131,8 +131,8 @@ public class ConferenceRoomBrowser extends JPanel implements ActionListener,
 
     private JPopupMenu popup;
 
-    private JLabel labelFilter;
-    private JTextField txtFilter;
+    private final JLabel labelFilter;
+    private final JTextField txtFilter;
 
     final TableRowSorter<TableModel> sorter;
 
@@ -218,7 +218,7 @@ public class ConferenceRoomBrowser extends JPanel implements ActionListener,
         roomsTable = new RoomList();
 
         //build model for roomsTable, ignoring the 1st column              
-        sorter = new TableRowSorter<TableModel>(roomsTable.getModel());
+        sorter = new TableRowSorter<>(roomsTable.getModel());
         roomsTable.setRowSorter(sorter);
 
         final JScrollPane pane = new JScrollPane(roomsTable);
@@ -236,7 +236,7 @@ public class ConferenceRoomBrowser extends JPanel implements ActionListener,
             public void keyReleased(KeyEvent e) {
                 JTextField textField = (JTextField) e.getSource();
                 String text = textField.getText();
-                List<RowFilter<Object, Object>> filters = new ArrayList<RowFilter<Object, Object>>();
+                List<RowFilter<Object, Object>> filters = new ArrayList<>();
                 filters.add(RowFilter.regexFilter(text, 1));
                 filters.add(RowFilter.regexFilter(text, 2));
                 filters.add(RowFilter.regexFilter(text, 3));
@@ -245,41 +245,48 @@ public class ConferenceRoomBrowser extends JPanel implements ActionListener,
             }
         });
         joinRoomButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 joinSelectedRoom();
             }
         });
         addRoomButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 bookmarkRoom(serviceName);
             }
         });
 
         refreshButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 refreshRoomList(serviceName);
             }
         });
 
         joinRoomItem.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 joinSelectedRoom();
             }
         });
 
         addRoomItem.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 bookmarkRoom(serviceName);
             }
         });
 
         refreshItem.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 refreshRoomList(serviceName);
             }
         });
 
         showHiddenButtons.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 popup.show(showHiddenButtons, 0, showHiddenButtons.getHeight());
             }
@@ -322,6 +329,7 @@ public class ConferenceRoomBrowser extends JPanel implements ActionListener,
                 return null;
             }
 
+            @Override
             public void finished() {
                 refreshButton.setIcon(SparkRes.getImageIcon(SparkRes.REFRESH_IMAGE));
                 refreshButton.validate();
@@ -495,6 +503,7 @@ public class ConferenceRoomBrowser extends JPanel implements ActionListener,
     private void addTableListener() {
         roomsTable.getSelectionModel().addListSelectionListener(
                 new ListSelectionListener() {
+                    @Override
                     public void valueChanged(ListSelectionEvent e) {
                         if (e.getValueIsAdjusting()) {
                             return;
@@ -635,6 +644,7 @@ public class ConferenceRoomBrowser extends JPanel implements ActionListener,
         dlg.setLocationRelativeTo(SparkManager.getMainWindow());
 
         PropertyChangeListener changeListener = new PropertyChangeListener() {
+            @Override
             public void propertyChange(PropertyChangeEvent e) {
                 String value = (String) pane.getValue();
                 if (Res.getString("close").equals(value)) {
@@ -649,6 +659,7 @@ public class ConferenceRoomBrowser extends JPanel implements ActionListener,
         pane.addPropertyChangeListener(changeListener);
 
         dlg.addKeyListener(new KeyAdapter() {
+            @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyChar() == KeyEvent.VK_ESCAPE) {
                     dlg.dispose();
@@ -685,16 +696,19 @@ public class ConferenceRoomBrowser extends JPanel implements ActionListener,
             // setSortable(true);
 
             addMouseListener(new MouseAdapter() {
+                @Override
                 public void mouseClicked(MouseEvent e) {
                     if (e.getClickCount() == 2) {
                         enterRoom();
                     }
                 }
 
+                @Override
                 public void mouseReleased(MouseEvent e) {
                     checkPopup(e);
                 }
 
+                @Override
                 public void mousePressed(MouseEvent e) {
                     checkPopup(e);
                 }
@@ -703,6 +717,7 @@ public class ConferenceRoomBrowser extends JPanel implements ActionListener,
         }
 
         // Handle image rendering correctly
+        @Override
         public TableCellRenderer getCellRenderer(int row, int column) {
             Object o = getValueAt(row, column);
             if (o != null) {
@@ -725,6 +740,7 @@ public class ConferenceRoomBrowser extends JPanel implements ActionListener,
                 Action roomInfoAction = new AbstractAction() {
                     private static final long serialVersionUID = 5142016247851363420L;
 
+                    @Override
                     public void actionPerformed(ActionEvent actionEvent) {
                         int selectedRow = roomsTable.getSelectedRow();
                         if (selectedRow != -1) {
@@ -770,6 +786,7 @@ public class ConferenceRoomBrowser extends JPanel implements ActionListener,
 
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == createButton || e.getSource() == createItem) {
             createRoom();
@@ -847,7 +864,7 @@ public class ConferenceRoomBrowser extends JPanel implements ActionListener,
                     form.setAnswer("muc#roomconfig_persistentroom", true);
                 }
 
-                List<String> owners = new ArrayList<String>();
+                List<String> owners = new ArrayList<>();
                 owners.add(SparkManager.getSessionManager().getBareAddress());
                 form.setAnswer("muc#roomconfig_roomowners", owners);
 
@@ -1002,6 +1019,7 @@ public class ConferenceRoomBrowser extends JPanel implements ActionListener,
             setHorizontalAlignment(CENTER);
         }
 
+        @Override
         public Component getTableCellRendererComponent(JTable table,
                 Object value, boolean isSelected, boolean hasFocus, int row,
                 int column) {
@@ -1043,14 +1061,17 @@ public class ConferenceRoomBrowser extends JPanel implements ActionListener,
         }
     }
 
+    @Override
     public void componentHidden(ComponentEvent e) {
 
     }
 
+    @Override
     public void componentMoved(ComponentEvent e) {
 
     }
 
+    @Override
     public void componentResized(ComponentEvent e) {
         if (this.getWidth() <= (oneButtonWidth + 19)) {
             joinRoomButton.setVisible(false);
@@ -1115,6 +1136,7 @@ public class ConferenceRoomBrowser extends JPanel implements ActionListener,
         }
     }
 
+    @Override
     public void componentShown(ComponentEvent e) {
 
     }

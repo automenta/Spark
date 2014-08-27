@@ -85,8 +85,8 @@ import org.jivesoftware.sparkimpl.plugin.transcripts.ChatTranscriptPlugin;
 public class Workspace extends JPanel implements PacketListener {
 
     private static final long serialVersionUID = 7076407890063933765L;
-    private SparkTabbedPane workspacePane;
-    private StatusBar statusBox;
+    private final SparkTabbedPane workspacePane;
+    private final StatusBar statusBox;
 
     private ContactList contactList;
     private ConferenceServices conferences;
@@ -98,8 +98,8 @@ public class Workspace extends JPanel implements PacketListener {
     private static Workspace singleton;
     private static final Object LOCK = new Object();
 
-    private JPanel cardPanel;
-    private CardLayout cardLayout;
+    private final JPanel cardPanel;
+    private final CardLayout cardLayout;
 
     public static final String WORKSPACE_PANE = "WORKSPACE_PANE";
 
@@ -131,6 +131,7 @@ public class Workspace extends JPanel implements PacketListener {
 
         // Add MainWindow listener
         mainWindow.addMainWindowListener(new MainWindowListener() {
+            @Override
             public void shutdown() {
                 final ChatContainer container = SparkManager.getChatManager().getChatContainer();
                 // Close all Chats.
@@ -145,10 +146,12 @@ public class Workspace extends JPanel implements PacketListener {
                 broadcastPlugin.shutdown();
             }
 
+            @Override
             public void mainWindowActivated() {
 
             }
 
+            @Override
             public void mainWindowDeactivated() {
 
             }
@@ -175,6 +178,7 @@ public class Workspace extends JPanel implements PacketListener {
         this.getActionMap().put("showDebugger", new AbstractAction("showDebugger") {
             private static final long serialVersionUID = 4066886679016416923L;
 
+            @Override
             public void actionPerformed(ActionEvent evt) {
                 EnhancedDebuggerWindow window = EnhancedDebuggerWindow.getInstance();
                 window.setVisible(true);
@@ -223,6 +227,7 @@ public class Workspace extends JPanel implements PacketListener {
 
         // Make presence available to anonymous requests, if from anonymous user in the system.
         PacketListener workspacePresenceListener = new PacketListener() {
+            @Override
             public void processPacket(Packet packet) {
                 Presence presence = (Presence) packet;
                 if (presence.getProperty("anonymous") != null) {
@@ -258,6 +263,7 @@ public class Workspace extends JPanel implements PacketListener {
 
         // Schedule loading of the plugins after two seconds.
         TaskEngine.getInstance().schedule(new TimerTask() {
+            @Override
             public void run() {
                 final PluginManager pluginManager = PluginManager.getInstance();
 
@@ -288,8 +294,10 @@ public class Workspace extends JPanel implements PacketListener {
      *
      * @param packet the smack packet to process.
      */
+    @Override
     public void processPacket(final Packet packet) {
         SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 handleIncomingPacket(packet);
             }

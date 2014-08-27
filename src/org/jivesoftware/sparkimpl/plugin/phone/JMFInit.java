@@ -64,6 +64,7 @@ public class JMFInit extends Frame implements Runnable {
          */
     }
 
+    @Override
     public void run() {
         detectDirectAudio();
         detectS8DirectAudio();

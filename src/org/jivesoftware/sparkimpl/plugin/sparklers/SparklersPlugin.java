@@ -23,8 +23,10 @@ import org.jivesoftware.spark.ui.SparklerDecorator;
 
 public class SparklersPlugin implements Plugin {
 
+    @Override
     public void initialize() {
         new Sparkler() {
+            @Override
             public void decorateMessage(String message, SparklerDecorator decorator) {
                 decorator.setURL("Spark", "http://www.test.com");
             }
@@ -32,14 +34,17 @@ public class SparklersPlugin implements Plugin {
 
     }
 
+    @Override
     public void shutdown() {
 
     }
 
+    @Override
     public boolean canShutDown() {
         return false;
     }
 
+    @Override
     public void uninstall() {
 
     }

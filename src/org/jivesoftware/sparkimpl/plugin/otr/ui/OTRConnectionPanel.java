@@ -31,9 +31,9 @@ public class OTRConnectionPanel {
     private ImageIcon _icon;
     private JPanel _conPanel;
     private int _i;
-    private StyledDocument _doc;
-    private TranscriptWindow _transcriptWindow;
-    private JButton _retry;
+    private final StyledDocument _doc;
+    private final TranscriptWindow _transcriptWindow;
+    private final JButton _retry;
     private boolean _succesfull = false;
     private boolean _waiting = false;
 

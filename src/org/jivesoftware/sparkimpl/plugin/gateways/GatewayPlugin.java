@@ -82,16 +82,18 @@ public class GatewayPlugin implements Plugin, ContactItemHandler {
     public static final String GATEWAY = "gateway";
     private boolean useTab;
 
-    private Map<Transport, GatewayItem> uiMap = new HashMap<Transport, GatewayItem>();
+    private final Map<Transport, GatewayItem> uiMap = new HashMap<>();
     ;
-    private JPanel transferTab = new JPanel();
+    private final JPanel transferTab = new JPanel();
 
+    @Override
     public void initialize() {
         ProviderManager.getInstance().addIQProvider(Gateway.ELEMENT_NAME, Gateway.NAMESPACE, new Gateway.Provider());
         LocalPreferences localPref = SettingsManager.getLocalPreferences();
         useTab = localPref.getShowTransportTab();
         transferTab.setBackground((Color) UIManager.get("ContactItem.background"));
         SwingWorker thread = new SwingWorker() {
+            @Override
             public Object construct() {
                 try {
                     // Let's try and avoid any timing issues with the gateway presence.
@@ -105,6 +107,7 @@ public class GatewayPlugin implements Plugin, ContactItemHandler {
                 return true;
             }
 
+            @Override
             public void finished() {
 
                 transferTab.setLayout(new VerticalFlowLayout(0, 0, 0, true, false));
@@ -129,13 +132,16 @@ public class GatewayPlugin implements Plugin, ContactItemHandler {
         thread.start();
     }
 
+    @Override
     public void shutdown() {
     }
 
+    @Override
     public boolean canShutDown() {
         return false;
     }
 
+    @Override
     public void uninstall() {
     }
 
@@ -211,6 +217,7 @@ public class GatewayPlugin implements Plugin, ContactItemHandler {
         PacketFilter orFilter = new OrFilter(new PacketTypeFilter(Presence.class), new PacketTypeFilter(Message.class));
 
         SparkManager.getConnection().addPacketListener(new PacketListener() {
+            @Override
             public void processPacket(Packet packet) {
                 if (packet instanceof Presence) {
                     Presence presence = (Presence) packet;
@@ -274,6 +281,7 @@ public class GatewayPlugin implements Plugin, ContactItemHandler {
         }
 
         SparkManager.getSessionManager().addPresenceListener(new PresenceListener() {
+            @Override
             public void presenceChanged(Presence presence) {
                 for (Transport transport : TransportUtils.getTransports()) {
                     GatewayItem button = uiMap.get(transport);
@@ -291,6 +299,7 @@ public class GatewayPlugin implements Plugin, ContactItemHandler {
         });
     }
 
+    @Override
     public boolean handlePresence(ContactItem item, Presence presence) {
         if (presence.isAvailable()) {
             String domain = StringUtils.parseServer(presence.getFrom());
@@ -308,10 +317,12 @@ public class GatewayPlugin implements Plugin, ContactItemHandler {
         return false;
     }
 
+    @Override
     public boolean handleDoubleClick(ContactItem item) {
         return false;
     }
 
+    @Override
     public Icon getIcon(String jid) {
         String domain = StringUtils.parseServer(jid);
         Transport transport = TransportUtils.getTransport(domain);
@@ -325,6 +336,7 @@ public class GatewayPlugin implements Plugin, ContactItemHandler {
         return null;
     }
 
+    @Override
     public Icon getTabIcon(Presence presence) {
         return null;
     }

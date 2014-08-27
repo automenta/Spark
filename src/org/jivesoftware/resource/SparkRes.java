@@ -32,7 +32,7 @@ import org.jivesoftware.spark.util.log.Log;
 
 public class SparkRes {
 
-    private static PropertyResourceBundle prb;
+    private static final PropertyResourceBundle prb;
 
     public static final String ACCEPT_CHAT = "ACCEPT_CHAT";
     public static final String ACCEPT_INVITE_IMAGE = "ACCEPT_INVITE_IMAGE";

@@ -24,7 +24,7 @@ import javax.swing.ImageIcon;
 
 public class ConfigurationRes {
 
-    private static PropertyResourceBundle prb;
+    private static final PropertyResourceBundle prb;
     public static final String GLOBAL_ELEMENT_NAME = "GLOBAL_ELEMENT_NAME";
     public static final String DELETE_IMAGE = "DELETE_IMAGE";
     public static final String PERSONAL_NAMESPACE = "PERSONAL_NAMESPACE";

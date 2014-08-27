@@ -59,7 +59,7 @@ public class TransferManager extends JPanel implements TransferListener {
     private JDialog dialog;
     private String dialedNumber;
 
-    private List<TransferGroupUI> groups = new ArrayList<TransferGroupUI>();
+    private List<TransferGroupUI> groups = new ArrayList<>();
 
     public TransferManager() {
         setLayout(new GridBagLayout());
@@ -76,6 +76,7 @@ public class TransferManager extends JPanel implements TransferListener {
         add(callButton, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5, 5, 5, 0), 0, 0));
 
         callField.getTextComponent().addCaretListener(new CaretListener() {
+            @Override
             public void caretUpdate(CaretEvent caretEvent) {
                 callButton.setEnabled(ModelUtil.hasLength(callField.getText()) && callField.isEdited());
                 callField.validateTextField();
@@ -83,6 +84,7 @@ public class TransferManager extends JPanel implements TransferListener {
         });
 
         callField.getTextComponent().addKeyListener(new KeyAdapter() {
+            @Override
             public void keyPressed(KeyEvent e) {
                 if (!callField.isEnabled() || !callField.isEdited() || !ModelUtil.hasLength(callField.getText())) {
                     return;
@@ -93,6 +95,7 @@ public class TransferManager extends JPanel implements TransferListener {
                 }
             }
 
+            @Override
             public void keyReleased(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     return;
@@ -106,6 +109,7 @@ public class TransferManager extends JPanel implements TransferListener {
         });
 
         callButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 transferCall();
             }
@@ -116,7 +120,7 @@ public class TransferManager extends JPanel implements TransferListener {
         final JPanel groupsPanel = new JPanel(new VerticalFlowLayout(VerticalFlowLayout.TOP, 0, 0, true, false));
         groupsPanel.setBackground(Color.white);
 
-        final List<String> groupNames = new ArrayList<String>();
+        final List<String> groupNames = new ArrayList<>();
 
         for (RosterGroup rosterGroup : roster.getGroups()) {
             groupNames.add(rosterGroup.getName());
@@ -154,6 +158,7 @@ public class TransferManager extends JPanel implements TransferListener {
         dialog.dispose();
     }
 
+    @Override
     public void numberSelected(String number) {
         callField.setText(number);
     }

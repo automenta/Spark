@@ -43,10 +43,12 @@ public class ContactGroupTransferHandler extends TransferHandler {
     private static final long serialVersionUID = -1229773343301542259L;
     private static final DataFlavor flavors[] = {DataFlavor.imageFlavor, DataFlavor.javaFileListFlavor};
 
+    @Override
     public int getSourceActions(JComponent c) {
         return TransferHandler.MOVE;
     }
 
+    @Override
     public boolean canImport(JComponent comp, DataFlavor flavor[]) {
         if (!(comp instanceof JList)) {
             return false;
@@ -71,9 +73,11 @@ public class ContactGroupTransferHandler extends TransferHandler {
         return false;
     }
 
+    @Override
     protected void exportDone(JComponent c, Transferable data, int action) {
     }
 
+    @Override
     public Transferable createTransferable(JComponent comp) {
 
         if (comp instanceof JList) {
@@ -84,6 +88,7 @@ public class ContactGroupTransferHandler extends TransferHandler {
         return null;
     }
 
+    @Override
     public boolean importData(JComponent comp, Transferable t) {
         if (comp instanceof JList) {
             JList list = (JList) comp;
@@ -131,23 +136,26 @@ public class ContactGroupTransferHandler extends TransferHandler {
 
     public class ContactItemTransferable implements Transferable {
 
-        private ContactItem item;
+        private final ContactItem item;
 
         public ContactItemTransferable(ContactItem item) {
             this.item = item;
         }
 
         // Returns supported flavors
+        @Override
         public DataFlavor[] getTransferDataFlavors() {
             return new DataFlavor[]{DataFlavor.imageFlavor};
         }
 
         // Returns true if flavor is supported
+        @Override
         public boolean isDataFlavorSupported(DataFlavor flavor) {
             return DataFlavor.imageFlavor.equals(flavor);
         }
 
         // Returns image
+        @Override
         public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
             if (!DataFlavor.imageFlavor.equals(flavor)) {
                 throw new UnsupportedFlavorException(flavor);
@@ -209,6 +217,7 @@ public class ContactGroupTransferHandler extends TransferHandler {
         final ContactGroup oldGroup = getContactGroup(item.getGroupName());
 
         SwingWorker worker = new SwingWorker() {
+            @Override
             public Object construct() {
                 Roster roster = SparkManager.getConnection().getRoster();
                 RosterEntry entry = roster.getEntry(item.getJID());
@@ -239,6 +248,7 @@ public class ContactGroupTransferHandler extends TransferHandler {
                 return true;
             }
 
+            @Override
             public void finished() {
                 if ((Boolean) get()) {
                     // Now try and remove the group from the old one.

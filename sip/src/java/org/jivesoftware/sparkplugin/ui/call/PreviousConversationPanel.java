@@ -57,7 +57,7 @@ public class PreviousConversationPanel extends JPanel {
 
     private final SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy, h:mm a");
 
-    private TimeTrackingLabel durationLabel;
+    private final TimeTrackingLabel durationLabel;
 
     private Date startTime;
 
@@ -126,7 +126,7 @@ public class PreviousConversationPanel extends JPanel {
         add(oldConversation);
 
         int count = 0;
-        final List<HistoryCall> calls = new ArrayList<HistoryCall>(SoftPhoneManager.getInstance().getLogManager().getCallHistory());
+        final List<HistoryCall> calls = new ArrayList<>(SoftPhoneManager.getInstance().getLogManager().getCallHistory());
         Collections.sort(calls, itemComparator);
 
         for (HistoryCall call : calls) {
@@ -201,6 +201,7 @@ public class PreviousConversationPanel extends JPanel {
     }
 
     final Comparator<HistoryCall> itemComparator = new Comparator<HistoryCall>() {
+        @Override
         public int compare(HistoryCall contactItemOne, HistoryCall contactItemTwo) {
             final HistoryCall time1 = contactItemOne;
             final HistoryCall time2 = contactItemTwo;

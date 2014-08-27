@@ -42,7 +42,7 @@ import org.jivesoftware.spark.util.WindowsFileSystemView;
 public class FileTransferPreferencePanel extends JPanel {
 
     private static final long serialVersionUID = -2404221882867691253L;
-    private JTextField timeoutField;
+    private final JTextField timeoutField;
     private JTextField downloadDirectoryField;
 
     private JFileChooser fc;
@@ -71,6 +71,7 @@ public class FileTransferPreferencePanel extends JPanel {
         add(button, new GridBagConstraints(2, 1, 1, 1, 0.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0));
 
         button.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 pickFile(Res.getString("title.choose.directory"), downloadDirectoryField);
             }

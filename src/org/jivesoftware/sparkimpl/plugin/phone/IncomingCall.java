@@ -30,8 +30,8 @@ import org.jivesoftware.resource.SparkRes;
 public class IncomingCall extends JPanel {
 
     private static final long serialVersionUID = -5840942759253687771L;
-    private JLabel callerNameLabel;
-    private JLabel callerNumberLabel;
+    private final JLabel callerNameLabel;
+    private final JLabel callerNumberLabel;
 
     public IncomingCall() {
         setLayout(new GridBagLayout());

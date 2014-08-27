@@ -29,7 +29,7 @@ import javax.swing.Icon;
  */
 public class ProgressIcon implements Icon {
 
-    private int percent;
+    private final int percent;
 
     /**
      * Create new ProgressIcon.
@@ -40,14 +40,17 @@ public class ProgressIcon implements Icon {
         this.percent = percent;
     }
 
+    @Override
     public int getIconHeight() {
         return 10;
     }
 
+    @Override
     public int getIconWidth() {
         return percent;
     }
 
+    @Override
     public void paintIcon(Component c, Graphics g, int x, int y) {
         g.setColor(Color.blue);
         g.fillRect(x, y, getIconWidth(), getIconHeight());//To change body of implemented methods use File | Settings | File Templates.

@@ -52,15 +52,15 @@ import org.jitsi.service.neomedia.format.MediaFormat;
  */
 public class AudioReceiverChannel {
 
-    private String localIpAddress;
-    private int localPort;
-    private String remoteIpAddress;
-    private int remotePort;
+    private final String localIpAddress;
+    private final int localPort;
+    private final String remoteIpAddress;
+    private final int remotePort;
 
     private RTPManager rtpMgrs[];
     private AudioReceiver audioReceiver;
 
-    private boolean started = false;
+    private final boolean started = false;
 
     /**
      * Creates an Audio Receiver Channel for a desired jmf locator.

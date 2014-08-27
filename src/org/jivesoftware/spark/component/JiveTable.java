@@ -40,7 +40,7 @@ import javax.swing.table.TableCellRenderer;
 public class JiveTable extends JTable {
 
     private static final long serialVersionUID = -7140811933957438525L;
-    private JiveTable.JiveTableModel tableModel;
+    private final JiveTable.JiveTableModel tableModel;
 
     public JiveTable(String[] headers, Integer[] columnsToUseRenderer) {
         tableModel = new JiveTable.JiveTableModel(headers, 0, false);
@@ -57,6 +57,7 @@ public class JiveTable extends JTable {
 
     }
 
+    @Override
     public TableCellRenderer getCellRenderer(int row, int column) {
         if (column == 3 || column == 4) {
             return new JiveTable.JButtonRenderer(false);
@@ -94,7 +95,7 @@ public class JiveTable extends JTable {
     public class JiveTableModel extends DefaultTableModel {
 
         private static final long serialVersionUID = -2072664365332767844L;
-        private boolean _isEditable;
+        private final boolean _isEditable;
 
         /**
          * Use the JiveTableModel in order to better handle the table. This
@@ -112,6 +113,7 @@ public class JiveTable extends JTable {
         /**
          * Returns true if cell is editable.
          */
+        @Override
         public boolean isCellEditable(int row, int column) {
             return _isEditable;
         }
@@ -128,6 +130,7 @@ public class JiveTable extends JTable {
             super();
         }
 
+        @Override
         public Component getTableCellRendererComponent(JTable table, Object color, boolean isSelected, boolean hasFocus, int row, int column) {
             final String text = ((JLabel) color).getText();
             setText(text);
@@ -178,6 +181,7 @@ public class JiveTable extends JTable {
             //setOpaque(true); //MUST do this for background to show up.
         }
 
+        @Override
         public Component getTableCellRendererComponent(JTable table, Object color, boolean isSelected, boolean hasFocus, int row, int column) {
             final String text = ((AbstractButton) color).getText();
             setText(text);

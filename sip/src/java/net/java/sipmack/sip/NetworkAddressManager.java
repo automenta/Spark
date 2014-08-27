@@ -43,7 +43,7 @@ public class NetworkAddressManager {
 
     private static int index = 0;
 
-    private static List<InetAddressWrapper> addresses = new ArrayList<InetAddressWrapper>();
+    private static final List<InetAddressWrapper> addresses = new ArrayList<>();
 
     private NetworkAddressManager() {
     }
@@ -342,6 +342,7 @@ public class NetworkAddressManager {
             return inetAddress;
         }
 
+        @Override
         public int compareTo(InetAddressWrapper o) {
 
             InetAddressWrapper other = o;

@@ -27,14 +27,17 @@ public class JabberAvatarExtension implements PacketExtension {
         photoHash = hash;
     }
 
+    @Override
     public String getElementName() {
         return "x";
     }
 
+    @Override
     public String getNamespace() {
         return "jabber:x:avatar";
     }
 
+    @Override
     public String toXML() {
         StringBuilder buf = new StringBuilder();
         buf.append("<").append(getElementName()).append(" xmlns=\"").append(getNamespace()).append("\">");

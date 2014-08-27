@@ -46,7 +46,7 @@ import org.jivesoftware.spark.util.log.Log;
 public abstract class DroppableFrame extends JFrame implements DropTargetListener, DragSourceListener, DragGestureListener {
 
     private static final long serialVersionUID = -4250762326200861757L;
-    private DragSource dragSource = DragSource.getDefaultDragSource();
+    private final DragSource dragSource = DragSource.getDefaultDragSource();
 
     /**
      * Creates an Instance of the Droppable Frame.
@@ -55,34 +55,44 @@ public abstract class DroppableFrame extends JFrame implements DropTargetListene
         dragSource.createDefaultDragGestureRecognizer(this, DnDConstants.ACTION_COPY_OR_MOVE, this);
     }
 
+    @Override
     public void dragDropEnd(DragSourceDropEvent DragSourceDropEvent) {
     }
 
+    @Override
     public void dragEnter(DragSourceDragEvent DragSourceDragEvent) {
     }
 
+    @Override
     public void dragExit(DragSourceEvent DragSourceEvent) {
     }
 
+    @Override
     public void dragOver(DragSourceDragEvent DragSourceDragEvent) {
     }
 
+    @Override
     public void dropActionChanged(DragSourceDragEvent DragSourceDragEvent) {
     }
 
+    @Override
     public void dragEnter(DropTargetDragEvent dropTargetDragEvent) {
         dropTargetDragEvent.acceptDrag(DnDConstants.ACTION_COPY_OR_MOVE);
     }
 
+    @Override
     public void dragExit(DropTargetEvent dropTargetEvent) {
     }
 
+    @Override
     public void dragOver(DropTargetDragEvent dropTargetDragEvent) {
     }
 
+    @Override
     public void dropActionChanged(DropTargetDragEvent dropTargetDragEvent) {
     }
 
+    @Override
     public void drop(DropTargetDropEvent dropTargetDropEvent) {
         try {
             Transferable transferable = dropTargetDropEvent.getTransferable();
@@ -110,6 +120,7 @@ public abstract class DroppableFrame extends JFrame implements DropTargetListene
 
     }
 
+    @Override
     public void dragGestureRecognized(DragGestureEvent dragGestureEvent) {
 
     }

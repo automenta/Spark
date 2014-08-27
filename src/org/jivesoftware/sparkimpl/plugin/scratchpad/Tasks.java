@@ -33,7 +33,7 @@ import org.xmlpull.v1.XmlPullParser;
  */
 public class Tasks implements PrivateData {
 
-    private List<Task> tasks = new ArrayList<Task>();
+    private List<Task> tasks = new ArrayList<>();
 
     /**
      * Required Empty Constructor to use Tasks.
@@ -58,6 +58,7 @@ public class Tasks implements PrivateData {
      *
      * @return the element name.
      */
+    @Override
     public String getElementName() {
         return "scratchpad";
     }
@@ -67,6 +68,7 @@ public class Tasks implements PrivateData {
      *
      * @return the namespace.
      */
+    @Override
     public String getNamespace() {
         return "scratchpad:tasks";
     }
@@ -76,6 +78,7 @@ public class Tasks implements PrivateData {
      *
      * @return the private data as XML.
      */
+    @Override
     public String toXML() {
         StringBuilder buf = new StringBuilder();
         buf.append("<scratchpad xmlns=\"scratchpad:tasks\">");
@@ -114,6 +117,7 @@ public class Tasks implements PrivateData {
             super();
         }
 
+        @Override
         public PrivateData parsePrivateData(XmlPullParser parser) throws Exception {
             boolean done = false;
             while (!done) {

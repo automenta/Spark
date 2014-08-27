@@ -15,7 +15,7 @@ import org.jivesoftware.spark.SparkManager;
  */
 public class OTRProperties {
 
-    private Properties props;
+    private final Properties props;
     private File configFile;
 
     private static final Object LOCK = new Object();

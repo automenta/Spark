@@ -39,7 +39,7 @@ import javax.swing.tree.TreeSelectionModel;
 public class CheckTree extends JPanel {
 
     private static final long serialVersionUID = 8452107824029515678L;
-    private JTree tree;
+    private final JTree tree;
 
     /**
      * Constructs a new CheckBox tree.
@@ -67,6 +67,7 @@ public class CheckTree extends JPanel {
             this.tree = tree;
         }
 
+        @Override
         public void mouseClicked(MouseEvent e) {
             int x = e.getX();
             int y = e.getY();
@@ -109,6 +110,7 @@ public class CheckTree extends JPanel {
             this.textArea = textArea;
         }
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             Enumeration<CheckNode> nodeEnum = root.breadthFirstEnumeration();
             while (nodeEnum.hasMoreElements()) {

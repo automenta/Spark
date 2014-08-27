@@ -33,38 +33,45 @@ import org.jivesoftware.sparkimpl.settings.local.SettingsManager;
  */
 public class GroupChatPreference implements Preference {
 
-    private GroupChatPreferencePanel panel = new GroupChatPreferencePanel();
+    private final GroupChatPreferencePanel panel = new GroupChatPreferencePanel();
 
     /**
      * Define the Namespace used for this preference.
      */
     public static final String NAMESPACE = "Group Chat";
 
+    @Override
     public String getTitle() {
         return Res.getString("title.group.chat");
     }
 
+    @Override
     public String getListName() {
         return Res.getString("title.group.chat");
     }
 
+    @Override
     public String getTooltip() {
         return Res.getString("title.group.chat");
     }
 
+    @Override
     public Icon getIcon() {
         return SparkRes.getImageIcon(SparkRes.JOIN_GROUPCHAT_IMAGE);
     }
 
+    @Override
     public void load() {
         SwingWorker thread = new SwingWorker() {
             LocalPreferences localPreferences;
 
+            @Override
             public Object construct() {
                 localPreferences = SettingsManager.getLocalPreferences();
                 return localPreferences;
             }
 
+            @Override
             public void finished() {
                 boolean highlightMyName = localPreferences.isMucHighNameEnabled();
                 boolean highlightMyText = localPreferences.isMucHighTextEnabled();
@@ -90,6 +97,7 @@ public class GroupChatPreference implements Preference {
 
     }
 
+    @Override
     public void commit() {
         LocalPreferences pref = SettingsManager.getLocalPreferences();
 
@@ -104,26 +112,32 @@ public class GroupChatPreference implements Preference {
         SettingsManager.saveSettings();
     }
 
+    @Override
     public Object getData() {
         return SettingsManager.getLocalPreferences();
     }
 
+    @Override
     public String getErrorMessage() {
         return null;
     }
 
+    @Override
     public boolean isDataValid() {
         return true;
     }
 
+    @Override
     public JComponent getGUI() {
         return panel;
     }
 
+    @Override
     public String getNamespace() {
         return NAMESPACE;
     }
 
+    @Override
     public void shutdown() {
         commit();
     }

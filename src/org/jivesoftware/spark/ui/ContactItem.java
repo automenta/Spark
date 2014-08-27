@@ -403,6 +403,7 @@ public class ContactItem extends JPanel {
         SparkManager.getVCardManager().addToQueue(getJID());
     }
 
+    @Override
     public String toString() {
         return displayNameLabel.getText();
     }

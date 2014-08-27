@@ -36,13 +36,13 @@ import net.java.sipmack.softphone.listeners.InterlocutorListener;
  */
 public class GuiManager implements GuiCallback, DefaultGuiManager {
 
-    private List<InterlocutorUI> interlocutors = new ArrayList<InterlocutorUI>();
+    private final List<InterlocutorUI> interlocutors = new ArrayList<>();
 
-    private AlertManager alertManager = new AlertManager();
+    private final AlertManager alertManager = new AlertManager();
 
-    public List<UserActionListener> actionHandlers = new ArrayList<UserActionListener>();
+    public List<UserActionListener> actionHandlers = new ArrayList<>();
 
-    public List<InterlocutorListener> interlocutorListeners = new ArrayList<InterlocutorListener>();
+    public List<InterlocutorListener> interlocutorListeners = new ArrayList<>();
 
     private boolean autoAnswer = false;
 
@@ -105,6 +105,7 @@ public class GuiManager implements GuiCallback, DefaultGuiManager {
      *
      * @param interlocutorUI To be updated
      */
+    @Override
     public void update(InterlocutorUI interlocutorUI) {
 
     }
@@ -114,6 +115,7 @@ public class GuiManager implements GuiCallback, DefaultGuiManager {
      *
      * @return List<InterlocutorUI>
      */
+    @Override
     public List<InterlocutorUI> getInterlocutors() {
         return interlocutors;
     }
@@ -130,6 +132,7 @@ public class GuiManager implements GuiCallback, DefaultGuiManager {
      *
      * @param interlocutorUI To be removed
      */
+    @Override
     public synchronized void remove(InterlocutorUI interlocutorUI) {
         interlocutors.remove(interlocutorUI);
         for (InterlocutorListener interlocutorListener : interlocutorListeners) {
@@ -142,6 +145,7 @@ public class GuiManager implements GuiCallback, DefaultGuiManager {
      *
      * @param alertResourceName The wav to be played
      */
+    @Override
     public void startAlert(String alertResourceName) {
         try {
             alertManager.startAlert(alertResourceName);
@@ -155,6 +159,7 @@ public class GuiManager implements GuiCallback, DefaultGuiManager {
      *
      * @param alertResourceName The wav to be stop
      */
+    @Override
     public void stopAlert(String alertResourceName) {
         try {
             alertManager.stopAlert(alertResourceName);
@@ -177,6 +182,7 @@ public class GuiManager implements GuiCallback, DefaultGuiManager {
     /**
      * Answer the current ringing call
      */
+    @Override
     public boolean answer() {
         if (interlocutors.size() < 1) {
             Log.debug("answer", "No interlocutors");
@@ -203,6 +209,7 @@ public class GuiManager implements GuiCallback, DefaultGuiManager {
      * Hold all current calls. In fact it holds all medias depending of the
      * server.
      */
+    @Override
     public void holdAll() {
         if (interlocutors.size() < 1) {
             Log.debug("hold", "No interlocutors");
@@ -223,6 +230,7 @@ public class GuiManager implements GuiCallback, DefaultGuiManager {
      *
      * @param interlocutor interlocutor that will be holded
      */
+    @Override
     public void hold(InterlocutorUI interlocutor) {
         boolean mic = interlocutor.onHoldMic(), cam = interlocutor.onHoldCam();
         for (UserActionListener ual : actionHandlers) {
@@ -233,6 +241,7 @@ public class GuiManager implements GuiCallback, DefaultGuiManager {
     /**
      * Mute all current calls.
      */
+    @Override
     public void muteAll(boolean mic) {
         if (interlocutors.size() < 1) {
             Log.debug("mute", "No interlocutors");
@@ -251,6 +260,7 @@ public class GuiManager implements GuiCallback, DefaultGuiManager {
      * @param interlocutor
      * @param mic
      */
+    @Override
     public void mute(InterlocutorUI interlocutor, boolean mic) {
         for (UserActionListener ual : actionHandlers) {
             ual.handleMute(interlocutor, mic);
@@ -262,6 +272,7 @@ public class GuiManager implements GuiCallback, DefaultGuiManager {
      *
      * @param digit DTMF digit to be sent
      */
+    @Override
     public void sendDTMF(String digit) {
         if (interlocutors.size() < 1) {
             Log.debug("sendDTMF", "No interlocutors");
@@ -279,6 +290,7 @@ public class GuiManager implements GuiCallback, DefaultGuiManager {
      *
      * @param callee Number to be called
      */
+    @Override
     public void dial(String callee) {
         for (UserActionListener ual : actionHandlers) {
             ual.handleDialRequest(callee);
@@ -288,6 +300,7 @@ public class GuiManager implements GuiCallback, DefaultGuiManager {
     /**
      * Hangup the current call
      */
+    @Override
     public boolean hangupAll() {
         if (interlocutors.size() < 1) {
             Log.debug("hangup", "No interlocutors");
@@ -309,6 +322,7 @@ public class GuiManager implements GuiCallback, DefaultGuiManager {
      * @param interlocutorUI
      * @return
      */
+    @Override
     public boolean hangup(InterlocutorUI interlocutorUI) {
         boolean result = true;
         for (UserActionListener ual : actionHandlers) {
@@ -331,6 +345,7 @@ public class GuiManager implements GuiCallback, DefaultGuiManager {
      *
      * @return The value
      */
+    @Override
     public boolean getAutoAnswer() {
         return autoAnswer;
     }

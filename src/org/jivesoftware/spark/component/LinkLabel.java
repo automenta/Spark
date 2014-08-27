@@ -35,11 +35,11 @@ final public class LinkLabel extends JLabel implements MouseListener {
 
     private static final long serialVersionUID = 454820993140807217L;
     // cursors used in url-link related displays and default display
-    private Cursor DEFAULT_CURSOR = new Cursor(Cursor.DEFAULT_CURSOR);
-    private Cursor LINK_CURSOR = new Cursor(Cursor.HAND_CURSOR);
-    private Color rolloverTextColor;
-    private Color foregroundTextColor;
-    private String labelURL;
+    private final Cursor DEFAULT_CURSOR = new Cursor(Cursor.DEFAULT_CURSOR);
+    private final Cursor LINK_CURSOR = new Cursor(Cursor.HAND_CURSOR);
+    private final Color rolloverTextColor;
+    private final Color foregroundTextColor;
+    private final String labelURL;
 
     private boolean invokeBrowser;
 
@@ -75,6 +75,7 @@ final public class LinkLabel extends JLabel implements MouseListener {
      *
      * @param me the MouseEvent.
      */
+    @Override
     public void mouseClicked(MouseEvent me) {
         if (invokeBrowser) {
             try {
@@ -85,17 +86,21 @@ final public class LinkLabel extends JLabel implements MouseListener {
         }
     }
 
+    @Override
     public void mousePressed(MouseEvent me) {
     }
 
+    @Override
     public void mouseReleased(MouseEvent me) {
     }
 
+    @Override
     public void mouseEntered(MouseEvent me) {
         this.setForeground(rolloverTextColor);
         this.setCursor(LINK_CURSOR);
     }
 
+    @Override
     public void mouseExited(MouseEvent me) {
         this.setForeground(foregroundTextColor);
         this.setCursor(DEFAULT_CURSOR);

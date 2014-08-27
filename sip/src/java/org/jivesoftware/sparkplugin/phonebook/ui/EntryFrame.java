@@ -21,8 +21,8 @@ public class EntryFrame extends JFrame {
 
     private static final long serialVersionUID = -8956851041216444903L;
     private JTextField tfName, tfNumber;
-    private PhonebookUI parent;
-    private BookManager manager;
+    private final PhonebookUI parent;
+    private final BookManager manager;
     public static final int TYP_ADD = 0;
     public static final int TYP_EDIT = 1;
     private int typ = 0;
@@ -46,12 +46,14 @@ public class EntryFrame extends JFrame {
         JButton btnCancel = new JButton(PhoneRes.getIString("btn.cancel"));
 
         btnCancel.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 EntryFrame.this.dispose();
             }
         });
 
         btnOK.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if (tfName.getText() != null
                         && !tfName.getText().trim().isEmpty()
@@ -110,6 +112,7 @@ public class EntryFrame extends JFrame {
         }
     }
 
+    @Override
     public void setName(String name) {
         tfName.setText(name);
         this.name = name;

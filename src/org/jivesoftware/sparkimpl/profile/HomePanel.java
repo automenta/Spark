@@ -33,27 +33,27 @@ import org.jivesoftware.spark.util.ResourceUtils;
 public class HomePanel extends JPanel {
 
     private static final long serialVersionUID = -838061087276345124L;
-    private JLabel streetLabel = new JLabel();
-    private JLabel cityLabel = new JLabel();
-    private JLabel stateLabel = new JLabel();
-    private JLabel zipCodeLabel = new JLabel();
-    private JLabel countryLabel = new JLabel();
+    private final JLabel streetLabel = new JLabel();
+    private final JLabel cityLabel = new JLabel();
+    private final JLabel stateLabel = new JLabel();
+    private final JLabel zipCodeLabel = new JLabel();
+    private final JLabel countryLabel = new JLabel();
 
-    private JTextField cityField = new JTextField();
-    private JTextField stateField = new JTextField();
-    private JTextField zipCodeField = new JTextField();
-    private JTextField countryField = new JTextField();
-    private JTextField streetField = new JTextField();
+    private final JTextField cityField = new JTextField();
+    private final JTextField stateField = new JTextField();
+    private final JTextField zipCodeField = new JTextField();
+    private final JTextField countryField = new JTextField();
+    private final JTextField streetField = new JTextField();
 
-    private JLabel phoneLabel = new JLabel();
-    private JLabel faxLabel = new JLabel();
-    private JLabel pagerLabel = new JLabel();
-    private JLabel mobileLabel = new JLabel();
-    private JTextField phoneField = new JTextField();
-    private JTextField faxField = new JTextField();
-    private JTextField pagerField = new JTextField();
-    private JTextField mobileField = new JTextField();
-    private JTextField webPageField = new JTextField();
+    private final JLabel phoneLabel = new JLabel();
+    private final JLabel faxLabel = new JLabel();
+    private final JLabel pagerLabel = new JLabel();
+    private final JLabel mobileLabel = new JLabel();
+    private final JTextField phoneField = new JTextField();
+    private final JTextField faxField = new JTextField();
+    private final JTextField pagerField = new JTextField();
+    private final JTextField mobileField = new JTextField();
+    private final JTextField webPageField = new JTextField();
 
     public HomePanel() {
         this.setLayout(new GridBagLayout());

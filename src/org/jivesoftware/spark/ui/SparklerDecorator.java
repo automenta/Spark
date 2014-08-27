@@ -23,8 +23,8 @@ import javax.swing.JComponent;
 
 public class SparklerDecorator {
 
-    private Map<String, String> urls = new HashMap<String, String>();
-    private Map<String, JComponent> popups = new HashMap<String, JComponent>();
+    private final Map<String, String> urls = new HashMap<>();
+    private final Map<String, JComponent> popups = new HashMap<>();
 
     public void setURL(String matchedText, String url) {
         urls.put(matchedText, url);

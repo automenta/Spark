@@ -27,8 +27,8 @@ import org.jivesoftware.sparkimpl.plugin.otr.util.OTRProperties;
 public class OTRManager extends ChatRoomListenerAdapter implements ContactItemHandler {
 
     private static OTRManager singleton;
-    private static Object LOCK = new Object();
-    private Map<String, OTRSession> _activeSessions = new HashMap<String, OTRSession>();
+    private static final Object LOCK = new Object();
+    private final Map<String, OTRSession> _activeSessions = new HashMap<>();
     final ChatManager chatManager = SparkManager.getChatManager();
     private static MyOtrKeyManager _keyManager;
 

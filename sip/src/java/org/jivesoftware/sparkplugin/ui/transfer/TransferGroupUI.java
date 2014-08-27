@@ -57,9 +57,9 @@ public class TransferGroupUI extends JPanel {
 
     private static final long serialVersionUID = 1L;
 
-    private List<TransferListener> listeners = new ArrayList<TransferListener>();
+    private List<TransferListener> listeners = new ArrayList<>();
 
-    private List<UserEntry> userEntries = new ArrayList<UserEntry>();
+    private List<UserEntry> userEntries = new ArrayList<>();
 
     private boolean containsNumbers;
 
@@ -70,7 +70,7 @@ public class TransferGroupUI extends JPanel {
         final Roster roster = SparkManager.getConnection().getRoster();
         final RosterGroup rosterGroup = roster.getGroup(groupName);
 
-        final List<RosterEntry> entries = new ArrayList<RosterEntry>(rosterGroup.getEntries());
+        final List<RosterEntry> entries = new ArrayList<>(rosterGroup.getEntries());
 
         Collections.sort(entries, entryComparator);
 
@@ -90,10 +90,10 @@ public class TransferGroupUI extends JPanel {
          *
          */
         private static final long serialVersionUID = 1L;
-        private String name;
-        private String workNumber;
-        private String homeNumber;
-        private String mobileNumber;
+        private final String name;
+        private final String workNumber;
+        private final String homeNumber;
+        private final String mobileNumber;
 
         public UserEntry(RosterEntry entry) {
             setLayout(new GridBagLayout());
@@ -131,7 +131,7 @@ public class TransferGroupUI extends JPanel {
             workNumber = vcard.getPhoneWork("VOICE");
             mobileNumber = vcard.getPhoneWork("CELL");
 
-            final List<Action> actions = new ArrayList<Action>();
+            final List<Action> actions = new ArrayList<>();
 
             if (ModelUtil.hasLength(homeNumber)) {
                 Action homeAction = new NumberAction("Home:", homeNumber, PhoneRes.getImageIcon("HOME_IMAGE"));
@@ -155,6 +155,7 @@ public class TransferGroupUI extends JPanel {
                 add(transferButton, new GridBagConstraints(2, 0, 1, 1, 1.0, 0.0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0, 5, 0, 0), 0, 0));
 
                 transferButton.addMouseListener(new MouseAdapter() {
+                    @Override
                     public void mouseClicked(MouseEvent mouseEvent) {
                         if (actions.size() > 1) {
                             JPopupMenu popupMenu = new JPopupMenu();
@@ -196,7 +197,7 @@ public class TransferGroupUI extends JPanel {
     private class NumberAction extends AbstractAction {
 
         private static final long serialVersionUID = 1L;
-        private String number;
+        private final String number;
 
         public NumberAction(String label, String number, Icon icon) {
             this.number = number;
@@ -204,6 +205,7 @@ public class TransferGroupUI extends JPanel {
             putValue(Action.SMALL_ICON, icon);
         }
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             fireTransferListeners(number);
         }
@@ -270,6 +272,7 @@ public class TransferGroupUI extends JPanel {
      * Sorts RosterEntries
      */
     final Comparator<RosterEntry> entryComparator = new Comparator<RosterEntry>() {
+        @Override
         public int compare(RosterEntry one, RosterEntry two) {
             final RosterEntry entryOne = one;
             final RosterEntry entryTwo = two;

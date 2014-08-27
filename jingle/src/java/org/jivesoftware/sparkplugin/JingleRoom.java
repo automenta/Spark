@@ -58,7 +58,7 @@ public class JingleRoom extends JPanel {
     private JLabel connectedLabel;
     private String phoneNumber;
     private JLabel phoneLabel;
-    private PreviousConversationPanel historyPanel;
+    private final PreviousConversationPanel historyPanel;
 
     private boolean transmitting;
 
@@ -66,7 +66,7 @@ public class JingleRoom extends JPanel {
 
     private RolloverButton hangUpButton;
 
-    private static String CONNECTED = "Connected";
+    private static final String CONNECTED = "Connected";
 
     protected final Color greenColor = new Color(91, 175, 41);
     protected final Color orangeColor = new Color(229, 139, 11);
@@ -75,11 +75,11 @@ public class JingleRoom extends JPanel {
 
     private boolean callWasTransferred;
 
-    private ChatRoom chatRoom;
+    private final ChatRoom chatRoom;
 
-    private JingleSession session;
+    private final JingleSession session;
 
-    private JavaMixer mixer = new JavaMixer();
+    private final JavaMixer mixer = new JavaMixer();
 
     public JingleRoom(JingleSession session, ChatRoom chatRoom) {
         this.session = session;
@@ -187,6 +187,7 @@ public class JingleRoom extends JPanel {
 
     public void setupDefaults() {
         muteButton.addMouseListener(new MouseAdapter() {
+            @Override
             public void mousePressed(MouseEvent mouseEvent) {
                 toggleMute();
             }
@@ -194,6 +195,7 @@ public class JingleRoom extends JPanel {
         });
 
         hangUpButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 hangUpButton.setEnabled(false);
                 try {
@@ -303,6 +305,7 @@ public class JingleRoom extends JPanel {
 
     }
 
+    @Override
     public void paintComponent(Graphics g) {
         BufferedImage cache = new BufferedImage(2, getHeight(), BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = cache.createGraphics();
@@ -316,6 +319,7 @@ public class JingleRoom extends JPanel {
         g.drawImage(cache, 0, 0, getWidth(), getHeight(), null);
     }
 
+    @Override
     public Dimension getPreferredSize() {
         Dimension dim = super.getPreferredSize();
         dim.width = 200;

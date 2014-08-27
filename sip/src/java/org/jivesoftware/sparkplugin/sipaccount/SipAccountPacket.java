@@ -68,6 +68,7 @@ public class SipAccountPacket extends IQ {
      */
     public static final String NAMESPACE = "http://www.jivesoftware.com/protocol/sipark";
 
+    @Override
     public String getChildElementXML() {
         StringBuilder buf = new StringBuilder();
         buf.append("<").append(ELEMENT_NAME).append(" xmlns='").append(
@@ -90,6 +91,7 @@ public class SipAccountPacket extends IQ {
             super();
         }
 
+        @Override
         public IQ parseIQ(XmlPullParser parser) throws Exception {
             SipAccountPacket packet = new SipAccountPacket();
             SipAccount sip = new SipAccount();

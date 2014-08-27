@@ -37,6 +37,7 @@ public class Backdrop extends JPanel {
     public Backdrop() {
     }
 
+    @Override
     public void paintComponent(Graphics g) {
         final Image backgroundImage = Default.getImageIcon(Default.TOP_BOTTOM_BACKGROUND_IMAGE).getImage();
         double scaleX = getWidth() / (double) backgroundImage.getWidth(null);

@@ -46,7 +46,7 @@ public class ReconnectPanelSmall extends ContactGroup implements
         ConnectionListener {
 
     private static final long serialVersionUID = 437696141257704105L;
-    private JLabel _reconnectionlabel = new JLabel(
+    private final JLabel _reconnectionlabel = new JLabel(
             Res.getString("message.reconnect.attempting"),
             SparkRes.getImageIcon(SparkRes.BUSY_IMAGE), 0);
     private Component thiscomp;
@@ -99,6 +99,7 @@ public class ReconnectPanelSmall extends ContactGroup implements
                     popupmenu.add(reconnect);
 
                     reconnect.addActionListener(new ActionListener() {
+                        @Override
                         public void actionPerformed(ActionEvent e) {
                             reconnect();
                         }
@@ -117,6 +118,7 @@ public class ReconnectPanelSmall extends ContactGroup implements
 
         if (!SparkManager.getConnection().isConnected()) {
             TimerTask task = new SwingTimerTask() {
+                @Override
                 public void doRun() {
                     reconnect();
                 }

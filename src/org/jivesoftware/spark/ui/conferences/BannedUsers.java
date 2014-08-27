@@ -50,7 +50,7 @@ public class BannedUsers extends JPanel {
 
     private DefaultListModel listModel = new DefaultListModel();
     private JList list = new JList(listModel);
-    private JMenuItem unBanMenuItem = new JMenuItem(Res.getString("menuitem.unban"));
+    private final JMenuItem unBanMenuItem = new JMenuItem(Res.getString("menuitem.unban"));
 
     /**
      * Construct UI
@@ -61,6 +61,7 @@ public class BannedUsers extends JPanel {
         add(list, BorderLayout.CENTER);
         // Respond to Double-Click in Agent List to start a chat
         list.addMouseListener(new MouseAdapter() {
+            @Override
             public void mousePressed(MouseEvent evt) {
                 if (evt.isPopupTrigger()) {
                     int index = list.locationToIndex(evt.getPoint());
@@ -71,6 +72,7 @@ public class BannedUsers extends JPanel {
                 }
             }
 
+            @Override
             public void mouseReleased(MouseEvent evt) {
                 if (evt.isPopupTrigger()) {
                     int index = list.locationToIndex(evt.getPoint());
@@ -83,6 +85,7 @@ public class BannedUsers extends JPanel {
         });
 
         unBanMenuItem.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 int index = list.getSelectedIndex();
                 ImageIcon icon = (ImageIcon) list.getModel().getElementAt(index);

@@ -26,7 +26,7 @@ import org.jivesoftware.spark.util.GraphicUtils;
 public class PreferenceUI extends JLabel {
 
     private static final long serialVersionUID = 1094181037849878301L;
-    private Preference preference;
+    private final Preference preference;
 
     public PreferenceUI(Preference preference) {
         this.preference = preference;

@@ -80,7 +80,7 @@ public class RosterPickList extends JPanel {
      * @return all items choosen in the pick list.
      */
     public Collection<String> showRoster(JDialog parent) {
-        final List<ContactItem> userList = new ArrayList<ContactItem>();
+        final List<ContactItem> userList = new ArrayList<>();
 
         // Populate Invite Panel with Available users.
         final Roster roster = SparkManager.getConnection().getRoster();
@@ -130,6 +130,7 @@ public class RosterPickList extends JPanel {
         dlg.setLocationRelativeTo(parent);
 
         PropertyChangeListener changeListener = new PropertyChangeListener() {
+            @Override
             public void propertyChange(PropertyChangeEvent e) {
                 String value = (String) pane.getValue();
                 if (Res.getString("cancel").equals(value)) {
@@ -149,7 +150,7 @@ public class RosterPickList extends JPanel {
         dlg.toFront();
         dlg.requestFocus();
 
-        List<String> selectedContacts = new ArrayList<String>();
+        List<String> selectedContacts = new ArrayList<>();
 
         Object[] values = rosterList.getSelectedValues();
         final int no = values != null ? values.length : 0;
@@ -169,6 +170,7 @@ public class RosterPickList extends JPanel {
      * Sorts ContactItems.
      */
     final Comparator<ContactItem> itemComparator = new Comparator<ContactItem>() {
+        @Override
         public int compare(ContactItem item1, ContactItem item2) {
             String nickname1 = item1.getDisplayName();
             String nickname2 = item2.getDisplayName();

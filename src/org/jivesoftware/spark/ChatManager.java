@@ -89,27 +89,27 @@ public class ChatManager implements ChatManagerListener {
         new Color(255, 69, 0), new Color(255, 99, 72), new Color(109, 130, 180), new Color(233, 0, 0), new Color(139, 69, 19), new Color(255, 127, 80),
         new Color(140, 105, 225)};
 
-    private List<MessageFilter> messageFilters = new ArrayList<MessageFilter>();
+    private final List<MessageFilter> messageFilters = new ArrayList<>();
 
-    private List<GlobalMessageListener> globalMessageListeners = new ArrayList<GlobalMessageListener>();
+    private final List<GlobalMessageListener> globalMessageListeners = new ArrayList<>();
 
-    private List<RoomInvitationListener> invitationListeners = new ArrayList<RoomInvitationListener>();
+    private final List<RoomInvitationListener> invitationListeners = new ArrayList<>();
 
-    private List<TranscriptWindowInterceptor> interceptors = new ArrayList<TranscriptWindowInterceptor>();
+    private final List<TranscriptWindowInterceptor> interceptors = new ArrayList<>();
 
-    private List<SparkTabHandler> sparkTabHandlers = new CopyOnWriteArrayList<SparkTabHandler>();
+    private final List<SparkTabHandler> sparkTabHandlers = new CopyOnWriteArrayList<>();
 
     private final ChatContainer chatContainer;
 
     private String conferenceService;
 
-    private List<ContactItemHandler> contactItemHandlers = new ArrayList<ContactItemHandler>();
+    private final List<ContactItemHandler> contactItemHandlers = new ArrayList<>();
 
-    private Set<ChatRoom> typingNotificationList = new HashSet<ChatRoom>();
+    private final Set<ChatRoom> typingNotificationList = new HashSet<>();
 
-    private UriManager _uriManager = new UriManager();
+    private final UriManager _uriManager = new UriManager();
 
-    private List<ChatMessageHandler> chatMessageHandlers = new ArrayList<ChatMessageHandler>();
+    private final List<ChatMessageHandler> chatMessageHandlers = new ArrayList<>();
 
     /**
      * The listener instance that we use to track chat states according to
@@ -299,6 +299,7 @@ public class ChatManager implements ChatManagerListener {
             final ChatManager chatManager = SparkManager.getChatManager();
             ChatRoom chatRoom;
 
+            @Override
             public Object construct() {
                 try {
                     Thread.sleep(10);
@@ -316,6 +317,7 @@ public class ChatManager implements ChatManagerListener {
                 return chatRoom;
             }
 
+            @Override
             public void finished() {
                 if (chatRoom == null) {
                     chatRoom = UIComponentRegistry.createChatRoom(jid, nickname, nickname);
@@ -600,6 +602,7 @@ public class ChatManager implements ChatManagerListener {
 
     public void composingNotification(final String from) {
         SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 final ContactList contactList = SparkManager.getWorkspace().getContactList();
 
@@ -622,6 +625,7 @@ public class ChatManager implements ChatManagerListener {
 
     public void cancelledNotification(final String from, final ChatState state) {
         SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 ContactList contactList = SparkManager.getWorkspace().getContactList();
 

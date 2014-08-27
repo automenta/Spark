@@ -41,13 +41,13 @@ import org.jivesoftware.sparkimpl.settings.local.SettingsManager;
 final class JoinConferenceRoomDialog extends JPanel {
 
     private static final long serialVersionUID = -6400555509113588047L;
-    private JLabel roomNameLabel = new JLabel();
-    private JLabel nicknameLabel = new JLabel();
-    private JLabel passwordLabel = new JLabel();
-    private JPasswordField passwordField = new JPasswordField();
-    private JTextField nicknameField = new JTextField();
-    private GridBagLayout gridBagLayout1 = new GridBagLayout();
-    private JLabel roomNameDescription = new JLabel();
+    private final JLabel roomNameLabel = new JLabel();
+    private final JLabel nicknameLabel = new JLabel();
+    private final JLabel passwordLabel = new JLabel();
+    private final JPasswordField passwordField = new JPasswordField();
+    private final JTextField nicknameField = new JTextField();
+    private final GridBagLayout gridBagLayout1 = new GridBagLayout();
+    private final JLabel roomNameDescription = new JLabel();
 
     public JoinConferenceRoomDialog() {
         setLayout(gridBagLayout1);
@@ -108,6 +108,7 @@ final class JoinConferenceRoomDialog extends JPanel {
         dlg.setLocationRelativeTo(SparkManager.getMainWindow());
 
         PropertyChangeListener changeListener = new PropertyChangeListener() {
+            @Override
             public void propertyChange(PropertyChangeEvent e) {
                 String value = (String) pane.getValue();
                 if (Res.getString("cancel").equals(value)) {
@@ -130,11 +131,13 @@ final class JoinConferenceRoomDialog extends JPanel {
         SwingWorker worker = new SwingWorker() {
             boolean requiresPassword;
 
+            @Override
             public Object construct() {
                 requiresPassword = ConferenceUtils.isPasswordRequired(roomJID);
                 return requiresPassword;
             }
 
+            @Override
             public void finished() {
                 passwordField.setVisible(requiresPassword);
                 passwordLabel.setVisible(requiresPassword);

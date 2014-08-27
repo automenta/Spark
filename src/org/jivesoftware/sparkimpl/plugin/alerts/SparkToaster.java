@@ -132,7 +132,7 @@ public class SparkToaster {
 
     private Window window;
 
-    private JPanel mainPanel = new JPanel();
+    private final JPanel mainPanel = new JPanel();
 
     private TitleLabel titleLabel;
 
@@ -163,7 +163,7 @@ public class SparkToaster {
 
         // Label to store Icon
         // Text area for the message
-        private JTextArea message = new JTextArea();
+        private final JTextArea message = new JTextArea();
 
         /**
          * Simple costructor that initialized components...
@@ -193,6 +193,7 @@ public class SparkToaster {
             mainPanel.add(titleLabel, new GridBagConstraints(0, 0, 3, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 
             titleLabel.getCloseButton().addActionListener(new ActionListener() {
+                @Override
                 public void actionPerformed(ActionEvent e) {
                     setVisible(false);
                     dispose();
@@ -226,6 +227,7 @@ public class SparkToaster {
 
         private class PaneMouseListener extends MouseAdapter {
 
+            @Override
             public void mouseClicked(MouseEvent e) {
                 if (customAction != null) {
                     customAction.actionPerformed(null);
@@ -237,11 +239,13 @@ public class SparkToaster {
                 }
             }
 
+            @Override
             public void mouseEntered(MouseEvent e) {
                 message.setCursor(HAND_CURSOR);
                 setCursor(HAND_CURSOR);
             }
 
+            @Override
             public void mouseExited(MouseEvent e) {
                 message.setCursor(DEFAULT_CURSOR);
                 setCursor(DEFAULT_CURSOR);
@@ -289,6 +293,7 @@ public class SparkToaster {
             toaster.repaint();
         }
 
+        @Override
         public void run() {
             try {
                 boolean animateFromBottom = true;
@@ -312,6 +317,7 @@ public class SparkToaster {
                 toaster.setLocation(posx, screenHeight);
                 try {
                     EventQueue.invokeAndWait(new Runnable() {
+                        @Override
                         public void run() {
                             toaster.setVisible(true);
                         }
@@ -327,7 +333,7 @@ public class SparkToaster {
                     startYPosition = screenHeight;
                     stopYPosition = startYPosition - toasterHeight - 1;
                     if (currentNumberOfToaster > 0) {
-                        stopYPosition = stopYPosition - (maxToaster % maxToasterInSceen * toasterHeight);
+                        stopYPosition -= (maxToaster % maxToasterInSceen * toasterHeight);
                     } else {
                         maxToaster = 0;
                     }
@@ -336,7 +342,7 @@ public class SparkToaster {
                     stopYPosition = screenRect.y;
 
                     if (currentNumberOfToaster > 0) {
-                        stopYPosition = stopYPosition + (maxToaster % maxToasterInSceen * toasterHeight);
+                        stopYPosition += (maxToaster % maxToasterInSceen * toasterHeight);
                     } else {
                         maxToaster = 0;
                     }
@@ -607,8 +613,8 @@ public class SparkToaster {
     class TitleLabel extends JPanel {
 
         private static final long serialVersionUID = -5163519932953987400L;
-        private JLabel label;
-        private RolloverButton closeButton;
+        private final JLabel label;
+        private final RolloverButton closeButton;
 
         public TitleLabel(String text, final boolean showCloseIcon) {
             setLayout(new GridBagLayout());

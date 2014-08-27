@@ -42,6 +42,7 @@ public class JPanelRenderer extends JPanel implements ListCellRenderer {
         setOpaque(true);
     }
 
+    @Override
     public Component getListCellRendererComponent(JList list,
             Object value,
             int index,

@@ -34,7 +34,7 @@ import org.jivesoftware.spark.util.log.Log;
 public class ChatRoomTransferHandler extends TransferHandler {
 
     private static final long serialVersionUID = 6941570710627039031L;
-    private ChatRoom chatRoom;
+    private final ChatRoom chatRoom;
 
     private static final DataFlavor flavors[] = {DataFlavor.javaFileListFlavor, DataFlavor.stringFlavor};
 
@@ -42,10 +42,12 @@ public class ChatRoomTransferHandler extends TransferHandler {
         this.chatRoom = chatRoom;
     }
 
+    @Override
     public int getSourceActions(JComponent c) {
         return TransferHandler.COPY_OR_MOVE;
     }
 
+    @Override
     public boolean canImport(JComponent comp, DataFlavor flavor[]) {
         for (int i = 0, n = flavor.length; i < n; i++) {
             for (int j = 0, m = flavors.length; j < m; j++) {
@@ -57,10 +59,12 @@ public class ChatRoomTransferHandler extends TransferHandler {
         return false;
     }
 
+    @Override
     protected void exportDone(JComponent c, Transferable data, int action) {
 
     }
 
+    @Override
     public Transferable createTransferable(JComponent comp) {
         if (comp instanceof TranscriptWindow) {
             return new TranscriptWindowTransferable((TranscriptWindow) comp);
@@ -69,6 +73,7 @@ public class ChatRoomTransferHandler extends TransferHandler {
         return null;
     }
 
+    @Override
     public boolean importData(JComponent comp, Transferable t) {
         if (t.isDataFlavorSupported(flavors[0])) {
             try {
@@ -103,23 +108,26 @@ public class ChatRoomTransferHandler extends TransferHandler {
 
     public class TranscriptWindowTransferable implements Transferable {
 
-        private TranscriptWindow item;
+        private final TranscriptWindow item;
 
         public TranscriptWindowTransferable(TranscriptWindow item) {
             this.item = item;
         }
 
         // Returns supported flavors
+        @Override
         public DataFlavor[] getTransferDataFlavors() {
             return new DataFlavor[]{DataFlavor.stringFlavor};
         }
 
         // Returns true if flavor is supported
+        @Override
         public boolean isDataFlavorSupported(DataFlavor flavor) {
             return DataFlavor.stringFlavor.equals(flavor);
         }
 
         // Returns Selected Text
+        @Override
         public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
             if (!DataFlavor.stringFlavor.equals(flavor)) {
                 throw new UnsupportedFlavorException(flavor);

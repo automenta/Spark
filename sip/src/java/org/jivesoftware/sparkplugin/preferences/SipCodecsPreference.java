@@ -11,7 +11,7 @@ import org.jivesoftware.sparkimpl.settings.local.SettingsManager;
 
 public class SipCodecsPreference implements Preference {
 
-    private SipCodecs panel = new SipCodecs();
+    private final SipCodecs panel = new SipCodecs();
     public static final String NAMESPACE = "http://www.jivesoftware.org/spark/codecs";
 
     @Override
@@ -73,11 +73,13 @@ public class SipCodecsPreference implements Preference {
         SwingWorker thread = new SwingWorker() {
             LocalPreferences localPreferences;
 
+            @Override
             public Object construct() {
                 localPreferences = SettingsManager.getLocalPreferences();
                 return localPreferences;
             }
 
+            @Override
             public void finished() {
                 String sel = localPreferences.getSelectedCodecs();
                 String avail = localPreferences.getAvailableCodecs();

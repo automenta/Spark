@@ -35,13 +35,13 @@ import org.jivesoftware.spark.util.ResourceUtils;
 public class NotificationsUI extends JPanel {
 
     private static final long serialVersionUID = -3372199803443605883L;
-    private JCheckBox toasterBox;
-    private JCheckBox windowFocusBox;
-    private JCheckBox offlineNotificationBox;
-    private JCheckBox onlineNotificationBox;
-    private JCheckBox betaCheckBox;
-    private JCheckBox SystemTrayNotificationBox;
-    private JCheckBox showTypingNotificationBox;
+    private final JCheckBox toasterBox;
+    private final JCheckBox windowFocusBox;
+    private final JCheckBox offlineNotificationBox;
+    private final JCheckBox onlineNotificationBox;
+    private final JCheckBox betaCheckBox;
+    private final JCheckBox SystemTrayNotificationBox;
+    private final JCheckBox showTypingNotificationBox;
 
     public NotificationsUI() {
         setLayout(new VerticalFlowLayout());
@@ -79,6 +79,7 @@ public class NotificationsUI extends JPanel {
         }
 
         windowFocusBox.addChangeListener(new ChangeListener() {
+            @Override
             public void stateChanged(ChangeEvent ce) {
                 if (shouldWindowPopup()) {
                     setSystemTrayNotification(false);
@@ -90,6 +91,7 @@ public class NotificationsUI extends JPanel {
         });
 
         SystemTrayNotificationBox.addChangeListener(new ChangeListener() {
+            @Override
             public void stateChanged(ChangeEvent ce) {
                 if (isSystemTrayNotificationEnabled()) {
                     setShowWindowPopup(false);

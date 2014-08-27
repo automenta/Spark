@@ -99,12 +99,12 @@ public class GroupChatRoom extends ChatRoom {
     private boolean isActive = true;
     private SubjectPanel subjectPanel;
 
-    private List<String> currentUserList = new ArrayList<String>();
+    private List<String> currentUserList = new ArrayList<>();
 
     private String conferenceService;
-    private List<String> blockedUsers = new ArrayList<String>();
+    private List<String> blockedUsers = new ArrayList<>();
 
-    private ChatRoomMessageManager messageManager;
+    private final ChatRoomMessageManager messageManager;
     private Timer typingTimer;
     private int typedChars;
 
@@ -169,11 +169,13 @@ public class GroupChatRoom extends ChatRoom {
         // Add ContextMenuListener
         getTranscriptWindow().addContextMenuListener(new ContextMenuListener() {
 
+            @Override
             public void poppingUp(Object component, JPopupMenu popup) {
                 popup.addSeparator();
                 Action inviteAction = new AbstractAction() {
                     private static final long serialVersionUID = -2493782261839364071L;
 
+                    @Override
                     public void actionPerformed(ActionEvent actionEvent) {
                         ConferenceUtils.inviteUsersToRoom(conferenceService,
                                 getRoomname(), null, false);
@@ -190,6 +192,7 @@ public class GroupChatRoom extends ChatRoom {
                 Action configureAction = new AbstractAction() {
                     private static final long serialVersionUID = -7463450970328104297L;
 
+                    @Override
                     public void actionPerformed(ActionEvent actionEvent) {
                         try {
                             ChatFrame chatFrame = SparkManager.getChatManager()
@@ -215,6 +218,7 @@ public class GroupChatRoom extends ChatRoom {
                 Action subjectChangeAction = new AbstractAction() {
                     private static final long serialVersionUID = 6730534406025965089L;
 
+                    @Override
                     public void actionPerformed(ActionEvent actionEvent) {
                         String newSubject = JOptionPane.showInputDialog(
                                 getChatRoom(),
@@ -242,6 +246,7 @@ public class GroupChatRoom extends ChatRoom {
                 Action destroyRoomAction = new AbstractAction() {
                     private static final long serialVersionUID = 6494204166819377882L;
 
+                    @Override
                     public void actionPerformed(ActionEvent e) {
                         int ok = JOptionPane.showConfirmDialog(
                                 getChatRoom(),
@@ -280,10 +285,12 @@ public class GroupChatRoom extends ChatRoom {
 
             }
 
+            @Override
             public void poppingDown(JPopupMenu popup) {
 
             }
 
+            @Override
             public boolean handleDefaultAction(MouseEvent e) {
                 return false;
             }
@@ -324,6 +331,7 @@ public class GroupChatRoom extends ChatRoom {
     /**
      * Have the user leave this chat room and then close it.
      */
+    @Override
     public void closeChatRoom() {
         // Specify the end time.
         super.closeChatRoom();
@@ -371,6 +379,7 @@ public class GroupChatRoom extends ChatRoom {
      *
      * @param message - the message to send.
      */
+    @Override
     public void sendMessage(Message message) {
         fireOutgoingMessageSending(message);
 
@@ -465,6 +474,7 @@ public class GroupChatRoom extends ChatRoom {
      *
      * @return the roomname.
      */
+    @Override
     public String getRoomname() {
         return roomname;
     }
@@ -474,6 +484,7 @@ public class GroupChatRoom extends ChatRoom {
      *
      * @return the nickname of the agent in this groupchat
      */
+    @Override
     public String getNickname() {
         return chat.getNickname();
     }
@@ -492,6 +503,7 @@ public class GroupChatRoom extends ChatRoom {
      *
      * @return the Icon to use in tab.
      */
+    @Override
     public Icon getTabIcon() {
         return tabIcon;
     }
@@ -501,6 +513,7 @@ public class GroupChatRoom extends ChatRoom {
      *
      * @return the title to be used on the tab.
      */
+    @Override
     public String getTabTitle() {
         return tabTitle;
     }
@@ -510,6 +523,7 @@ public class GroupChatRoom extends ChatRoom {
      *
      * @return the title of this room.
      */
+    @Override
     public String getRoomTitle() {
         return getTabTitle();
     }
@@ -519,6 +533,7 @@ public class GroupChatRoom extends ChatRoom {
      *
      * @return the type of chat we are in.
      */
+    @Override
     public Message.Type getChatType() {
         return Message.Type.groupchat;
     }
@@ -526,6 +541,7 @@ public class GroupChatRoom extends ChatRoom {
     /**
      * Implementation of leaveChatRoom.
      */
+    @Override
     public void leaveChatRoom() {
         if (!isActive) {
             return;
@@ -587,6 +603,7 @@ public class GroupChatRoom extends ChatRoom {
      *
      * @return true if the ChatRoom is active.
      */
+    @Override
     public boolean isActive() {
         return isActive;
     }
@@ -608,10 +625,12 @@ public class GroupChatRoom extends ChatRoom {
      *
      * @param packet the packet.
      */
+    @Override
     public void processPacket(final Packet packet) {
         super.processPacket(packet);
         if (packet instanceof Presence) {
             SwingUtilities.invokeLater(new Runnable() {
+                @Override
                 public void run() {
                     handlePresencePacket(packet);
                 }
@@ -620,6 +639,7 @@ public class GroupChatRoom extends ChatRoom {
         }
         if (packet instanceof Message) {
             SwingUtilities.invokeLater(new Runnable() {
+                @Override
                 public void run() {
                     handleMessagePacket(packet);
 
@@ -814,76 +834,89 @@ public class GroupChatRoom extends ChatRoom {
     private void setupListeners() {
         chat.addParticipantStatusListener(new DefaultParticipantStatusListener() {
 
+            @Override
             public void kicked(String participant, String actor, String reason) {
                 String nickname = StringUtils.parseResource(participant);
                 insertText(Res.getString("message.user.kicked.from.room",
                         nickname, actor, reason));
             }
 
+            @Override
             public void voiceGranted(String participant) {
                 String nickname = StringUtils.parseResource(participant);
                 insertText(Res.getString("message.user.given.voice", nickname));
             }
 
+            @Override
             public void voiceRevoked(String participant) {
                 String nickname = StringUtils.parseResource(participant);
                 insertText(Res
                         .getString("message.user.voice.revoked", nickname));
             }
 
+            @Override
             public void banned(String participant, String actor, String reason) {
                 String nickname = StringUtils.parseResource(participant);
                 insertText(Res.getString("message.user.banned", nickname, reason));
             }
 
+            @Override
             public void membershipGranted(String participant) {
                 String nickname = StringUtils.parseResource(participant);
                 insertText(Res.getString("message.user.granted.membership",
                         nickname));
             }
 
+            @Override
             public void membershipRevoked(String participant) {
                 String nickname = StringUtils.parseResource(participant);
                 insertText(Res.getString("message.user.revoked.membership",
                         nickname));
             }
 
+            @Override
             public void moderatorGranted(String participant) {
                 String nickname = StringUtils.parseResource(participant);
                 insertText(Res.getString("message.user.granted.moderator",
                         nickname));
             }
 
+            @Override
             public void moderatorRevoked(String participant) {
                 String nickname = StringUtils.parseResource(participant);
                 insertText(Res.getString("message.user.revoked.moderator",
                         nickname));
             }
 
+            @Override
             public void ownershipGranted(String participant) {
                 String nickname = StringUtils.parseResource(participant);
                 insertText(Res
                         .getString("message.user.granted.owner", nickname));
             }
 
+            @Override
             public void ownershipRevoked(String participant) {
                 String nickname = StringUtils.parseResource(participant);
                 insertText(Res
                         .getString("message.user.revoked.owner", nickname));
             }
 
+            @Override
             public void adminGranted(String participant) {
                 String nickname = StringUtils.parseResource(participant);
                 insertText(Res
                         .getString("message.user.granted.admin", nickname));
             }
 
+            @Override
             public void adminRevoked(String participant) {
                 String nickname = StringUtils.parseResource(participant);
                 insertText(Res
                         .getString("message.user.revoked.admin", nickname));
             }
 
+            @Override
             public void nicknameChanged(String participant, String nickname) {
                 insertText(Res.getString("message.user.nickname.changed",
                         StringUtils.parseResource(participant), nickname));
@@ -891,6 +924,7 @@ public class GroupChatRoom extends ChatRoom {
         });
 
         chat.addUserStatusListener(new DefaultUserStatusListener() {
+            @Override
             public void kicked(String s, String reason) {
                 if (ModelUtil.hasLength(reason)) {
                     insertText(reason);
@@ -903,48 +937,59 @@ public class GroupChatRoom extends ChatRoom {
                 leaveChatRoom();
             }
 
+            @Override
             public void voiceGranted() {
                 insertText(Res.getString("message.your.voice.granted"));
                 getChatInputEditor().setEnabled(true);
             }
 
+            @Override
             public void voiceRevoked() {
                 insertText(Res.getString("message.your.voice.revoked"));
                 getChatInputEditor().setEnabled(false);
             }
 
+            @Override
             public void banned(String s, String reason) {
                 insertText(Res.getString("message.your.banned"));
             }
 
+            @Override
             public void membershipGranted() {
                 insertText(Res.getString("message.your.membership.granted"));
             }
 
+            @Override
             public void membershipRevoked() {
                 insertText(Res.getString("message.your.membership.revoked"));
             }
 
+            @Override
             public void moderatorGranted() {
                 insertText(Res.getString("message.your.moderator.granted"));
             }
 
+            @Override
             public void moderatorRevoked() {
                 insertText(Res.getString("message.your.moderator.revoked"));
             }
 
+            @Override
             public void ownershipGranted() {
                 insertText(Res.getString("message.your.ownership.granted"));
             }
 
+            @Override
             public void ownershipRevoked() {
                 insertText(Res.getString("message.your.ownership.revoked"));
             }
 
+            @Override
             public void adminGranted() {
                 insertText(Res.getString("message.your.admin.granted"));
             }
 
+            @Override
             public void adminRevoked() {
                 insertText(Res.getString("message.your.revoked.granted"));
             }
@@ -968,6 +1013,7 @@ public class GroupChatRoom extends ChatRoom {
      */
     private class SubjectListener implements SubjectUpdatedListener {
 
+        @Override
         public void subjectUpdated(String subject, String by) {
             subjectPanel.setSubject(subject);
             subjectPanel.setToolTipText(subject);
@@ -996,11 +1042,13 @@ public class GroupChatRoom extends ChatRoom {
      * Sends the message that is currently in the send field. The message is
      * automatically added to the transcript for later retrieval.
      */
+    @Override
     public void sendMessage() {
         final String text = getChatInputEditor().getText();
         sendMessage(text);
     }
 
+    @Override
     public void sendMessage(String text) {
         // IF there is no body, just return and do nothing
         if (!ModelUtil.hasLength(text)) {
@@ -1078,6 +1126,7 @@ public class GroupChatRoom extends ChatRoom {
             boolean sendAndReceiveTypingNotifications) {
         if (sendAndReceiveTypingNotifications) {
             typingTimer = new Timer(10000, new ActionListener() {
+                @Override
                 public void actionPerformed(ActionEvent e) {
                     showDefaultTabIcon();
                 }
@@ -1120,14 +1169,18 @@ public class GroupChatRoom extends ChatRoom {
 
         }
 
+        @Override
         public void deliveredNotification(String from, String packetID) {
         }
 
+        @Override
         public void displayedNotification(String from, String packetID) {
         }
 
+        @Override
         public void composingNotification(final String from, String packetID) {
             SwingUtilities.invokeLater(new Runnable() {
+                @Override
                 public void run() {
                     String bareAddress = StringUtils.parseBareAddress(from);
 
@@ -1138,9 +1191,11 @@ public class GroupChatRoom extends ChatRoom {
             });
         }
 
+        @Override
         public void offlineNotification(String from, String packetID) {
         }
 
+        @Override
         public void cancelledNotification(String from, String packetID) {
         }
     }
@@ -1171,6 +1226,7 @@ public class GroupChatRoom extends ChatRoom {
      *
      * @param e - the DocumentEvent to respond to.
      */
+    @Override
     public void insertUpdate(DocumentEvent e) {
         checkForText(e);
 
@@ -1208,14 +1264,17 @@ public class GroupChatRoom extends ChatRoom {
         return roomInfo;
     }
 
+    @Override
     public long getLastActivity() {
         return lastActivity;
     }
 
+    @Override
     public void connectionClosed() {
         handleDisconnect();
     }
 
+    @Override
     public void connectionClosedOnError(Exception ex) {
         handleDisconnect();
 
@@ -1241,6 +1300,7 @@ public class GroupChatRoom extends ChatRoom {
     /**
      * Part of Connectionlistener. Gets triggered when successfully reconnected.
      */
+    @Override
     public void reconnectionSuccessful() {
 
         final String roomJID = chat.getRoom();
@@ -1273,8 +1333,8 @@ public class GroupChatRoom extends ChatRoom {
     public class SubjectPanel extends JPanel {
 
         private static final long serialVersionUID = -1459165526561181321L;
-        private JLabel roomJIDLabel;
-        private JLabel subjectLabel;
+        private final JLabel roomJIDLabel;
+        private final JLabel subjectLabel;
 
         public SubjectPanel() {
             setLayout(new GridBagLayout());

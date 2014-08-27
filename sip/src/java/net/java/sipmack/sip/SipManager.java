@@ -203,7 +203,7 @@ public class SipManager implements SipListener {
 
     protected long registrationTransaction = -1;
 
-    protected List<CommunicationsListener> listeners = new ArrayList<CommunicationsListener>();
+    protected List<CommunicationsListener> listeners = new ArrayList<>();
 
     // Processing managers
     /**

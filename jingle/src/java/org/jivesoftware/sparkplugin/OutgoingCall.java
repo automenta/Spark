@@ -139,14 +139,17 @@ public class OutgoingCall extends JPanel implements JingleSessionListener, ChatR
         titleLabel.setText(JingleResources.getString("label.outgoing.voicechat", contactItem.getNickname()));
 
         cancelButton.addMouseListener(new MouseAdapter() {
+            @Override
             public void mousePressed(MouseEvent e) {
                 cancel();
             }
 
+            @Override
             public void mouseEntered(MouseEvent e) {
                 cancelButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
             }
 
+            @Override
             public void mouseExited(MouseEvent e) {
                 cancelButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
@@ -229,13 +232,16 @@ public class OutgoingCall extends JPanel implements JingleSessionListener, ChatR
 
     private void makeClickable(final JComponent component) {
         component.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
             }
 
+            @Override
             public void mouseEntered(MouseEvent e) {
                 component.setCursor(new Cursor(Cursor.HAND_CURSOR));
             }
 
+            @Override
             public void mouseExited(MouseEvent e) {
                 component.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
@@ -295,6 +301,7 @@ public class OutgoingCall extends JPanel implements JingleSessionListener, ChatR
         showCallEndedState("Voice chat ended on " + formatter.format(new Date()));
     }
 
+    @Override
     public void closing() {
         if (session != null) {
             try {
@@ -316,6 +323,7 @@ public class OutgoingCall extends JPanel implements JingleSessionListener, ChatR
     public void sessionEstablished(PayloadType payloadType, TransportCandidate transportCandidate, TransportCandidate transportCandidate1, JingleSession jingleSession) {
         established = true;
         mediaReceivedTask = new SwingTimerTask() {
+            @Override
             public void doRun() {
                 if (!mediaReceived) {
                     if (session != null) {
@@ -331,6 +339,7 @@ public class OutgoingCall extends JPanel implements JingleSessionListener, ChatR
         TaskEngine.getInstance().schedule(mediaReceivedTask, WAIT_FOR_MEDIA_DELAY, WAIT_FOR_MEDIA_DELAY);
 
         SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 updateOutgoingCallPanel();
             }
@@ -341,6 +350,7 @@ public class OutgoingCall extends JPanel implements JingleSessionListener, ChatR
         showCallEndedState("The Session was rejected.");
 
         SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 updateOutgoingCallPanel();
             }
@@ -349,6 +359,7 @@ public class OutgoingCall extends JPanel implements JingleSessionListener, ChatR
 
     public void sessionRedirected(String string, JingleSession jingleSession) {
         SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 updateOutgoingCallPanel();
             }
@@ -370,6 +381,7 @@ public class OutgoingCall extends JPanel implements JingleSessionListener, ChatR
         }
 
         SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 updateOutgoingCallPanel();
             }
@@ -383,6 +395,7 @@ public class OutgoingCall extends JPanel implements JingleSessionListener, ChatR
         }
 
         SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 updateOutgoingCallPanel();
             }

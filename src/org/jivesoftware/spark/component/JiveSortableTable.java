@@ -64,7 +64,7 @@ public abstract class JiveSortableTable extends Table {
      */
     public static final Color TOOLTIP_COLOR = new Color(166, 202, 240);
 
-    private final Map<Integer, Object> objectMap = new HashMap<Integer, Object>();
+    private final Map<Integer, Object> objectMap = new HashMap<>();
 
     /**
      * Empty Constructor.
@@ -72,6 +72,7 @@ public abstract class JiveSortableTable extends Table {
     protected JiveSortableTable() {
     }
 
+    @Override
     public String getToolTipText(MouseEvent e) {
         int r = rowAtPoint(e.getPoint());
         int c = columnAtPoint(e.getPoint());
@@ -102,6 +103,7 @@ public abstract class JiveSortableTable extends Table {
     }
 
     // Handle image rendering correctly
+    @Override
     public TableCellRenderer getCellRenderer(int row, int column) {
         Object o = getValueAt(row, column);
         if (o != null) {
@@ -129,6 +131,7 @@ public abstract class JiveSortableTable extends Table {
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         this.addKeyListener(new KeyListener() {
+            @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyChar() == KeyEvent.VK_ENTER) {
                     e.consume();
@@ -136,9 +139,11 @@ public abstract class JiveSortableTable extends Table {
                 }
             }
 
+            @Override
             public void keyReleased(KeyEvent e) {
             }
 
+            @Override
             public void keyTyped(KeyEvent e) {
 
             }
@@ -150,6 +155,7 @@ public abstract class JiveSortableTable extends Table {
      *
      * @param list the list to add to the model.
      */
+    @Override
     public void add(List<Object> list) {
         for (Object aList : list) {
             Object[] newRow = (Object[]) aList;
@@ -162,6 +168,7 @@ public abstract class JiveSortableTable extends Table {
      *
      * @return the object array of a row.
      */
+    @Override
     public Object[] getSelectedRowObject() {
         return getRowObject(getSelectedRow());
     }
@@ -172,6 +179,7 @@ public abstract class JiveSortableTable extends Table {
      * @param selectedRow the row to retrieve.
      * @return the object[] of a row.
      */
+    @Override
     public Object[] getRowObject(int selectedRow) {
         if (selectedRow < 0) {
             return null;
@@ -190,6 +198,7 @@ public abstract class JiveSortableTable extends Table {
     /**
      * Removes all columns and rows from table.
      */
+    @Override
     public void clearTable() {
         int rowCount = getRowCount();
         for (int i = 0; i < rowCount; i++) {
@@ -225,6 +234,7 @@ public abstract class JiveSortableTable extends Table {
          * @param column the column to check.
          * @return true if the cell is editable.
          */
+        @Override
         public boolean isCellEditable(int row, int column) {
             return isEditable;
         }
@@ -250,6 +260,7 @@ public abstract class JiveSortableTable extends Table {
             this.isBordered = isBordered;
         }
 
+        @Override
         public Component getTableCellRendererComponent(JTable table, Object color, boolean isSelected, boolean hasFocus, int row, int column) {
             final String text = ((JLabel) color).getText();
             if (text != null) {
@@ -306,6 +317,7 @@ public abstract class JiveSortableTable extends Table {
             setFont(font);
         }
 
+        @Override
         public Component getTableCellRendererComponent(JTable jTable, Object obj, boolean isSelected, boolean hasFocus,
                 int row, int column) {
             // set color & border here
@@ -335,6 +347,7 @@ public abstract class JiveSortableTable extends Table {
         public JButtonRenderer() {
         }
 
+        @Override
         public Component getTableCellRendererComponent(JTable table, Object color, boolean isSelected, boolean hasFocus, int row, int column) {
             final String text = ((AbstractButton) color).getText();
             setText(text);
@@ -384,6 +397,7 @@ public abstract class JiveSortableTable extends Table {
             super(items);
         }
 
+        @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
                 boolean isSelected, boolean hasFocus, int row, int column) {
             if (isSelected) {
@@ -414,6 +428,7 @@ public abstract class JiveSortableTable extends Table {
      *
      * @return the table model.
      */
+    @Override
     public Table.JiveTableModel getTableModel() {
         return tableModel;
     }
@@ -421,6 +436,7 @@ public abstract class JiveSortableTable extends Table {
     /**
      * Clears all objects from map.
      */
+    @Override
     public void clearObjectMap() {
         objectMap.clear();
     }
@@ -431,6 +447,7 @@ public abstract class JiveSortableTable extends Table {
      * @param row - the current row
      * @param object - the object to associate with the row.
      */
+    @Override
     public void addObject(int row, Object object) {
         objectMap.put(row, object);
     }
@@ -441,6 +458,7 @@ public abstract class JiveSortableTable extends Table {
      * @param row - the row associated with the object.
      * @return The object associated with the row.
      */
+    @Override
     public Object getObject(int row) {
         return objectMap.get(row);
     }
@@ -448,6 +466,7 @@ public abstract class JiveSortableTable extends Table {
     /**
      * Override to handle when enter is pressed.
      */
+    @Override
     public void enterPressed() {
     }
 

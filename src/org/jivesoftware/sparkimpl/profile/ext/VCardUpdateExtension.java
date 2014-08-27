@@ -27,14 +27,17 @@ public class VCardUpdateExtension implements PacketExtension {
         photoHash = hash;
     }
 
+    @Override
     public String getElementName() {
         return "x";
     }
 
+    @Override
     public String getNamespace() {
         return "vcard-temp:x:update";
     }
 
+    @Override
     public String toXML() {
         StringBuilder buf = new StringBuilder();
         buf.append("<").append(getElementName()).append(" xmlns=\"").append(getNamespace()).append("\">");

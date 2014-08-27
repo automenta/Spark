@@ -74,6 +74,7 @@ public class MissedCalls implements ActionListener {
 
         list.setCellRenderer(new MissedCallRenderer());
         list.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 if (mouseEvent.getClickCount() == 2) {
                     placeCall((MissedCall) list.getSelectedValue());
@@ -82,6 +83,7 @@ public class MissedCalls implements ActionListener {
         });
 
         list.addListSelectionListener(new ListSelectionListener() {
+            @Override
             public void valueChanged(ListSelectionEvent e) {
                 if (e.getValueIsAdjusting()) {
                     return;
@@ -148,6 +150,7 @@ public class MissedCalls implements ActionListener {
 
         try {
             EventQueue.invokeAndWait(new Runnable() {
+                @Override
                 public void run() {
                     final MissedCall missedCall = new MissedCall(callID, new Date(), number);
                     model.insertElementAt(missedCall, 0);
@@ -172,7 +175,7 @@ public class MissedCalls implements ActionListener {
     private class MissedCall extends JPanel {
 
         private static final long serialVersionUID = -6155295091292349158L;
-        private String number;
+        private final String number;
 
         public MissedCall(String title, Date time, String number) {
             setLayout(new GridBagLayout());
@@ -216,6 +219,7 @@ public class MissedCalls implements ActionListener {
         SparkManager.getMainWindow().toFront();
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         final MissedCall missedCall = (MissedCall) list.getSelectedValue();
 
@@ -233,6 +237,7 @@ public class MissedCalls implements ActionListener {
 
         private static final long serialVersionUID = -3128542669141396537L;
 
+        @Override
         public Component getListCellRendererComponent(JList list,
                 Object value,
                 int index,

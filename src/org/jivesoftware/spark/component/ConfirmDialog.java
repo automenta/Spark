@@ -41,10 +41,10 @@ import org.jivesoftware.spark.util.ResourceUtils;
 public class ConfirmDialog extends BackgroundPanel {
 
     private static final long serialVersionUID = -441250586899776207L;
-    private JLabel message;
-    private JLabel iconLabel;
-    private JButton yesButton;
-    private JButton noButton;
+    private final JLabel message;
+    private final JLabel iconLabel;
+    private final JButton yesButton;
+    private final JButton noButton;
 
     private ConfirmListener listener = null;
     private JDialog dialog;
@@ -66,6 +66,7 @@ public class ConfirmDialog extends BackgroundPanel {
         add(noButton, new GridBagConstraints(4, 1, 1, 1, 0.0, 0.0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0));
 
         yesButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if (listener != null) {
                     listener.yesOption();
@@ -76,6 +77,7 @@ public class ConfirmDialog extends BackgroundPanel {
         });
 
         noButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 dialog.dispose();
             }
@@ -108,6 +110,7 @@ public class ConfirmDialog extends BackgroundPanel {
         dialog.setVisible(true);
 
         dialog.addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosed(WindowEvent windowEvent) {
                 if (listener != null) {
                     listener.noOption();

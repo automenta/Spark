@@ -90,14 +90,14 @@ public class PluginViewer extends JPanel implements Plugin {
 
     private boolean loaded = false;
 
-    private String retrieveListURL = Default.getString("PLUGIN_REPOSITORY");
+    private final String retrieveListURL = Default.getString("PLUGIN_REPOSITORY");
 
     private JProgressBar progressBar;
 
     private JPanel installedPanel;
     private JPanel availablePanel;
     private JPanel deactivatedPanel;
-    private LocalPreferences _prefs;
+    private final LocalPreferences _prefs;
     private List<String> _deactivatedPlugins;
 
     public PluginViewer() {
@@ -106,6 +106,7 @@ public class PluginViewer extends JPanel implements Plugin {
 
         EventQueue.invokeLater(new Runnable() {
 
+            @Override
             public void run() {
 
                 tabbedPane = new JTabbedPane();
@@ -139,6 +140,7 @@ public class PluginViewer extends JPanel implements Plugin {
                 loadDeactivatedPlugins();
 
                 tabbedPane.addChangeListener(new ChangeListener() {
+                    @Override
                     public void stateChanged(ChangeEvent changeEvent) {
                         if (tabbedPane.getSelectedComponent().equals(
                                 availablePanel.getParent().getParent())) {
@@ -184,6 +186,7 @@ public class PluginViewer extends JPanel implements Plugin {
 
     }
 
+    @Override
     public void initialize() {
         // Add Plugins Menu
         JMenuBar menuBar = SparkManager.getMainWindow().getJMenuBar();
@@ -196,6 +199,7 @@ public class PluginViewer extends JPanel implements Plugin {
         Action viewAction = new AbstractAction() {
             private static final long serialVersionUID = 6518407602062984752L;
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 invokeViewer();
             }
@@ -243,10 +247,12 @@ public class PluginViewer extends JPanel implements Plugin {
         MessageDialog.showComponent(Res.getString("title.plugins"), "", null, viewer, SparkManager.getMainWindow(), 600, 600, false);
     }
 
+    @Override
     public void shutdown() {
 
     }
 
+    @Override
     public boolean canShutDown() {
         return false;
     }
@@ -263,6 +269,7 @@ public class PluginViewer extends JPanel implements Plugin {
         SwingWorker worker = new SwingWorker() {
             Collection<PublicPlugin> pluginList = null;
 
+            @Override
             public Object construct() {
                 // Prepare HTTP post
                 final GetMethod post = new GetMethod(retrieveListURL);
@@ -297,6 +304,7 @@ public class PluginViewer extends JPanel implements Plugin {
                 return "ok";
             }
 
+            @Override
             public void finished() {
                 final PluginManager pluginManager = PluginManager.getInstance();
                 if (pluginList == null) {
@@ -368,6 +376,7 @@ public class PluginViewer extends JPanel implements Plugin {
             frame.setIconImage(SparkRes.getImageIcon(SparkRes.SMALL_MESSAGE_IMAGE).getImage());
 
             final Thread thread = new Thread(new Runnable() {
+                @Override
                 public void run() {
                     try {
                         Thread.sleep(2000);
@@ -436,7 +445,7 @@ public class PluginViewer extends JPanel implements Plugin {
     }
 
     public Collection<PublicPlugin> getPluginList(InputStream response) {
-        final List<PublicPlugin> pluginList = new ArrayList<PublicPlugin>();
+        final List<PublicPlugin> pluginList = new ArrayList<>();
         SAXReader saxReader = new SAXReader();
         Document pluginXML = null;
 
@@ -574,6 +583,7 @@ public class PluginViewer extends JPanel implements Plugin {
 
     private void addSparkPlugUIListener(final SparkPlugUI ui) {
         ui.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 // Clear all selections
                 Component[] comps = installedPanel.getComponents();
@@ -653,6 +663,7 @@ public class PluginViewer extends JPanel implements Plugin {
         });
     }
 
+    @Override
     public void uninstall() {
         // Do nothing.
     }

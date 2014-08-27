@@ -42,10 +42,11 @@ import org.jivesoftware.sparkimpl.plugin.alerts.SparkToaster;
  */
 public class TaskNotification {
 
-    private SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yy");
+    private final SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yy");
 
     public TaskNotification() {
         TimerTask task = new TimerTask() {
+            @Override
             public void run() {
                 notifyUser();
             }
@@ -72,6 +73,7 @@ public class TaskNotification {
                 final JPanel titlePanel = new JPanel(new BorderLayout()) {
                     private static final long serialVersionUID = -8871487137643685431L;
 
+                    @Override
                     public void paintComponent(Graphics g) {
                         Color startColor = Color.white;
                         Color endColor = new Color(198, 211, 247);

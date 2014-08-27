@@ -33,12 +33,13 @@ import org.jivesoftware.sparkplugin.JingleStateManager.JingleRoomState;
  */
 public class JingleTabHandler extends SparkTabHandler {
 
-    private JingleStateManager manager;
+    private final JingleStateManager manager;
 
     public JingleTabHandler() {
         manager = JingleStateManager.getInstance();
     }
 
+    @Override
     public boolean isTabHandled(SparkTab tab, Component component, boolean isSelectedTab, boolean chatFrameFocused) {
         if (component instanceof ChatRoom) {
             JingleRoomState roomState = manager.getJingleRoomState((ChatRoom) component);

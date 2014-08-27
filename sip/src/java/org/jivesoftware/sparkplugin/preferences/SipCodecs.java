@@ -65,24 +65,28 @@ public class SipCodecs extends JPanel {
 
         // add actionlisteners
         btnLeft.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 left();
             }
         });
 
         btnRight.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 right();
             }
         });
 
         btnUp.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 up();
             }
         });
 
         btnDown.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 down();
             }
@@ -164,7 +168,7 @@ public class SipCodecs extends JPanel {
     }
 
     public String getSelected() {
-        Vector<String> selected = new Vector<String>();
+        Vector<String> selected = new Vector<>();
 
         for (Object s : _listSelectedModel.toArray()) {
             String ss = (String) s;
@@ -175,7 +179,7 @@ public class SipCodecs extends JPanel {
     }
 
     public String getAvailable() {
-        Vector<String> selected = new Vector<String>();
+        Vector<String> selected = new Vector<>();
         if (_listAvailableModel.toArray().length > 0) {
             for (Object s : _listAvailableModel.toArray()) {
                 String ss = (String) s;
@@ -227,7 +231,7 @@ public class SipCodecs extends JPanel {
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
-        Vector<String> removelater = new Vector<String>();
+        Vector<String> removelater = new Vector<>();
         for (int i = 0; i < selRows.length; i++) {
             String item = (String) _listSelectedModel.elementAt(selRows[i]);
 
@@ -259,7 +263,7 @@ public class SipCodecs extends JPanel {
             return;
         }
 
-        Vector<String> removelater = new Vector<String>();
+        Vector<String> removelater = new Vector<>();
         for (int i = 0; i < selRows.length; i++) {
             String item = (String) _listAvailableModel.elementAt(selRows[i]);
             _listSelectedModel.addElement(item);

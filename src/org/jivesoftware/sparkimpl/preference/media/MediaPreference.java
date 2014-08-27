@@ -26,7 +26,7 @@ import org.jivesoftware.spark.preference.Preference;
 
 public class MediaPreference implements Preference {
 
-    private JPanel panel = new JPanel();
+    private final JPanel panel = new JPanel();
     public static final String NAMESPACE = "http://www.jivesoftware.org/spark/media";
 
     @Override

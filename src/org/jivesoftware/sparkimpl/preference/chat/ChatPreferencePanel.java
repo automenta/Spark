@@ -46,25 +46,25 @@ import org.jivesoftware.sparkimpl.settings.local.SettingsManager;
 public class ChatPreferencePanel extends JPanel implements ActionListener {
 
     private static final long serialVersionUID = 8910938026549098719L;
-    private JCheckBox showTimeBox = new JCheckBox();
-    private ButtonGroup timeFormat = new ButtonGroup();
-    private JRadioButton format12 = new JRadioButton("12:00 PM", true);
-    private JRadioButton format24 = new JRadioButton("24:00", false);
-    private JCheckBox groupChatNotificationBox = new JCheckBox();
-    private JPanel generalPanel = new JPanel();
-    private JPanel chatWindowPanel = new JPanel();
+    private final JCheckBox showTimeBox = new JCheckBox();
+    private final ButtonGroup timeFormat = new ButtonGroup();
+    private final JRadioButton format12 = new JRadioButton("12:00 PM", true);
+    private final JRadioButton format24 = new JRadioButton("24:00", false);
+    private final JCheckBox groupChatNotificationBox = new JCheckBox();
+    private final JPanel generalPanel = new JPanel();
+    private final JPanel chatWindowPanel = new JPanel();
 
     // Password changing
-    private JPasswordField passwordField = new JPasswordField();
-    private JPasswordField confirmationPasswordField = new JPasswordField();
-    private JLabel passwordLabel = new JLabel();
-    private JLabel confirmationPasswordLabel = new JLabel();
-    private JCheckBox hideChatHistory = new JCheckBox();
-    private JCheckBox sortChatHistoryAscending = new JCheckBox();
-    private JCheckBox hidePrevChatHistory = new JCheckBox();
-    private JCheckBox tabsOnTopBox = new JCheckBox();
-    private JTextField chatTimeoutField = new JTextField();
-    private JCheckBox buzzBox = new JCheckBox();
+    private final JPasswordField passwordField = new JPasswordField();
+    private final JPasswordField confirmationPasswordField = new JPasswordField();
+    private final JLabel passwordLabel = new JLabel();
+    private final JLabel confirmationPasswordLabel = new JLabel();
+    private final JCheckBox hideChatHistory = new JCheckBox();
+    private final JCheckBox sortChatHistoryAscending = new JCheckBox();
+    private final JCheckBox hidePrevChatHistory = new JCheckBox();
+    private final JCheckBox tabsOnTopBox = new JCheckBox();
+    private final JTextField chatTimeoutField = new JTextField();
+    private final JCheckBox buzzBox = new JCheckBox();
 
     /**
      * Constructor invokes UI setup.
@@ -129,6 +129,7 @@ public class ChatPreferencePanel extends JPanel implements ActionListener {
         generalPanel.add(confirmationPasswordField, new GridBagConstraints(1, 2, 1, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 100, 0));
 
         showTimeBox.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if (showTimeBox.isSelected()) {
                     format12.setEnabled(true);
@@ -247,6 +248,7 @@ public class ChatPreferencePanel extends JPanel implements ActionListener {
         }
     }
 
+    @Override
     public void actionPerformed(ActionEvent actionEvent) {
         if (hideChatHistory.isSelected()) {
             int ok = JOptionPane.showConfirmDialog(this, Res.getString("message.delete.all.history"), Res.getString("title.confirmation"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);

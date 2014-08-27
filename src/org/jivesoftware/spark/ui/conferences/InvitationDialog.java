@@ -66,22 +66,22 @@ import org.jivesoftware.sparkimpl.settings.local.SettingsManager;
 final class InvitationDialog extends JPanel {
 
     private static final long serialVersionUID = -8588678602429200581L;
-    private JLabel roomsLabel = new JLabel();
+    private final JLabel roomsLabel = new JLabel();
     private JComponent roomsField = new JTextField();
     private JTextField textRoomsField;
     private JComboBox comboRoomsField;
 
-    private JLabel messageLabel = new JLabel();
-    private JTextField messageField = new JTextField();
+    private final JLabel messageLabel = new JLabel();
+    private final JTextField messageField = new JTextField();
 
-    private JLabel inviteLabel = new JLabel();
+    private final JLabel inviteLabel = new JLabel();
 
     private DefaultListModel invitedUsers = new DefaultListModel();
-    private JList invitedUserList = new JList(invitedUsers);
+    private final JList invitedUserList = new JList(invitedUsers);
 
     private JDialog dlg;
 
-    private GridBagLayout gridBagLayout1 = new GridBagLayout();
+    private final GridBagLayout gridBagLayout1 = new GridBagLayout();
 
     public InvitationDialog(boolean adhoc) {
         if (adhoc) {
@@ -127,6 +127,7 @@ final class InvitationDialog extends JPanel {
         add(browseButton, new GridBagConstraints(3, 2, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0));
 
         addJIDButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 String jid = jidField.getText();
                 String server = StringUtils.parseBareAddress(jid);
@@ -144,6 +145,7 @@ final class InvitationDialog extends JPanel {
         });
 
         browseButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 RosterPickList browser = new RosterPickList();
                 Collection<String> col = browser.showRoster(dlg);
@@ -170,12 +172,14 @@ final class InvitationDialog extends JPanel {
 
         // Add Listener to list
         invitedUserList.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseReleased(MouseEvent mouseEvent) {
                 if (mouseEvent.isPopupTrigger()) {
                     showPopup(mouseEvent);
                 }
             }
 
+            @Override
             public void mousePressed(MouseEvent mouseEvent) {
                 if (mouseEvent.isPopupTrigger()) {
                     showPopup(mouseEvent);
@@ -191,6 +195,7 @@ final class InvitationDialog extends JPanel {
         Action removeAction = new AbstractAction() {
             private static final long serialVersionUID = 7837533277115442942L;
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 invitedUsers.remove(index);
             }
@@ -296,6 +301,7 @@ final class InvitationDialog extends JPanel {
         dlg.setLocationRelativeTo(parent);
 
         PropertyChangeListener changeListener = new PropertyChangeListener() {
+            @Override
             public void propertyChange(PropertyChangeEvent e) {
                 String value = (String) pane.getValue();
                 if (Res.getString("cancel").equals(value)) {
@@ -342,7 +348,7 @@ final class InvitationDialog extends JPanel {
                         chatRoom = SparkManager.getChatManager().getGroupChat(roomName);
                     } catch (ChatNotFoundException e1) {
                         dlg.setVisible(false);
-                        final List<String> jidList = new ArrayList<String>();
+                        final List<String> jidList = new ArrayList<>();
                         Object[] jids = invitedUserList.getSelectedValues();
                         final int no = jids != null ? jids.length : 0;
                         for (int i = 0; i < no; i++) {
@@ -354,6 +360,7 @@ final class InvitationDialog extends JPanel {
                         }
 
                         SwingWorker worker = new SwingWorker() {
+                            @Override
                             public Object construct() {
                                 try {
                                     Thread.sleep(15);
@@ -363,6 +370,7 @@ final class InvitationDialog extends JPanel {
                                 return "ok";
                             }
 
+                            @Override
                             public void finished() {
                                 try {
                                     if (selectedBookmarkedConf == null) {

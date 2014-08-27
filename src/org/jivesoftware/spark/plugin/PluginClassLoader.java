@@ -68,6 +68,7 @@ public class PluginClassLoader extends URLClassLoader {
         File libDir = new File(pluginDir, "lib");
 
         File[] jars = libDir.listFiles(new FilenameFilter() {
+            @Override
             public boolean accept(File dir, String name) {
                 boolean accept = false;
                 String smallName = name.toLowerCase();

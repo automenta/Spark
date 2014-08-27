@@ -131,24 +131,30 @@ public class ContactInfoWindow extends JPanel {
 
         final ContactList contactList = SparkManager.getWorkspace().getContactList();
         contactList.addContactListListener(new ContactListListener() {
+            @Override
             public void contactItemAdded(ContactItem item) {
             }
 
+            @Override
             public void contactItemRemoved(ContactItem item) {
             }
 
+            @Override
             public void contactGroupAdded(ContactGroup group) {
             }
 
+            @Override
             public void contactGroupRemoved(ContactGroup group) {
             }
 
+            @Override
             public void contactItemClicked(ContactItem item) {
                 if (window != null) {
                     window.dispose();
                 }
             }
 
+            @Override
             public void contactItemDoubleClicked(ContactItem item) {
                 if (window != null) {
                     window.dispose();
@@ -322,6 +328,7 @@ public class ContactInfoWindow extends JPanel {
         window.dispose();
     }
 
+    @Override
     public Dimension getPreferredSize() {
         final Dimension size = super.getPreferredSize();
         size.width = 300;

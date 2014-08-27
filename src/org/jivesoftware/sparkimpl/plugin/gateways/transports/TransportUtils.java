@@ -42,7 +42,7 @@ import org.jivesoftware.sparkimpl.plugin.gateways.GatewayPrivateData;
  */
 public class TransportUtils {
 
-    private static Map<String, Transport> transports = new HashMap<String, Transport>();
+    private static final Map<String, Transport> transports = new HashMap<>();
     private static GatewayPrivateData gatewayPreferences;
 
     private TransportUtils() {
@@ -52,6 +52,7 @@ public class TransportUtils {
         PrivateDataManager.addPrivateDataProvider(GatewayPrivateData.ELEMENT, GatewayPrivateData.NAMESPACE, new GatewayPrivateData.ConferencePrivateDataProvider());
 
         final Runnable loadGateways = new Runnable() {
+            @Override
             public void run() {
                 PrivateDataManager pdm = SparkManager.getSessionManager().getPersonalDataManager();
                 gatewayPreferences = null;
@@ -160,7 +161,7 @@ public class TransportUtils {
         registration.setTo(gatewayDomain);
         registration.addExtension(new GatewayRegisterExtension());
 
-        Map<String, String> attributes = new HashMap<String, String>();
+        Map<String, String> attributes = new HashMap<>();
         if (username != null) {
             attributes.put("username", username);
         }
@@ -196,7 +197,7 @@ public class TransportUtils {
         Registration registration = new Registration();
         registration.setType(IQ.Type.SET);
         registration.setTo(gatewayDomain);
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<>();
         map.put("remove", "");
         registration.setAttributes(map);
 
@@ -215,14 +216,17 @@ public class TransportUtils {
 
     static class GatewayRegisterExtension implements PacketExtension {
 
+        @Override
         public String getElementName() {
             return "x";
         }
 
+        @Override
         public String getNamespace() {
             return "jabber:iq:gateway:register";
         }
 
+        @Override
         public String toXML() {
             StringBuilder builder = new StringBuilder();
             builder.append("<").append(getElementName()).append(" xmlns=\"").append(getNamespace()).append(

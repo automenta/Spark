@@ -28,7 +28,7 @@ import org.jivesoftware.spark.ui.ChatRoom;
  */
 public class DataManager {
 
-    private List<MetadataListener> metadataListeners = new ArrayList<MetadataListener>();
+    private final List<MetadataListener> metadataListeners = new ArrayList<>();
 
     private static DataManager singleton;
     private static final Object LOCK = new Object();

@@ -111,7 +111,7 @@ public final class ResourceUtils {
         if (index != -1) {
             text = label.substring(0, index);
             if (label.length() > index) {
-                text = text + label.substring(index + 1);
+                text += label.substring(index + 1);
                 return text;
             }
         }

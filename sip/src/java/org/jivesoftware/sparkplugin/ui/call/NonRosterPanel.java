@@ -81,19 +81,19 @@ public class NonRosterPanel extends PhonePanel {
     private EndCallButton hangUpButton;
     private RedialButton redialButton;
 
-    private SoftPhoneManager softPhone;
+    private final SoftPhoneManager softPhone;
 
-    private String CONNECTED = PhoneRes.getIString("phone.connected");
+    private final String CONNECTED = PhoneRes.getIString("phone.connected");
 
     private InterlocutorUI activeCall;
 
-    private CallManager callManager;
+    private final CallManager callManager;
 
     private boolean callWasTransferred;
 
     private boolean uiBuilt;
 
-    private JavaMixer mixer = new JavaMixer();
+    private final JavaMixer mixer = new JavaMixer();
 
     public NonRosterPanel() {
         setLayout(new GridBagLayout());
@@ -144,6 +144,7 @@ public class NonRosterPanel extends PhonePanel {
 
             private static final long serialVersionUID = 1571929852761037052L;
 
+            @Override
             public Dimension getPreferredSize() {
                 final Dimension dim = super.getPreferredSize();
                 dim.height = 100;
@@ -209,6 +210,7 @@ public class NonRosterPanel extends PhonePanel {
         return mainPanel;
     }
 
+    @Override
     public void setInterlocutorUI(final InterlocutorUI interlocutorUI) {
         this.activeCall = interlocutorUI;
 
@@ -249,18 +251,21 @@ public class NonRosterPanel extends PhonePanel {
 
     public void setupDefaults() {
         holdButton.addMouseListener(new MouseAdapter() {
+            @Override
             public void mousePressed(MouseEvent mouseEvent) {
                 toggleHold();
             }
         });
 
         muteButton.addMouseListener(new MouseAdapter() {
+            @Override
             public void mousePressed(MouseEvent mouseEvent) {
                 toggleMute();
             }
         });
 
         transferButton.addMouseListener(new MouseAdapter() {
+            @Override
             public void mousePressed(MouseEvent mouseEvent) {
                 TransferManager ui = new TransferManager();
                 final String number = ui.getNumber(SparkManager.getChatManager().getChatContainer().getChatFrame());
@@ -268,6 +273,7 @@ public class NonRosterPanel extends PhonePanel {
                     setStatus(PhoneRes.getIString("phone.transferring") + "...", blueColor);
                     historyPanel.transferring();
                     SwingWorker transferringThread = new SwingWorker() {
+                        @Override
                         public Object construct() {
                             try {
                                 Thread.sleep(2000);
@@ -277,6 +283,7 @@ public class NonRosterPanel extends PhonePanel {
                             return true;
                         }
 
+                        @Override
                         public void finished() {
                             setStatus(PhoneRes.getIString("phone.transfered"), blueColor);
                             historyPanel.transfer(number);
@@ -294,6 +301,7 @@ public class NonRosterPanel extends PhonePanel {
 
         final SoftPhoneManager manager = SoftPhoneManager.getInstance();
         hangUpButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 manager.getDefaultGuiManager().hangup(activeCall);
                 hangUpButton.setEnabled(false);
@@ -303,6 +311,7 @@ public class NonRosterPanel extends PhonePanel {
         });
 
         redialButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 manager.getDefaultGuiManager().dial(activeCall.getCall().getNumber());
                 redialButton.setVisible(false);
@@ -340,6 +349,7 @@ public class NonRosterPanel extends PhonePanel {
     /**
      * Called when the call is ended. This does basic container cleanup.
      */
+    @Override
     public void callEnded() {
         if (!callWasTransferred) {
             historyPanel.callEnded();
@@ -437,10 +447,12 @@ public class NonRosterPanel extends PhonePanel {
 
     }
 
+    @Override
     public String getTabTitle() {
         return phoneNumber;
     }
 
+    @Override
     public String getFrameTitle() {
         if (activeCall.getCallState() == Call.CONNECTED) {
             return PhoneRes.getIString("phone.onphonewith") + " " + phoneNumber;
@@ -450,26 +462,32 @@ public class NonRosterPanel extends PhonePanel {
 
     }
 
+    @Override
     public ImageIcon getTabIcon() {
         return PhoneRes.getImageIcon("RECEIVER2_IMAGE");
     }
 
+    @Override
     public JComponent getGUI() {
         return this;
     }
 
+    @Override
     public String getToolTipDescription() {
         return phoneNumber;
     }
 
+    @Override
     public boolean closing() {
         return true;
     }
 
+    @Override
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
+    @Override
     public void paintComponent(Graphics g) {
         BufferedImage cache = new BufferedImage(2, getHeight(), BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = cache.createGraphics();
@@ -483,12 +501,14 @@ public class NonRosterPanel extends PhonePanel {
         g.drawImage(cache, 0, 0, getWidth(), getHeight(), null);
     }
 
+    @Override
     public Dimension getPreferredSize() {
         Dimension dim = super.getPreferredSize();
         dim.width = 0;
         return dim;
     }
 
+    @Override
     public InterlocutorUI getActiveCall() {
         return activeCall;
     }

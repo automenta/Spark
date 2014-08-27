@@ -42,6 +42,7 @@ public class RosterTreeCellRenderer extends DefaultTreeCellRenderer {
     public RosterTreeCellRenderer() {
     }
 
+    @Override
     public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
         this.value = value;
 
@@ -98,26 +99,32 @@ public class RosterTreeCellRenderer extends DefaultTreeCellRenderer {
         return null;
     }
 
+    @Override
     public Icon getClosedIcon() {
         return getCustomIcon();
     }
 
+    @Override
     public Icon getDefaultClosedIcon() {
         return getCustomIcon();
     }
 
+    @Override
     public Icon getDefaultLeafIcon() {
         return getCustomIcon();
     }
 
+    @Override
     public Icon getDefaultOpenIcon() {
         return getCustomIcon();
     }
 
+    @Override
     public Icon getLeafIcon() {
         return getCustomIcon();
     }
 
+    @Override
     public Icon getOpenIcon() {
         return getCustomIcon();
     }

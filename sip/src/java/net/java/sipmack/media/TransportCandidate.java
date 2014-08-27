@@ -258,6 +258,7 @@ public abstract class TransportCandidate {
      *
      * @see java.lang.Object#equals(java.lang.Object)
      */
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -335,12 +336,13 @@ public abstract class TransportCandidate {
 
         public static final Protocol SSLTCP = new Protocol("ssltcp");
 
-        private String value;
+        private final String value;
 
         public Protocol(String value) {
             this.value = value;
         }
 
+        @Override
         public String toString() {
             return value;
         }
@@ -374,6 +376,7 @@ public abstract class TransportCandidate {
          *
          * @see java.lang.Object#equals(java.lang.Object)
          */
+        @Override
         public boolean equals(Object obj) {
             if (this == obj) {
                 return true;
@@ -416,12 +419,13 @@ public abstract class TransportCandidate {
 
         public static final Channel MYRTCPVOICE = new Channel("myrtcpvoice");
 
-        private String value;
+        private final String value;
 
         public Channel(String value) {
             this.value = value;
         }
 
+        @Override
         public String toString() {
             return value;
         }
@@ -449,6 +453,7 @@ public abstract class TransportCandidate {
          *
          * @see java.lang.Object#equals(java.lang.Object)
          */
+        @Override
         public boolean equals(Object obj) {
             if (this == obj) {
                 return true;

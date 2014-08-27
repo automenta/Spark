@@ -58,17 +58,17 @@ import org.jitsi.util.swing.VideoContainer;
 
 public class VideoChannel {
 
-    private MediaLocator locator;
-    private String localIpAddress;
-    private String ipAddress;
-    private int localPort;
-    private int localRTCPPort;
-    private int remotePort;
-    private int remoteRTCPPort;
-    private Format format;
+    private final MediaLocator locator;
+    private final String localIpAddress;
+    private final String ipAddress;
+    private final int localPort;
+    private final int localRTCPPort;
+    private final int remotePort;
+    private final int remoteRTCPPort;
+    private final Format format;
     private StreamConnector connector;
-    private List<SendStream> sendStreams = new ArrayList<SendStream>();
-    private List<ReceiveStreamListener> receiveListeners = new ArrayList<ReceiveStreamListener>();
+    private final List<SendStream> sendStreams = new ArrayList<>();
+    private final List<ReceiveStreamListener> receiveListeners = new ArrayList<>();
     private MediaStream mediaStream = null;
     private JFrame frame = null;
 

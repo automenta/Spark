@@ -70,14 +70,14 @@ import org.jivesoftware.sparkimpl.settings.local.SettingsManager;
 
 public class CheckUpdates {
 
-    private String mainUpdateURL;
+    private final String mainUpdateURL;
     private JProgressBar bar;
     private TitlePanel titlePanel;
     private boolean downloadComplete = false;
     private boolean cancel = false;
     public static boolean UPDATING = false;
-    private boolean sparkPluginInstalled;
-    private XStream xstream = new XStream();
+    private final boolean sparkPluginInstalled;
+    private final XStream xstream = new XStream();
     private String sizeText;
 
     public CheckUpdates() {
@@ -205,6 +205,7 @@ public class CheckUpdates {
         titlePanel = new TitlePanel(Res.getString("title.upgrading.client"), Res.getString("message.version", version.getVersion()), SparkRes.getImageIcon(SparkRes.SEND_FILE_24x24), true);
 
         final Thread thread = new Thread(new Runnable() {
+            @Override
             public void run() {
                 try {
                     InputStream stream = post.getResponseBodyAsStream();
@@ -272,6 +273,7 @@ public class CheckUpdates {
         frame.setLocationRelativeTo(SparkManager.getMainWindow());
         GraphicUtils.centerWindowOnScreen(frame);
         frame.addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent windowEvent) {
                 thread.interrupt();
                 cancel = true;
@@ -290,6 +292,7 @@ public class CheckUpdates {
         timer.scheduleAtFixedRate(new TimerTask() {
             int seconds = 1;
 
+            @Override
             public void run() {
                 ByteFormat formatter = new ByteFormat();
                 long value = bar.getValue();
@@ -417,8 +420,10 @@ public class CheckUpdates {
                     null);
             confirm.setDialogSize(400, 300);
             confirm.setConfirmListener(new ConfirmListener() {
+                @Override
                 public void yesOption() {
                     SwingWorker worker = new SwingWorker() {
+                        @Override
                         public Object construct() {
                             try {
                                 Thread.sleep(50);
@@ -428,6 +433,7 @@ public class CheckUpdates {
                             return "ok";
                         }
 
+                        @Override
                         public void finished() {
                             if (Spark.isWindows()) {
                                 downloadUpdate(fileToDownload, serverVersion);
@@ -450,6 +456,7 @@ public class CheckUpdates {
                     worker.start();
                 }
 
+                @Override
                 public void noOption() {
                     UPDATING = false;
                 }
@@ -583,6 +590,7 @@ public class CheckUpdates {
                 message, Res.getString("yes"), Res.getString("no"),
                 null);
         confirm.setConfirmListener(new ConfirmListener() {
+            @Override
             public void yesOption() {
                 try {
                     if (Spark.isWindows()) {
@@ -596,6 +604,7 @@ public class CheckUpdates {
                 SparkManager.getMainWindow().shutdown();
             }
 
+            @Override
             public void noOption() {
 
             }

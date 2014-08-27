@@ -85,27 +85,27 @@ public class VCardManager {
 
     private VCard personalVCard;
 
-    private Map<String, VCard> vcards = Collections.synchronizedMap(new HashMap<String, VCard>());
+    private final Map<String, VCard> vcards = Collections.synchronizedMap(new HashMap<String, VCard>());
 
-    private Set<String> delayedContacts = Collections.synchronizedSet(new HashSet<String>());
+    private final Set<String> delayedContacts = Collections.synchronizedSet(new HashSet<String>());
 
     private boolean vcardLoaded;
 
-    private File imageFile;
+    private final File imageFile;
 
     private final VCardEditor editor;
 
-    private File vcardStorageDirectory;
+    private final File vcardStorageDirectory;
 
     final MXParser parser;
 
-    private LinkedBlockingQueue<String> queue = new LinkedBlockingQueue<String>();
+    private final LinkedBlockingQueue<String> queue = new LinkedBlockingQueue<>();
 
-    private File contactsDir;
+    private final File contactsDir;
 
-    private List<VCardListener> listeners = new ArrayList<VCardListener>();
+    private final List<VCardListener> listeners = new ArrayList<>();
 
-    private List<String> writingQueue = Collections.synchronizedList(new ArrayList<String>());
+    private final List<String> writingQueue = Collections.synchronizedList(new ArrayList<String>());
 
     /**
      * Initialize VCardManager.
@@ -138,6 +138,7 @@ public class VCardManager {
         // Intercept all presence packets being sent and append vcard information.
         PacketFilter presenceFilter = new PacketTypeFilter(Presence.class);
         SparkManager.getConnection().addPacketInterceptor(new PacketInterceptor() {
+            @Override
             public void interceptPacket(Packet packet) {
                 Presence newPresence = (Presence) packet;
                 VCardUpdateExtension update = new VCardUpdateExtension();
@@ -178,6 +179,7 @@ public class VCardManager {
      */
     private void startQueueListener() {
         final Runnable queueListener = new Runnable() {
+            @Override
             public void run() {
                 while (true) {
                     try {
@@ -246,8 +248,10 @@ public class VCardManager {
 
         communicatorMenu.insert(editProfileMenu, 1);
         editProfileMenu.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 SwingWorker vcardLoaderWorker = new SwingWorker() {
+                    @Override
                     public Object construct() {
                         try {
                             personalVCard.load(SparkManager.getConnection());
@@ -257,6 +261,7 @@ public class VCardManager {
                         return true;
                     }
 
+                    @Override
                     public void finished() {
                         editor.editProfile(personalVCard, SparkManager.getWorkspace());
                     }
@@ -269,6 +274,7 @@ public class VCardManager {
         ResourceUtils.resButton(viewProfileMenu, Res.getString("menuitem.lookup.profile"));
         contactsMenu.insert(viewProfileMenu, size > 0 ? size - 1 : 0);
         viewProfileMenu.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 String jidToView = JOptionPane.showInputDialog(SparkManager.getMainWindow(), Res.getString("message.enter.jabber.id") + ":", Res.getString("title.lookup.profile"), JOptionPane.QUESTION_MESSAGE);
                 if (ModelUtil.hasLength(jidToView) && jidToView.contains("@") && ModelUtil.hasLength(StringUtils.parseServer(jidToView))) {
@@ -290,11 +296,13 @@ public class VCardManager {
         final SwingWorker vcardThread = new SwingWorker() {
             VCard vcard = new VCard();
 
+            @Override
             public Object construct() {
                 vcard = getVCard(jid);
                 return vcard;
             }
 
+            @Override
             public void finished() {
                 if (vcard == null) {
                     // Show vcard not found
@@ -319,11 +327,13 @@ public class VCardManager {
         final SwingWorker vcardThread = new SwingWorker() {
             VCard vcard = new VCard();
 
+            @Override
             public Object construct() {
                 vcard = getVCard(jid);
                 return vcard;
             }
 
+            @Override
             public void finished() {
                 if (vcard.getError() != null || vcard == null) {
                     // Show vcard not found

@@ -54,16 +54,16 @@ public class ConversationInvitation extends JPanel implements ContainerComponent
 
     private static final long serialVersionUID = -5830187619047598274L;
 
-    private JButton joinButton;
+    private final JButton joinButton;
 
-    private String roomName;
-    private String password;
-    private String inviter;
+    private final String roomName;
+    private final String password;
+    private final String inviter;
 
-    private String invitationDateFormat = ((SimpleDateFormat) SimpleDateFormat.getTimeInstance(SimpleDateFormat.MEDIUM)).toPattern();
-    private String tabTitle;
-    private String frameTitle;
-    private String descriptionText;
+    private final String invitationDateFormat = ((SimpleDateFormat) SimpleDateFormat.getTimeInstance(SimpleDateFormat.MEDIUM)).toPattern();
+    private final String tabTitle;
+    private final String frameTitle;
+    private final String descriptionText;
 
     /**
      * Builds a new Conference Invitation UI.
@@ -143,6 +143,7 @@ public class ConversationInvitation extends JPanel implements ContainerComponent
         chatManager.getChatContainer().addContainerComponent(this);
     }
 
+    @Override
     public void actionPerformed(ActionEvent actionEvent) {
         final Object obj = actionEvent.getSource();
         if (obj == joinButton) {
@@ -157,26 +158,32 @@ public class ConversationInvitation extends JPanel implements ContainerComponent
         chatManager.getChatContainer().closeTab(this);
     }
 
+    @Override
     public String getTabTitle() {
         return tabTitle;
     }
 
+    @Override
     public String getFrameTitle() {
         return frameTitle;
     }
 
+    @Override
     public ImageIcon getTabIcon() {
         return SparkRes.getImageIcon(SparkRes.CONFERENCE_IMAGE_16x16);
     }
 
+    @Override
     public JComponent getGUI() {
         return this;
     }
 
+    @Override
     public String getToolTipDescription() {
         return descriptionText;
     }
 
+    @Override
     public boolean closing() {
         return true;
     }

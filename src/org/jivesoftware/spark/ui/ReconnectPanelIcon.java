@@ -41,8 +41,8 @@ import org.jivesoftware.spark.util.TaskEngine;
 public class ReconnectPanelIcon implements ConnectionListener {
 
     private static final long serialVersionUID = 437696141257704105L;
-    private RolloverButton _button;
-    private JPanel _commandpanel;
+    private final RolloverButton _button;
+    private final JPanel _commandpanel;
     private boolean _closedOnError;
 
     /**
@@ -57,6 +57,7 @@ public class ReconnectPanelIcon implements ConnectionListener {
         _button = new RolloverButton(SparkRes.getImageIcon(SparkRes.BUSY_IMAGE));
 
         _button.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 startReconnecting();
             }
@@ -77,6 +78,7 @@ public class ReconnectPanelIcon implements ConnectionListener {
     public void startReconnecting() {
         if (!SparkManager.getConnection().isConnected()) {
             TimerTask task = new SwingTimerTask() {
+                @Override
                 public void doRun() {
                     reconnect();
                 }

@@ -64,6 +64,7 @@ public class Timer {
     //TODO REMOVE
     @SuppressWarnings("unused")
     private Object threadReaper = new Object() {
+        @Override
         protected void finalize() throws Throwable {
             synchronized (queue) {
                 thread.newTasksMayBeScheduled = false;
@@ -374,12 +375,13 @@ class TimerThread extends Thread {
      * to the Timer so the reference graph remains acyclic. Otherwise, the Timer
      * would never be garbage-collected and this thread would never go away.
      */
-    private TaskQueue queue;
+    private final TaskQueue queue;
 
     TimerThread(TaskQueue queue) {
         this.queue = queue;
     }
 
+    @Override
     public void run() {
         try {
             mainLoop();

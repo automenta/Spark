@@ -49,11 +49,11 @@ public class StringUtils {
     private static final char[] GT_ENCODE = "&gt;".toCharArray();
 
     // patterns for the email address checks
-    private static Pattern basicAddressPattern;
-    private static Pattern validUserPattern;
-    private static Pattern domainPattern;
-    private static Pattern ipDomainPattern;
-    private static Pattern tldPattern;
+    private static final Pattern basicAddressPattern;
+    private static final Pattern validUserPattern;
+    private static final Pattern domainPattern;
+    private static final Pattern ipDomainPattern;
+    private static final Pattern tldPattern;
 
     // prepare the patterns
     static {
@@ -830,7 +830,7 @@ public class StringUtils {
             return new String[0];
         }
 
-        ArrayList<String> wordList = new ArrayList<String>();
+        ArrayList<String> wordList = new ArrayList<>();
         BreakIterator boundary = BreakIterator.getWordInstance();
         boundary.setText(text);
         int start = 0;
@@ -859,7 +859,7 @@ public class StringUtils {
      * Random class is not considered to be cryptographically secure, so only
      * use these random Strings for low to medium security applications.
      */
-    private static Random randGen = new Random();
+    private static final Random randGen = new Random();
 
     /**
      * Array of numbers and letters of mixed case. Numbers appear in the list
@@ -867,7 +867,7 @@ public class StringUtils {
      * We can use the array to get a random number or letter by picking a random
      * array index.
      */
-    private static char[] numbersAndLetters = ("0123456789abcdefghijklmnopqrstuvwxyz"
+    private static final char[] numbersAndLetters = ("0123456789abcdefghijklmnopqrstuvwxyz"
             + "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ").toCharArray();
 
     /**
@@ -1158,7 +1158,7 @@ public class StringUtils {
                     // if the last character is a space, replace it with a \n
                     if (end != BreakIterator.DONE && end == limit + 1) {
                         buf.replace(lineStart + end, lineStart + end + 1, "\n");
-                        lineStart = lineStart + end;
+                        lineStart += end;
                     } // otherwise, just insert a \n
                     else if (end != BreakIterator.DONE && end != 0) {
                         buf.insert(lineStart + end, '\n');

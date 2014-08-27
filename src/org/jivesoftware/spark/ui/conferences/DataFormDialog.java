@@ -65,7 +65,7 @@ import org.jivesoftware.spark.util.log.Log;
 public class DataFormDialog extends JPanel {
 
     private static final long serialVersionUID = -1536217028590811636L;
-    private final Map<String, JComponent> valueMap = new HashMap<String, JComponent>();
+    private final Map<String, JComponent> valueMap = new HashMap<>();
     private int row = 0;
     JDialog dialog = null;
 
@@ -95,7 +95,7 @@ public class DataFormDialog extends JPanel {
                 String type = field.getType();
 
                 Iterator<?> iter = field.getValues();
-                List<Object> valueList = new ArrayList<Object>();
+                List<Object> valueList = new ArrayList<>();
                 while (iter.hasNext()) {
                     valueList.add(iter.next());
                 }
@@ -152,7 +152,7 @@ public class DataFormDialog extends JPanel {
                         String optionLabel = null;
                         String optionValue = null;
                         Iterator<?> i = field.getValues();
-                        List<String> values = new ArrayList<String>();
+                        List<String> values = new ArrayList<>();
                         while (i.hasNext()) {
                             values.add((String) i.next());
                         }   while (options.hasNext()) {
@@ -171,6 +171,7 @@ public class DataFormDialog extends JPanel {
         JButton button = new JButton();
         ResourceUtils.resButton(button, Res.getString("button.update"));
         button.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 dialog.dispose();
                 // Now submit all information
@@ -193,6 +194,7 @@ public class DataFormDialog extends JPanel {
         JButton cancelButton = new JButton();
         ResourceUtils.resButton(cancelButton, Res.getString("button.cancel"));
         cancelButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 dialog.dispose();
             }
@@ -217,7 +219,7 @@ public class DataFormDialog extends JPanel {
                 boolean isSelected = ((AbstractButton) o).isSelected();
                 submitForm.setAnswer(answer, isSelected);
             } else if (o instanceof JTextArea) {
-                List<String> list = new ArrayList<String>();
+                List<String> list = new ArrayList<>();
                 String value = ((JTextComponent) o).getText();
                 StringTokenizer tokenizer = new StringTokenizer(value, ", ", false);
                 while (tokenizer.hasMoreTokens()) {
@@ -233,7 +235,7 @@ public class DataFormDialog extends JPanel {
                 }
             } else if (o instanceof JComboBox) {
                 String value = (String) ((JComboBox) o).getSelectedItem();
-                List<String> list = new ArrayList<String>();
+                List<String> list = new ArrayList<>();
                 list.add(value);
                 if (list.size() > 0) {
                     submitForm.setAnswer(answer, list);

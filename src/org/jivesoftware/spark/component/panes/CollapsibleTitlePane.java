@@ -47,10 +47,10 @@ import org.jivesoftware.spark.util.log.Log;
 public class CollapsibleTitlePane extends BaseCollapsibleTitlePane {
 
     private static final long serialVersionUID = 2528585101535037612L;
-    private JLabel titleLabel;
-    private JLabel iconLabel;
+    private final JLabel titleLabel;
+    private final JLabel iconLabel;
 
-    private JLabel preIconLabel;
+    private final JLabel preIconLabel;
 
     private boolean collapsed;
 
@@ -93,10 +93,12 @@ public class CollapsibleTitlePane extends BaseCollapsibleTitlePane {
         titleLabel.setFont(titleFont);
 
         addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseEntered(MouseEvent e) {
                 setCursor(GraphicUtils.HAND_CURSOR);
             }
 
+            @Override
             public void mouseExited(MouseEvent e) {
                 setCursor(GraphicUtils.DEFAULT_CURSOR);
             }
@@ -121,18 +123,22 @@ public class CollapsibleTitlePane extends BaseCollapsibleTitlePane {
         endColor = color;
     }
 
+    @Override
     public void setIcon(Icon icon) {
         titleLabel.setIcon(icon);
     }
 
+    @Override
     public void setTitle(String title) {
         titleLabel.setText(title);
     }
 
+    @Override
     public boolean isCollapsed() {
         return collapsed;
     }
 
+    @Override
     public void setCollapsed(boolean collapsed) {
         this.collapsed = collapsed;
 
@@ -163,6 +169,7 @@ public class CollapsibleTitlePane extends BaseCollapsibleTitlePane {
         return titleColor;
     }
 
+    @Override
     public void paintComponent(Graphics g) {
         if (backgroundImage != null) {
             double scaleX = getWidth() / (double) backgroundImage.getWidth(null);

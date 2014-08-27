@@ -59,8 +59,8 @@ import org.jivesoftware.sparkimpl.settings.local.SettingsManager;
  */
 public class JmfMediaManager {
 
-    private List<AudioFormat> audioFormats = new ArrayList<AudioFormat>();
-    private List<VideoFormat> videoFormats = new ArrayList<VideoFormat>();
+    private final List<AudioFormat> audioFormats = new ArrayList<>();
+    private final List<VideoFormat> videoFormats = new ArrayList<>();
     protected SdpFactory sdpFactory = SdpFactory.getInstance();
 
     /**
@@ -165,11 +165,11 @@ public class JmfMediaManager {
         int mediaPort = -1;
         boolean atLeastOneTransmitterStarted = false;
         //ArrayList mediaTypes = new ArrayList();
-        ArrayList<String> remoteAddresses = new ArrayList<String>();
+        ArrayList<String> remoteAddresses = new ArrayList<>();
         // A hashtable that indicates what addresses are different media
         // types
         // coming from.
-        Hashtable<String, String> remoteTransmisionDetails = new Hashtable<String, String>();
+        Hashtable<String, String> remoteTransmisionDetails = new Hashtable<>();
         // by default everything is supposed to be coming from the address
         // specified in the session (global) connection parameter so store
         // this address for now.
@@ -177,10 +177,10 @@ public class JmfMediaManager {
             remoteTransmisionDetails.put("audio", sessionRemoteAddress);
             remoteTransmisionDetails.put("video", sessionRemoteAddress);
         }
-        ArrayList<Integer> ports = new ArrayList<Integer>();
+        ArrayList<Integer> ports = new ArrayList<>();
         ArrayList<ArrayList<MediaFormat>> formatSets = new ArrayList<ArrayList<MediaFormat>>();
-        ArrayList<String> contents = new ArrayList<String>();
-        ArrayList<Integer> localPorts = new ArrayList<Integer>();
+        ArrayList<String> contents = new ArrayList<>();
+        ArrayList<Integer> localPorts = new ArrayList<>();
         for (int i = 0; i < mediaDescriptions.size(); i++) {
             MediaDescription mediaDescription = (MediaDescription) mediaDescriptions
                     .get(i);
@@ -329,11 +329,11 @@ public class JmfMediaManager {
         int mediaPort = -1;
         boolean atLeastOneTransmitterStarted = false;
         //ArrayList mediaTypes = new ArrayList();
-        ArrayList<String> remoteAddresses = new ArrayList<String>();
+        ArrayList<String> remoteAddresses = new ArrayList<>();
         // A hashtable that indicates what addresses are different media
         // types
         // coming from.
-        Hashtable<String, String> remoteTransmisionDetails = new Hashtable<String, String>();
+        Hashtable<String, String> remoteTransmisionDetails = new Hashtable<>();
         // by default everything is supposed to be coming from the address
         // specified in the session (global) connection parameter so store
         // this address for now.
@@ -341,10 +341,10 @@ public class JmfMediaManager {
             remoteTransmisionDetails.put("audio", sessionRemoteAddress);
             remoteTransmisionDetails.put("video", sessionRemoteAddress);
         }
-        ArrayList<Integer> ports = new ArrayList<Integer>();
+        ArrayList<Integer> ports = new ArrayList<>();
         ArrayList<ArrayList<MediaFormat>> formatSets = new ArrayList<ArrayList<MediaFormat>>();
-        ArrayList<String> contents = new ArrayList<String>();
-        ArrayList<Integer> localPorts = new ArrayList<Integer>();
+        ArrayList<String> contents = new ArrayList<>();
+        ArrayList<Integer> localPorts = new ArrayList<>();
         for (int i = 0; i < mediaDescriptions.size(); i++) {
             MediaDescription mediaDescription = (MediaDescription) mediaDescriptions
                     .get(i);
@@ -748,7 +748,7 @@ public class JmfMediaManager {
     }
 
     private List<AudioFormat> getSelectedFormats() {
-        List<AudioFormat> format = new ArrayList<AudioFormat>();
+        List<AudioFormat> format = new ArrayList<>();
         List<AudioFormat> all = getAudioFormats();
         LocalPreferences localPreferences = SettingsManager.getLocalPreferences();
         // gets the selected order from preferences

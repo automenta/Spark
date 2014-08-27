@@ -75,6 +75,7 @@ public class RoundLabel extends JPanel {
         setOpaque(false);
     }
 
+    @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 

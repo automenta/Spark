@@ -23,7 +23,7 @@ import org.jivesoftware.smackx.packet.PrivateData;
 
 public class SettingsData implements PrivateData {
 
-    private Map<String, String> settingsMap;
+    private final Map<String, String> settingsMap;
 
     public SettingsData(Map<String, String> map) {
         settingsMap = map;
@@ -33,14 +33,17 @@ public class SettingsData implements PrivateData {
         return settingsMap;
     }
 
+    @Override
     public String getElementName() {
         return "personal_settings";
     }
 
+    @Override
     public String getNamespace() {
         return "jive:user:settings";
     }
 
+    @Override
     public String toXML() {
         StringBuilder buf = new StringBuilder();
         buf.append("<").append(getElementName()).append(" xmlns=\"").append(getNamespace()).append("\">");

@@ -46,16 +46,19 @@ import org.jivesoftware.sparkimpl.profile.VCardManager;
 
 public class GooglePlugin implements Plugin {
 
+    @Override
     public void initialize() {
         // Add "Find Reference to."
         ContactList contactList = SparkManager.getWorkspace().getContactList();
         contactList.addContextMenuListener(new ContextMenuListener() {
+            @Override
             public void poppingUp(Object object, JPopupMenu popup) {
                 if (object instanceof ContactItem) {
                     final ContactItem item = (ContactItem) object;
                     final Action findReferenceAction = new AbstractAction() {
                         private static final long serialVersionUID = 6791538529104540239L;
 
+                        @Override
                         public void actionPerformed(ActionEvent actionEvent) {
                             findReferences(item);
                         }
@@ -69,10 +72,12 @@ public class GooglePlugin implements Plugin {
                 }
             }
 
+            @Override
             public void poppingDown(JPopupMenu popup) {
 
             }
 
+            @Override
             public boolean handleDefaultAction(MouseEvent e) {
                 return false;
             }
@@ -81,6 +86,7 @@ public class GooglePlugin implements Plugin {
         SparkManager.getSearchManager().addSearchService(new GoogleSearchable());
 
         SparkManager.getChatManager().addChatRoomListener(new ChatRoomListenerAdapter() {
+            @Override
             public void chatRoomOpened(final ChatRoom room) {
                 ClassLoader cl = getClass().getClassLoader();
                 URL url = cl.getResource("images/google.gif");
@@ -91,6 +97,7 @@ public class GooglePlugin implements Plugin {
                 buttonPanel.add(searchButton);
 
                 searchButton.addActionListener(new ActionListener() {
+                    @Override
                     public void actionPerformed(ActionEvent actionEvent) {
                         String text = room.getChatInputEditor().getSelectedText();
                         if (text == null) {
@@ -127,10 +134,12 @@ public class GooglePlugin implements Plugin {
                 });
 
                 room.getTranscriptWindow().addContextMenuListener(new ContextMenuListener() {
+                    @Override
                     public void poppingUp(Object object, JPopupMenu popup) {
                         final Action searchConversationAction = new AbstractAction() {
                             private static final long serialVersionUID = -5696144571481817379L;
 
+                            @Override
                             public void actionPerformed(ActionEvent actionEvent) {
                                 searchConversation(room);
                             }
@@ -139,6 +148,7 @@ public class GooglePlugin implements Plugin {
                         final Action searchAction = new AbstractAction() {
                             private static final long serialVersionUID = 5437636852619141730L;
 
+                            @Override
                             public void actionPerformed(ActionEvent actionEvent) {
                                 searchText(room.getTranscriptWindow().getSelectedText());
                             }
@@ -155,10 +165,12 @@ public class GooglePlugin implements Plugin {
                         }
                     }
 
+                    @Override
                     public void poppingDown(JPopupMenu popup) {
 
                     }
 
+                    @Override
                     public boolean handleDefaultAction(MouseEvent e) {
                         return false;
                     }
@@ -166,6 +178,7 @@ public class GooglePlugin implements Plugin {
 
             }
 
+            @Override
             public void chatRoomClosed(ChatRoom room) {
             }
         });
@@ -217,14 +230,17 @@ public class GooglePlugin implements Plugin {
         search.search(text, true);
     }
 
+    @Override
     public void shutdown() {
 
     }
 
+    @Override
     public boolean canShutDown() {
         return false;
     }
 
+    @Override
     public void uninstall() {
 
     }

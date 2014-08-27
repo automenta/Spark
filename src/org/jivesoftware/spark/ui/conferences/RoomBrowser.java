@@ -47,18 +47,18 @@ import org.jivesoftware.spark.util.log.Log;
 public class RoomBrowser extends JPanel {
 
     private static final long serialVersionUID = 8820670697089268423L;
-    private JLabel descriptionLabel = new JLabel();
-    private JLabel subjectLabel = new JLabel();
-    private JLabel occupantsLabel = new JLabel();
-    private JLabel roomNameLabel = new JLabel();
+    private final JLabel descriptionLabel = new JLabel();
+    private final JLabel subjectLabel = new JLabel();
+    private final JLabel occupantsLabel = new JLabel();
+    private final JLabel roomNameLabel = new JLabel();
 
-    private JLabel descriptionValue = new JLabel();
-    private JLabel subjectValue = new JLabel();
-    private JLabel occupantsValue = new JLabel();
-    private JLabel roomNameValue = new JLabel();
+    private final JLabel descriptionValue = new JLabel();
+    private final JLabel subjectValue = new JLabel();
+    private final JLabel occupantsValue = new JLabel();
+    private final JLabel roomNameValue = new JLabel();
 
-    private JiveTreeNode rootNode;
-    private Tree tree;
+    private final JiveTreeNode rootNode;
+    private final Tree tree;
 
     public RoomBrowser() {
         descriptionLabel.setText(Res.getString("description") + ":");
@@ -94,6 +94,7 @@ public class RoomBrowser extends JPanel {
             RoomInfo roomInfo = null;
             DiscoverItems items = null;
 
+            @Override
             public Object construct() {
                 try {
                     roomInfo = MultiUserChat.getRoomInfo(SparkManager.getConnection(), roomJID);
@@ -106,6 +107,7 @@ public class RoomBrowser extends JPanel {
                 return "ok";
             }
 
+            @Override
             public void finished() {
                 setupRoomInformationUI(roomJID, roomInfo, items);
             }
@@ -169,6 +171,7 @@ public class RoomBrowser extends JPanel {
         dlg.setLocationRelativeTo(SparkManager.getMainWindow());
 
         PropertyChangeListener changeListener = new PropertyChangeListener() {
+            @Override
             public void propertyChange(PropertyChangeEvent e) {
                 String value = (String) pane.getValue();
                 if (Res.getString("close").equals(value)) {

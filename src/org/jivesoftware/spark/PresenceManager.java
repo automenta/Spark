@@ -36,7 +36,7 @@ import org.jivesoftware.smackx.packet.MUCUser;
  */
 public class PresenceManager {
 
-    private static final List<Presence> PRESENCES = new ArrayList<Presence>();
+    private static final List<Presence> PRESENCES = new ArrayList<>();
 
     static {
         // Add Available Presence

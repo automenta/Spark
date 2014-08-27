@@ -71,8 +71,10 @@ public class SoftPhonePlugin implements Plugin, SoftPhoneListener {
      * Called after Spark is loaded to initialize the new plugin. Load
      * Configuration from VCard and Instantiate a SoftPhoneManager
      */
+    @Override
     public void initialize() {
         final SwingWorker initializeThread = new SwingWorker() {
+            @Override
             public Object construct() {
                 PhoneManager.getInstance();
                 softPhone = SoftPhoneManager.getInstance();
@@ -80,6 +82,7 @@ public class SoftPhonePlugin implements Plugin, SoftPhoneListener {
                 return true;
             }
 
+            @Override
             public void finished() {
                 if (softPhone.isPhoneEnabled()) {
                     // Add TabHandler
@@ -110,20 +113,25 @@ public class SoftPhonePlugin implements Plugin, SoftPhoneListener {
 
         SparkManager.getConnection().addConnectionListener(new ConnectionListener() {
 
+            @Override
             public void connectionClosed() {
                 //softPhone.handleUnregisterRequest();
             }
 
+            @Override
             public void connectionClosedOnError(Exception exception) {
                 softPhone.handleUnregisterRequest();
             }
 
+            @Override
             public void reconnectingIn(int i) {
             }
 
+            @Override
             public void reconnectionSuccessful() {
                 // Wait a bit before registering
                 TimerTask registerTask = new TimerTask() {
+                    @Override
                     public void run() {
                         softPhone.register();
                     }
@@ -132,6 +140,7 @@ public class SoftPhonePlugin implements Plugin, SoftPhoneListener {
                 TaskEngine.getInstance().schedule(registerTask, 15000);
             }
 
+            @Override
             public void reconnectionFailed(Exception exception) {
 
             }
@@ -143,6 +152,7 @@ public class SoftPhonePlugin implements Plugin, SoftPhoneListener {
      * Called when Spark is shutting down to allow for persistence of
      * information or releasing of resources. Unregister from SIP Server
      */
+    @Override
     public void shutdown() {
         if (softPhone.isPhoneEnabled()) {
             softPhone.getLogManager().commit();
@@ -157,10 +167,12 @@ public class SoftPhonePlugin implements Plugin, SoftPhoneListener {
      *
      * @return true if Spark can shutdown on users request.
      */
+    @Override
     public boolean canShutDown() {
         return true;
     }
 
+    @Override
     public void uninstall() {
     }
 
@@ -169,6 +181,7 @@ public class SoftPhonePlugin implements Plugin, SoftPhoneListener {
      *
      * @param evt MessageEvent
      */
+    @Override
     public void messageReceived(MessageEvent evt) {
         if (evt.getSource() instanceof Request) {
             Request request = (Request) evt.getSource();
@@ -185,6 +198,7 @@ public class SoftPhonePlugin implements Plugin, SoftPhoneListener {
      *
      * @param evt UnknownMessageEvent
      */
+    @Override
     public void receivedUnknownMessage(UnknownMessageEvent evt) {
 
     }
@@ -194,6 +208,7 @@ public class SoftPhonePlugin implements Plugin, SoftPhoneListener {
      *
      * @param evt RegisterEvent
      */
+    @Override
     public void registerStatusChanged(RegisterEvent evt) {
         if (evt.getStatus() == SipRegisterStatus.Registered) {
             dialControl.setVisible(true);
@@ -224,6 +239,7 @@ public class SoftPhonePlugin implements Plugin, SoftPhoneListener {
     /**
      * Perform some GUI Changes when call State Changes
      */
+    @Override
     public void callStateChanged(CallStateEvent evt) {
 
     }
@@ -233,6 +249,7 @@ public class SoftPhonePlugin implements Plugin, SoftPhoneListener {
      *
      * @param evt the rejection Event
      */
+    @Override
     public void callRejectedRemotely(CallRejectedEvent evt) {
         Call call = evt.getCall();
 

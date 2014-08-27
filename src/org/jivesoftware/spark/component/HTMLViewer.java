@@ -36,7 +36,7 @@ import org.jivesoftware.spark.util.log.Log;
 public class HTMLViewer extends JPanel {
 
     private static final long serialVersionUID = 4938398130343609958L;
-    private JEditorPane browser;
+    private final JEditorPane browser;
 
     /**
      * Creates a new CoBrowser object to be used with the specifid ChatRoom.
@@ -92,6 +92,7 @@ public class HTMLViewer extends JPanel {
      *
      * @return the preferred dimension
      */
+    @Override
     public Dimension getPreferredSize() {
         final Dimension size = super.getPreferredSize();
         size.width = 0;

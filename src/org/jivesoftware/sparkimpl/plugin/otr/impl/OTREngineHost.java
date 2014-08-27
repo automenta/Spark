@@ -20,8 +20,8 @@ import org.jivesoftware.sparkimpl.plugin.otr.OTRManager;
  */
 public class OTREngineHost implements OtrEngineHost {
 
-    private ChatRoomImpl _chatRoom;
-    private OtrPolicy _policy;
+    private final ChatRoomImpl _chatRoom;
+    private final OtrPolicy _policy;
 
     public OTREngineHost(OtrPolicy policy, ChatRoomImpl chatroom) {
         _policy = policy;

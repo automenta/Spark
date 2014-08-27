@@ -14,7 +14,7 @@ import org.jivesoftware.spark.util.log.Log;
 
 public class OTRResources {
 
-    private static PropertyResourceBundle prb;
+    private static final PropertyResourceBundle prb;
 
     static ClassLoader cl = OTRResources.class.getClassLoader();
 

@@ -106,6 +106,7 @@ public class TranscriptWindow extends ChatArea implements ContextMenuListener {
         getActionMap().put("copy", new AbstractAction("copy") {
             private static final long serialVersionUID = 1797491846835591379L;
 
+            @Override
             public void actionPerformed(ActionEvent evt) {
                 StringSelection stringSelection = new StringSelection(getSelectedText());
                 Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);
@@ -482,10 +483,12 @@ public class TranscriptWindow extends ChatArea implements ContextMenuListener {
         getActionMap().remove("copy");
     }
 
+    @Override
     public void setFont(Font font) {
         this.defaultFont = font;
     }
 
+    @Override
     public Font getFont() {
         return defaultFont;
     }
@@ -496,10 +499,12 @@ public class TranscriptWindow extends ChatArea implements ContextMenuListener {
      * @param object the TransferWindow
      * @param popup the popup menu to add to.
      */
+    @Override
     public void poppingUp(final Object object, JPopupMenu popup) {
         Action printAction = new AbstractAction() {
             private static final long serialVersionUID = -244227593637660347L;
 
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 SparkManager.printChatTranscript((TranscriptWindow) object);
             }
@@ -508,6 +513,7 @@ public class TranscriptWindow extends ChatArea implements ContextMenuListener {
         Action clearAction = new AbstractAction() {
             private static final long serialVersionUID = -5664307353522844588L;
 
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
 
                 String user = null;
@@ -573,10 +579,12 @@ public class TranscriptWindow extends ChatArea implements ContextMenuListener {
         popup.add(viewLogAction);
     }
 
+    @Override
     public void poppingDown(JPopupMenu popup) {
 
     }
 
+    @Override
     public boolean handleDefaultAction(MouseEvent e) {
         return false;
     }

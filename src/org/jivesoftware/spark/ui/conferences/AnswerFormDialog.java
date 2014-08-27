@@ -60,7 +60,7 @@ public class AnswerFormDialog {
     private JPanel centerpanel;
     private JPanel bottompanel;
 
-    HashMap<String, JComponent> _map = new HashMap<String, JComponent>();
+    HashMap<String, JComponent> _map = new HashMap<>();
 
     /**
      * Creates an Answer Form Dialog from the specified Form
@@ -107,6 +107,7 @@ public class AnswerFormDialog {
         JButton updatebutton = new JButton();
         ResourceUtils.resButton(updatebutton, Res.getString("apply"));
         updatebutton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 dialog.dispose();
                 sendAnswerForm(form.createAnswerForm(), chat);

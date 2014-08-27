@@ -62,6 +62,7 @@ public class ByteFormat extends Format {
      * @return A formatted string representing the given bytes in more
      * human-readable form.
      */
+    @Override
     public StringBuffer format(Object obj, StringBuffer buf, FieldPosition pos) {
         if (obj instanceof Long) {
             long numBytes = (Long) obj;
@@ -89,6 +90,7 @@ public class ByteFormat extends Format {
      * @param pos Position to parse from.
      * @return returns null in this implementation.
      */
+    @Override
     public Object parseObject(String source, ParsePosition pos) {
         return null;
     }

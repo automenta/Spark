@@ -49,7 +49,7 @@ public class UserIdlePlugin extends TimerTask implements Plugin {
     private double y = 0;
     private boolean hasChanged = false;
     private int counter = 0;
-    private LocalPreferences pref = SettingsManager.getLocalPreferences();
+    private final LocalPreferences pref = SettingsManager.getLocalPreferences();
     private Presence latestPresence;
     private KeyHook keyHook;
 
@@ -205,6 +205,7 @@ public class UserIdlePlugin extends TimerTask implements Plugin {
                     final User32 lib = User32.INSTANCE;
                     HMODULE hMod = Kernel32.INSTANCE.GetModuleHandle(null);
                     keyboardHook = new LowLevelKeyboardProc() {
+                        @Override
                         public LRESULT callback(int nCode, WPARAM wParam,
                                 KBDLLHOOKSTRUCT info) {
                             if (nCode >= 0) {

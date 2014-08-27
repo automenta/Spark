@@ -39,6 +39,7 @@ public class SoundPlugin implements Plugin, MessageListener, ChatRoomListener {
 
     SoundPreference soundPreference;
 
+    @Override
     public void initialize() {
         soundPreference = new SoundPreference();
         SparkManager.getPreferenceManager().addPreference(soundPreference);
@@ -46,6 +47,7 @@ public class SoundPlugin implements Plugin, MessageListener, ChatRoomListener {
         SparkManager.getChatManager().addChatRoomListener(this);
 
         SparkManager.getConnection().addPacketListener(new PacketListener() {
+            @Override
             public void processPacket(Packet packet) {
                 Presence presence = (Presence) packet;
                 if (!presence.isAvailable()) {
@@ -63,6 +65,7 @@ public class SoundPlugin implements Plugin, MessageListener, ChatRoomListener {
 
         // Load sound preferences.
         final Runnable soundLoader = new Runnable() {
+            @Override
             public void run() {
                 soundPreference.loadFromFile();
             }
@@ -71,6 +74,7 @@ public class SoundPlugin implements Plugin, MessageListener, ChatRoomListener {
         TaskEngine.getInstance().submit(soundLoader);
 
         MultiUserChat.addInvitationListener(SparkManager.getConnection(), new InvitationListener() {
+            @Override
             public void invitationReceived(Connection xmppConnection, String string, String string1, String string2, String string3, Message message) {
                 SoundPreferences preferences = soundPreference.getPreferences();
                 if (preferences != null && preferences.playIncomingInvitationSound()) {
@@ -83,6 +87,7 @@ public class SoundPlugin implements Plugin, MessageListener, ChatRoomListener {
 
     }
 
+    @Override
     public void messageReceived(ChatRoom room, Message message) {
 
         // Do not play sounds on history updates.
@@ -98,6 +103,7 @@ public class SoundPlugin implements Plugin, MessageListener, ChatRoomListener {
         }
     }
 
+    @Override
     public void messageSent(ChatRoom room, Message message) {
         SoundPreferences preferences = soundPreference.getPreferences();
         if (preferences.isPlayOutgoingSound()) {
@@ -106,38 +112,47 @@ public class SoundPlugin implements Plugin, MessageListener, ChatRoomListener {
         }
     }
 
+    @Override
     public void shutdown() {
 
     }
 
+    @Override
     public boolean canShutDown() {
         return false;
     }
 
+    @Override
     public void chatRoomOpened(ChatRoom room) {
         room.addMessageListener(this);
     }
 
+    @Override
     public void chatRoomLeft(ChatRoom room) {
 
     }
 
+    @Override
     public void chatRoomClosed(ChatRoom room) {
         room.removeMessageListener(this);
     }
 
+    @Override
     public void chatRoomActivated(ChatRoom room) {
 
     }
 
+    @Override
     public void userHasJoined(ChatRoom room, String userid) {
 
     }
 
+    @Override
     public void userHasLeft(ChatRoom room, String userid) {
 
     }
 
+    @Override
     public void uninstall() {
         // Do nothing.
     }

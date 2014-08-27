@@ -57,9 +57,9 @@ public class IncomingCall implements JingleSessionListener, ChatRoomClosingListe
 
     private ChatRoom chatRoom;
 
-    private Map<ChatRoom, JingleRoom> callMap = new HashMap<ChatRoom, JingleRoom>();
+    private Map<ChatRoom, JingleRoom> callMap = new HashMap<>();
 
-    private GenericNotification notificationUI;
+    private final GenericNotification notificationUI;
 
     private JingleSession session;
 
@@ -103,6 +103,7 @@ public class IncomingCall implements JingleSessionListener, ChatRoomClosingListe
      */
     private void showCallAnsweredState() {
         SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 final SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy h:mm a");
                 notificationUI.setTitle("Voice chat started on " + formatter.format(new Date()));
@@ -134,6 +135,7 @@ public class IncomingCall implements JingleSessionListener, ChatRoomClosingListe
      */
     private void showCallEndedState(final String reason) {
         SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 if (ringing != null) {
                     ringing.stop();
@@ -221,12 +223,14 @@ public class IncomingCall implements JingleSessionListener, ChatRoomClosingListe
         toasterManager.hideTitle();
 
         incomingCall.getAcceptButton().addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 acceptSession(request);
             }
         });
 
         incomingCall.getRejectButton().addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 rejectIncomingCall();
             }
@@ -234,6 +238,7 @@ public class IncomingCall implements JingleSessionListener, ChatRoomClosingListe
 
         // Start the ringing.
         final Runnable ringer = new Runnable() {
+            @Override
             public void run() {
                 ringing.loop();
             }
@@ -243,6 +248,7 @@ public class IncomingCall implements JingleSessionListener, ChatRoomClosingListe
 
         // End after 30 seconds max.
         TimerTask endTask = new SwingTimerTask() {
+            @Override
             public void doRun() {
                 if (!session.isFullyEstablished()) {
                     rejectIncomingCall();
@@ -286,6 +292,7 @@ public class IncomingCall implements JingleSessionListener, ChatRoomClosingListe
 
         established = true;
         mediaReceivedTask = new SwingTimerTask() {
+            @Override
             public void doRun() {
                 if (!mediaReceived) {
                     if (session != null) {
@@ -327,6 +334,7 @@ public class IncomingCall implements JingleSessionListener, ChatRoomClosingListe
         }
     }
 
+    @Override
     public void closing() {
         if (session != null) {
             try {

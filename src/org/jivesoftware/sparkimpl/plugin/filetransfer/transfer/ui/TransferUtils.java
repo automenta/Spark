@@ -70,7 +70,7 @@ public class TransferUtils {
         long x = sizeleft * timediff / currentsize;
 
         // Make it seconds
-        x = x / 1000;
+        x /= 1000;
 
         return convertSecondstoHHMMSS(Math.round(x));
     }

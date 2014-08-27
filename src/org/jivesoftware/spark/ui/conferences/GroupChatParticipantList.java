@@ -91,29 +91,29 @@ public class GroupChatParticipantList extends JPanel {
     private static final long serialVersionUID = 3809155443119207342L;
     private GroupChatRoom groupChatRoom;
     private final ImageTitlePanel agentInfoPanel;
-    private ChatManager chatManager;
+    private final ChatManager chatManager;
     private MultiUserChat chat;
     private LocalPreferences _localPreferences = SettingsManager.getLocalPreferences();
 
-    private final Map<String, String> userMap = new HashMap<String, String>();
+    private final Map<String, String> userMap = new HashMap<>();
 
     private UserManager userManager = SparkManager.getUserManager();
 
     private DefaultListModel model = new DefaultListModel();
 
-    private JXList participantsList;
+    private final JXList participantsList;
 
     private PacketListener listener = null;
 
-    private Map<String, String> invitees = new HashMap<String, String>();
+    private Map<String, String> invitees = new HashMap<>();
 
     private boolean allowNicknameChange = true;
 
     private DiscoverInfo roomInformation;
 
-    private List<JLabel> users = new ArrayList<JLabel>();
+    private List<JLabel> users = new ArrayList<>();
 
-    private HashMap<String, String> usersandRoles = new HashMap<String, String>();
+    private HashMap<String, String> usersandRoles = new HashMap<>();
 
     /**
      * Creates a new RoomInfo instance using the specified ChatRoom. The
@@ -135,6 +135,7 @@ public class GroupChatParticipantList extends JPanel {
 
         // Respond to Double-Click in Agent List to start a chat
         participantsList.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent evt) {
                 if (evt.getClickCount() == 2) {
                     String selectedUser = getSelectedUser();
@@ -142,12 +143,14 @@ public class GroupChatParticipantList extends JPanel {
                 }
             }
 
+            @Override
             public void mouseReleased(final MouseEvent evt) {
                 if (evt.isPopupTrigger()) {
                     checkPopup(evt);
                 }
             }
 
+            @Override
             public void mousePressed(final MouseEvent evt) {
                 if (evt.isPopupTrigger()) {
                     checkPopup(evt);
@@ -174,6 +177,7 @@ public class GroupChatParticipantList extends JPanel {
         chat = groupChatRoom.getMultiUserChat();
 
         chat.addInvitationRejectionListener(new InvitationRejectionListener() {
+            @Override
             public void invitationDeclined(String jid, String message) {
                 String nickname = userManager.getUserNicknameFromJID(jid);
 
@@ -186,8 +190,10 @@ public class GroupChatParticipantList extends JPanel {
         });
 
         listener = new PacketListener() {
+            @Override
             public void processPacket(final Packet packet) {
                 SwingUtilities.invokeLater(new Runnable() {
+                    @Override
                     public void run() {
                         Presence p = (Presence) packet;
                         if (p.getError() != null) {
@@ -239,49 +245,61 @@ public class GroupChatParticipantList extends JPanel {
         }
 
         chat.addUserStatusListener(new UserStatusListener() {
+            @Override
             public void kicked(String actor, String reason) {
 
             }
 
+            @Override
             public void voiceGranted() {
 
             }
 
+            @Override
             public void voiceRevoked() {
 
             }
 
+            @Override
             public void banned(String actor, String reason) {
 
             }
 
+            @Override
             public void membershipGranted() {
 
             }
 
+            @Override
             public void membershipRevoked() {
 
             }
 
+            @Override
             public void moderatorGranted() {
 
             }
 
+            @Override
             public void moderatorRevoked() {
 
             }
 
+            @Override
             public void ownershipGranted() {
             }
 
+            @Override
             public void ownershipRevoked() {
 
             }
 
+            @Override
             public void adminGranted() {
 
             }
 
+            @Override
             public void adminRevoked() {
 
             }
@@ -668,6 +686,7 @@ public class GroupChatParticipantList extends JPanel {
      *
      * @return the preferred dimension
      */
+    @Override
     public Dimension getPreferredSize() {
         final Dimension size = super.getPreferredSize();
         size.width = 150;
@@ -711,6 +730,7 @@ public class GroupChatParticipantList extends JPanel {
                 Action inviteAgainAction = new AbstractAction() {
                     private static final long serialVersionUID = -1875073139356098243L;
 
+                    @Override
                     public void actionPerformed(ActionEvent actionEvent) {
                         String message = invitees.get(selectedUser);
                         String jid = userManager
@@ -726,6 +746,7 @@ public class GroupChatParticipantList extends JPanel {
                 Action removeInvite = new AbstractAction() {
                     private static final long serialVersionUID = -3647279452501661970L;
 
+                    @Override
                     public void actionPerformed(ActionEvent actionEvent) {
                         int index = getIndex(selectedUser);
 
@@ -747,6 +768,7 @@ public class GroupChatParticipantList extends JPanel {
                 Action changeNicknameAction = new AbstractAction() {
                     private static final long serialVersionUID = -7891803180672794112L;
 
+                    @Override
                     public void actionPerformed(ActionEvent actionEvent) {
                         String newNickname = JOptionPane.showInputDialog(
                                 groupChatRoom,
@@ -805,6 +827,7 @@ public class GroupChatParticipantList extends JPanel {
             Action chatAction = new AbstractAction() {
                 private static final long serialVersionUID = -2739549054781928195L;
 
+                @Override
                 public void actionPerformed(ActionEvent actionEvent) {
                     String selectedUser = getSelectedUser();
                     startChat(groupChatRoom, userMap.get(selectedUser));
@@ -822,6 +845,7 @@ public class GroupChatParticipantList extends JPanel {
             Action blockAction = new AbstractAction() {
                 private static final long serialVersionUID = 8771362206105723776L;
 
+                @Override
                 public void actionPerformed(ActionEvent e) {
                     String user = getSelectedUser();
                     ImageIcon icon;
@@ -853,6 +877,7 @@ public class GroupChatParticipantList extends JPanel {
             Action kickAction = new AbstractAction() {
                 private static final long serialVersionUID = 5769982955040961189L;
 
+                @Override
                 public void actionPerformed(ActionEvent actionEvent) {
                     kickUser(selectedUser);
                 }
@@ -870,6 +895,7 @@ public class GroupChatParticipantList extends JPanel {
             Action voiceAction = new AbstractAction() {
                 private static final long serialVersionUID = 7628207942009369329L;
 
+                @Override
                 public void actionPerformed(ActionEvent actionEvent) {
                     if (userManager.hasVoice(groupChatRoom, selectedUser)) {
                         revokeVoice(selectedUser);
@@ -898,6 +924,7 @@ public class GroupChatParticipantList extends JPanel {
             Action banAction = new AbstractAction() {
                 private static final long serialVersionUID = 4290194898356641253L;
 
+                @Override
                 public void actionPerformed(ActionEvent actionEvent) {
                     banUser(selectedUser);
                 }
@@ -938,6 +965,7 @@ public class GroupChatParticipantList extends JPanel {
             Action moderatorAction = new AbstractAction() {
                 private static final long serialVersionUID = 8162535640460764896L;
 
+                @Override
                 public void actionPerformed(ActionEvent actionEvent) {
                     if (!userIsModerator) {
                         grantModerator(selectedUser);
@@ -1023,6 +1051,7 @@ public class GroupChatParticipantList extends JPanel {
             Action unbanAction = new AbstractAction() {
                 private static final long serialVersionUID = 3672121864443182872L;
 
+                @Override
                 public void actionPerformed(ActionEvent actionEvent) {
                     String jid = ((AbstractButton) actionEvent.getSource())
                             .getText();
@@ -1057,6 +1086,7 @@ public class GroupChatParticipantList extends JPanel {
         Action inviteAction = new AbstractAction() {
             private static final long serialVersionUID = 2240864466141501086L;
 
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 ConferenceUtils.inviteUsersToRoom(
                         groupChatRoom.getConferenceService(),
@@ -1146,6 +1176,7 @@ public class GroupChatParticipantList extends JPanel {
      */
     final Comparator<JLabel> labelComp = new Comparator<JLabel>() {
 
+        @Override
         public int compare(JLabel item1, JLabel item2) {
             if (_localPreferences.isShowingRoleIcons()) {
                 return compareWithRole(item1, item2);
@@ -1275,6 +1306,7 @@ public class GroupChatParticipantList extends JPanel {
             setOpaque(true);
         }
 
+        @Override
         public Component getListCellRendererComponent(JList list, Object value,
                 int index, boolean isSelected, boolean cellHasFocus) {
             if (isSelected) {

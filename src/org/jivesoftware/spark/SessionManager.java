@@ -52,7 +52,7 @@ public final class SessionManager implements ConnectionListener {
 
     private String JID;
 
-    private List<PresenceListener> presenceListeners = new ArrayList<PresenceListener>();
+    private final List<PresenceListener> presenceListeners = new ArrayList<>();
 
     private String userBareAddress;
     private DiscoverItems discoverItems;
@@ -138,8 +138,10 @@ public final class SessionManager implements ConnectionListener {
      *
      * @param ex the Exception that took place.
      */
+    @Override
     public void connectionClosedOnError(final Exception ex) {
         SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 final Presence presence = new Presence(Presence.Type.unavailable);
                 changePresence(presence);
@@ -152,6 +154,7 @@ public final class SessionManager implements ConnectionListener {
     /**
      * Notify agent that the connection has been closed.
      */
+    @Override
     public void connectionClosed() {
     }
 
@@ -180,7 +183,7 @@ public final class SessionManager implements ConnectionListener {
      */
     public void changePresence(Presence presence) {
         // Fire Presence Listeners
-        for (PresenceListener listener : new ArrayList<PresenceListener>(this.presenceListeners)) {
+        for (PresenceListener listener : new ArrayList<>(this.presenceListeners)) {
             listener.presenceChanged(presence);
         }
 
@@ -253,12 +256,15 @@ public final class SessionManager implements ConnectionListener {
         this.connection = con;
     }
 
+    @Override
     public void reconnectingIn(int i) {
     }
 
+    @Override
     public void reconnectionSuccessful() {
     }
 
+    @Override
     public void reconnectionFailed(Exception exception) {
     }
 

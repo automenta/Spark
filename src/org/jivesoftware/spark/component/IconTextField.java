@@ -36,9 +36,9 @@ import org.jivesoftware.resource.SparkRes;
 public class IconTextField extends JPanel {
 
     private static final long serialVersionUID = -7000758637988415370L;
-    private JTextField textField;
-    private JLabel imageComponent;
-    private JLabel downOption;
+    private final JTextField textField;
+    private final JLabel imageComponent;
+    private final JLabel downOption;
 
     /**
      * Creates a new IconTextField with Icon.

@@ -33,34 +33,34 @@ import org.jivesoftware.spark.util.ResourceUtils;
 public class BusinessPanel extends JPanel {
 
     private static final long serialVersionUID = -6319059605447012843L;
-    private JLabel companyLabel = new JLabel();
-    private JLabel streetLabel = new JLabel();
-    private JLabel cityLabel = new JLabel();
-    private JLabel stateLabel = new JLabel();
-    private JLabel zipCodeLabel = new JLabel();
-    private JLabel countryLabel = new JLabel();
+    private final JLabel companyLabel = new JLabel();
+    private final JLabel streetLabel = new JLabel();
+    private final JLabel cityLabel = new JLabel();
+    private final JLabel stateLabel = new JLabel();
+    private final JLabel zipCodeLabel = new JLabel();
+    private final JLabel countryLabel = new JLabel();
 
-    private JTextField companyField = new JTextField();
-    private JTextField cityField = new JTextField();
-    private JTextField stateField = new JTextField();
-    private JTextField zipCodeField = new JTextField();
-    private JTextField countryField = new JTextField();
-    private JTextField streetField = new JTextField();
+    private final JTextField companyField = new JTextField();
+    private final JTextField cityField = new JTextField();
+    private final JTextField stateField = new JTextField();
+    private final JTextField zipCodeField = new JTextField();
+    private final JTextField countryField = new JTextField();
+    private final JTextField streetField = new JTextField();
 
-    private JLabel jobTitleLabel = new JLabel();
-    private JLabel departmentLabel = new JLabel();
-    private JLabel phoneLabel = new JLabel();
-    private JLabel faxLabel = new JLabel();
-    private JLabel pagerLabel = new JLabel();
-    private JLabel mobileLabel = new JLabel();
-    private JLabel webPageLabel = new JLabel();
-    private JTextField jobTitleField = new JTextField();
-    private JTextField departmentField = new JTextField();
-    private JTextField phoneField = new JTextField();
-    private JTextField faxField = new JTextField();
-    private JTextField pagerField = new JTextField();
-    private JTextField mobileField = new JTextField();
-    private JTextField webPageField = new JTextField();
+    private final JLabel jobTitleLabel = new JLabel();
+    private final JLabel departmentLabel = new JLabel();
+    private final JLabel phoneLabel = new JLabel();
+    private final JLabel faxLabel = new JLabel();
+    private final JLabel pagerLabel = new JLabel();
+    private final JLabel mobileLabel = new JLabel();
+    private final JLabel webPageLabel = new JLabel();
+    private final JTextField jobTitleField = new JTextField();
+    private final JTextField departmentField = new JTextField();
+    private final JTextField phoneField = new JTextField();
+    private final JTextField faxField = new JTextField();
+    private final JTextField pagerField = new JTextField();
+    private final JTextField mobileField = new JTextField();
+    private final JTextField webPageField = new JTextField();
 
     public BusinessPanel() {
         this.setLayout(new GridBagLayout());

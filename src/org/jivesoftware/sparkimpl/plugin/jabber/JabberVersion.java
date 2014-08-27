@@ -45,10 +45,12 @@ import org.jivesoftware.sparkimpl.settings.JiveInfo;
 
 public class JabberVersion implements Plugin {
 
+    @Override
     public void initialize() {
         // Create IQ Filter
         PacketFilter packetFilter = new PacketTypeFilter(IQ.class);
         SparkManager.getConnection().addPacketListener(new PacketListener() {
+            @Override
             public void processPacket(Packet packet) {
                 IQ iq = (IQ) packet;
 
@@ -85,6 +87,7 @@ public class JabberVersion implements Plugin {
         final ContactList contactList = SparkManager.getWorkspace().getContactList();
         contactList.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("control F11"), "viewClient");
         contactList.addContextMenuListener(new ContextMenuListener() {
+            @Override
             public void poppingUp(final Object component, JPopupMenu popup) {
                 if (!(component instanceof ContactItem)) {
                     return;
@@ -98,6 +101,7 @@ public class JabberVersion implements Plugin {
                 Action versionRequest = new AbstractAction() {
                     private static final long serialVersionUID = -5619737417315441711L;
 
+                    @Override
                     public void actionPerformed(ActionEvent e) {
                         viewClient();
                     }
@@ -107,10 +111,12 @@ public class JabberVersion implements Plugin {
                 popup.add(versionRequest);
             }
 
+            @Override
             public void poppingDown(JPopupMenu popup) {
 
             }
 
+            @Override
             public boolean handleDefaultAction(MouseEvent e) {
                 return false;
             }
@@ -119,6 +125,7 @@ public class JabberVersion implements Plugin {
         contactList.getActionMap().put("viewClient", new AbstractAction("viewClient") {
             private static final long serialVersionUID = 8282301357403753561L;
 
+            @Override
             public void actionPerformed(ActionEvent evt) {
                 viewClient();
             }
@@ -134,6 +141,7 @@ public class JabberVersion implements Plugin {
             Presence presence = item.getPresence();
             final String jid = presence.getFrom();
             SwingWorker worker = new SwingWorker() {
+                @Override
                 public Object construct() {
                     try {
                         Thread.sleep(10);
@@ -143,6 +151,7 @@ public class JabberVersion implements Plugin {
                     return jid;
                 }
 
+                @Override
                 public void finished() {
                     VersionViewer.viewVersion(jid);
                 }
@@ -151,14 +160,17 @@ public class JabberVersion implements Plugin {
         }
     }
 
+    @Override
     public void shutdown() {
 
     }
 
+    @Override
     public boolean canShutDown() {
         return false;
     }
 
+    @Override
     public void uninstall() {
         // Do nothing.
     }

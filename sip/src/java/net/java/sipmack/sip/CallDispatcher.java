@@ -29,7 +29,7 @@ class CallDispatcher implements CallListener {
     /**
      * All currently active calls.
      */
-    Hashtable<Integer, Call> calls = new Hashtable<Integer, Call>();
+    Hashtable<Integer, Call> calls = new Hashtable<>();
 
     Call createCall(Dialog dialog, Request initialRequest) {
         Call call = null;
@@ -105,6 +105,7 @@ class CallDispatcher implements CallListener {
     }
 
     // ================================ DialogListener =================
+    @Override
     public void callStateChanged(CallStateEvent evt) {
         if (evt.getNewState().equals(Call.DISCONNECTED)) {
             removeCall(evt.getSourceCall());

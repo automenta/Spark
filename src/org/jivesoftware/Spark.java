@@ -111,7 +111,7 @@ public final class Spark {
         SparkCompatibility sparkCompat = new SparkCompatibility();
         try {
             // Absolute paths to a collection of files or directories to skip
-            Collection<String> skipFiles = new HashSet<String>();
+            Collection<String> skipFiles = new HashSet<>();
             skipFiles.add(new File(USER_SPARK_HOME, "plugins").getAbsolutePath());
 
             sparkCompat.transferConfig(USER_SPARK_HOME, skipFiles);
@@ -173,6 +173,7 @@ public final class Spark {
         System.setProperty("file.encoding", "UTF-8");
 
         SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 // Start Application
                 new Spark();
@@ -192,6 +193,7 @@ public final class Spark {
 
         try {
             EventQueue.invokeAndWait(new Runnable() {
+                @Override
                 public void run() {
                     final LoginDialog dialog = UIComponentRegistry.createLoginDialog();
                     dialog.invoke(new JFrame());
@@ -230,6 +232,7 @@ public final class Spark {
         try {
             if (laf.toLowerCase().contains("substance")) {
                 EventQueue.invokeLater(new Runnable() {
+                    @Override
                     public void run() {
                         try {
                             if (Spark.isWindows()) {

@@ -32,26 +32,32 @@ public class XMPPTransport implements Transport {
         this.serviceName = serviceName;
     }
 
+    @Override
     public String getTitle() {
         return Res.getString("title.xmpp.registration");
     }
 
+    @Override
     public String getInstructions() {
         return Res.getString("message.enter.xmpp");
     }
 
+    @Override
     public Icon getIcon() {
         return SparkRes.getImageIcon(SparkRes.XMPP_TRANSPORT_ACTIVE_IMAGE);
     }
 
+    @Override
     public Icon getInactiveIcon() {
         return SparkRes.getImageIcon(SparkRes.XMPP_TRANSPORT_INACTIVE_IMAGE);
     }
 
+    @Override
     public String getServiceName() {
         return serviceName;
     }
 
+    @Override
     public String getName() {
         return "XMPP";
     }
@@ -60,14 +66,17 @@ public class XMPPTransport implements Transport {
         this.serviceName = serviceName;
     }
 
+    @Override
     public Boolean requiresUsername() {
         return true;
     }
 
+    @Override
     public Boolean requiresPassword() {
         return true;
     }
 
+    @Override
     public Boolean requiresNickname() {
         return false;
     }

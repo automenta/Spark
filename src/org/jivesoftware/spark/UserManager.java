@@ -68,7 +68,7 @@ import org.jivesoftware.sparkimpl.profile.VCardManager;
  */
 public class UserManager {
 
-    private Map<JFrame, Component> parents = new HashMap<JFrame, Component>();
+    private Map<JFrame, Component> parents = new HashMap<>();
 
     public UserManager() {
     }
@@ -125,7 +125,7 @@ public class UserManager {
      * @return a Collection of jids found in the room.
      */
     public Collection<String> getUserJidsInRoom(String room, boolean fullJID) {
-        return new ArrayList<String>();
+        return new ArrayList<>();
     }
 
     /**
@@ -307,7 +307,7 @@ public class UserManager {
      * @see <code>ChatUser</code>
      */
     public Collection<String> getAllParticipantsInRoom(ChatRoom chatRoom) {
-        return new ArrayList<String>();
+        return new ArrayList<>();
     }
 
     public String getUserNicknameFromJID(String jid) {
@@ -397,8 +397,8 @@ public class UserManager {
         final Component glassPane = parents.get(parent);
         parent.setGlassPane(glassPane);
 
-        final Map<String, ContactItem> contactMap = new HashMap<String, ContactItem>();
-        final List<ContactItem> contacts = new ArrayList<ContactItem>();
+        final Map<String, ContactItem> contactMap = new HashMap<>();
+        final List<ContactItem> contacts = new ArrayList<>();
 
         final ContactList contactList = SparkManager.getWorkspace().getContactList();
 
@@ -415,7 +415,7 @@ public class UserManager {
         // Sort
         Collections.sort(contacts, itemComparator);
 
-        final JContactItemField contactField = new JContactItemField(new ArrayList<ContactItem>(contacts));
+        final JContactItemField contactField = new JContactItemField(new ArrayList<>(contacts));
 
         JPanel layoutPanel = new JPanel();
         layoutPanel.setLayout(new GridBagLayout());
@@ -426,6 +426,7 @@ public class UserManager {
         layoutPanel.setBorder(BorderFactory.createBevelBorder(0));
 
         contactField.addKeyListener(new KeyAdapter() {
+            @Override
             public void keyReleased(KeyEvent keyEvent) {
                 if (keyEvent.getKeyChar() == KeyEvent.VK_ENTER) {
                     if (ModelUtil.hasLength(contactField.getText())) {
@@ -450,6 +451,7 @@ public class UserManager {
         });
 
         contactField.getList().addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
                 if (SwingUtilities.isRightMouseButton(e)) {
                     contactField.setSelectetIndex(e);
@@ -487,6 +489,7 @@ public class UserManager {
         contactField.focus();
 
         mainPanel.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 parent.setGlassPane(glassPane);
                 parent.getGlassPane().setVisible(false);
@@ -495,6 +498,7 @@ public class UserManager {
         });
 
         parent.addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent windowEvent) {
                 parent.setGlassPane(glassPane);
                 parent.getGlassPane().setVisible(false);
@@ -502,8 +506,10 @@ public class UserManager {
                 parent.removeWindowListener(this);
             }
 
+            @Override
             public void windowDeactivated(final WindowEvent windowEvent) {
                 TimerTask task = new SwingTimerTask() {
+                    @Override
                     public void doRun() {
                         if (contactField.canClose()) {
                             windowClosing(windowEvent);
@@ -543,6 +549,7 @@ public class UserManager {
      * Sorts ContactItems.
      */
     final Comparator<ContactItem> itemComparator = new Comparator<ContactItem>() {
+        @Override
         public int compare(ContactItem item1, ContactItem item2) {
             return item1.getDisplayName().toLowerCase().compareTo(item2.getDisplayName().toLowerCase());
         }

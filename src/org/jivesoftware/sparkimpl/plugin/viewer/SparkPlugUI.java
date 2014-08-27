@@ -49,7 +49,7 @@ public class SparkPlugUI extends JPanel {
     private static final long serialVersionUID = -4206533328807591854L;
     private PublicPlugin _plugin;
     private final JButton installButton = new JButton();
-    private JLabel imageIcon = new JLabel();
+    private final JLabel imageIcon = new JLabel();
 
     public SparkPlugUI(PublicPlugin plugin) {
         _plugin = plugin;
@@ -85,6 +85,7 @@ public class SparkPlugUI extends JPanel {
             RolloverButton readMeButton = new RolloverButton(SparkRes.getImageIcon(SparkRes.README_IMAGE));
 
             changeLogButton.addActionListener(new ActionListener() {
+                @Override
                 public void actionPerformed(ActionEvent e) {
                     try {
                         BrowserLauncher.openURL(_plugin.getChangeLog());
@@ -95,6 +96,7 @@ public class SparkPlugUI extends JPanel {
             });
 
             readMeButton.addActionListener(new ActionListener() {
+                @Override
                 public void actionPerformed(ActionEvent e) {
                     try {
                         BrowserLauncher.openURL(_plugin.getReadMeURL());

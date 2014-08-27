@@ -28,12 +28,13 @@ import org.jivesoftware.spark.preference.PreferenceManager;
  */
 public class TransferSettingsPreference implements Preference {
 
-    private TransferSettingsPanel gui = new TransferSettingsPanel();
-    private FileTransferSettings settings = new FileTransferSettings();
+    private final TransferSettingsPanel gui = new TransferSettingsPanel();
+    private final FileTransferSettings settings = new FileTransferSettings();
 
     /**
      * Called when preference settings should be persisted.
      */
+    @Override
     public void commit() {
         gui.storeSettings(settings);
         settings.store();
@@ -45,6 +46,7 @@ public class TransferSettingsPreference implements Preference {
      *
      * @return object data
      */
+    @Override
     public Object getData() {
         return settings;
     }
@@ -56,6 +58,7 @@ public class TransferSettingsPreference implements Preference {
      * @return an error message to display if calls to {@link #isDataValid}
      * return false.
      */
+    @Override
     public String getErrorMessage() {
         return "What happend here?";
     }
@@ -65,6 +68,7 @@ public class TransferSettingsPreference implements Preference {
      *
      * @return the GUI for setting and viewing preference settings.
      */
+    @Override
     public javax.swing.JComponent getGUI() {
         gui.applySettings(settings);
         return gui;
@@ -75,6 +79,7 @@ public class TransferSettingsPreference implements Preference {
      *
      * @return the {@link Icon} to show in the preferences ui.
      */
+    @Override
     public javax.swing.Icon getIcon() {
         return new ImageIcon(getClass().getResource("/images/knight.png"));
     }
@@ -84,6 +89,7 @@ public class TransferSettingsPreference implements Preference {
      *
      * @return the name displayed in the list of preferences.
      */
+    @Override
     public String getListName() {
         return "Transfer Guard";
     }
@@ -95,6 +101,7 @@ public class TransferSettingsPreference implements Preference {
      * @return the key to retrive this instance from the
      * {@link PreferenceManager}.
      */
+    @Override
     public String getNamespace() {
         return "transferSettings";
     }
@@ -104,6 +111,7 @@ public class TransferSettingsPreference implements Preference {
      *
      * @return the title of the preference panel for this preference.
      */
+    @Override
     public String getTitle() {
         return TGuardRes.getString("guard.settings.title.settings");
     }
@@ -113,6 +121,7 @@ public class TransferSettingsPreference implements Preference {
      *
      * @return the tooltip text to display in the preferences list.
      */
+    @Override
     public String getTooltip() {
         return "Configure allowed file transfer types, sizes, and senders";
     }
@@ -124,6 +133,7 @@ public class TransferSettingsPreference implements Preference {
      *
      * @return true.
      */
+    @Override
     public boolean isDataValid() {
         return true;
     }
@@ -131,6 +141,7 @@ public class TransferSettingsPreference implements Preference {
     /**
      * Called when data should be loaded from the persistent stor.
      */
+    @Override
     public void load() {
         settings.load();
     }
@@ -138,6 +149,7 @@ public class TransferSettingsPreference implements Preference {
     /**
      * Called when the application shuts down.
      */
+    @Override
     public void shutdown() {
     }
 }

@@ -21,8 +21,8 @@ public class OTRKeyTable extends JPanel {
      *
      */
     private static final long serialVersionUID = -2922785387942547350L;
-    private JTable _table;
-    private DefaultTableModel _tableModel;
+    private final JTable _table;
+    private final DefaultTableModel _tableModel;
 
     public OTRKeyTable() {
 
@@ -76,7 +76,7 @@ public class OTRKeyTable extends JPanel {
      * @param verified
      */
     public void addEntry(String jid, String hash, boolean verified) {
-        Vector<Object> data = new Vector<Object>(3);
+        Vector<Object> data = new Vector<>(3);
 
         data.add(jid);
         data.add(hash);

@@ -41,7 +41,7 @@ import org.jivesoftware.spark.util.log.Log;
  */
 public class TaskEngine {
 
-    private static TaskEngine instance = new TaskEngine();
+    private static final TaskEngine instance = new TaskEngine();
 
     /**
      * Returns a task engine instance (singleton).
@@ -54,7 +54,7 @@ public class TaskEngine {
 
     private Timer timer;
     private ExecutorService executor;
-    private Map<TimerTask, TimerTaskWrapper> wrappedTasks = new ConcurrentHashMap<TimerTask, TimerTaskWrapper>();
+    private Map<TimerTask, TimerTaskWrapper> wrappedTasks = new ConcurrentHashMap<>();
 
     /**
      * Constructs a new task engine.
@@ -65,6 +65,7 @@ public class TaskEngine {
 
             final AtomicInteger threadNumber = new AtomicInteger(1);
 
+            @Override
             public Thread newThread(Runnable runnable) {
                 // Use our own naming scheme for the threads.
                 Thread thread = new Thread(Thread.currentThread().getThreadGroup(), runnable,
@@ -313,12 +314,13 @@ public class TaskEngine {
      */
     private class TimerTaskWrapper extends TimerTask {
 
-        private TimerTask task;
+        private final TimerTask task;
 
         public TimerTaskWrapper(TimerTask task) {
             this.task = task;
         }
 
+        @Override
         public void run() {
             executor.submit(task);
         }

@@ -59,18 +59,18 @@ public class UserSearchForm extends JPanel {
 
     private static final long serialVersionUID = -9192188543673595941L;
     private JComboBox servicesBox;
-    private UserSearchManager searchManager;
+    private final UserSearchManager searchManager;
 
-    private Collection<String> searchServices;
+    private final Collection<String> searchServices;
 
-    private CardLayout cardLayout = new CardLayout();
-    private JPanel cardPanel = new JPanel();
+    private final CardLayout cardLayout = new CardLayout();
+    private final JPanel cardPanel = new JPanel();
 
     private TitlePanel titlePanel;
 
-    private Map<String, SearchForm> serviceMap = new HashMap<String, SearchForm>();
+    private final Map<String, SearchForm> serviceMap = new HashMap<>();
 
-    private static File pluginsettings = new File(Spark.getSparkUserHome() + File.separator + "search.properties"); //new
+    private static final File pluginsettings = new File(Spark.getSparkUserHome() + File.separator + "search.properties"); //new
 
     /**
      * Initializes the UserSearchForm with all available search services.
@@ -149,6 +149,7 @@ public class UserSearchForm extends JPanel {
         ResourceUtils.resButton(addService, Res.getString("button.add.service"));
         add(addService, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0));
         addService.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 final String serviceName = JOptionPane.showInputDialog(getRootPane(), Res.getString("message.name.of.search.service.question"), Res.getString("title.add.search.service"), JOptionPane.QUESTION_MESSAGE);
                 if (ModelUtil.hasLength(serviceName)) {
@@ -156,6 +157,7 @@ public class UserSearchForm extends JPanel {
                     SwingWorker findServiceThread = new SwingWorker() {
                         Form newForm;
 
+                        @Override
                         public Object construct() {
                             try {
                                 newForm = searchManager.getSearchForm(serviceName);
@@ -165,6 +167,7 @@ public class UserSearchForm extends JPanel {
                             return newForm;
                         }
 
+                        @Override
                         public void finished() {
                             if (newForm == null) {
                                 JOptionPane.showMessageDialog(getGUI(), Res.getString("message.search.service.not.available"), Res.getString("title.notification"), JOptionPane.ERROR_MESSAGE);
@@ -203,8 +206,10 @@ public class UserSearchForm extends JPanel {
         });
 
         servicesBox.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 SwingWorker worker = new SwingWorker() {
+                    @Override
                     public Object construct() {
                         try {
                             Thread.sleep(50);
@@ -214,6 +219,7 @@ public class UserSearchForm extends JPanel {
                         return "ok";
                     }
 
+                    @Override
                     public void finished() {
                         showService(getSearchService());
                     }

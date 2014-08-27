@@ -36,6 +36,7 @@ public class SoftPhoneMedia implements MediaListener {
      *
      * @param event MediaEvent
      */
+    @Override
     public void playerStarting(MediaEvent event) {
         javax.media.Player player = null;
         try {
@@ -64,12 +65,14 @@ public class SoftPhoneMedia implements MediaListener {
      *
      * @param evt MediaErrorEvent
      */
+    @Override
     public void nonFatalMediaErrorOccurred(MediaErrorEvent evt) {
     }
 
     /**
      * Fired when player stops
      */
+    @Override
     public void playerStopped() {
         if (videoFrame != null) {
             videoFrame.setAlwaysOnTop(false);

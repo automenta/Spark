@@ -43,7 +43,7 @@ import org.jivesoftware.sparkplugin.phonebook.PhonebookManager;
 public class PhonebookUI extends JPanel {
 
     private static final long serialVersionUID = -5477841619200563149L;
-    private JFrame frame = new JFrame();
+    private final JFrame frame = new JFrame();
     private RolloverButton btnAdd;
     private RolloverButton btnDel;
     private RolloverButton btnEdit;
@@ -72,11 +72,12 @@ public class PhonebookUI extends JPanel {
         model = new DefaultTableModel() {
             private static final long serialVersionUID = -1231025049889503785L;
 
+            @Override
             public boolean isCellEditable(int i, int j) {
                 return false;
             }
         };
-        sorter = new TableRowSorter<TableModel>(model);
+        sorter = new TableRowSorter<>(model);
         table = new JTable(model);
         JPanel pbtn = new JPanel();
         JPanel psearch = new JPanel();
@@ -99,12 +100,14 @@ public class PhonebookUI extends JPanel {
 
         // add actionlisteners
         btnAdd.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 btnAddPerformed();
             }
         });
 
         btnDel.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 int[] selected = table.getSelectedRows();
                 if (selected.length == 0) {
@@ -122,6 +125,7 @@ public class PhonebookUI extends JPanel {
         });
 
         btnEdit.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 int selected = table.getSelectedRow();
                 if (selected > -1) {
@@ -134,6 +138,7 @@ public class PhonebookUI extends JPanel {
         });
 
         btnDial.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 int selected = table.getSelectedRow();
                 if (selected > -1) {
@@ -151,6 +156,7 @@ public class PhonebookUI extends JPanel {
         });
 
         sorter.addRowSorterListener(new RowSorterListener() {
+            @Override
             public void sorterChanged(RowSorterEvent arg0) {
                 TableRowSorter<?> rs = (TableRowSorter<?>) arg0.getSource();
                 String temp = tfsearch.getText();
@@ -169,6 +175,7 @@ public class PhonebookUI extends JPanel {
         });
 
         tfsearch.addKeyListener(new KeyAdapter() {
+            @Override
             public void keyReleased(KeyEvent evt) {
                 keyReleasedSuchFeld(evt);
                 if (table.getRowCount() > 0) {
@@ -218,8 +225,8 @@ public class PhonebookUI extends JPanel {
     public void loadEntries() {
         int selRow = table.getSelectedRow();
 
-        Vector<String> heading = new Vector<String>();
-        Vector<Vector<String>> data = new Vector<Vector<String>>();
+        Vector<String> heading = new Vector<>();
+        Vector<Vector<String>> data = new Vector<>();
         Vector<String> temp;
 
         heading.add(PhoneRes.getIString("book.name"));
@@ -228,7 +235,7 @@ public class PhonebookUI extends JPanel {
         List<PhoneNumber> numbers = manager.getPhoneNumbers();
 
         for (PhoneNumber number : numbers) {
-            temp = new Vector<String>();
+            temp = new Vector<>();
             temp.add(number.getName());
             temp.add(number.getNumber());
             data.add(temp);
@@ -263,6 +270,7 @@ public class PhonebookUI extends JPanel {
     private void btnAddPerformed() {
         try {
             EventQueue.invokeLater(new Runnable() {
+                @Override
                 public void run() {
                     EntryFrame addFrame = new EntryFrame(PhonebookUI.this, manager, EntryFrame.TYP_ADD);
                     addFrame.invoke();
@@ -279,6 +287,7 @@ public class PhonebookUI extends JPanel {
     private void btnEditPerformed(final String name, final String number) {
         try {
             EventQueue.invokeLater(new Runnable() {
+                @Override
                 public void run() {
                     EntryFrame editFrame = new EntryFrame(PhonebookUI.this, manager, EntryFrame.TYP_EDIT);
                     editFrame.setName(name);
@@ -294,13 +303,13 @@ public class PhonebookUI extends JPanel {
     private void filterTable(String text) {
         String filterString = text;
 
-        ArrayList<RowFilter<TableModel, Object>> andFilter = new ArrayList<RowFilter<TableModel, Object>>(1); //split.length);
+        ArrayList<RowFilter<TableModel, Object>> andFilter = new ArrayList<>(1); //split.length);
         ArrayList<RowFilter<TableModel, Object>> subFilter;
         RowFilter<TableModel, Object> rf;
         RowFilter<TableModel, Object> rf0;
 
         try {
-            subFilter = new ArrayList<RowFilter<TableModel, Object>>(1); //split.length);
+            subFilter = new ArrayList<>(1); //split.length);
 
             for (Integer i = 0; i < model.getColumnCount(); i++) {
                 rf0 = RowFilter.regexFilter("^(?i)" + filterString, i);

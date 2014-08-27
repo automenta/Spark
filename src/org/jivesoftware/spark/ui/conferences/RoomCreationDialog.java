@@ -114,6 +114,7 @@ public class RoomCreationDialog extends JPanel {
         dlg.setLocationRelativeTo(parent);
 
         PropertyChangeListener changeListener = new PropertyChangeListener() {
+            @Override
             public void propertyChange(PropertyChangeEvent e) {
                 Object o = pane.getValue();
                 if (o instanceof Integer) {

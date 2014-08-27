@@ -47,10 +47,10 @@ import org.jivesoftware.spark.util.ModelUtil;
 public class TelephoneTextField extends JPanel implements FocusListener, MouseListener, KeyListener {
 
     private static final long serialVersionUID = 1091481535990834763L;
-    private JTextField textField;
-    private JLabel imageComponent;
+    private final JTextField textField;
+    private final JLabel imageComponent;
 
-    private PhonePad pad;
+    private final PhonePad pad;
 
     private final String textFieldText = PhoneRes.getIString("phone.enternumber");
 
@@ -75,6 +75,7 @@ public class TelephoneTextField extends JPanel implements FocusListener, MouseLi
         add(textField, new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(2, 5, 2, 5), 0, 0));
 
         imageComponent.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
                 displayPad(e);
             }
@@ -175,6 +176,7 @@ public class TelephoneTextField extends JPanel implements FocusListener, MouseLi
         pad.showDialpad(this);
     }
 
+    @Override
     public void focusGained(final FocusEvent e) {
         if (!isEdited()) {
             textField.setText("");
@@ -182,6 +184,7 @@ public class TelephoneTextField extends JPanel implements FocusListener, MouseLi
         textField.setForeground(Color.black);
     }
 
+    @Override
     public void focusLost(FocusEvent e) {
         if (!ModelUtil.hasLength(textField.getText())) {
             textField.setForeground((Color) UIManager.get("TextField.lightforeground"));
@@ -189,6 +192,7 @@ public class TelephoneTextField extends JPanel implements FocusListener, MouseLi
         }
     }
 
+    @Override
     public void keyTyped(KeyEvent keyEvent) {
         if (keyEvent.getKeyChar() == KeyEvent.VK_ENTER) {
             if (pad != null) {
@@ -202,27 +206,34 @@ public class TelephoneTextField extends JPanel implements FocusListener, MouseLi
         }
     }
 
+    @Override
     public void keyPressed(KeyEvent keyEvent) {
     }
 
+    @Override
     public void keyReleased(KeyEvent keyEvent) {
     }
 
+    @Override
     public void mouseClicked(MouseEvent mouseEvent) {
         if (!pad.isShowing()) {
             pad.showDialpad(this);
         }
     }
 
+    @Override
     public void mousePressed(MouseEvent mouseEvent) {
     }
 
+    @Override
     public void mouseReleased(MouseEvent mouseEvent) {
     }
 
+    @Override
     public void mouseEntered(MouseEvent mouseEvent) {
     }
 
+    @Override
     public void mouseExited(MouseEvent mouseEvent) {
     }
 }

@@ -88,16 +88,16 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
      */
     private int fontSize;
 
-    private List<ContextMenuListener> contextMenuListener = new ArrayList<ContextMenuListener>();
+    private final List<ContextMenuListener> contextMenuListener = new ArrayList<>();
 
     private JPopupMenu popup;
 
-    private JMenuItem cutMenu;
-    private JMenuItem copyMenu;
-    private JMenuItem pasteMenu;
-    private JMenuItem selectAll;
+    private final JMenuItem cutMenu;
+    private final JMenuItem copyMenu;
+    private final JMenuItem pasteMenu;
+    private final JMenuItem selectAll;
 
-    private List<LinkInterceptor> interceptors = new ArrayList<LinkInterceptor>();
+    private final List<LinkInterceptor> interceptors = new ArrayList<>();
 
     protected EmoticonManager emoticonManager;
 
@@ -144,6 +144,7 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
         getActionMap().put("cut", new AbstractAction("cut") {
             private static final long serialVersionUID = 9117190151545566922L;
 
+            @Override
             public void actionPerformed(ActionEvent evt) {
                 cutAction();
             }
@@ -154,6 +155,7 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
         getActionMap().put("copy", new AbstractAction("copy") {
             private static final long serialVersionUID = 4949716854440264528L;
 
+            @Override
             public void actionPerformed(ActionEvent evt) {
                 SparkManager.setClipboard(getSelectedText());
             }
@@ -164,6 +166,7 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
         getActionMap().put("paste", new AbstractAction("paste") {
             private static final long serialVersionUID = -8767763580660683678L;
 
+            @Override
             public void actionPerformed(ActionEvent evt) {
                 pasteAction();
             }
@@ -176,6 +179,7 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
      *
      * @param message inserts the text directly into the ChatArea
      */
+    @Override
     public void setText(String message) {
         // By default, use the hand cursor for link selection
         // and scrolling.
@@ -479,6 +483,7 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
         fontSize = size;
     }
 
+    @Override
     public void mouseClicked(MouseEvent e) {
         try {
             final int pos = viewToModel(e.getPoint());
@@ -522,6 +527,7 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
         }
     }
 
+    @Override
     public void mousePressed(MouseEvent e) {
         if (e.isPopupTrigger()) {
             handlePopup(e);
@@ -535,6 +541,7 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
      *
      * @param e - the MouseReleased event
      */
+    @Override
     public void mouseReleased(MouseEvent e) {
         if (e.isPopupTrigger()) {
             handlePopup(e);
@@ -542,12 +549,15 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
 
     }
 
+    @Override
     public void mouseEntered(MouseEvent e) {
     }
 
+    @Override
     public void mouseExited(MouseEvent e) {
     }
 
+    @Override
     public void mouseDragged(MouseEvent e) {
     }
 
@@ -556,6 +566,7 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
      *
      * @param e - the current MouseEvent.
      */
+    @Override
     public void mouseMoved(MouseEvent e) {
         checkForLink(e);
     }
@@ -714,7 +725,7 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
     }
 
     private void fireContextMenuListeners() {
-        for (ContextMenuListener listener : new ArrayList<ContextMenuListener>(contextMenuListener)) {
+        for (ContextMenuListener listener : new ArrayList<>(contextMenuListener)) {
             listener.poppingUp(this, popup);
         }
     }
@@ -728,7 +739,7 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
     }
 
     public boolean fireLinkInterceptors(MouseEvent event, String link) {
-        for (LinkInterceptor linkInterceptor : new ArrayList<LinkInterceptor>(interceptors)) {
+        for (LinkInterceptor linkInterceptor : new ArrayList<>(interceptors)) {
             boolean handled = linkInterceptor.handleLink(event, link);
             if (handled) {
                 return true;
@@ -738,6 +749,7 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
         return false;
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == cutMenu) {
             cutAction();

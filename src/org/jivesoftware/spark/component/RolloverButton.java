@@ -83,6 +83,7 @@ public class RolloverButton extends JButton {
         setMargin(new Insets(1, 1, 1, 1));
 
         addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseEntered(MouseEvent e) {
                 if (isEnabled()) {
                     setBorderPainted(true);
@@ -94,6 +95,7 @@ public class RolloverButton extends JButton {
                 }
             }
 
+            @Override
             public void mouseExited(MouseEvent e) {
                 setBorderPainted(false);
                 setContentAreaFilled(false);

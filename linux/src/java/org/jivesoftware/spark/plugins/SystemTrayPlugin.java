@@ -14,18 +14,22 @@ import org.jivesoftware.spark.plugin.Plugin;
  */
 public class SystemTrayPlugin implements Plugin {
 
+    @Override
     public void initialize() {
         // Add System Tray
         new SparkSystemTray();
     }
 
+    @Override
     public void shutdown() {
     }
 
+    @Override
     public boolean canShutDown() {
         return false;
     }
 
+    @Override
     public void uninstall() {
     }
 }

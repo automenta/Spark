@@ -50,6 +50,7 @@ public class BuzzPlugin implements Plugin {
     private static final String ELEMENTNAME_OLD = "buzz";
     private static final String NAMESPACE_OLD = "http://www.jivesoftware.com/spark";
 
+    @Override
     public void initialize() {
         ProviderManager.getInstance().addExtensionProvider(ELEMENTNAME,
                 NAMESPACE, BuzzPacket.class);
@@ -58,6 +59,7 @@ public class BuzzPlugin implements Plugin {
                 NAMESPACE_OLD, BuzzPacket.class);
 
         SparkManager.getConnection().addPacketListener(new PacketListener() {
+            @Override
             public void processPacket(Packet packet) {
                 if (packet instanceof Message) {
                     final Message message = (Message) packet;
@@ -67,6 +69,7 @@ public class BuzzPlugin implements Plugin {
                             || message.getExtension(ELEMENTNAME, NAMESPACE) != null;
                     if (buzz) {
                         SwingUtilities.invokeLater(new Runnable() {
+                            @Override
                             public void run() {
                                 shakeWindow(message);
                             }
@@ -78,8 +81,10 @@ public class BuzzPlugin implements Plugin {
 
         SparkManager.getChatManager().addChatRoomListener(
                 new ChatRoomListener() {
+            @Override
                     public void chatRoomOpened(final ChatRoom room) {
                         TimerTask task = new SwingTimerTask() {
+                    @Override
                             public void doRun() {
                                 addBuzzFeatureToChatRoom(room);
                             }
@@ -88,18 +93,23 @@ public class BuzzPlugin implements Plugin {
                         TaskEngine.getInstance().schedule(task, 100);
                     }
 
+            @Override
                     public void chatRoomLeft(ChatRoom room) {
                     }
 
+            @Override
                     public void chatRoomClosed(ChatRoom room) {
                     }
 
+            @Override
                     public void chatRoomActivated(ChatRoom room) {
                     }
 
+            @Override
                     public void userHasJoined(ChatRoom room, String userid) {
                     }
 
+            @Override
                     public void userHasLeft(ChatRoom room, String userid) {
                     }
                 });
@@ -154,13 +164,16 @@ public class BuzzPlugin implements Plugin {
         room.scrollToBottom();
     }
 
+    @Override
     public void shutdown() {
     }
 
+    @Override
     public boolean canShutDown() {
         return true;
     }
 
+    @Override
     public void uninstall() {
     }
 }

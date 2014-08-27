@@ -112,7 +112,7 @@ public class LoginDialog {
     private static final String BUTTON_PANEL = "buttonpanel"; // NOTRANS
     private static final String PROGRESS_BAR = "progressbar"; // NOTRANS
     private LocalPreferences localPref;
-    private ArrayList<String> _usernames = new ArrayList<String>();
+    private ArrayList<String> _usernames = new ArrayList<>();
     private String loginUsername;
     private String loginPassword;
     private String loginServer;
@@ -147,6 +147,7 @@ public class LoginDialog {
 
         // Construct Dialog
         EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 loginDialog = new JFrame(Default.getString(Default.APPLICATION_NAME));
                 loginDialog.setIconImage(SparkManager.getApplicationImage().getImage());
@@ -183,6 +184,7 @@ public class LoginDialog {
 
                 // Show dialog
                 loginDialog.addWindowListener(new WindowAdapter() {
+                    @Override
                     public void windowClosing(WindowEvent e) {
                         quitLogin();
                     }
@@ -423,6 +425,7 @@ public class LoginDialog {
                     final String url = Default.getString(Default.PASSWORD_RESET_URL);
                     private static final long serialVersionUID = 2680369963282231348L;
 
+                    @Override
                     public void actionPerformed(ActionEvent actionEvent) {
                         try {
 
@@ -628,6 +631,7 @@ public class LoginDialog {
          *
          * @param e the ActionEvent
          */
+        @Override
         public void actionPerformed(ActionEvent e) {
 
             if (e.getSource() == quitButton) {
@@ -699,10 +703,12 @@ public class LoginDialog {
          *
          * @param e the KeyEvent to process.
          */
+        @Override
         public void keyTyped(KeyEvent e) {
             validate(e);
         }
 
+        @Override
         public void keyPressed(KeyEvent e) {
             if (e.getKeyCode() == KeyEvent.VK_RIGHT
                     && ((JTextComponent) e.getSource()).getCaretPosition() == ((JTextComponent) e.getSource()).getText().length()) {
@@ -710,6 +716,7 @@ public class LoginDialog {
             }
         }
 
+        @Override
         public void keyReleased(KeyEvent e) {
             validateDialog();
         }
@@ -736,6 +743,7 @@ public class LoginDialog {
             }
         }
 
+        @Override
         public void focusGained(FocusEvent e) {
             Object o = e.getSource();
             if (o instanceof JTextComponent) {
@@ -743,6 +751,7 @@ public class LoginDialog {
             }
         }
 
+        @Override
         public void focusLost(FocusEvent e) {
         }
 
@@ -792,6 +801,7 @@ public class LoginDialog {
          */
         private void validateLogin() {
             final SwingWorker loginValidationThread = new SwingWorker() {
+                @Override
                 public Object construct() {
                     setLoginUsername(getUsername());
                     setLoginPassword(getPassword());
@@ -841,6 +851,7 @@ public class LoginDialog {
             return passwordField;
         }
 
+        @Override
         public Dimension getPreferredSize() {
             final Dimension dim = super.getPreferredSize();
             dim.height = 230;
@@ -1110,6 +1121,7 @@ public class LoginDialog {
             return !hasErrors;
         }
 
+        @Override
         public void handle(Callback[] callbacks) throws IOException {
             for (Callback callback : callbacks) {
                 if (callback instanceof NameCallback) {
@@ -1139,6 +1151,7 @@ public class LoginDialog {
         // Invoke the MainWindow.
         try {
             EventQueue.invokeLater(new Runnable() {
+                @Override
                 public void run() {
                     final MainWindow mainWindow = MainWindow.getInstance();
 
@@ -1303,13 +1316,13 @@ public class LoginDialog {
         //Assumption: the KDC will be found with the SRV record
         // _kerberos._udp.$realm
         try {
-            Hashtable<String, String> env = new Hashtable<String, String>();
+            Hashtable<String, String> env = new Hashtable<>();
             env.put("java.naming.factory.initial", "com.sun.jndi.dns.DnsContextFactory");
             DirContext context = new InitialDirContext(env);
             Attributes dnsLookup = context.getAttributes("_kerberos._udp." + realm, new String[]{"SRV"});
 
-            ArrayList<Integer> priorities = new ArrayList<Integer>();
-            HashMap<Integer, List<String>> records = new HashMap<Integer, List<String>>();
+            ArrayList<Integer> priorities = new ArrayList<>();
+            HashMap<Integer, List<String>> records = new HashMap<>();
             for (Enumeration<?> e = dnsLookup.getAll(); e.hasMoreElements();) {
                 Attribute record = (Attribute) e.nextElement();
                 for (Enumeration<?> e2 = record.getAll(); e2.hasMoreElements();) {
@@ -1319,12 +1332,12 @@ public class LoginDialog {
                     if (priorities.contains(pri)) {
                         List<String> recs = records.get(pri);
                         if (recs == null) {
-                            recs = new ArrayList<String>();
+                            recs = new ArrayList<>();
                         }
                         recs.add(sRecord);
                     } else {
                         priorities.add(pri);
-                        List<String> recs = new ArrayList<String>();
+                        List<String> recs = new ArrayList<>();
                         recs.add(sRecord);
                         records.put(pri, recs);
                     }

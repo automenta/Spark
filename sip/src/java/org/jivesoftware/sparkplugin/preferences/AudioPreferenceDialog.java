@@ -45,15 +45,15 @@ import org.jivesoftware.sparkplugin.ui.components.JavaMixer;
 public class AudioPreferenceDialog extends JPanel {
 
     private static final long serialVersionUID = -7436724748439424479L;
-    private JComboBox<String> audioBox = new JComboBox<String>();
+    private JComboBox<String> audioBox = new JComboBox<>();
     private JDialog dialog;
-    private JButton closeButton;
-    private JavaMixer javaMixer = new JavaMixer();
+    private final JButton closeButton;
+    private final JavaMixer javaMixer = new JavaMixer();
 
     public AudioPreferenceDialog() {
         setLayout(new GridBagLayout());
 
-        audioBox = new JComboBox<String>();
+        audioBox = new JComboBox<>();
 
         final JLabel inputValueLabel = new JLabel("Input Volume:");
         final JLabel outputValueLabel = new JLabel("Output Volume:");
@@ -66,6 +66,7 @@ public class AudioPreferenceDialog extends JPanel {
 
         closeButton = new JButton("Close");
         closeButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 SipPreference pref = SoftPhoneManager.getInstance().getPreference();
                 SipPreferences preferences = (SipPreferences) pref.getData();

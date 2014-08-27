@@ -40,12 +40,14 @@ public class TranslatorPlugin implements Plugin {
     /**
      * Called after Spark is loaded to initialize the new plugin.
      */
+    @Override
     public void initialize() {
         // Retrieve ChatManager from the SparkManager
         final ChatManager chatManager = SparkManager.getChatManager();
 
         // Add to a new ChatRoom when the ChatRoom opens.
         chatManager.addChatRoomListener(new ChatRoomListenerAdapter() {
+            @Override
             public void chatRoomOpened(ChatRoom room) {
                 // only do the translation for single chat
                 if (room instanceof ChatRoom) {
@@ -55,6 +57,7 @@ public class TranslatorPlugin implements Plugin {
                     final JComboBox translatorBox = new JComboBox(TranslatorUtil.TranslationType.getTypes());
 
                     translatorBox.addActionListener(new ActionListener() {
+                        @Override
                         public void actionPerformed(ActionEvent e) {
                             // Set the focus back to the message box.
                             roo.getChatInputEditor().requestFocusInWindow();
@@ -65,6 +68,7 @@ public class TranslatorPlugin implements Plugin {
 
                     // do the translation for outgoing messages.
                     final MessageEventListener messageListener = new MessageEventListener() {
+                        @Override
                         public void sendingMessage(Message message) {
                             String currentBody = message.getBody();
                             String oldBody = message.getBody();
@@ -82,6 +86,7 @@ public class TranslatorPlugin implements Plugin {
                             }
                         }
 
+                        @Override
                         public void receivingMessage(Message message) {
                             // do nothing
                         }
@@ -97,6 +102,7 @@ public class TranslatorPlugin implements Plugin {
      * Called when Spark is shutting down to allow for persistence of
      * information or releasing of resources.
      */
+    @Override
     public void shutdown() {
 
     }
@@ -106,6 +112,7 @@ public class TranslatorPlugin implements Plugin {
      *
      * @return true if Spark can shutdown on users request.
      */
+    @Override
     public boolean canShutDown() {
         return true;
     }
@@ -115,6 +122,7 @@ public class TranslatorPlugin implements Plugin {
      * plugin owner is responsible to clean up any resources and remove any
      * components install in Spark.
      */
+    @Override
     public void uninstall() {
         // Remove all resources belonging to this plugin.
     }

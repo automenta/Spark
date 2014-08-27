@@ -76,12 +76,13 @@ public class ScratchPadPlugin implements Plugin {
     public static boolean SHOW_ALL_TASKS = true;
 
     private static final String dateShortFormat = ((SimpleDateFormat) SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT)).toPattern();
-    private SimpleDateFormat formatter = new SimpleDateFormat(dateShortFormat);
-    private static List<TaskUI> taskList = new ArrayList<TaskUI>();
+    private final SimpleDateFormat formatter = new SimpleDateFormat(dateShortFormat);
+    private static final List<TaskUI> taskList = new ArrayList<>();
     private static JPanel panel_events;
     private static JPanel mainPanel;
     private static JFrame frame;
 
+    @Override
     public void initialize() {
 
         TimerTask startTask = new TimerTask() {
@@ -100,6 +101,7 @@ public class ScratchPadPlugin implements Plugin {
         contactList.getActionMap().put("viewNotes", new AbstractAction("viewNotes") {
             private static final long serialVersionUID = -3258500919859584696L;
 
+            @Override
             public void actionPerformed(ActionEvent evt) {
                 // Retrieve notes and dispaly in editor.
                 retrieveNotes();
@@ -111,6 +113,7 @@ public class ScratchPadPlugin implements Plugin {
         contactList.getActionMap().put("viewTasks", new AbstractAction("viewTasks") {
             private static final long serialVersionUID = 8589614513097901484L;
 
+            @Override
             public void actionPerformed(ActionEvent evt) {
                 // Retrieve notes and dispaly in editor.
                 showTaskList();
@@ -135,12 +138,14 @@ public class ScratchPadPlugin implements Plugin {
                 SparkRes.getImageIcon(SparkRes.DOCUMENT_16x16));
 
         taskMenu.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 showTaskList();
             }
         });
 
         notesMenu.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 retrieveNotes();
             }
@@ -205,6 +210,7 @@ public class ScratchPadPlugin implements Plugin {
         final JPanel titlePanel = new JPanel(new BorderLayout()) {
             private static final long serialVersionUID = -8812868562658925280L;
 
+            @Override
             public void paintComponent(Graphics g) {
                 Color startColor = Color.white;
                 Color endColor = new Color(198, 211, 247);
@@ -228,6 +234,7 @@ public class ScratchPadPlugin implements Plugin {
         Action showAllAction = new AbstractAction() {
             private static final long serialVersionUID = -7031122285194582204L;
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 for (TaskUI ui : taskList) {
                     ui.setVisible(true);
@@ -240,6 +247,7 @@ public class ScratchPadPlugin implements Plugin {
         Action showActiveAction = new AbstractAction() {
             private static final long serialVersionUID = -7551153291479117311L;
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 for (TaskUI ui : taskList) {
                     if (ui.isSelected()) {
@@ -254,6 +262,7 @@ public class ScratchPadPlugin implements Plugin {
         final Action addAction = new AbstractAction() {
             private static final long serialVersionUID = -5937301529216080813L;
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 String taskTitle = taskField.getText();
                 if (!ModelUtil.hasLength(taskTitle)) {
@@ -333,6 +342,7 @@ public class ScratchPadPlugin implements Plugin {
         final Action saveAction = new AbstractAction() {
             private static final long serialVersionUID = -4287799161421970177L;
 
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 // Save it.
                 Tasks tasks = new Tasks();
@@ -346,6 +356,7 @@ public class ScratchPadPlugin implements Plugin {
         };
 
         addButton.addKeyListener(new KeyAdapter() {
+            @Override
             public void keyReleased(KeyEvent e) {
                 if (e.getKeyChar() == KeyEvent.VK_ESCAPE) {
                     frame.dispose();
@@ -356,12 +367,14 @@ public class ScratchPadPlugin implements Plugin {
         });
 
         frame.addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent windowEvent) {
                 saveAction.actionPerformed(null);
             }
         });
 
         taskField.addKeyListener(new KeyAdapter() {
+            @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyChar() == KeyEvent.VK_ENTER) {
                     addAction.actionPerformed(null);
@@ -415,10 +428,12 @@ public class ScratchPadPlugin implements Plugin {
     private void retrieveNotes() {
         // Retrieve private notes from server.
         final SwingWorker notesWorker = new SwingWorker() {
+            @Override
             public Object construct() {
                 return PrivateNotes.getPrivateNotes();
             }
 
+            @Override
             public void finished() {
                 final PrivateNotes privateNotes = (PrivateNotes) get();
                 showPrivateNotes(privateNotes);
@@ -456,6 +471,7 @@ public class ScratchPadPlugin implements Plugin {
         final JPanel mainPanel = new JPanel();
 
         pane.addKeyListener(new KeyAdapter() {
+            @Override
             public void keyReleased(KeyEvent e) {
                 if (e.getKeyChar() == KeyEvent.VK_ESCAPE) {
                     frame.dispose();
@@ -486,6 +502,7 @@ public class ScratchPadPlugin implements Plugin {
         pane.setCaretPosition(0);
 
         button.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 frame.dispose();
 
@@ -497,19 +514,23 @@ public class ScratchPadPlugin implements Plugin {
         });
 
         cancelButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 frame.dispose();
             }
         });
     }
 
+    @Override
     public void shutdown() {
     }
 
+    @Override
     public boolean canShutDown() {
         return true;
     }
 
+    @Override
     public void uninstall() {
     }
 

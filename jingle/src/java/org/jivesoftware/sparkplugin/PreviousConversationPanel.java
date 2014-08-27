@@ -48,7 +48,7 @@ public class PreviousConversationPanel extends JPanel {
 
     private final SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy, h:mm a");
 
-    private TimeTrackingLabel durationLabel;
+    private final TimeTrackingLabel durationLabel;
 
     private Date startTime;
 

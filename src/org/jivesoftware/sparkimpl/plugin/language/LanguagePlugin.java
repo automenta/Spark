@@ -106,6 +106,7 @@ public class LanguagePlugin implements Plugin {
                 Action action = new AbstractAction() {
                     private static final long serialVersionUID = -7093236616888591766L;
 
+                    @Override
                     public void actionPerformed(ActionEvent e) {
                         final LocalPreferences preferences = SettingsManager.getLocalPreferences();
                         preferences.setLanguage(locale.toString());
@@ -129,13 +130,16 @@ public class LanguagePlugin implements Plugin {
         }
     }
 
+    @Override
     public void shutdown() {
     }
 
+    @Override
     public boolean canShutDown() {
         return false;
     }
 
+    @Override
     public void uninstall() {
     }
 }

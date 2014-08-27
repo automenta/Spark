@@ -45,11 +45,11 @@ public class PhonePad extends BackgroundPanel {
 
     private TelephoneTextField callField;
 
-    final List<DialButton> list = new ArrayList<DialButton>();
+    final List<DialButton> list = new ArrayList<>();
 
     private JPopupMenu menu;
 
-    private DialSoundManager dialSoundManager;
+    private final DialSoundManager dialSoundManager;
 
     public PhonePad() {
         setLayout(new GridBagLayout());
@@ -107,6 +107,7 @@ public class PhonePad extends BackgroundPanel {
         setBorder(BorderFactory.createLineBorder(new Color(197, 213, 230)));
 
         addKeyListener(new KeyAdapter() {
+            @Override
             public void keyTyped(KeyEvent keyEvent) {
                 if (keyEvent.getKeyChar() == KeyEvent.VK_ESCAPE) {
                     menu.setVisible(false);
@@ -153,6 +154,7 @@ public class PhonePad extends BackgroundPanel {
             super(name);
         }
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             final String number = getValue(Action.NAME).toString();
 
@@ -193,6 +195,7 @@ public class PhonePad extends BackgroundPanel {
         this.requestFocus();
     }
 
+    @Override
     public void hide() {
         if (menu != null) {
             menu.setVisible(false);

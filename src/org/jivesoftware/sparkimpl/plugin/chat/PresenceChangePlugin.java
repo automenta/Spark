@@ -55,9 +55,10 @@ import org.jivesoftware.sparkimpl.settings.local.SettingsManager;
  */
 public class PresenceChangePlugin implements Plugin {
 
-    private final Set<String> sparkContacts = new HashSet<String>();
-    private LocalPreferences localPref = SettingsManager.getLocalPreferences();
+    private final Set<String> sparkContacts = new HashSet<>();
+    private final LocalPreferences localPref = SettingsManager.getLocalPreferences();
 
+    @Override
     public void initialize() {
         // Listen for right-clicks on ContactItem
         final ContactList contactList = SparkManager.getWorkspace().getContactList();
@@ -65,6 +66,7 @@ public class PresenceChangePlugin implements Plugin {
         final Action listenAction = new AbstractAction() {
             private static final long serialVersionUID = 7705539667621148816L;
 
+            @Override
             public void actionPerformed(ActionEvent e) {
 
                 for (ContactItem item : contactList.getSelectedUsers()) {
@@ -81,6 +83,7 @@ public class PresenceChangePlugin implements Plugin {
         final Action removeAction = new AbstractAction() {
             private static final long serialVersionUID = -8726129089417116105L;
 
+            @Override
             public void actionPerformed(ActionEvent e) {
 
                 for (ContactItem item : contactList.getSelectedUsers()) {
@@ -96,6 +99,7 @@ public class PresenceChangePlugin implements Plugin {
         removeAction.putValue(Action.SMALL_ICON, SparkRes.getImageIcon(SparkRes.SMALL_DELETE));
 
         contactList.addContextMenuListener(new ContextMenuListener() {
+            @Override
             public void poppingUp(Object object, JPopupMenu popup) {
                 if (object instanceof ContactItem) {
                     ContactItem item = (ContactItem) object;
@@ -110,10 +114,12 @@ public class PresenceChangePlugin implements Plugin {
                 }
             }
 
+            @Override
             public void poppingDown(JPopupMenu popup) {
 
             }
 
+            @Override
             public boolean handleDefaultAction(MouseEvent e) {
                 return false;
             }
@@ -121,9 +127,11 @@ public class PresenceChangePlugin implements Plugin {
 
         // Check presence changes
         SparkManager.getConnection().addPacketListener(new PacketListener() {
+            @Override
             public void processPacket(final Packet packet) {
                 try {
                     EventQueue.invokeAndWait(new Runnable() {
+                        @Override
                         public void run() {
                             Presence presence = (Presence) packet;
                             if (!presence.isAvailable() || presence.isAway()) {
@@ -131,7 +139,7 @@ public class PresenceChangePlugin implements Plugin {
                             }
                             String from = presence.getFrom();
 
-                            ArrayList<String> removelater = new ArrayList<String>();
+                            ArrayList<String> removelater = new ArrayList<>();
 
                             for (final String jid : sparkContacts) {
                                 if (jid.equals(StringUtils
@@ -195,14 +203,17 @@ public class PresenceChangePlugin implements Plugin {
         }, new PacketTypeFilter(Presence.class));
     }
 
+    @Override
     public void shutdown() {
 
     }
 
+    @Override
     public boolean canShutDown() {
         return true;
     }
 
+    @Override
     public void uninstall() {
         // Do nothing.
     }

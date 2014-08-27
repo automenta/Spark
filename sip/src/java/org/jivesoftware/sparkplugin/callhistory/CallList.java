@@ -22,10 +22,10 @@ import java.util.List;
 
 public class CallList {
 
-    private List<HistoryCall> list;
+    private final List<HistoryCall> list;
 
     public CallList() {
-        list = new ArrayList<HistoryCall>();
+        list = new ArrayList<>();
     }
 
     public List<HistoryCall> getList() {

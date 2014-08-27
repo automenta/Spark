@@ -36,7 +36,7 @@ import org.jivesoftware.spark.util.GraphicUtils;
 public class BookmarkUI extends JPanel {
 
     private static final long serialVersionUID = 2724141541874364121L;
-    private DefaultListModel model;
+    private final DefaultListModel model;
     private JList list;
 
     public BookmarkUI() {

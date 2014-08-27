@@ -118,6 +118,7 @@ public class GoogleFileViewer {
             setRowSelectionAllowed(true);
 
             addMouseListener(new MouseAdapter() {
+                @Override
                 public void mouseClicked(MouseEvent e) {
                     if (e.getClickCount() == 2) {
                         int row = getSelectedRow();
@@ -144,10 +145,12 @@ public class GoogleFileViewer {
                     }
                 }
 
+                @Override
                 public void mouseReleased(MouseEvent e) {
                     checkPopup(e);
                 }
 
+                @Override
                 public void mousePressed(MouseEvent e) {
                     checkPopup(e);
                 }
@@ -156,6 +159,7 @@ public class GoogleFileViewer {
         }
 
         // Handle image rendering correctly
+        @Override
         public TableCellRenderer getCellRenderer(int row, int column) {
             Object o = getValueAt(row, column);
             if (o != null) {
@@ -173,6 +177,7 @@ public class GoogleFileViewer {
                 Action action = new AbstractAction() {
                     private static final long serialVersionUID = 5747717080614743622L;
 
+                    @Override
                     public void actionPerformed(ActionEvent e) {
                         int selectedRow = table.getSelectedRow();
                         if (selectedRow != -1) {

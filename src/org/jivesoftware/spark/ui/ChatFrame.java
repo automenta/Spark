@@ -49,7 +49,7 @@ public class ChatFrame extends JFrame implements WindowFocusListener {
     private boolean focused;
     private JCheckBox alwaysOnTopItem;
     private ChatFrame chatFrame = this;
-    private Collection<ChatFrameToFrontListener> _windowToFrontListeners = new ArrayList<ChatFrameToFrontListener>();
+    private final Collection<ChatFrameToFrontListener> _windowToFrontListeners = new ArrayList<>();
 
     /**
      * Creates default ChatFrame.
@@ -60,6 +60,7 @@ public class ChatFrame extends JFrame implements WindowFocusListener {
         alwaysOnTopItem = new JCheckBox();
         alwaysOnTopItem.setToolTipText(Res.getString("menuitem.always.on.top"));
         alwaysOnTopItem.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if (alwaysOnTopItem.isSelected()) {
                     SettingsManager.getLocalPreferences().setChatWindowAlwaysOnTop(true);
@@ -102,6 +103,7 @@ public class ChatFrame extends JFrame implements WindowFocusListener {
              *
              * @param e WindowEvent is not used.
              */
+            @Override
             public void windowActivated(WindowEvent e) {
                 inactiveTime = 0;
                 if (Spark.isMac()) {
@@ -112,6 +114,7 @@ public class ChatFrame extends JFrame implements WindowFocusListener {
             /**
              * Invoked when a window is de-activated.
              */
+            @Override
             public void windowDeactivated(WindowEvent e) {
                 inactiveTime = System.currentTimeMillis();
             }
@@ -122,9 +125,11 @@ public class ChatFrame extends JFrame implements WindowFocusListener {
              *
              * @param e WindowEvent is not used.
              */
+            @Override
             public void windowIconified(WindowEvent e) {
             }
 
+            @Override
             public void windowDeiconified(WindowEvent e) {
                 setFocusableWindowState(true);
             }
@@ -132,6 +137,7 @@ public class ChatFrame extends JFrame implements WindowFocusListener {
 
         // Adding a Resize Listener to validate component sizes in a Chat Room.
         addComponentListener(new ComponentAdapter() {
+            @Override
             public void componentResized(ComponentEvent e) {
                 try {
                     ChatRoom chatRoom = SparkManager.getChatManager().getChatContainer().getActiveChatRoom();
@@ -144,6 +150,7 @@ public class ChatFrame extends JFrame implements WindowFocusListener {
 
     }
 
+    @Override
     public void windowGainedFocus(WindowEvent e) {
         focused = true;
 
@@ -154,6 +161,7 @@ public class ChatFrame extends JFrame implements WindowFocusListener {
         SparkManager.getChatManager().getChatContainer().focusChat();
     }
 
+    @Override
     public void windowLostFocus(WindowEvent e) {
         focused = false;
     }

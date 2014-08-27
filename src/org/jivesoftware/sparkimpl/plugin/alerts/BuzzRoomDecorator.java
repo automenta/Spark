@@ -40,8 +40,8 @@ import org.jivesoftware.spark.util.UIComponentRegistry;
  */
 public class BuzzRoomDecorator implements ActionListener {
 
-    private ChatRoom chatRoom;
-    private JButton buzzButton;
+    private final ChatRoom chatRoom;
+    private final JButton buzzButton;
 
     public BuzzRoomDecorator(ChatRoom chatRoom) {
         this.chatRoom = chatRoom;
@@ -64,6 +64,7 @@ public class BuzzRoomDecorator implements ActionListener {
         chatRoom.addEditorComponent(buzzer.buzzButton);
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         final String jid = ((ChatRoomImpl) chatRoom).getParticipantJID();
         Message message = new Message();
@@ -76,6 +77,7 @@ public class BuzzRoomDecorator implements ActionListener {
 
         // Enable the button after 30 seconds to prevent abuse.
         final TimerTask enableTask = new SwingTimerTask() {
+            @Override
             public void doRun() {
                 buzzButton.setEnabled(true);
             }

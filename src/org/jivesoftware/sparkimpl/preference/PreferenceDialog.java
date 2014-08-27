@@ -58,6 +58,7 @@ public class PreferenceDialog implements PropertyChangeListener {
         JButton btn_close = new JButton(Res.getString("close"));
 
         btn_close.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 saveLayout();
                 preferenceDialog.setVisible(false);
@@ -65,6 +66,7 @@ public class PreferenceDialog implements PropertyChangeListener {
             }
         });
         btn_save.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 boolean okToClose = prefPanel.closing();
                 if (okToClose) {
@@ -77,6 +79,7 @@ public class PreferenceDialog implements PropertyChangeListener {
             }
         });
         btn_apply.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 boolean okToClose = prefPanel.closing();
                 if (!okToClose) {
@@ -109,12 +112,14 @@ public class PreferenceDialog implements PropertyChangeListener {
         preferenceDialog.toFront();
 
         preferenceDialog.addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 saveLayout();
             }
         });
     }
 
+    @Override
     public void propertyChange(PropertyChangeEvent e) {
         if (pane.getValue() instanceof Integer) {
             saveLayout();

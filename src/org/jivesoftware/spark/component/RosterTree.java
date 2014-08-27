@@ -44,8 +44,8 @@ public final class RosterTree extends JPanel {
     private static final long serialVersionUID = 7892174130061826144L;
     private final JiveTreeNode rootNode = new JiveTreeNode("Contact List");
     private final Tree rosterTree;
-    private final Map<JiveTreeNode, String> addressMap = new HashMap<JiveTreeNode, String>();
-    private boolean showUnavailableAgents = true;
+    private final Map<JiveTreeNode, String> addressMap = new HashMap<>();
+    private final boolean showUnavailableAgents = true;
 
     /**
      * Creates a new Roster Tree.
@@ -90,18 +90,22 @@ public final class RosterTree extends JPanel {
         final Roster roster = xmppCon.getRoster();
 
         roster.addRosterListener(new RosterListener() {
+            @Override
             public void entriesAdded(Collection<String> addresses) {
 
             }
 
+            @Override
             public void entriesUpdated(Collection<String> addresses) {
 
             }
 
+            @Override
             public void entriesDeleted(Collection<String> addresses) {
 
             }
 
+            @Override
             public void presenceChanged(Presence presence) {
                 //changePresence(presence.getFrom(), presence.getMode() == Presence.Mode.available);
 
@@ -156,6 +160,7 @@ public final class RosterTree extends JPanel {
         return addressMap.get(node);
     }
 
+    @Override
     public String toString() {
         return "Roster";
     }

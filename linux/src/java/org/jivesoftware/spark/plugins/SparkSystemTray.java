@@ -126,6 +126,7 @@ public final class SparkSystemTray implements ActionListener, MainWindowListener
         hideMenu.addActionListener(this);
 
         Action logoutAction = new AbstractAction() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 SparkManager.getMainWindow().logout(false);
             }
@@ -152,12 +153,14 @@ public final class SparkSystemTray implements ActionListener, MainWindowListener
         }
 
         trayIcon.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 showMainWindow();
             }
         });
 
         SparkManager.getSessionManager().addPresenceListener(new PresenceListener() {
+            @Override
             public void presenceChanged(Presence presence) {
                 changePresence(presence);
             }
@@ -202,6 +205,7 @@ public final class SparkSystemTray implements ActionListener, MainWindowListener
 
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         Object o = e.getSource();
         if (!(o instanceof MenuItem)) {
@@ -274,13 +278,16 @@ public final class SparkSystemTray implements ActionListener, MainWindowListener
         }
     }
 
+    @Override
     public void shutdown() {
         systemTray.remove(trayIcon);
     }
 
+    @Override
     public void mainWindowActivated() {
     }
 
+    @Override
     public void mainWindowDeactivated() {
     }
 
@@ -325,6 +332,7 @@ public final class SparkSystemTray implements ActionListener, MainWindowListener
         notificationDialog.setPreferredSize(new Dimension(200, 150));
         notificationDialog.setLocation(newLoc);
         messageLabel.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
                 notificationDialog.setVisible(false);
                 showMainWindow();
@@ -332,6 +340,7 @@ public final class SparkSystemTray implements ActionListener, MainWindowListener
         });
 
         mainPanel.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
                 notificationDialog.setVisible(false);
                 showMainWindow();

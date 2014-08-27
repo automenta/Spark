@@ -42,9 +42,9 @@ import org.w3c.dom.Element;
  */
 public class GoogleSearchResult {
 
-    private String searchBase;
+    private final String searchBase;
     private String query;
-    private int relevance;
+    private final int relevance;
     String id;
     String title;
     String url;
@@ -176,7 +176,7 @@ public class GoogleSearchResult {
      * @return the values to populate the table with.
      */
     public List<String> getFieldValues() {
-        final List<String> returnList = new ArrayList<String>();
+        final List<String> returnList = new ArrayList<>();
         returnList.add(StringUtils.stripTags(snippet));
         returnList.add(getSubject());
         return returnList;

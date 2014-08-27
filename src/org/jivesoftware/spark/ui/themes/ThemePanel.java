@@ -69,42 +69,42 @@ public class ThemePanel extends JPanel {
 
     private static final long serialVersionUID = 2943854311454590459L;
 
-    private TranscriptWindow emoticonpreviewtranscript;
+    private final TranscriptWindow emoticonpreviewtranscript;
 
-    private JComboBox messageStyleBox;
+    private final JComboBox messageStyleBox;
 
-    private JComboBox emoticonBox;
+    private final JComboBox emoticonBox;
 
-    private JButton addEmoticonButton;
+    private final JButton addEmoticonButton;
 
-    private JTextField contactListFontField;
-    private JLabel contactListFontLabel;
+    private final JTextField contactListFontField;
+    private final JLabel contactListFontLabel;
 
-    private JTextField chatRoomFontField;
-    private JLabel chatRoomFontLabel;
+    private final JTextField chatRoomFontField;
+    private final JLabel chatRoomFontLabel;
 
-    private JCheckBox emoticonCheckBox;
+    private final JCheckBox emoticonCheckBox;
     private JFileChooser fc;
 
-    private JCheckBox showAvatarsBox;
-    private JCheckBox showVCards;
-    private JLabel avatarSizeLabel;
-    private JComboBox avatarSizeField;
+    private final JCheckBox showAvatarsBox;
+    private final JCheckBox showVCards;
+    private final JLabel avatarSizeLabel;
+    private final JComboBox avatarSizeField;
 
-    private JLabel _lookandfeelLabel;
+    private final JLabel _lookandfeelLabel;
     private JComboBox _lookandfeel;
     private JButton _lookandfeelpreview;
-    private Vector<String> _lookandfeelname = new Vector<String>();
-    private JCheckBox _useTabsForTransports;
-    private JCheckBox _useTabsForConference;
+    private Vector<String> _lookandfeelname = new Vector<>();
+    private final JCheckBox _useTabsForTransports;
+    private final JCheckBox _useTabsForConference;
 
-    private ThemePanel _themepanel;
+    private final ThemePanel _themepanel;
 
     private JComboBox _showReconnectBox;
 
-    private LocalPreferences pref = SettingsManager.getLocalPreferences();
+    private final LocalPreferences pref = SettingsManager.getLocalPreferences();
 
-    private JScrollPane emoticonscrollpane;
+    private final JScrollPane emoticonscrollpane;
 
     private JPanel emoticonspanel;
 
@@ -118,7 +118,7 @@ public class ThemePanel extends JPanel {
 
         LookAndFeelInfo[] ui = UIManager.getInstalledLookAndFeels();
 
-        Vector<String> lafname = new Vector<String>();
+        Vector<String> lafname = new Vector<>();
 
         for (int i = 0; i < ui.length; i++) {
             _lookandfeelname.add(ui[i].getClassName());
@@ -339,6 +339,7 @@ public class ThemePanel extends JPanel {
         _showReconnectBox.setSelectedIndex(pref.getReconnectPanelType());
 
         _showReconnectBox.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if (_showReconnectBox.getSelectedIndex() != -1) {
                     setShowReconnectPanel(_showReconnectBox.getSelectedIndex());
@@ -441,6 +442,7 @@ public class ThemePanel extends JPanel {
         emoticonBox.setSelectedItem(activePack);
 
         emoticonBox.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 emoticonManager.addEmoticonPack((String) emoticonBox.getSelectedItem());
                 emoticonManager.setActivePack((String) emoticonBox.getSelectedItem());
@@ -449,6 +451,7 @@ public class ThemePanel extends JPanel {
         });
 
         addEmoticonButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 addEmoticonPack();
             }
@@ -590,6 +593,7 @@ public class ThemePanel extends JPanel {
      */
     private class ZipFilter extends javax.swing.filechooser.FileFilter {
 
+        @Override
         public boolean accept(File file) {
             String filename = file.getName();
             if (file.isDirectory()) {
@@ -598,6 +602,7 @@ public class ThemePanel extends JPanel {
             return filename.endsWith(".zip");
         }
 
+        @Override
         public String getDescription() {
             return "*.zip";
         }

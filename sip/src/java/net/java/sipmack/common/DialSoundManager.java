@@ -37,7 +37,7 @@ public class DialSoundManager {
     AudioPlayer audioPlayer = AudioPlayer.player;
     AudioStream[] audioStreams;
 
-    private Vector<String> playQueue = new Vector<String>();
+    private Vector<String> playQueue = new Vector<>();
     private boolean running = true;
     Thread playerThread;
 
@@ -145,7 +145,7 @@ public class DialSoundManager {
 
 class InputStreamEventSource extends InputStream {
 
-    private InputStream is;
+    private final InputStream is;
     int i;
 
     public InputStreamEventSource(int i, InputStream is) {
@@ -177,7 +177,7 @@ class InputStreamEventSource extends InputStream {
     public void addListener(InputStreamListener item) {
         listeners.add(item);
     }
-    List<InputStreamListener> listeners = new ArrayList<InputStreamListener>();
+    List<InputStreamListener> listeners = new ArrayList<>();
 }
 
 interface InputStreamListener {

@@ -69,15 +69,15 @@ import org.jivesoftware.sparkimpl.settings.local.SettingsManager;
  */
 public class LoginSettingDialog implements PropertyChangeListener {
 
-    private LocalPreferences localPreferences;
+    private final LocalPreferences localPreferences;
 
     private JDialog optionsDialog;
     private JOptionPane optionPane;
 
-    private GeneralPanel generalPanel;
-    private ProxyPanel proxyPanel;
-    private PkiPanel pkiPanel;
-    private SsoPanel ssoPanel;
+    private final GeneralPanel generalPanel;
+    private final ProxyPanel proxyPanel;
+    private final PkiPanel pkiPanel;
+    private final SsoPanel ssoPanel;
 
     /**
      * Empty Constructor.
@@ -152,6 +152,7 @@ public class LoginSettingDialog implements PropertyChangeListener {
      *
      * @param e the property change event.
      */
+    @Override
     public void propertyChange(PropertyChangeEvent e) {
         String value = (String) optionPane.getValue();
         if (Res.getString("cancel").equals(value)) {
@@ -187,19 +188,19 @@ public class LoginSettingDialog implements PropertyChangeListener {
     private class GeneralPanel extends JPanel implements ActionListener {
 
         private static final long serialVersionUID = -3628642430429935901L;
-        private JCheckBox autoDiscoverBox = new JCheckBox();
-        private JLabel portLabel = new JLabel();
-        private JTextField portField = new JTextField();
-        private JLabel xmppHostLabel = new JLabel();
-        private JTextField xmppHostField = new JTextField();
-        private JLabel timeOutLabel = new JLabel();
-        private JTextField timeOutField = new JTextField();
-        private JLabel resourceLabel = new JLabel();
-        private JTextField resourceField = new JTextField();
-        private JCheckBox autoLoginBox = new JCheckBox();
-        private JCheckBox useSSLBox = new JCheckBox();
-        private JCheckBox compressionBox = new JCheckBox();
-        private JCheckBox debuggerBox = new JCheckBox();
+        private final JCheckBox autoDiscoverBox = new JCheckBox();
+        private final JLabel portLabel = new JLabel();
+        private final JTextField portField = new JTextField();
+        private final JLabel xmppHostLabel = new JLabel();
+        private final JTextField xmppHostField = new JTextField();
+        private final JLabel timeOutLabel = new JLabel();
+        private final JTextField timeOutField = new JTextField();
+        private final JLabel resourceLabel = new JLabel();
+        private final JTextField resourceField = new JTextField();
+        private final JCheckBox autoLoginBox = new JCheckBox();
+        private final JCheckBox useSSLBox = new JCheckBox();
+        private final JCheckBox compressionBox = new JCheckBox();
+        private final JCheckBox debuggerBox = new JCheckBox();
 
         public GeneralPanel() {
             ResourceUtils.resLabel(portLabel, portField,
@@ -296,6 +297,7 @@ public class LoginSettingDialog implements PropertyChangeListener {
             SettingsManager.saveSettings();
         }
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == autoDiscoverBox) {
                 updateAutoDiscovery();
@@ -367,11 +369,11 @@ public class LoginSettingDialog implements PropertyChangeListener {
 
         private static final long serialVersionUID = 4652063977305639878L;
         private JCheckBox useProxyBox = new JCheckBox();
-        private JComboBox protocolBox = new JComboBox();
-        private JTextField hostField = new JTextField();
-        private JTextField portField = new JTextField();
-        private JTextField usernameField = new JTextField();
-        private JPasswordField passwordField = new JPasswordField();
+        private final JComboBox protocolBox = new JComboBox();
+        private final JTextField hostField = new JTextField();
+        private final JTextField portField = new JTextField();
+        private final JTextField usernameField = new JTextField();
+        private final JPasswordField passwordField = new JPasswordField();
 
         /**
          * Construct UI.
@@ -436,6 +438,7 @@ public class LoginSettingDialog implements PropertyChangeListener {
                     new Insets(5, 5, 5, 5), 0, 0));
 
             useProxyBox.addActionListener(new ActionListener() {
+                @Override
                 public void actionPerformed(ActionEvent e) {
                     enableFields(useProxyBox.isSelected());
                 }
@@ -838,6 +841,7 @@ public class LoginSettingDialog implements PropertyChangeListener {
             return null;
         }
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == useSSOBox) {
                 ssoMethodFileRadio.setEnabled(useSSOBox.isSelected());
@@ -1048,6 +1052,7 @@ public class LoginSettingDialog implements PropertyChangeListener {
 
         }
 
+        @Override
         public void actionPerformed(ActionEvent e) {
 
             if (e.getSource() == usePKIBox) {

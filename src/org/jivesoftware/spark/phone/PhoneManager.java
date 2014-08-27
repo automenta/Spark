@@ -59,8 +59,8 @@ public class PhoneManager implements ChatRoomListener, ContextMenuListener {
     private static PhoneManager singleton;
     private static final Object LOCK = new Object();
 
-    private List<Phone> phones = new CopyOnWriteArrayList<Phone>();
-    private List<String> currentCalls = new ArrayList<String>();
+    private final List<Phone> phones = new CopyOnWriteArrayList<>();
+    private final List<String> currentCalls = new ArrayList<>();
     // Static Media Locator
     static private MediaLocator mediaLocator = null;
     // Static Media Locator Preference
@@ -119,14 +119,16 @@ public class PhoneManager implements ChatRoomListener, ContextMenuListener {
         phones.remove(phone);
     }
 
+    @Override
     public void chatRoomOpened(final ChatRoom room) {
         if (!phones.isEmpty() && room instanceof ChatRoomImpl) {
             final ChatRoomImpl chatRoomImpl = (ChatRoomImpl) room;
             final ChatRoomButton dialButton = new ChatRoomButton(SparkRes.getImageIcon(SparkRes.DIAL_PHONE_IMAGE_24x24));
             dialButton.setToolTipText(Res.getString("tooltip.place.voice.call"));
 
-            final List<Action> actions = new ArrayList<Action>();
+            final List<Action> actions = new ArrayList<>();
             SwingWorker actionWorker = new SwingWorker() {
+                @Override
                 public Object construct() {
                     for (Phone phone : phones) {
                         final Collection<Action> phoneActions = phone.getPhoneActions(chatRoomImpl.getParticipantJID());
@@ -139,6 +141,7 @@ public class PhoneManager implements ChatRoomListener, ContextMenuListener {
                     return actions;
                 }
 
+                @Override
                 public void finished() {
                     if (!actions.isEmpty()) {
                         room.addChatRoomButton(dialButton, true);
@@ -149,8 +152,10 @@ public class PhoneManager implements ChatRoomListener, ContextMenuListener {
             actionWorker.start();
 
             dialButton.addMouseListener(new MouseAdapter() {
+                @Override
                 public void mousePressed(final MouseEvent e) {
                     SwingWorker worker = new SwingWorker() {
+                        @Override
                         public Object construct() {
                             try {
                                 Thread.sleep(50);
@@ -160,6 +165,7 @@ public class PhoneManager implements ChatRoomListener, ContextMenuListener {
                             return true;
                         }
 
+                        @Override
                         public void finished() {
                             // Handle actions.
                             if (actions.size() > 0) {
@@ -180,28 +186,35 @@ public class PhoneManager implements ChatRoomListener, ContextMenuListener {
         }
     }
 
+    @Override
     public void chatRoomLeft(ChatRoom room) {
     }
 
+    @Override
     public void chatRoomClosed(ChatRoom room) {
     }
 
+    @Override
     public void chatRoomActivated(ChatRoom room) {
     }
 
+    @Override
     public void userHasJoined(ChatRoom room, String userid) {
     }
 
+    @Override
     public void userHasLeft(ChatRoom room, String userid) {
     }
 
+    @Override
     public void poppingUp(Object object, final JPopupMenu popup) {
         if (!phones.isEmpty()) {
             if (object instanceof ContactItem) {
                 final ContactItem contactItem = (ContactItem) object;
-                final List<Action> actions = new ArrayList<Action>();
+                final List<Action> actions = new ArrayList<>();
 
                 SwingWorker worker = new SwingWorker() {
+                    @Override
                     public Object construct() {
                         for (Phone phone : phones) {
                             final Collection<Action> itemActions = phone.getPhoneActions(contactItem.getJID());
@@ -212,6 +225,7 @@ public class PhoneManager implements ChatRoomListener, ContextMenuListener {
                         return null;
                     }
 
+                    @Override
                     public void finished() {
 
                         if (actions.size() > 0) {
@@ -240,9 +254,11 @@ public class PhoneManager implements ChatRoomListener, ContextMenuListener {
         }
     }
 
+    @Override
     public void poppingDown(JPopupMenu popup) {
     }
 
+    @Override
     public boolean handleDefaultAction(MouseEvent e) {
         return false;
     }

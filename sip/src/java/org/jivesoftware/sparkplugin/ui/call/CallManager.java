@@ -55,11 +55,11 @@ public class CallManager implements InterlocutorListener {
 
     private SoftPhoneManager softPhone;
 
-    private final Map<String, PhonePanel> calls = new HashMap<String, PhonePanel>();
+    private final Map<String, PhonePanel> calls = new HashMap<>();
 
     private Presence offPhonePresence;
 
-    private Map<InterlocutorUI, SparkToaster> toasters = new HashMap<InterlocutorUI, SparkToaster>();
+    private Map<InterlocutorUI, SparkToaster> toasters = new HashMap<>();
 
     /**
      * Returns the singleton instance of <CODE>CallManager</CODE>, creating it
@@ -86,20 +86,25 @@ public class CallManager implements InterlocutorListener {
         softPhone.addInterlocutorListener(this);
 
         SparkManager.getChatManager().getChatContainer().addSparkTabbedPaneListener(new SparkTabbedPaneListener() {
+            @Override
             public void tabRemoved(SparkTab tab, Component component, int index) {
                 removePhonePanel(component);
             }
 
+            @Override
             public void tabAdded(SparkTab tab, Component component, int index) {
 
             }
 
+            @Override
             public void tabSelected(SparkTab tab, Component component, int index) {
             }
 
+            @Override
             public void allTabsRemoved() {
             }
 
+            @Override
             public boolean canTabClose(SparkTab tab, Component component) {
                 PhonePanel phonePanel = null;
                 if (component instanceof PhonePanel) {
@@ -147,6 +152,7 @@ public class CallManager implements InterlocutorListener {
 
         try {
             EventQueue.invokeAndWait(new Runnable() {
+                @Override
                 public void run() {
                     final SparkToaster toasterManager = new SparkToaster();
                     toasters.put(ic, toasterManager);
@@ -160,6 +166,7 @@ public class CallManager implements InterlocutorListener {
 
                     toasterManager.setHidable(false);
                     incomingCall.getAcceptButton().addActionListener(new ActionListener() {
+                        @Override
                         public void actionPerformed(ActionEvent e) {
                             SparkManager.getMainWindow().toFront();
                             closeToaster(ic);
@@ -168,6 +175,7 @@ public class CallManager implements InterlocutorListener {
                         }
                     });
                     incomingCall.getRejectButton().addActionListener(new ActionListener() {
+                        @Override
                         public void actionPerformed(ActionEvent e) {
                             closeToaster(ic);
                             SoftPhoneManager.getInstance().getDefaultGuiManager().hangup(ic);
@@ -194,6 +202,7 @@ public class CallManager implements InterlocutorListener {
         toasterManager.hideTitle();
 
         incomingCall.getRejectButton().addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 closeToaster(ic);
                 SoftPhoneManager.getInstance().getDefaultGuiManager().hangup(ic);
@@ -201,6 +210,7 @@ public class CallManager implements InterlocutorListener {
         });
     }
 
+    @Override
     public void interlocutorAdded(final InterlocutorUI interlocutorUI) {
 
         Presence current = SparkManager.getWorkspace().getStatusBar().getPresence();
@@ -215,6 +225,7 @@ public class CallManager implements InterlocutorListener {
         SparkManager.getSessionManager().changePresence(onPhonePresence);
 
         interlocutorUI.getCall().addStateChangeListener(new CallListener() {
+            @Override
             public void callStateChanged(CallStateEvent evt) {
                 final String callState = evt.getNewState();
 
@@ -257,6 +268,7 @@ public class CallManager implements InterlocutorListener {
         try {
 
             EventQueue.invokeAndWait(new Runnable() {
+                @Override
                 public void run() {
                     String phoneNumber = interlocutorUI.getCall().getNumber();
                     phoneNumber = SoftPhoneManager.getNumbersFromPhone(phoneNumber);
@@ -305,6 +317,7 @@ public class CallManager implements InterlocutorListener {
         }
     }
 
+    @Override
     public void interlocutorRemoved(final InterlocutorUI interlocutorUI) {
         if (softPhone.getInterlocutors().isEmpty()) {
 
@@ -326,6 +339,7 @@ public class CallManager implements InterlocutorListener {
         }
 
         final SwingWorker delay = new SwingWorker() {
+            @Override
             public Object construct() {
                 try {
                     Thread.sleep(2000);
@@ -335,6 +349,7 @@ public class CallManager implements InterlocutorListener {
                 return true;
             }
 
+            @Override
             public void finished() {
                 String phoneNumber = interlocutorUI.getCall().getNumber();
                 phoneNumber = SoftPhoneManager.getNumbersFromPhone(phoneNumber);

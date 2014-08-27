@@ -71,8 +71,9 @@ public class FrequentContactsPlugin implements Plugin {
     private JList contacts;
     private Window window;
 
-    private Map<JLabel, String> jidMap = new HashMap<JLabel, String>();
+    private Map<JLabel, String> jidMap = new HashMap<>();
 
+    @Override
     public void initialize() {
         transcriptDir = new File(SparkManager.getUserDirectory(), "transcripts");
 
@@ -93,6 +94,7 @@ public class FrequentContactsPlugin implements Plugin {
 
         // Add Listeners
         contacts.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
                 if (SwingUtilities.isRightMouseButton(e)) {
 
@@ -122,6 +124,7 @@ public class FrequentContactsPlugin implements Plugin {
         });
 
         contacts.addKeyListener(new KeyAdapter() {
+            @Override
             public void keyReleased(KeyEvent e) {
                 if (e.getKeyChar() == KeyEvent.VK_ENTER) {
                     final JLabel label = (JLabel) contacts.getSelectedValue();
@@ -138,10 +141,12 @@ public class FrequentContactsPlugin implements Plugin {
         });
 
         contacts.addFocusListener(new FocusListener() {
+            @Override
             public void focusGained(FocusEvent e) {
 
             }
 
+            @Override
             public void focusLost(FocusEvent e) {
                 window.dispose();
             }
@@ -153,6 +158,7 @@ public class FrequentContactsPlugin implements Plugin {
         SparkManager.getMainWindow().getRootPane().getActionMap().put("favoritePeople", new AbstractAction("favoritePeople") {
             private static final long serialVersionUID = 6836584242669218932L;
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 // Show History Popup
                 showPopup();
@@ -215,6 +221,7 @@ public class FrequentContactsPlugin implements Plugin {
         }
 
         final File[] transcriptFiles = transcriptDir.listFiles(new FilenameFilter() {
+            @Override
             public boolean accept(File dir, String name) {
                 return !name.contains("_current") && !name.equals("conversations.xml");
             }
@@ -228,7 +235,7 @@ public class FrequentContactsPlugin implements Plugin {
             size = 10;
         }
 
-        final List<String> jidList = new ArrayList<String>();
+        final List<String> jidList = new ArrayList<>();
         for (int i = 0; i < size; i++) {
             File file = files.get(i);
             String jid;
@@ -243,14 +250,17 @@ public class FrequentContactsPlugin implements Plugin {
         return jidList;
     }
 
+    @Override
     public void shutdown() {
 
     }
 
+    @Override
     public boolean canShutDown() {
         return true;
     }
 
+    @Override
     public void uninstall() {
     }
 
@@ -268,6 +278,7 @@ public class FrequentContactsPlugin implements Plugin {
             setOpaque(true);
         }
 
+        @Override
         public Component getListCellRendererComponent(JList list,
                 Object value,
                 int index,
@@ -292,6 +303,7 @@ public class FrequentContactsPlugin implements Plugin {
      * Sorts files by largest to smallest.
      */
     final Comparator<File> sizeComparator = new Comparator<File>() {
+        @Override
         public int compare(File item1, File item2) {
             long int1 = item1.length();
             long int2 = item2.length();

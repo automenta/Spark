@@ -62,9 +62,9 @@ public class LogManagerImpl implements SoftPhoneListener, LogManager {
 
     private boolean remoteLogging;
 
-    private SoftPhone softPhone;
+    private final SoftPhone softPhone;
 
-    private List<HistoryCall> calls = new ArrayList<HistoryCall>();
+    private final List<HistoryCall> calls = new ArrayList<>();
 
     public LogManagerImpl(SoftPhone softPhone) {
         this.softPhone = softPhone;
@@ -75,18 +75,22 @@ public class LogManagerImpl implements SoftPhoneListener, LogManager {
         softPhone.addSoftPhoneListener(this);
     }
 
+    @Override
     public boolean isRemoteLogging() {
         return remoteLogging;
     }
 
+    @Override
     public void setRemoteLogging(boolean remoteLogging) {
         this.remoteLogging = remoteLogging;
     }
 
+    @Override
     public void callStateChanged(final CallStateEvent evt) {
         if (evt.getNewState().equals(Call.DISCONNECTED)) {
 
             TimerTask task = new TimerTask() {
+                @Override
                 public void run() {
                     checkForMissedCalls(evt.getSourceCall());
                 }
@@ -96,6 +100,7 @@ public class LogManagerImpl implements SoftPhoneListener, LogManager {
         }
     }
 
+    @Override
     public void callRejectedRemotely(CallRejectedEvent evt) {
         //Do Nothing
     }
@@ -142,14 +147,17 @@ public class LogManagerImpl implements SoftPhoneListener, LogManager {
         }
     }
 
+    @Override
     public void messageReceived(MessageEvent evt) {
 
     }
 
+    @Override
     public void receivedUnknownMessage(UnknownMessageEvent evt) {
 
     }
 
+    @Override
     public void registerStatusChanged(RegisterEvent evt) {
         if (isRemoteLogging()) {
             try {
@@ -161,6 +169,7 @@ public class LogManagerImpl implements SoftPhoneListener, LogManager {
         }
     }
 
+    @Override
     public void showCallHistory() {
 
     }
@@ -173,6 +182,7 @@ public class LogManagerImpl implements SoftPhoneListener, LogManager {
         return new File(file, "spark-phone-history.xml");
     }
 
+    @Override
     public void commit() {
         final StringBuilder builder = new StringBuilder();
 
@@ -201,6 +211,7 @@ public class LogManagerImpl implements SoftPhoneListener, LogManager {
         }
     }
 
+    @Override
     public Collection<HistoryCall> getCallHistory() {
         return calls;
     }
@@ -259,6 +270,7 @@ public class LogManagerImpl implements SoftPhoneListener, LogManager {
         return call;
     }
 
+    @Override
     public void deleteCall(HistoryCall call) {
         getCallHistory().remove(call);
     }

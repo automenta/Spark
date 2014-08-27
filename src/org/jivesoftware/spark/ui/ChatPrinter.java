@@ -81,7 +81,7 @@ public class ChatPrinter implements Printable {
      pFormat object, the print method gets its PageFormat as an argument.
      */
     private PageFormat pFormat;
-    private PrinterJob pJob;
+    private final PrinterJob pJob;
 
     /**
      * The constructor initializes the pFormat and PJob variables.
@@ -174,6 +174,7 @@ public class ChatPrinter implements Printable {
      * @param pageIndex the page to print.
      * @return the page number printed.
      */
+    @Override
     public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) {
         double scale = 1.0;
         Graphics2D graphics2D;

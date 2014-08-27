@@ -32,8 +32,8 @@ import org.jivesoftware.sparkimpl.settings.local.SettingsManager;
  */
 public class FileTransferPreference implements Preference {
 
-    private FileTransferPreferencePanel ui;
-    private LocalPreferences localPreferences;
+    private final FileTransferPreferencePanel ui;
+    private final LocalPreferences localPreferences;
 
     public FileTransferPreference() {
         localPreferences = SettingsManager.getLocalPreferences();
@@ -46,36 +46,44 @@ public class FileTransferPreference implements Preference {
         ui = new FileTransferPreferencePanel();
     }
 
+    @Override
     public String getTitle() {
         return Res.getString("title.file.transfer.preferences");
     }
 
+    @Override
     public Icon getIcon() {
         return SparkRes.getImageIcon(SparkRes.SEND_FILE_24x24);
     }
 
+    @Override
     public String getTooltip() {
         return Res.getString("tooltip.file.transfer");
     }
 
+    @Override
     public String getListName() {
         return Res.getString("title.file.transfer");
     }
 
+    @Override
     public String getNamespace() {
         return "FILE_TRANSFER";
     }
 
+    @Override
     public JComponent getGUI() {
         return ui;
     }
 
+    @Override
     public void load() {
         int timeout = localPreferences.getFileTransferTimeout();
         ui.setDownloadDirectory(localPreferences.getDownloadDir());
         ui.setTimeout(Integer.toString(timeout));
     }
 
+    @Override
     public void commit() {
         LocalPreferences pref = SettingsManager.getLocalPreferences();
 
@@ -103,18 +111,22 @@ public class FileTransferPreference implements Preference {
 
     }
 
+    @Override
     public boolean isDataValid() {
         return true;
     }
 
+    @Override
     public String getErrorMessage() {
         return null;
     }
 
+    @Override
     public Object getData() {
         return null;
     }
 
+    @Override
     public void shutdown() {
         commit();
     }

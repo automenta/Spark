@@ -59,34 +59,44 @@ public class FileDragLabel extends JLabel implements DropTargetListener, DragSou
         this.file = file;
     }
 
+    @Override
     public void dragDropEnd(DragSourceDropEvent DragSourceDropEvent) {
     }
 
+    @Override
     public void dragEnter(DragSourceDragEvent DragSourceDragEvent) {
     }
 
+    @Override
     public void dragExit(DragSourceEvent DragSourceEvent) {
     }
 
+    @Override
     public void dragOver(DragSourceDragEvent DragSourceDragEvent) {
     }
 
+    @Override
     public void dropActionChanged(DragSourceDragEvent DragSourceDragEvent) {
     }
 
+    @Override
     public void dragEnter(DropTargetDragEvent dropTargetDragEvent) {
         dropTargetDragEvent.acceptDrag(DnDConstants.ACTION_COPY_OR_MOVE);
     }
 
+    @Override
     public void dragExit(DropTargetEvent dropTargetEvent) {
     }
 
+    @Override
     public void dragOver(DropTargetDragEvent dropTargetDragEvent) {
     }
 
+    @Override
     public void dropActionChanged(DropTargetDragEvent dropTargetDragEvent) {
     }
 
+    @Override
     public synchronized void drop(DropTargetDropEvent dropTargetDropEvent) {
         try {
             final Transferable transferable = dropTargetDropEvent.getTransferable();
@@ -102,6 +112,7 @@ public class FileDragLabel extends JLabel implements DropTargetListener, DragSou
         }
     }
 
+    @Override
     public void dragGestureRecognized(DragGestureEvent dragGestureEvent) {
         if (file == null) {
             // Nothing selected, nothing to drag
@@ -126,18 +137,21 @@ public class FileDragLabel extends JLabel implements DropTargetListener, DragSou
             addElement(file);
         }
 
+        @Override
         public synchronized DataFlavor[] getTransferDataFlavors() {
             return flavors;
         }
 
+        @Override
         public boolean isDataFlavorSupported(DataFlavor flavor) {
             boolean b = false;
-            b = b | flavor.equals(flavors[FILE]);
+            b |= flavor.equals(flavors[FILE]);
             b |= flavor.equals(flavors[STRING]);
             b |= flavor.equals(flavors[PLAIN]);
             return (b);
         }
 
+        @Override
         public synchronized Object getTransferData(DataFlavor flavor)
                 throws UnsupportedFlavorException, IOException {
             if (flavor.equals(flavors[FILE])) {

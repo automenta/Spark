@@ -97,6 +97,7 @@ public class ContactUri implements Comparable<ContactUri> {
 //        return -(((int)(getPriority() * 1000)) - (int)(((ContactUri)o)
 //                .getPriority() * 1000));
 //    }
+    @Override
     public Object clone() {
         ContactUri clone = new ContactUri();
         clone.setContactValue(new String(getContactValue()));

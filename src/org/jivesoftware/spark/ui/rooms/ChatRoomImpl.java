@@ -204,6 +204,7 @@ public class ChatRoomImpl extends ChatRoom {
 
     protected void createChatStateTimerTask() {
         typingTimerTask = new TimerTask() {
+            @Override
             public void run() {
                 if (!sendChatStateNotification) {
                     return;
@@ -274,6 +275,7 @@ public class ChatRoomImpl extends ChatRoom {
         }
     }
 
+    @Override
     public void closeChatRoom() {
         // If already closed, don't bother.
         if (!active) {
@@ -306,11 +308,13 @@ public class ChatRoomImpl extends ChatRoom {
         addToRosterButton.removeActionListener(this);
     }
 
+    @Override
     public void sendMessage() {
         String text = getChatInputEditor().getText();
         sendMessage(text);
     }
 
+    @Override
     public void sendMessage(String text) {
         final Message message = new Message();
 
@@ -344,6 +348,7 @@ public class ChatRoomImpl extends ChatRoom {
      *
      * @param message the message to send.
      */
+    @Override
     public void sendMessage(Message message) {
         lastActivity = System.currentTimeMillis();
         //Before sending message, let's add our full jid for full verification
@@ -387,10 +392,12 @@ public class ChatRoomImpl extends ChatRoom {
         activateChatStateNotificationSystem();
     }
 
+    @Override
     public String getRoomname() {
         return roomname;
     }
 
+    @Override
     public Icon getTabIcon() {
         return tabIcon;
     }
@@ -399,6 +406,7 @@ public class ChatRoomImpl extends ChatRoom {
         this.tabIcon = icon;
     }
 
+    @Override
     public String getTabTitle() {
         return tabTitle;
     }
@@ -411,18 +419,22 @@ public class ChatRoomImpl extends ChatRoom {
         this.roomTitle = roomTitle;
     }
 
+    @Override
     public String getRoomTitle() {
         return roomTitle;
     }
 
+    @Override
     public Message.Type getChatType() {
         return Message.Type.chat;
     }
 
+    @Override
     public void leaveChatRoom() {
         // There really is no such thing in Agent to Agent
     }
 
+    @Override
     public boolean isActive() {
         return true;
     }
@@ -454,8 +466,10 @@ public class ChatRoomImpl extends ChatRoom {
      *
      * @param packet - the packet to process
      */
+    @Override
     public void processPacket(final Packet packet) {
         final Runnable runnable = new Runnable() {
+            @Override
             public void run() {
                 if (packet instanceof Presence) {
                     presence = (Presence) packet;
@@ -549,6 +563,7 @@ public class ChatRoomImpl extends ChatRoom {
      *
      * @param e - the DocumentEvent to respond to.
      */
+    @Override
     public void insertUpdate(DocumentEvent e) {
         checkForText(e);
 
@@ -573,6 +588,7 @@ public class ChatRoomImpl extends ChatRoom {
         }
     }
 
+    @Override
     public void insertMessage(Message message) {
         // Debug info
         super.insertMessage(message);
@@ -630,6 +646,7 @@ public class ChatRoomImpl extends ChatRoom {
      *
      * @return the last time this chat room sent or receieved a message.
      */
+    @Override
     public long getLastActivity() {
         return lastActivity;
     }
@@ -647,6 +664,7 @@ public class ChatRoomImpl extends ChatRoom {
         this.sendChatStateNotification = isSendChatStateNotification;
     }
 
+    @Override
     public void connectionClosed() {
         handleDisconnect();
 
@@ -654,6 +672,7 @@ public class ChatRoomImpl extends ChatRoom {
         getTranscriptWindow().insertNotificationMessage(message, ChatManager.ERROR_COLOR);
     }
 
+    @Override
     public void connectionClosedOnError(Exception ex) {
         handleDisconnect();
 
@@ -671,6 +690,7 @@ public class ChatRoomImpl extends ChatRoom {
         getTranscriptWindow().insertNotificationMessage(message, ChatManager.ERROR_COLOR);
     }
 
+    @Override
     public void reconnectionSuccessful() {
         Presence usersPresence = PresenceManager.getPresence(getParticipantJID());
         if (usersPresence.isAvailable()) {
@@ -744,6 +764,7 @@ public class ChatRoomImpl extends ChatRoom {
 
     // I would normally use the command pattern, but
     // have no real use when dealing with just a couple options.
+    @Override
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == infoButton) {

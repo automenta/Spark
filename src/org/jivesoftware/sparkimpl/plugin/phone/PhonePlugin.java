@@ -71,6 +71,7 @@ public class PhonePlugin implements Plugin {
 
     private Presence offPhonePresence;
 
+    @Override
     public void initialize() {
         ProviderManager.getInstance().addExtensionProvider("phone-event", "http://jivesoftware.com/xmlns/phone", new PhoneEventPacketExtensionProvider());
         ProviderManager.getInstance().addIQProvider("phone-action", "http://jivesoftware.com/xmlns/phone", new PhoneActionIQProvider());
@@ -78,6 +79,7 @@ public class PhonePlugin implements Plugin {
         final XMPPConnection con = SparkManager.getConnection();
 
         SwingWorker worker = new SwingWorker() {
+            @Override
             public Object construct() {
                 try {
                     phoneClient = new PhoneClient(con);
@@ -91,6 +93,7 @@ public class PhonePlugin implements Plugin {
                 return phoneClient;
             }
 
+            @Override
             public void finished() {
                 if (phoneClient != null) {
                     setupPhoneSystem();
@@ -109,9 +112,11 @@ public class PhonePlugin implements Plugin {
 
         // Add Listener
         dialNumberMenu.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 dialPanel = new DialPanel();
                 dialPanel.getDialButton().addActionListener(new ActionListener() {
+                    @Override
                     public void actionPerformed(ActionEvent e) {
                         String number = dialPanel.getNumberToDial();
                         if (ModelUtil.hasLength(number)) {
@@ -128,6 +133,7 @@ public class PhonePlugin implements Plugin {
                 dialPanel.getDialField().requestFocusInWindow();
 
                 dialPanel.getDialField().addKeyListener(new KeyAdapter() {
+                    @Override
                     public void keyPressed(KeyEvent e) {
                         if (e.getKeyChar() == KeyEvent.VK_ENTER) {
                             try {
@@ -152,6 +158,7 @@ public class PhonePlugin implements Plugin {
 
         // Add ChatRoomListener to call users based on JID
         SparkManager.getChatManager().addChatRoomListener(new ChatRoomListenerAdapter() {
+            @Override
             public void chatRoomOpened(final ChatRoom room) {
                 if (room instanceof ChatRoomImpl) {
                     final ChatRoomButton callButton = new ChatRoomButton("", SparkRes.getImageIcon(SparkRes.TELEPHONE_24x24));
@@ -167,6 +174,7 @@ public class PhonePlugin implements Plugin {
                     if (phoneEnabled) {
                         room.addChatRoomButton(callButton);
                         callButton.addActionListener(new ActionListener() {
+                            @Override
                             public void actionPerformed(ActionEvent e) {
                                 callJID(chatRoom.getParticipantJID());
                             }
@@ -178,6 +186,7 @@ public class PhonePlugin implements Plugin {
 
         ContactList contactList = SparkManager.getWorkspace().getContactList();
         contactList.addContextMenuListener(new ContextMenuListener() {
+            @Override
             public void poppingUp(Object object, final JPopupMenu popup) {
                 if (object instanceof ContactItem) {
                     final ContactItem item = (ContactItem) object;
@@ -194,6 +203,7 @@ public class PhonePlugin implements Plugin {
                         Action callAction = new AbstractAction() {
                             private static final long serialVersionUID = 7221741748743018431L;
 
+                            @Override
                             public void actionPerformed(ActionEvent e) {
                                 callJID(item.getJID());
                             }
@@ -206,10 +216,12 @@ public class PhonePlugin implements Plugin {
                 }
             }
 
+            @Override
             public void poppingDown(JPopupMenu popup) {
 
             }
 
+            @Override
             public boolean handleDefaultAction(MouseEvent e) {
                 return false;
             }
@@ -218,6 +230,7 @@ public class PhonePlugin implements Plugin {
 
     private class PhoneListener extends BasePhoneEventListener {
 
+        @Override
         public void handleOnPhone(OnPhoneEvent event) {
             if (dialDialog != null) {
                 dialDialog.setVisible(false);
@@ -234,6 +247,7 @@ public class PhonePlugin implements Plugin {
 
         }
 
+        @Override
         public void handleHangUp(HangUpEvent event) {
             if (dialDialog != null) {
                 dialDialog.setVisible(false);
@@ -253,8 +267,10 @@ public class PhonePlugin implements Plugin {
             }
         }
 
+        @Override
         public void handleRing(final RingEvent event) {
             final TimerTask task = new SwingTimerTask() {
+                @Override
                 public void doRun() {
                     String callerID = event.getCallerID();
                     if (ModelUtil.hasLength(callerID)) {
@@ -299,6 +315,7 @@ public class PhonePlugin implements Plugin {
 
     public void callExtension(final String number) {
         final Runnable caller = new Runnable() {
+            @Override
             public void run() {
                 try {
                     phoneClient.dialByExtension(number);
@@ -313,6 +330,7 @@ public class PhonePlugin implements Plugin {
 
     public void callJID(final String jid) {
         final Runnable caller = new Runnable() {
+            @Override
             public void run() {
                 try {
                     phoneClient.dialByJID(jid);
@@ -329,14 +347,17 @@ public class PhonePlugin implements Plugin {
         return phoneClient;
     }
 
+    @Override
     public void shutdown() {
 
     }
 
+    @Override
     public boolean canShutDown() {
         return true;
     }
 
+    @Override
     public void uninstall() {
         // Do nothing.
     }

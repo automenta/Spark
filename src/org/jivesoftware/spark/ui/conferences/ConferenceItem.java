@@ -21,7 +21,7 @@ import org.jivesoftware.smackx.bookmark.BookmarkedConference;
 
 public class ConferenceItem {
 
-    private BookmarkedConference bookmarkedConf;
+    private final BookmarkedConference bookmarkedConf;
 
     public ConferenceItem(BookmarkedConference bookmarkedConf) {
         this.bookmarkedConf = bookmarkedConf;

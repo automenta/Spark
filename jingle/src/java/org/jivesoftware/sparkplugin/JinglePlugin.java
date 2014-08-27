@@ -78,9 +78,10 @@ public class JinglePlugin implements Plugin, Phone, ConnectionListener {
     private String stunServer = "";
     private int stunPort = 0;
     private boolean readyToConnect = false;
-    private Map<String, Boolean> jingleFeature = new HashMap<String, Boolean>();
+    private final Map<String, Boolean> jingleFeature = new HashMap<>();
     private boolean fallbackStunEnabled = false;
 
+    @Override
     public void initialize() {
         // Add Jingle to discovered items list.
         SparkManager.addFeature(JINGLE_NAMESPACE);
@@ -107,6 +108,7 @@ public class JinglePlugin implements Plugin, Phone, ConnectionListener {
                 .addSparkTabHandler(new JingleTabHandler());
 
         final SwingWorker jingleLoadingThread = new SwingWorker() {
+            @Override
             public Object construct() {
                 if (fallbackStunEnabled) {
                     stunServer = localPref.getStunFallbackHost();
@@ -150,6 +152,7 @@ public class JinglePlugin implements Plugin, Phone, ConnectionListener {
                 return true;
             }
 
+            @Override
             public void finished() {
                 addListeners();
             }
@@ -180,6 +183,7 @@ public class JinglePlugin implements Plugin, Phone, ConnectionListener {
         jingleManager.addJingleSessionRequestListener(new JingleSessionRequestListener() {
             public void sessionRequested(final JingleSessionRequest request) {
                 SwingUtilities.invokeLater(new Runnable() {
+                    @Override
                     public void run() {
                         incomingJingleSession(request);
                     }
@@ -188,6 +192,7 @@ public class JinglePlugin implements Plugin, Phone, ConnectionListener {
         });
     }
 
+    @Override
     public Collection<Action> getPhoneActions(final String jid) {
         // Do not even disco gateway clients.
         if (TransportUtils.isFromGateway(jid) || jingleManager == null) {
@@ -224,10 +229,11 @@ public class JinglePlugin implements Plugin, Phone, ConnectionListener {
             return Collections.emptyList();
         }
 
-        final List<Action> actions = new ArrayList<Action>();
+        final List<Action> actions = new ArrayList<>();
         Action action = new AbstractAction() {
             private static final long serialVersionUID = 1467355627829748086L;
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 placeCall(jid);
             }
@@ -284,13 +290,16 @@ public class JinglePlugin implements Plugin, Phone, ConnectionListener {
         room.scrollToBottom();
     }
 
+    @Override
     public void shutdown() {
     }
 
+    @Override
     public boolean canShutDown() {
         return false;
     }
 
+    @Override
     public void uninstall() {
     }
 
@@ -315,6 +324,7 @@ public class JinglePlugin implements Plugin, Phone, ConnectionListener {
     private void addPresenceListener() {
         // Check presence changes
         SparkManager.getConnection().addPacketListener(new PacketListener() {
+            @Override
             public void processPacket(Packet packet) {
                 Presence presence = (Presence) packet;
                 if (!presence.isAvailable()) {
@@ -329,20 +339,25 @@ public class JinglePlugin implements Plugin, Phone, ConnectionListener {
         }, new PacketTypeFilter(Presence.class));
     }
 
+    @Override
     public void connectionClosed() {
     }
 
+    @Override
     public void connectionClosedOnError(Exception e) {
     }
 
+    @Override
     public void reconnectingIn(int seconds) {
     }
 
+    @Override
     public void reconnectionSuccessful() {
         // Add Jingle to discovered items list.
         SparkManager.addFeature(JINGLE_NAMESPACE);
     }
 
+    @Override
     public void reconnectionFailed(Exception e) {
 
     }

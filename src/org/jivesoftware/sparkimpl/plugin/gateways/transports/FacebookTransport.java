@@ -29,26 +29,32 @@ public class FacebookTransport implements Transport {
         this.serviceName = serviceName;
     }
 
+    @Override
     public String getTitle() {
         return Res.getString("title.facebook.registration");
     }
 
+    @Override
     public String getInstructions() {
         return Res.getString("message.enter.facebook");
     }
 
+    @Override
     public Icon getIcon() {
         return SparkRes.getImageIcon(SparkRes.FACEBOOK_TRANSPORT_ACTIVE_IMAGE);
     }
 
+    @Override
     public Icon getInactiveIcon() {
         return SparkRes.getImageIcon(SparkRes.FACEBOOK_TRANSPORT_INACTIVE_IMAGE);
     }
 
+    @Override
     public String getServiceName() {
         return serviceName;
     }
 
+    @Override
     public String getName() {
         return "Facebook";
     }
@@ -57,14 +63,17 @@ public class FacebookTransport implements Transport {
         this.serviceName = serviceName;
     }
 
+    @Override
     public Boolean requiresUsername() {
         return true;
     }
 
+    @Override
     public Boolean requiresPassword() {
         return true;
     }
 
+    @Override
     public Boolean requiresNickname() {
         return false;
     }

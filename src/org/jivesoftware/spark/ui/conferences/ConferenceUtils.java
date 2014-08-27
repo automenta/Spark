@@ -173,10 +173,11 @@ public class ConferenceUtils {
             }
         }
 
-        final List<String> errors = new ArrayList<String>();
+        final List<String> errors = new ArrayList<>();
         final String userPassword = password;
 
         final SwingWorker startChat = new SwingWorker() {
+            @Override
             public Object construct() {
                 if (!groupChat.isJoined()) {
                     int groupChatCounter = 0;
@@ -184,7 +185,7 @@ public class ConferenceUtils {
                         groupChatCounter++;
                         String joinName = nickname;
                         if (groupChatCounter > 1) {
-                            joinName = joinName + groupChatCounter;
+                            joinName += groupChatCounter;
                         }
                         if (groupChatCounter < 10) {
                             try {
@@ -227,6 +228,7 @@ public class ConferenceUtils {
                 return "ok";
             }
 
+            @Override
             public void finished() {
                 if (errors.size() > 0) {
                     String error = errors.get(0);
@@ -277,14 +279,14 @@ public class ConferenceUtils {
      * @return a List of errors, if any.
      */
     public static List<String> joinRoom(MultiUserChat groupChat, String nickname, String password) {
-        final List<String> errors = new ArrayList<String>();
+        final List<String> errors = new ArrayList<>();
         if (!groupChat.isJoined()) {
             int groupChatCounter = 0;
             while (true) {
                 groupChatCounter++;
                 String joinName = nickname;
                 if (groupChatCounter > 1) {
-                    joinName = joinName + groupChatCounter;
+                    joinName += groupChatCounter;
                 }
                 if (groupChatCounter < 10) {
                     try {
@@ -399,7 +401,7 @@ public class ConferenceUtils {
             submitForm.setAnswer("muc#roomconfig_publicroom", false);
             submitForm.setAnswer("muc#roomconfig_roomname", roomName);
 
-            final List<String> owners = new ArrayList<String>();
+            final List<String> owners = new ArrayList<>();
             owners.add(SparkManager.getSessionManager().getBareAddress());
             submitForm.setAnswer("muc#roomconfig_roomowners", owners);
 
@@ -493,7 +495,7 @@ public class ConferenceUtils {
             }
         }
 
-        final List<String> errors = new ArrayList<String>();
+        final List<String> errors = new ArrayList<>();
         final String userPassword = password;
 
         if (!groupChat.isJoined()) {
@@ -502,7 +504,7 @@ public class ConferenceUtils {
                 groupChatCounter++;
                 String joinName = nickname;
                 if (groupChatCounter > 1) {
-                    joinName = joinName + groupChatCounter;
+                    joinName += groupChatCounter;
                 }
                 if (groupChatCounter < 10) {
                     try {
@@ -562,7 +564,7 @@ public class ConferenceUtils {
         final GroupChatRoom room = UIComponentRegistry.createGroupChatRoom(groupChat);
         room.setTabTitle(tabTitle);
 
-        final List<String> errors = new ArrayList<String>();
+        final List<String> errors = new ArrayList<>();
 
         if (!groupChat.isJoined()) {
             int groupChatCounter = 0;
@@ -570,7 +572,7 @@ public class ConferenceUtils {
                 groupChatCounter++;
                 String joinName = nickname;
                 if (groupChatCounter > 1) {
-                    joinName = joinName + groupChatCounter;
+                    joinName += groupChatCounter;
                 }
                 if (groupChatCounter < 10) {
                     try {
@@ -624,7 +626,7 @@ public class ConferenceUtils {
 
     }
 
-    final static List<String> unclosableChatRooms = new ArrayList<String>();
+    final static List<String> unclosableChatRooms = new ArrayList<>();
 
     public synchronized static void addUnclosableChatRoom(String jid) {
         unclosableChatRooms.add(jid);

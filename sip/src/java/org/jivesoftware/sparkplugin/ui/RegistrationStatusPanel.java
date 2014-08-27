@@ -40,9 +40,9 @@ import org.jivesoftware.sparkplugin.ui.components.RectangleButton;
 public class RegistrationStatusPanel extends BackgroundPanel implements ActionListener {
 
     private static final long serialVersionUID = -7289401216186994399L;
-    private JLabel loadingLabel;
-    private CloseButton closeButton;
-    private RectangleButton retryButton;
+    private final JLabel loadingLabel;
+    private final CloseButton closeButton;
+    private final RectangleButton retryButton;
 
     public RegistrationStatusPanel() {
         setLayout(new GridBagLayout());
@@ -90,6 +90,7 @@ public class RegistrationStatusPanel extends BackgroundPanel implements ActionLi
         retryButton.setVisible(true);
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == closeButton) {
             setVisible(false);
