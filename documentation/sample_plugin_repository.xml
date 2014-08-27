@@ -20,9 +20,9 @@
         <email>Joe@Mama.com</email>
         <description>Adds some weird features you dont want</description>
         <class>org.weird.feature.class.mainclass</class>
-     <minSparkVersion>2.6.0</minSparkVersion>
-     <downloadURL>http://localhost/test.jar</downloadURL>
-     <changeLog>http://www.google.de/search?q=changelog</changeLog>
-     <readme>http://www.google.de/search?q=readme</readme>
+        <minSparkVersion>2.6.0</minSparkVersion>
+        <downloadURL>http://localhost/test.jar</downloadURL>
+        <changeLog>http://www.google.de/search?q=changelog</changeLog>
+        <readme>http://www.google.de/search?q=readme</readme>
     </plugin>
 </plugins>
