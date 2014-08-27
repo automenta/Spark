@@ -88,7 +88,7 @@ public class PhonePlugin implements Plugin {
                     phoneClient.addEventListener(new PhoneListener());
                 } catch (XMPPException e) {
                     // Ignore because the user does not have support.
-                    //Log.debug(e);
+                    //if (Log.debugging) Log.debug(e);
                 }
                 return phoneClient;
             }
@@ -111,48 +111,38 @@ public class PhonePlugin implements Plugin {
         ResourceUtils.resButton(dialNumberMenu, Res.getString("button.dial.number"));
 
         // Add Listener
-        dialNumberMenu.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dialPanel = new DialPanel();
-                dialPanel.getDialButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        String number = dialPanel.getNumberToDial();
-                        if (ModelUtil.hasLength(number)) {
-                            dialPanel.setText(Res.getString("message.calling", number));
-                            dialPanel.changeToRinging();
-                            callExtension(number);
-
-                        }
-
-                    }
-                });
-
-                dialDialog = PhoneDialog.invoke(dialPanel, Res.getString("title.dial.phone"), Res.getString("message.number.to.call"), null);
-                dialPanel.getDialField().requestFocusInWindow();
-
-                dialPanel.getDialField().addKeyListener(new KeyAdapter() {
-                    @Override
-                    public void keyPressed(KeyEvent e) {
-                        if (e.getKeyChar() == KeyEvent.VK_ENTER) {
-                            try {
-                                String number = dialPanel.getNumberToDial();
-                                if (ModelUtil.hasLength(number)) {
-                                    dialPanel.setText(Res.getString("message.calling", number));
-                                    dialPanel.changeToRinging();
-                                    callExtension(number);
-
-                                }
-                                e.consume();
-                            } catch (Exception ex) {
-                                Log.error(ex);
+        dialNumberMenu.addActionListener((ActionEvent e) -> {
+            dialPanel = new DialPanel();
+            dialPanel.getDialButton().addActionListener((ActionEvent e1) -> {
+                String number = dialPanel.getNumberToDial();
+                if (ModelUtil.hasLength(number)) {
+                    dialPanel.setText(Res.getString("message.calling", number));
+                    dialPanel.changeToRinging();
+                    callExtension(number);
+                    
+                }
+            });
+            dialDialog = PhoneDialog.invoke(dialPanel, Res.getString("title.dial.phone"), Res.getString("message.number.to.call"), null);
+            dialPanel.getDialField().requestFocusInWindow();
+            dialPanel.getDialField().addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyPressed(KeyEvent e) {
+                    if (e.getKeyChar() == KeyEvent.VK_ENTER) {
+                        try {
+                            String number = dialPanel.getNumberToDial();
+                            if (ModelUtil.hasLength(number)) {
+                                dialPanel.setText(Res.getString("message.calling", number));
+                                dialPanel.changeToRinging();
+                                callExtension(number);
+                                
                             }
+                            e.consume();
+                        } catch (Exception ex) {
+                            Log.error(ex);
                         }
                     }
-                });
-            }
-
+                }
+            });
         });
         viewMenu.add(dialNumberMenu);
 
@@ -173,11 +163,8 @@ public class PhonePlugin implements Plugin {
 
                     if (phoneEnabled) {
                         room.addChatRoomButton(callButton);
-                        callButton.addActionListener(new ActionListener() {
-                            @Override
-                            public void actionPerformed(ActionEvent e) {
-                                callJID(chatRoom.getParticipantJID());
-                            }
+                        callButton.addActionListener((ActionEvent e) -> {
+                            callJID(chatRoom.getParticipantJID());
                         });
                     }
                 }
@@ -314,14 +301,11 @@ public class PhonePlugin implements Plugin {
     }
 
     public void callExtension(final String number) {
-        final Runnable caller = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    phoneClient.dialByExtension(number);
-                } catch (PhoneActionException e) {
-                    Log.error(e);
-                }
+        final Runnable caller = () -> {
+            try {
+                phoneClient.dialByExtension(number);
+            } catch (PhoneActionException e) {
+                Log.error(e);
             }
         };
 
@@ -329,14 +313,11 @@ public class PhonePlugin implements Plugin {
     }
 
     public void callJID(final String jid) {
-        final Runnable caller = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    phoneClient.dialByJID(jid);
-                } catch (PhoneActionException e) {
-                    Log.error(e);
-                }
+        final Runnable caller = () -> {
+            try {
+                phoneClient.dialByJID(jid);
+            } catch (PhoneActionException e) {
+                Log.error(e);
             }
         };
 

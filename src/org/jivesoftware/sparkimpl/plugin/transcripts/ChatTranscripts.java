@@ -74,9 +74,9 @@ public final class ChatTranscripts {
         // Write to current history File
         final File currentHistoryFile = getCurrentHistoryFile(jid);
         ChatTranscript tempTranscript = getCurrentChatTranscript(jid);
-        for (HistoryMessage message : transcript.getMessages()) {
+        transcript.getMessages().stream().forEach((message) -> {
             tempTranscript.addHistoryMessage(message);
-        }
+        });
         writeToFile(currentHistoryFile, tempTranscript.getNumberOfEntries(20), false);
     }
 
@@ -93,16 +93,22 @@ public final class ChatTranscripts {
             builder.append(one + "<messages>\n");
         }
 
-        for (HistoryMessage m : messages) {
+        messages.stream().map((m) -> {
             builder.append(two + "<message>\n");
             builder.append(three + "<to>").append(m.getTo()).append("</to>\n");
+            return m;
+        }).map((m) -> {
             builder.append(three + "<from>").append(m.getFrom()).append("</from>\n");
+            return m;
+        }).map((m) -> {
             builder.append(three + "<body>").append(StringUtils.escapeForXML(m.getBody())).append("</body>\n");
-
-            String dateString = FORMATTER.format(m.getDate());
+            return m;
+        }).map((m) -> FORMATTER.format(m.getDate())).map((dateString) -> {
             builder.append(three + "<date>").append(dateString).append("</date>\n");
+            return dateString;
+        }).forEach((_item) -> {
             builder.append(two + "</message>\n");
-        }
+        });
 
         if (!transcriptFile.exists() || !append) {
             builder.append(one + "</messages>\n");

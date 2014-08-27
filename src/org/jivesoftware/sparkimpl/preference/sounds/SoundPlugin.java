@@ -46,42 +46,31 @@ public class SoundPlugin implements Plugin, MessageListener, ChatRoomListener {
 
         SparkManager.getChatManager().addChatRoomListener(this);
 
-        SparkManager.getConnection().addPacketListener(new PacketListener() {
-            @Override
-            public void processPacket(Packet packet) {
-                Presence presence = (Presence) packet;
-                if (!presence.isAvailable()) {
-                    SoundPreferences preferences = soundPreference.getPreferences();
-                    if (preferences != null && preferences.isPlayOfflineSound()) {
-                        if (!PresenceManager.isOnline(presence.getFrom())) {
-                            String offline = preferences.getOfflineSound();
-                            File offlineFile = new File(offline);
-                            SparkManager.getSoundManager().playClip(offlineFile);
-                        }
+        SparkManager.getConnection().addPacketListener((Packet packet) -> {
+            Presence presence = (Presence) packet;
+            if (!presence.isAvailable()) {
+                SoundPreferences preferences = soundPreference.getPreferences();
+                if (preferences != null && preferences.isPlayOfflineSound()) {
+                    if (!PresenceManager.isOnline(presence.getFrom())) {
+                        String offline = preferences.getOfflineSound();
+                        File offlineFile = new File(offline);
+                        SparkManager.getSoundManager().playClip(offlineFile);
                     }
                 }
             }
         }, new PacketTypeFilter(Presence.class));
 
         // Load sound preferences.
-        final Runnable soundLoader = new Runnable() {
-            @Override
-            public void run() {
-                soundPreference.loadFromFile();
-            }
-        };
+        final Runnable soundLoader = soundPreference::loadFromFile;
 
         TaskEngine.getInstance().submit(soundLoader);
 
-        MultiUserChat.addInvitationListener(SparkManager.getConnection(), new InvitationListener() {
-            @Override
-            public void invitationReceived(Connection xmppConnection, String string, String string1, String string2, String string3, Message message) {
-                SoundPreferences preferences = soundPreference.getPreferences();
-                if (preferences != null && preferences.playIncomingInvitationSound()) {
-                    String incomingSoundFile = preferences.getIncomingInvitationSoundFile();
-                    File offlineFile = new File(incomingSoundFile);
-                    SparkManager.getSoundManager().playClip(offlineFile);
-                }
+        MultiUserChat.addInvitationListener(SparkManager.getConnection(), (Connection xmppConnection, String string, String string1, String string2, String string3, Message message) -> {
+            SoundPreferences preferences = soundPreference.getPreferences();
+            if (preferences != null && preferences.playIncomingInvitationSound()) {
+                String incomingSoundFile = preferences.getIncomingInvitationSoundFile();
+                File offlineFile = new File(incomingSoundFile);
+                SparkManager.getSoundManager().playClip(offlineFile);
             }
         });
 

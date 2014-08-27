@@ -99,78 +99,63 @@ public class PhonebookUI extends JPanel {
         btnDial.setIcon(new ImageIcon(PhoneRes.getImage("DIALICON").getScaledInstance(iconwidth, iconheight, Image.SCALE_SMOOTH)));
 
         // add actionlisteners
-        btnAdd.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                btnAddPerformed();
+        btnAdd.addActionListener((ActionEvent e) -> {
+            btnAddPerformed();
+        });
+
+        btnDel.addActionListener((ActionEvent e) -> {
+            int[] selected = table.getSelectedRows();
+            if (selected.length == 0) {
+                JOptionPane.showMessageDialog(PhonebookUI.this, PhoneRes.getIString("book.noEntry"),
+                        PhoneRes.getIString("book.warning"), JOptionPane.WARNING_MESSAGE);
+            }
+            for (int select : selected) {
+                if (select > -1) {
+                    manager.deleteEntry(table.getValueAt(select, 0).toString(), table.getValueAt(select, 1).toString());
+                    model.removeRow(sorter.convertRowIndexToModel(select));
+                }
+            }
+            loadEntries();
+        });
+
+        btnEdit.addActionListener((ActionEvent e) -> {
+            int selected = table.getSelectedRow();
+            if (selected > -1) {
+                btnEditPerformed(table.getValueAt(selected, 0).toString(), table.getValueAt(selected, 1).toString());
+            } else {
+                JOptionPane.showMessageDialog(PhonebookUI.this, PhoneRes.getIString("book.noEntry"),
+                        PhoneRes.getIString("book.warning"), JOptionPane.WARNING_MESSAGE);
             }
         });
 
-        btnDel.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int[] selected = table.getSelectedRows();
-                if (selected.length == 0) {
-                    JOptionPane.showMessageDialog(PhonebookUI.this, PhoneRes.getIString("book.noEntry"),
-                            PhoneRes.getIString("book.warning"), JOptionPane.WARNING_MESSAGE);
-                }
-                for (int select : selected) {
-                    if (select > -1) {
-                        manager.deleteEntry(table.getValueAt(select, 0).toString(), table.getValueAt(select, 1).toString());
-                        model.removeRow(sorter.convertRowIndexToModel(select));
-                    }
-                }
-                loadEntries();
-            }
-        });
-
-        btnEdit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int selected = table.getSelectedRow();
-                if (selected > -1) {
-                    btnEditPerformed(table.getValueAt(selected, 0).toString(), table.getValueAt(selected, 1).toString());
+        btnDial.addActionListener((ActionEvent e) -> {
+            int selected = table.getSelectedRow();
+            if (selected > -1) {
+                final SoftPhoneManager phoneManager = SoftPhoneManager.getInstance();
+                if (phoneManager.getInterlocutors().size() > 0) {
+                    phoneManager.getDefaultGuiManager().hangupAll();
                 } else {
-                    JOptionPane.showMessageDialog(PhonebookUI.this, PhoneRes.getIString("book.noEntry"),
-                            PhoneRes.getIString("book.warning"), JOptionPane.WARNING_MESSAGE);
+                    phoneManager.getDefaultGuiManager().dial(table.getValueAt(selected, 1).toString());
                 }
+            } else {
+                JOptionPane.showMessageDialog(PhonebookUI.this, PhoneRes.getIString("book.noEntry"),
+                        PhoneRes.getIString("book.warning"), JOptionPane.WARNING_MESSAGE);
             }
         });
 
-        btnDial.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int selected = table.getSelectedRow();
-                if (selected > -1) {
-                    final SoftPhoneManager phoneManager = SoftPhoneManager.getInstance();
-                    if (phoneManager.getInterlocutors().size() > 0) {
-                        phoneManager.getDefaultGuiManager().hangupAll();
-                    } else {
-                        phoneManager.getDefaultGuiManager().dial(table.getValueAt(selected, 1).toString());
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(PhonebookUI.this, PhoneRes.getIString("book.noEntry"),
-                            PhoneRes.getIString("book.warning"), JOptionPane.WARNING_MESSAGE);
+        sorter.addRowSorterListener((RowSorterEvent arg0) -> {
+            TableRowSorter<?> rs = (TableRowSorter<?>) arg0.getSource();
+            String temp = tfsearch.getText();
+            
+            if (model.getRowCount() > 0
+                    && rs.getViewRowCount() < 1) {
+                // nur wenn auch was drin steht, erkennen
+                if (temp.length() > 0) {
+                    tfsearch.setText(temp.substring(0, temp.length() - 1));
                 }
-            }
-        });
-
-        sorter.addRowSorterListener(new RowSorterListener() {
-            @Override
-            public void sorterChanged(RowSorterEvent arg0) {
-                TableRowSorter<?> rs = (TableRowSorter<?>) arg0.getSource();
-                String temp = tfsearch.getText();
-
-                if (model.getRowCount() > 0
-                        && rs.getViewRowCount() < 1) {
-                    // nur wenn auch was drin steht, erkennen
-                    if (temp.length() > 0) {
-                        tfsearch.setText(temp.substring(0, temp.length() - 1));
-                    }
-                    filterTable(tfsearch.getText());
-                } else if (table.getRowCount() > 0) {
-                    table.setRowSelectionInterval(0, 0);
-                }
+                filterTable(tfsearch.getText());
+            } else if (table.getRowCount() > 0) {
+                table.setRowSelectionInterval(0, 0);
             }
         });
 
@@ -269,12 +254,9 @@ public class PhonebookUI extends JPanel {
      */
     private void btnAddPerformed() {
         try {
-            EventQueue.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    EntryFrame addFrame = new EntryFrame(PhonebookUI.this, manager, EntryFrame.TYP_ADD);
-                    addFrame.invoke();
-                }
+            EventQueue.invokeLater(() -> {
+                EntryFrame addFrame = new EntryFrame(PhonebookUI.this, manager, EntryFrame.TYP_ADD);
+                addFrame.invoke();
             });
         } catch (Exception ex) {
             Log.error(ex);
@@ -286,14 +268,11 @@ public class PhonebookUI extends JPanel {
      */
     private void btnEditPerformed(final String name, final String number) {
         try {
-            EventQueue.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    EntryFrame editFrame = new EntryFrame(PhonebookUI.this, manager, EntryFrame.TYP_EDIT);
-                    editFrame.setName(name);
-                    editFrame.setNumber(number);
-                    editFrame.invoke();
-                }
+            EventQueue.invokeLater(() -> {
+                EntryFrame editFrame = new EntryFrame(PhonebookUI.this, manager, EntryFrame.TYP_EDIT);
+                editFrame.setName(name);
+                editFrame.setNumber(number);
+                editFrame.invoke();
             });
         } catch (Exception ex) {
             Log.error(ex);

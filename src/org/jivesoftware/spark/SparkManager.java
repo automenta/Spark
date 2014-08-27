@@ -113,16 +113,12 @@ public final class SparkManager {
     static {
         KeyboardFocusManager focusManager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
         focusManager.addPropertyChangeListener(
-                new PropertyChangeListener() {
-                    @Override
-                    public void propertyChange(PropertyChangeEvent e) {
-                        String prop = e.getPropertyName();
-                        if (("focusOwner".equals(prop)) && (e.getNewValue() != null)) {
-                            focusedComponent = (Component) e.getNewValue();
-                        }
+                (PropertyChangeEvent e) -> {
+                    String prop = e.getPropertyName();
+                    if (("focusOwner".equals(prop)) && (e.getNewValue() != null)) {
+                        focusedComponent = (Component) e.getNewValue();
                     }
-                }
-        );
+        });
     }
 
     /**

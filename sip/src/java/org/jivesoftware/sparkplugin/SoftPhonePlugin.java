@@ -262,9 +262,9 @@ public class SoftPhonePlugin implements Plugin, SoftPhoneListener {
     private void loadVCards() {
         // Load vCard information.
         final Roster roster = SparkManager.getConnection().getRoster();
-        for (RosterEntry entry : roster.getEntries()) {
+        roster.getEntries().stream().forEach((entry) -> {
             SparkManager.getVCardManager().getVCardFromMemory(entry.getUser());
-        }
+        });
     }
 
 }

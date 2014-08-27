@@ -753,13 +753,13 @@ public class JmfMediaManager {
         LocalPreferences localPreferences = SettingsManager.getLocalPreferences();
         // gets the selected order from preferences
         String[] codecs = localPreferences.getSelectedCodecs().split("\\^");
-        for (AudioFormat form : all) {
+        all.stream().forEach((form) -> {
             for (String codec : codecs) {
                 if (form.getEncoding().toLowerCase().equals(codec.toLowerCase())) {
                     format.add(form);
                 }
             }
-        }
+        });
 
         System.out.println("FORMATE NEU: " + format);
         return format;

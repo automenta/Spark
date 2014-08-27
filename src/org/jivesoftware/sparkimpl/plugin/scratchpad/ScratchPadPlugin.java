@@ -137,18 +137,12 @@ public class ScratchPadPlugin implements Plugin {
         JMenuItem notesMenu = new JMenuItem(Res.getString("button.view.notes"),
                 SparkRes.getImageIcon(SparkRes.DOCUMENT_16x16));
 
-        taskMenu.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                showTaskList();
-            }
+        taskMenu.addActionListener((ActionEvent e) -> {
+            showTaskList();
         });
 
-        notesMenu.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                retrieveNotes();
-            }
+        notesMenu.addActionListener((ActionEvent e) -> {
+            retrieveNotes();
         });
 
         // Add To toolbar
@@ -236,9 +230,9 @@ public class ScratchPadPlugin implements Plugin {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                for (TaskUI ui : taskList) {
+                taskList.stream().forEach((ui) -> {
                     ui.setVisible(true);
-                }
+                });
 
                 SHOW_ALL_TASKS = true;
             }
@@ -249,11 +243,9 @@ public class ScratchPadPlugin implements Plugin {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                for (TaskUI ui : taskList) {
-                    if (ui.isSelected()) {
-                        ui.setVisible(false);
-                    }
-                }
+                taskList.stream().filter((ui) -> (ui.isSelected())).forEach((ui) -> {
+                    ui.setVisible(false);
+                });
 
                 SHOW_ALL_TASKS = false;
             }
@@ -346,10 +338,9 @@ public class ScratchPadPlugin implements Plugin {
             public void actionPerformed(ActionEvent actionEvent) {
                 // Save it.
                 Tasks tasks = new Tasks();
-                for (TaskUI ui : taskList) {
-                    Task task = ui.getTask();
+                taskList.stream().map((ui) -> ui.getTask()).forEach((task) -> {
                     tasks.addTask(task);
-                }
+                });
 
                 Tasks.saveTasks(tasks, SparkManager.getConnection());
             }
@@ -395,10 +386,7 @@ public class ScratchPadPlugin implements Plugin {
         panel_events.removeAll();
         taskList.clear();
 
-        for (Object o : tasks.getTasks()) {
-            Task task = (Task) o;
-            final TaskUI taskUI = new TaskUI(task);
-
+        tasks.getTasks().stream().map((o) -> (Task) o).map((task) -> new TaskUI(task)).map((taskUI) -> {
             if (SHOW_ALL_TASKS == false) {
                 if (taskUI.isSelected()) {
                     taskUI.setVisible(false);
@@ -406,10 +394,13 @@ public class ScratchPadPlugin implements Plugin {
                     taskUI.setVisible(true);
                 }
             }
-
+            return taskUI;
+        }).map((taskUI) -> {
             panel_events.add(taskUI);
+            return taskUI;
+        }).forEach((taskUI) -> {
             taskList.add(taskUI);
-        }
+        });
 
         panel_events.invalidate();
         panel_events.validate();
@@ -501,23 +492,15 @@ public class ScratchPadPlugin implements Plugin {
         frame.setVisible(true);
         pane.setCaretPosition(0);
 
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                frame.dispose();
-
-                // Save it.
-                String text = pane.getText();
-                privateNotes.setNotes(text);
-                PrivateNotes.savePrivateNotes(privateNotes);
-            }
+        button.addActionListener((ActionEvent actionEvent) -> {
+            frame.dispose();
+            String text1 = pane.getText();
+            privateNotes.setNotes(text1);
+            PrivateNotes.savePrivateNotes(privateNotes);
         });
 
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                frame.dispose();
-            }
+        cancelButton.addActionListener((ActionEvent actionEvent) -> {
+            frame.dispose();
         });
     }
 

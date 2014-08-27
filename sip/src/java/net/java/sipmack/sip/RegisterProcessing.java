@@ -167,7 +167,6 @@ class RegisterProcessing {
 
             retryTran.sendRequest();
 
-            return;
         } catch (SipSecurityException exc) {
             // tell the others we couldn't register
             sipManCallback.fireUnregistered(((FromHeader) clientTransaction
@@ -341,7 +340,7 @@ class RegisterProcessing {
     synchronized void unregister() throws CommunicationsException {
         try {
 
-            Log.debug("UNREGISTER");
+            if (Log.debugging) Log.debug("UNREGISTER");
 
             if (!isRegistered) {
                 return;

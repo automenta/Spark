@@ -399,9 +399,9 @@ public class ChatManager implements ChatManagerListener {
      * @param message the <code>Message</code>
      */
     public void fireGlobalMessageReceievedListeners(ChatRoom chatRoom, Message message) {
-        for (GlobalMessageListener listener : globalMessageListeners) {
+        globalMessageListeners.stream().forEach((listener) -> {
             listener.messageReceived(chatRoom, message);
-        }
+        });
     }
 
     /**
@@ -412,9 +412,9 @@ public class ChatManager implements ChatManagerListener {
      * @param message the <code>Message</code> sent.
      */
     public void fireGlobalMessageSentListeners(ChatRoom chatRoom, Message message) {
-        for (GlobalMessageListener listener : globalMessageListeners) {
+        globalMessageListeners.stream().forEach((listener) -> {
             listener.messageSent(chatRoom, message);
-        }
+        });
     }
 
     /**
@@ -448,9 +448,9 @@ public class ChatManager implements ChatManagerListener {
     public void filterOutgoingMessage(ChatRoom room, Message message) {
         // Fire Message Filters
         final ChatManager chatManager = SparkManager.getChatManager();
-        for (Object o : chatManager.getMessageFilters()) {
+        chatManager.getMessageFilters().stream().forEach((o) -> {
             ((MessageFilter) o).filterOutgoing(room, message);
-        }
+        });
     }
 
     /**
@@ -527,9 +527,9 @@ public class ChatManager implements ChatManagerListener {
     }
 
     public void fireMessageReceived(Message message) {
-        for (ChatMessageHandler handler : chatMessageHandlers) {
+        chatMessageHandlers.stream().forEach((handler) -> {
             handler.messageReceived(message);
-        }
+        });
     }
 
     /**
@@ -540,10 +540,8 @@ public class ChatManager implements ChatManagerListener {
      * @return true if it was handled.
      */
     public boolean fireContactItemPresenceChanged(ContactItem item, Presence presence) {
-        for (ContactItemHandler handler : contactItemHandlers) {
-            if (handler.handlePresence(item, presence)) {
-                return true;
-            }
+        if (contactItemHandlers.stream().anyMatch((handler) -> (handler.handlePresence(item, presence)))) {
+            return true;
         }
 
         return false;
@@ -557,10 +555,8 @@ public class ChatManager implements ChatManagerListener {
      * @return true if the event was intercepted and handled.
      */
     public boolean fireContactItemDoubleClicked(ContactItem item) {
-        for (ContactItemHandler handler : contactItemHandlers) {
-            if (handler.handleDoubleClick(item)) {
-                return true;
-            }
+        if (contactItemHandlers.stream().anyMatch((handler) -> (handler.handleDoubleClick(item)))) {
+            return true;
         }
 
         return false;
@@ -601,48 +597,42 @@ public class ChatManager implements ChatManagerListener {
     }
 
     public void composingNotification(final String from) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                final ContactList contactList = SparkManager.getWorkspace().getContactList();
-
-                ChatRoom chatRoom;
-                try {
-                    chatRoom = getChatContainer().getChatRoom(StringUtils.parseBareAddress(from));
-                    if (chatRoom != null && chatRoom instanceof ChatRoomImpl) {
-                        typingNotificationList.add(chatRoom);
-                        // Notify Decorators
-                        notifySparkTabHandlers(chatRoom);
-                        ((ChatRoomImpl) chatRoom).notifyChatStateChange(ChatState.composing);
-                    }
-                } catch (ChatRoomNotFoundException e) {
-                    // Do nothing
+        SwingUtilities.invokeLater(() -> {
+            final ContactList contactList = SparkManager.getWorkspace().getContactList();
+            
+            ChatRoom chatRoom;
+            try {
+                chatRoom = getChatContainer().getChatRoom(StringUtils.parseBareAddress(from));
+                if (chatRoom != null && chatRoom instanceof ChatRoomImpl) {
+                    typingNotificationList.add(chatRoom);
+                    // Notify Decorators
+                    notifySparkTabHandlers(chatRoom);
+                    ((ChatRoomImpl) chatRoom).notifyChatStateChange(ChatState.composing);
                 }
-                contactList.setIconFor(from, SparkRes.getImageIcon(SparkRes.SMALL_MESSAGE_EDIT_IMAGE));
+            } catch (ChatRoomNotFoundException e) {
+                // Do nothing
             }
+            contactList.setIconFor(from, SparkRes.getImageIcon(SparkRes.SMALL_MESSAGE_EDIT_IMAGE));
         });
     }
 
     public void cancelledNotification(final String from, final ChatState state) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                ContactList contactList = SparkManager.getWorkspace().getContactList();
-
-                ChatRoom chatRoom;
-                try {
-                    chatRoom = getChatContainer().getChatRoom(StringUtils.parseBareAddress(from));
-                    if (chatRoom != null && chatRoom instanceof ChatRoomImpl) {
-                        typingNotificationList.remove(chatRoom);
-                        // Notify Decorators
-                        notifySparkTabHandlers(chatRoom);
-                        ((ChatRoomImpl) chatRoom).notifyChatStateChange(state);
-                    }
-                } catch (ChatRoomNotFoundException e) {
-                    // Do nothing
+        SwingUtilities.invokeLater(() -> {
+            ContactList contactList = SparkManager.getWorkspace().getContactList();
+            
+            ChatRoom chatRoom;
+            try {
+                chatRoom = getChatContainer().getChatRoom(StringUtils.parseBareAddress(from));
+                if (chatRoom != null && chatRoom instanceof ChatRoomImpl) {
+                    typingNotificationList.remove(chatRoom);
+                    // Notify Decorators
+                    notifySparkTabHandlers(chatRoom);
+                    ((ChatRoomImpl) chatRoom).notifyChatStateChange(state);
                 }
-                contactList.useDefaults(from);
+            } catch (ChatRoomNotFoundException e) {
+                // Do nothing
             }
+            contactList.useDefaults(from);
         });
     }
 

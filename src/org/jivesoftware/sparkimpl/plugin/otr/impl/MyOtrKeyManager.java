@@ -379,9 +379,9 @@ public class MyOtrKeyManager implements OtrKeyManager {
         }
 
         this.store.removeProperty(sessionID.getUserID() + ".publicKey.verified");
-        for (OtrKeyManagerListener l : listeners) {
+        listeners.stream().forEach((l) -> {
             l.verificationStatusChanged(sessionID);
-        }
+        });
 
     }
 
@@ -400,9 +400,9 @@ public class MyOtrKeyManager implements OtrKeyManager {
 
         this.store.setProperty(sessionID.getUserID() + ".publicKey.verified", true);
 
-        for (OtrKeyManagerListener l : listeners) {
+        listeners.stream().forEach((l) -> {
             l.verificationStatusChanged(sessionID);
-        }
+        });
     }
 
 }

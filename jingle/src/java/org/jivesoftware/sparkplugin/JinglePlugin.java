@@ -182,11 +182,8 @@ public class JinglePlugin implements Plugin, Phone, ConnectionListener {
         // Listen in for new incoming Jingle requests.
         jingleManager.addJingleSessionRequestListener(new JingleSessionRequestListener() {
             public void sessionRequested(final JingleSessionRequest request) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        incomingJingleSession(request);
-                    }
+                SwingUtilities.invokeLater(() -> {
+                    incomingJingleSession(request);
                 });
             }
         });
@@ -212,7 +209,7 @@ public class JinglePlugin implements Plugin, Phone, ConnectionListener {
             try {
                 discoverInfo = discoManager.discoverInfo(fullJID);
             } catch (XMPPException e) {
-                Log.debug("Unable to disco " + fullJID);
+                if (Log.debugging) Log.debug("Unable to disco " + fullJID);
             }
 
             if (discoverInfo != null) {
@@ -323,18 +320,14 @@ public class JinglePlugin implements Plugin, Phone, ConnectionListener {
      */
     private void addPresenceListener() {
         // Check presence changes
-        SparkManager.getConnection().addPacketListener(new PacketListener() {
-            @Override
-            public void processPacket(Packet packet) {
-                Presence presence = (Presence) packet;
-                if (!presence.isAvailable()) {
-                    String from = presence.getFrom();
-                    if (ModelUtil.hasLength(from)) {
-                        // Remove from
-                        jingleFeature.remove(from);
-                    }
+        SparkManager.getConnection().addPacketListener((Packet packet) -> {
+            Presence presence = (Presence) packet;
+            if (!presence.isAvailable()) {
+                String from = presence.getFrom();
+                if (ModelUtil.hasLength(from)) {
+                    // Remove from
+                    jingleFeature.remove(from);
                 }
-
             }
         }, new PacketTypeFilter(Presence.class));
     }

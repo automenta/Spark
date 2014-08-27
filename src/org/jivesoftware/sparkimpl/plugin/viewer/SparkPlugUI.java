@@ -84,25 +84,19 @@ public class SparkPlugUI extends JPanel {
             RolloverButton changeLogButton = new RolloverButton(SparkRes.getImageIcon(SparkRes.CHANGELOG_IMAGE));
             RolloverButton readMeButton = new RolloverButton(SparkRes.getImageIcon(SparkRes.README_IMAGE));
 
-            changeLogButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    try {
-                        BrowserLauncher.openURL(_plugin.getChangeLog());
-                    } catch (Exception e1) {
-                        Log.error(e1);
-                    }
+            changeLogButton.addActionListener((ActionEvent e) -> {
+                try {
+                    BrowserLauncher.openURL(_plugin.getChangeLog());
+                } catch (Exception e1) {
+                    Log.error(e1);
                 }
             });
 
-            readMeButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    try {
-                        BrowserLauncher.openURL(_plugin.getReadMeURL());
-                    } catch (Exception e1) {
-                        Log.error(e1);
-                    }
+            readMeButton.addActionListener((ActionEvent e) -> {
+                try {
+                    BrowserLauncher.openURL(_plugin.getReadMeURL());
+                } catch (Exception e1) {
+                    Log.error(e1);
                 }
             });
 

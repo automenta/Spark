@@ -182,10 +182,9 @@ public abstract class Table extends JXTable {
      * @param list the list to add to the model.
      */
     public void add(List<Object> list) {
-        for (Object aList : list) {
-            Object[] newRow = (Object[]) aList;
+        list.stream().map((aList) -> (Object[]) aList).forEach((newRow) -> {
             tableModel.addRow(newRow);
-        }
+        });
     }
 
     /**

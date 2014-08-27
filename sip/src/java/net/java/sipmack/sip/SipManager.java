@@ -434,7 +434,7 @@ public class SipManager implements SipListener {
                 try {
                     sipStack.deleteListeningPoint(listeningPoint);
                 } catch (ObjectInUseException ex) {
-                    // Log.debug("Retrying delete of riListeningPoint!");
+                    // if (Log.debugging) Log.debug("Retrying delete of riListeningPoint!");
                     sleep(RETRY_OBJECT_DELETES_AFTER);
                     continue;
                 }
@@ -533,7 +533,7 @@ public class SipManager implements SipListener {
         try {
 
             if (sipServerAddress == null || sipServerAddress.trim().length() == 0) {
-                Log.debug("PUBLIC NOT FOUND!");
+                if (Log.debugging) Log.debug("PUBLIC NOT FOUND!");
                 throw new CommunicationsException("Public address NOT FOUND");
             }
 
@@ -1306,7 +1306,7 @@ public class SipManager implements SipListener {
 
     // ============================= SIP LISTENER METHODS ==============================
     public void processRequest(RequestEvent requestReceivedEvent) {
-        Log.debug(requestReceivedEvent.getRequest().toString());
+        if (Log.debugging) Log.debug(requestReceivedEvent.getRequest().toString());
 
         ServerTransaction serverTransaction = requestReceivedEvent
                 .getServerTransaction();
@@ -1461,10 +1461,10 @@ public class SipManager implements SipListener {
 
     // -------------------- PROCESS RESPONSE
     public void processResponse(ResponseEvent responseReceivedEvent) {
-        Log.debug("<RESPONSE>");
-        Log.debug("[" + responseReceivedEvent.getResponse().getStatusCode()
+        if (Log.debugging) Log.debug("<RESPONSE>");
+        if (Log.debugging) Log.debug("[" + responseReceivedEvent.getResponse().getStatusCode()
                 + "]");
-        Log.debug("</RESPONSE>");
+        if (Log.debugging) Log.debug("</RESPONSE>");
 
         ClientTransaction clientTransaction = responseReceivedEvent
                 .getClientTransaction();
@@ -1549,7 +1549,7 @@ public class SipManager implements SipListener {
             if (method.equals(Request.SUBSCRIBE)) {
             } else if (method.equals(Request.REGISTER)) {
                 fireRegistrationFailed("Invalid username.", RegistrationEvent.Type.NotFound);
-                Log.debug("REGISTER NOT FOUND");
+                if (Log.debugging) Log.debug("REGISTER NOT FOUND");
 
             }
         } // NOT_IMPLEMENTED
@@ -1592,7 +1592,7 @@ public class SipManager implements SipListener {
                 loginfailed++;
 
                 if (loginfailed < 3) {
-                    Log.debug("Removed");
+                    if (Log.debugging) Log.debug("Removed");
                 } else {
                     fireRegistrationFailed("Invalid password.", RegistrationEvent.Type.WrongPass);
                 }

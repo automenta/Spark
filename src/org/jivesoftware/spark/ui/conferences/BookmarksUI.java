@@ -356,12 +356,9 @@ public class BookmarksUI extends JPanel {
                     return;
                 }
 
-                for (Object mucService : mucServices) {
-                    String service = (String) mucService;
-                    if (!hasService(service)) {
-                        addServiceToList(service);
-                    }
-                }
+                mucServices.stream().map((mucService) -> (String) mucService).filter((service) -> (!hasService(service))).forEach((service) -> {
+                    addServiceToList(service);
+                });
             }
         };
 
@@ -479,9 +476,9 @@ public class BookmarksUI extends JPanel {
                                             case "server":
                                                 try {
                                                     Collection<String> services = getConferenceServices(conferenceService);
-                                                    for (String service : services) {
-                                                        serviceList.add(service);
-                                                    }
+                                                    services.stream().forEach((service) -> {
+                                                serviceList.add(service);
+                                            });
                                                 } catch (Exception e1) {
                                                     Log.error("Unable to load conference services in server.", e1);
                                                 }       break;
@@ -497,11 +494,9 @@ public class BookmarksUI extends JPanel {
                         @Override
                         public void finished() {
                             if (discoInfo != null) {
-                                for (String aServiceList : serviceList) {
-                                    if (!hasService(aServiceList)) {
-                                        addServiceToList(aServiceList);
-                                    }
-                                }
+                                serviceList.stream().filter((aServiceList) -> (!hasService(aServiceList))).forEach((aServiceList) -> {
+                                    addServiceToList(aServiceList);
+                                });
                                 serviceField.setText("");
                                 serviceField.setEnabled(true);
                                 addButton.setEnabled(true);
@@ -575,7 +570,7 @@ public class BookmarksUI extends JPanel {
      */
     public void setBookmarks(Collection<BookmarkedConference> bookmarks) {
 
-        for (BookmarkedConference bookmark : bookmarks) {
+        bookmarks.stream().forEach((bookmark) -> {
             String serviceName = StringUtils.parseServer(bookmark.getJid());
             String roomJID = bookmark.getJid();
             String roomName = bookmark.getName();
@@ -599,7 +594,7 @@ public class BookmarksUI extends JPanel {
             addBookmark(serviceNode, roomName, roomJID);
 
             tree.expandPath(path);
-        }
+        });
     }
 
     /**
@@ -630,9 +625,9 @@ public class BookmarksUI extends JPanel {
     }
 
     private void fireContextMenuListeners(JPopupMenu popup, JiveTreeNode node) {
-        for (ContextMenuListener listener : new ArrayList<>(listeners)) {
+        new ArrayList<>(listeners).stream().forEach((listener) -> {
             listener.poppingUp(node, popup);
-        }
+        });
     }
 
     /**
@@ -654,15 +649,15 @@ public class BookmarksUI extends JPanel {
     }
 
     private void fireBookmarksAdded(String roomJID) {
-        for (BookmarksListener bookmarkListener : new ArrayList<>(bookmarkListeners)) {
+        new ArrayList<>(bookmarkListeners).stream().forEach((bookmarkListener) -> {
             bookmarkListener.bookmarkAdded(roomJID);
-        }
+        });
     }
 
     private void fireBookmarksRemoved(String roomJID) {
-        for (BookmarksListener bookmarkListener : new ArrayList<>(bookmarkListeners)) {
+        new ArrayList<>(bookmarkListeners).stream().forEach((bookmarkListener) -> {
             bookmarkListener.bookmarkRemoved(roomJID);
-        }
+        });
     }
 
     /**

@@ -81,10 +81,10 @@ public class ColorSettingManager {
     public static void saveColorSettings() {
         final Properties props = new Properties();
 
-        for (String key : _propertyHashMap.keySet()) {
+        _propertyHashMap.keySet().stream().forEach((key) -> {
             String value = _propertyHashMap.get(key);
             props.setProperty(key, value);
-        }
+        });
         try {
             props.store(new FileOutputStream(getSettingsFile()),
                     "Storing Spark Color Settings");
@@ -202,10 +202,9 @@ public class ColorSettingManager {
     private static void initialLoad(Properties props) {
 
         HashMap<String, String> map = getDefaultColors();
-        for (String key : map.keySet()) {
+        map.keySet().stream().forEach((key) -> {
             props.setProperty(key, map.get(key));
-
-        }
+        });
 
         try {
             props.store(new FileOutputStream(getSettingsFile()),

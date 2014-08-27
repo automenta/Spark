@@ -68,9 +68,9 @@ public class ColorPreferencePanel extends SparkTabbedPane {
         Set<String> sets = _colorsettings.getKeys();
 
         Vector<String> keys = new Vector<>();
-        for (String s : sets) {
+        sets.stream().forEach((s) -> {
             keys.add(s);
-        }
+        });
         sortList(keys);
 
         JPanel rightpanel = new JPanel(new GridBagLayout());
@@ -98,35 +98,20 @@ public class ColorPreferencePanel extends SparkTabbedPane {
         add(_jScrollPane);
         add(rightpanel);
 
-        _colorliste.addListSelectionListener(new ListSelectionListener() {
-
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-
-                String v = (String) _colorliste.getSelectedValue();
-
-                Color c = _colorsettings.getColorFromProperty(v);
-
-                _colorpick.setColor(c);
-                _errorlabel.setText("");
-            }
+        _colorliste.addListSelectionListener((ListSelectionEvent e) -> {
+            String v = (String) _colorliste.getSelectedValue();
+            
+            Color c = _colorsettings.getColorFromProperty(v);
+            
+            _colorpick.setColor(c);
+            _errorlabel.setText("");
         });
 
-        savebutton.addActionListener(new ActionListener() {
+        savebutton.addActionListener(this::savebuttonaction);
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                savebuttonaction(e);
-            }
-        });
-
-        restoreDefaults.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ColorSettingManager.restoreDefault();
-                _colorsettings = ColorSettingManager.getColorSettings();
-            }
+        restoreDefaults.addActionListener((ActionEvent e) -> {
+            ColorSettingManager.restoreDefault();
+            _colorsettings = ColorSettingManager.getColorSettings();
         });
 
     }

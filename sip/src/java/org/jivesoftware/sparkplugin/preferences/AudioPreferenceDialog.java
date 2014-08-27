@@ -65,15 +65,12 @@ public class AudioPreferenceDialog extends JPanel {
         add(javaMixer.getPrefferedMasterVolume(), new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(2, 2, 2, 2), 0, 0));
 
         closeButton = new JButton("Close");
-        closeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                SipPreference pref = SoftPhoneManager.getInstance().getPreference();
-                SipPreferences preferences = (SipPreferences) pref.getData();
-                preferences.setAudioDevice((String) audioBox.getSelectedItem());
-                pref.saveSipFile();
-                dialog.dispose();
-            }
+        closeButton.addActionListener((ActionEvent actionEvent) -> {
+            SipPreference pref = SoftPhoneManager.getInstance().getPreference();
+            SipPreferences preferences = (SipPreferences) pref.getData();
+            preferences.setAudioDevice((String) audioBox.getSelectedItem());
+            pref.saveSipFile();
+            dialog.dispose();
         });
         add(closeButton, new GridBagConstraints(1, 3, 1, 1, 1.0, 0.0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(2, 2, 2, 2), 0, 0));
 

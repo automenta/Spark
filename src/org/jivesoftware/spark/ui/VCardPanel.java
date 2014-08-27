@@ -183,11 +183,8 @@ public class VCardPanel extends JPanel {
                 }
             }
 
-            final Timer timer = new Timer(500, new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent actionEvent) {
-                    showAvatarBig(true, vcard);
-                }
+            final Timer timer = new Timer(500, (ActionEvent actionEvent) -> {
+                showAvatarBig(true, vcard);
             });
 
             @Override

@@ -221,10 +221,6 @@ public class CallProcessing {
                 "Remote party returned error response: "
                 + notAcceptable.getStatusCode() + " - "
                 + notAcceptable.getReasonPhrase()));
-        return;
-
-        // it is the stack that should be sending the ACK so don't do it
-        // here
     }
 
     /**
@@ -356,14 +352,12 @@ public class CallProcessing {
                         .fireCommunicationsError(new CommunicationsException(
                                         "Failed to send a RINGING response to an INVITE request!",
                                         ex));
-                return;
             } catch (InvalidArgumentException e) {
                 call.setState(Call.DISCONNECTED);
                 sipManCallback
                         .fireCommunicationsError(new CommunicationsException(
                                         "Failed to send a NOT_FOUND response to an INVITE request!",
                                         e));
-                return;
             }
         } else {
             // Send BUSY_HERE
@@ -386,13 +380,11 @@ public class CallProcessing {
                         .fireCommunicationsError(new CommunicationsException(
                                         "Failed to send a RINGING response to an INVITE request!",
                                         ex));
-                return;
             } catch (InvalidArgumentException e) {
                 sipManCallback
                         .fireCommunicationsError(new CommunicationsException(
                                         "Failed to send a RINGING response to an INVITE request!",
                                         e));
-                return;
             }
         }
     }
@@ -416,7 +408,7 @@ public class CallProcessing {
             // find the call
             Call call = callDispatcher.findCall(serverTransaction.getDialog());
             if (call == null) {
-                Log.debug("No call find");
+                if (Log.debugging) Log.debug("No call find");
                 sipManCallback.fireUnknownMessageReceived(byeRequest);
                 return;
             }
@@ -799,7 +791,6 @@ public class CallProcessing {
             Log.error("hold", ee);
         }
 
-        return;
     }
 
     // send DTMF
@@ -1017,7 +1008,6 @@ public class CallProcessing {
             Log.error("bye", ee);
         }
 
-        return;
     } // bye
 
     // cancel
@@ -1241,7 +1231,7 @@ public class CallProcessing {
             Request invite) {
         sipManCallback.setBusy(false);
 
-        Log.debug("REINVITE DETECTED");
+        if (Log.debugging) Log.debug("REINVITE DETECTED");
 
         Call call = callDispatcher.findCall(serverTransaction.getDialog());
         if (call == null) {
@@ -1251,7 +1241,7 @@ public class CallProcessing {
 
         call.setRemoteSdpDescription(new String(invite.getRawContent()));
 
-        Log.debug("CALL CONNECT EVENT");
+        if (Log.debugging) Log.debug("CALL CONNECT EVENT");
 
         try {
             sayOK(call.getID(), call.getLocalSdpDescription().toString());

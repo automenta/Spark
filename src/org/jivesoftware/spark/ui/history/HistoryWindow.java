@@ -268,65 +268,53 @@ public class HistoryWindow extends JFrame {
     }
 
     private ActionListener onCloseBtnClick() {
-        return new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                hideWindow();
-            }
+        return (ActionEvent e) -> {
+            hideWindow();
         };
     }
 
     private ActionListener onFindBtnClick() {
-        return new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                String searchText = findTextField.getText().trim();
-                if (EMPTY.equals(searchText)) {
-                    historyTree.setModel(historyOriginalModel);
-                    selectVeryFirstLeaf();
-                    return;
-                }
-
-                List<HistoryEntry> results = historyFile.search(findTextField
-                        .getText());
-
-                HistoryTreeNode top = new HistoryTreeNode(searchText);
-
-                for (HistoryEntry entry : results) {
-                    top.add(new HistoryTreeNode(entry, entry.getName()));
-                }
-
-                historyTree.setModel(new DefaultTreeModel(top));
+        return (ActionEvent e) -> {
+            String searchText = findTextField.getText().trim();
+            if (EMPTY.equals(searchText)) {
+                historyTree.setModel(historyOriginalModel);
                 selectVeryFirstLeaf();
+                return;
             }
+            
+            List<HistoryEntry> results = historyFile.search(findTextField
+                    .getText());
+            
+            HistoryTreeNode top = new HistoryTreeNode(searchText);
+            
+            results.stream().forEach((entry) -> {
+                top.add(new HistoryTreeNode(entry, entry.getName()));
+            });
+            
+            historyTree.setModel(new DefaultTreeModel(top));
+            selectVeryFirstLeaf();
         };
     }
 
     private TreeSelectionListener onTreeSelected() {
-        return new TreeSelectionListener() {
-
-            @Override
-            public void valueChanged(TreeSelectionEvent e) {
-
-                TreePath tp = e.getNewLeadSelectionPath();
-                if (tp == null) {
-                    return;
-                }
-
-                Object node = tp.getLastPathComponent();
-                if (!(node instanceof HistoryTreeNode)) {
-                    return;
-                }
-
-                HistoryTreeNode entry = (HistoryTreeNode) node;
-                HistoryEntry historyEntry = entry.getHistoryEntry();
-
-                String historyText = (historyEntry == null || historyEntry
-                        .isEmpty()) ? EMPTY : historyEntry.getHistory();
-
-                historyContentText.setText(historyText);
+        return (TreeSelectionEvent e) -> {
+            TreePath tp = e.getNewLeadSelectionPath();
+            if (tp == null) {
+                return;
             }
+            
+            Object node = tp.getLastPathComponent();
+            if (!(node instanceof HistoryTreeNode)) {
+                return;
+            }
+            
+            HistoryTreeNode entry = (HistoryTreeNode) node;
+            HistoryEntry historyEntry = entry.getHistoryEntry();
+            
+            String historyText = (historyEntry == null || historyEntry
+                    .isEmpty()) ? EMPTY : historyEntry.getHistory();
+            
+            historyContentText.setText(historyText);
         };
     }
 

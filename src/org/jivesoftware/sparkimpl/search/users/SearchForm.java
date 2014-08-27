@@ -78,11 +78,8 @@ public class SearchForm extends JPanel {
         ResourceUtils.resButton(searchButton, Res.getString("button.search"));
         add(searchButton, new GridBagConstraints(0, 1, 3, 1, 1.0, 0.0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0));
 
-        searchButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                performSearch();
-            }
+        searchButton.addActionListener((ActionEvent e) -> {
+            performSearch();
         });
 
         KeyStroke enter = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);

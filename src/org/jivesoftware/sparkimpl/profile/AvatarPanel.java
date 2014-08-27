@@ -82,14 +82,11 @@ public class AvatarPanel extends JPanel implements ActionListener {
         ResourceUtils.resButton(browseButton, Res.getString("button.browse"));
         ResourceUtils.resButton(clearButton, Res.getString("button.clear"));
 
-        clearButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                avatar.setIcon(null);
-                bytes = null;
-                avatarFile = null;
-                avatar.setBorder(null);
-            }
+        clearButton.addActionListener((ActionEvent actionEvent) -> {
+            avatar.setIcon(null);
+            bytes = null;
+            avatarFile = null;
+            avatar.setBorder(null);
         });
 
         avatar.setText(Res.getString("message.no.avatar.found"));

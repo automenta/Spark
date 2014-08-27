@@ -402,15 +402,17 @@ public class UserManager {
 
         final ContactList contactList = SparkManager.getWorkspace().getContactList();
 
-        for (ContactGroup contactGroup : contactList.getContactGroups()) {
+        contactList.getContactGroups().stream().map((contactGroup) -> {
             contactGroup.clearSelection();
-            for (ContactItem contactItem : contactGroup.getContactItems()) {
-                if (!contactMap.containsKey(contactItem.getJID())) {
-                    contacts.add(contactItem);
-                    contactMap.put(contactItem.getJID(), contactItem);
-                }
-            }
-        }
+            return contactGroup;
+        }).forEach((contactGroup) -> {
+            contactGroup.getContactItems().stream().filter((contactItem) -> (!contactMap.containsKey(contactItem.getJID()))).map((contactItem) -> {
+                contacts.add(contactItem);
+                return contactItem;
+            }).forEach((contactItem) -> {
+                contactMap.put(contactItem.getJID(), contactItem);
+            });
+        });
 
         // Sort
         Collections.sort(contacts, itemComparator);
@@ -548,11 +550,6 @@ public class UserManager {
     /**
      * Sorts ContactItems.
      */
-    final Comparator<ContactItem> itemComparator = new Comparator<ContactItem>() {
-        @Override
-        public int compare(ContactItem item1, ContactItem item2) {
-            return item1.getDisplayName().toLowerCase().compareTo(item2.getDisplayName().toLowerCase());
-        }
-    };
+    final Comparator<ContactItem> itemComparator = (ContactItem item1, ContactItem item2) -> item1.getDisplayName().toLowerCase().compareTo(item2.getDisplayName().toLowerCase());
 
 }

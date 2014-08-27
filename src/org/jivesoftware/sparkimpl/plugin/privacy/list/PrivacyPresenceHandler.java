@@ -39,68 +39,59 @@ public class PrivacyPresenceHandler implements SparkPrivacyItemListener {
     }
 
     public void setIconsForList(SparkPrivacyList list) {
-        for (PrivacyItem pItem : list.getPrivacyItems()) {
+        list.getPrivacyItems().stream().map((pItem) -> {
             if (pItem.getType().equals(PrivacyItem.Type.jid)) {
                 setBlockedIconToContact(pItem.getValue());
                 if (pItem.isFilterPresence_out()) {
                     sendUnavailableTo(pItem.getValue());
                 }
             }
-
-            if (pItem.getType().equals(PrivacyItem.Type.group)) {
-                ContactGroup group = SparkManager.getWorkspace().getContactList().getContactGroup(pItem.getValue());
-                for (ContactItem citem : group.getContactItems()) {
-                    setBlockedIconToContact(citem.getJID());
-                    if (pItem.isFilterPresence_out()) {
-                        sendUnavailableTo(citem.getJID());
-                    }
-                }
-
-            }
-
-        }
+            return pItem;
+        }).filter((pItem) -> (pItem.getType().equals(PrivacyItem.Type.group))).forEach((pItem) -> {
+            ContactGroup group = SparkManager.getWorkspace().getContactList().getContactGroup(pItem.getValue());
+            group.getContactItems().stream().map((citem) -> {
+                setBlockedIconToContact(citem.getJID());
+                return citem;
+            }).filter((citem) -> (pItem.isFilterPresence_out())).forEach((citem) -> {
+                sendUnavailableTo(citem.getJID());
+            });
+        });
         SparkManager.getContactList().updateUI();
     }
 
     private void setBlockedIconToContact(String jid) {
         Collection<ContactItem> items = SparkManager.getWorkspace().getContactList().getContactItemsByJID(jid);
-        for (ContactItem contactItem : items) {
-            if (contactItem != null) {
-                contactItem.setSpecialIcon(SparkRes.getImageIcon("PRIVACY_ICON_SMALL"));
-            }
-        }
+        items.stream().filter((contactItem) -> (contactItem != null)).forEach((contactItem) -> {
+            contactItem.setSpecialIcon(SparkRes.getImageIcon("PRIVACY_ICON_SMALL"));
+        });
     }
 
     public void removeIconsForList(SparkPrivacyList list) {
-        for (PrivacyItem pItem : list.getPrivacyItems()) {
+        list.getPrivacyItems().stream().map((pItem) -> {
             if (pItem.getType().equals(PrivacyItem.Type.jid)) {
                 removeBlockedIconFromContact(pItem.getValue());
                 if (pItem.isFilterPresence_out()) {
                     sendRealPresenceTo(pItem.getValue());
                 }
             }
-
-            if (pItem.getType().equals(PrivacyItem.Type.group)) {
-                ContactGroup group = SparkManager.getWorkspace().getContactList().getContactGroup(pItem.getValue());
-                for (ContactItem citem : group.getContactItems()) {
-                    removeBlockedIconFromContact(citem.getJID());
-                    if (pItem.isFilterPresence_out()) {
-                        sendRealPresenceTo(citem.getJID());
-                    }
-                }
-            }
-
-        }
+            return pItem;
+        }).filter((pItem) -> (pItem.getType().equals(PrivacyItem.Type.group))).forEach((pItem) -> {
+            ContactGroup group = SparkManager.getWorkspace().getContactList().getContactGroup(pItem.getValue());
+            group.getContactItems().stream().map((citem) -> {
+                removeBlockedIconFromContact(citem.getJID());
+                return citem;
+            }).filter((citem) -> (pItem.isFilterPresence_out())).forEach((citem) -> {
+                sendRealPresenceTo(citem.getJID());
+            });
+        });
         SparkManager.getContactList().updateUI();
     }
 
     private void removeBlockedIconFromContact(String jid) {
         Collection<ContactItem> items = SparkManager.getWorkspace().getContactList().getContactItemsByJID(jid);
-        for (ContactItem item : items) {
-            if (item != null) {
-                item.setSpecialIcon(null);
-            }
-        }
+        items.stream().filter((item) -> (item != null)).forEach((item) -> {
+            item.setSpecialIcon(null);
+        });
 
     }
 
@@ -117,12 +108,12 @@ public class PrivacyPresenceHandler implements SparkPrivacyItemListener {
 
             if (item.getType().equals(PrivacyItem.Type.group)) {
                 ContactGroup group = SparkManager.getWorkspace().getContactList().getContactGroup(item.getValue());
-                for (ContactItem citem : group.getContactItems()) {
+                group.getContactItems().stream().map((citem) -> {
                     setBlockedIconToContact(citem.getJID());
-                    if (item.isFilterPresence_out()) {
-                        sendUnavailableTo(citem.getJID());
-                    }
-                }
+                    return citem;
+                }).filter((citem) -> (item.isFilterPresence_out())).forEach((citem) -> {
+                    sendUnavailableTo(citem.getJID());
+                });
 
             }
             SparkManager.getContactList().updateUI();
@@ -142,12 +133,12 @@ public class PrivacyPresenceHandler implements SparkPrivacyItemListener {
 
             if (item.getType().equals(PrivacyItem.Type.group)) {
                 ContactGroup group = SparkManager.getWorkspace().getContactList().getContactGroup(item.getValue());
-                for (ContactItem citem : group.getContactItems()) {
+                group.getContactItems().stream().map((citem) -> {
                     removeBlockedIconFromContact(citem.getJID());
-                    if (item.isFilterPresence_out()) {
-                        sendRealPresenceTo(citem.getJID());
-                    }
-                }
+                    return citem;
+                }).filter((citem) -> (item.isFilterPresence_out())).forEach((citem) -> {
+                    sendRealPresenceTo(citem.getJID());
+                });
 
             }
             SparkManager.getContactList().updateUI();

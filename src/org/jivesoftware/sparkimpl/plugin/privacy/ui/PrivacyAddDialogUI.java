@@ -75,13 +75,8 @@ public class PrivacyAddDialogUI extends JPanel {
         setLayout(new GridBagLayout());
 
         _showOffCheckbox.setText(Res.getString("menuitem.show.offline.users"));
-        _showOffCheckbox.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                createList();
-
-            }
+        _showOffCheckbox.addActionListener((ActionEvent e) -> {
+            createList();
         });
 
         JPanel checkBoxPanel = createCheckBoxes();
@@ -123,13 +118,14 @@ public class PrivacyAddDialogUI extends JPanel {
         _userList.clear();
         final Roster roster = SparkManager.getConnection().getRoster();
         if (_showGroups) {
-            for (RosterGroup group : roster.getGroups()) {
+            roster.getGroups().stream().map((group) -> {
                 _showOffCheckbox.setVisible(false);
-                ContactItem item = new ContactItem(group.getName(), null, group.getName());
+                return group;
+            }).map((group) -> new ContactItem(group.getName(), null, group.getName())).forEach((item) -> {
                 _userList.add(item);
-            }
+            });
         } else {
-            for (RosterEntry entry : roster.getEntries()) {
+            roster.getEntries().stream().forEach((entry) -> {
                 Presence presence = PresenceManager.getPresence(entry.getUser());
 
                 if (presence.isAvailable()) {
@@ -141,15 +137,14 @@ public class PrivacyAddDialogUI extends JPanel {
                     item.setPresence(presence);
                     _userList.add(item);
                 }
-            }
+            });
         }
 
         Collections.sort(_userList, itemComparator);
         model.clear();
-        for (ContactItem item : _userList) {
-
+        _userList.stream().forEach((item) -> {
             model.addElement(item);
-        }
+        });
 
     }
 
@@ -195,19 +190,15 @@ public class PrivacyAddDialogUI extends JPanel {
         dlg.setContentPane(mainPanel);
         dlg.setLocationRelativeTo(parent);
 
-        PropertyChangeListener changeListener = new PropertyChangeListener() {
-
-            @Override
-            public void propertyChange(PropertyChangeEvent e) {
-                String value = (String) pane.getValue();
-                if (Res.getString("cancel").equals(value)) {
-                    rosterList.clearSelection();
-                    pane.setValue(JOptionPane.UNINITIALIZED_VALUE);
-                    dlg.dispose();
-                } else if (Res.getString("ok").equals(value)) {
-                    pane.setValue(JOptionPane.UNINITIALIZED_VALUE);
-                    dlg.dispose();
-                }
+        PropertyChangeListener changeListener = (PropertyChangeEvent e) -> {
+            String value = (String) pane.getValue();
+            if (Res.getString("cancel").equals(value)) {
+                rosterList.clearSelection();
+                pane.setValue(JOptionPane.UNINITIALIZED_VALUE);
+                dlg.dispose();
+            } else if (Res.getString("ok").equals(value)) {
+                pane.setValue(JOptionPane.UNINITIALIZED_VALUE);
+                dlg.dispose();
             }
         };
 
@@ -244,18 +235,13 @@ public class PrivacyAddDialogUI extends JPanel {
     /**
      * Sorts ContactItems.
      */
-    final Comparator<ContactItem> itemComparator = new Comparator<ContactItem>() {
-
-        @Override
-        public int compare(ContactItem item1, ContactItem item2) {
-            String nickname1 = item1.getDisplayName();
-            String nickname2 = item2.getDisplayName();
-            if (nickname1 == null || nickname2 == null) {
-                return 0;
-            }
-
-            return nickname1.toLowerCase().compareTo(nickname2.toLowerCase());
-
+    final Comparator<ContactItem> itemComparator = (ContactItem item1, ContactItem item2) -> {
+        String nickname1 = item1.getDisplayName();
+        String nickname2 = item2.getDisplayName();
+        if (nickname1 == null || nickname2 == null) {
+            return 0;
         }
+        
+        return nickname1.toLowerCase().compareTo(nickname2.toLowerCase());
     };
 }

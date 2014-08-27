@@ -75,20 +75,16 @@ public class GatewayButton extends JPanel implements GatewayItem {
             }
         });
         commandPanel.updateUI();
-        final Runnable registerThread = new Runnable() {
-            @Override
-            public void run() {
-                // Send directed presence if registered with this transport.
-                final boolean isRegistered = TransportUtils.isRegistered(SparkManager.getConnection(), transport);
-                if (isRegistered) {
-                    // Check if auto login is set.
-                    boolean autoJoin = TransportUtils.autoJoinService(transport.getServiceName());
-                    if (autoJoin) {
-                        Presence oldPresence = statusBar.getPresence();
-                        Presence presence = new Presence(oldPresence.getType(), oldPresence.getStatus(), oldPresence.getPriority(), oldPresence.getMode());
-                        presence.setTo(transport.getServiceName());
-                        SparkManager.getConnection().sendPacket(presence);
-                    }
+        final Runnable registerThread = () -> {
+            final boolean isRegistered = TransportUtils.isRegistered(SparkManager.getConnection(), transport);
+            if (isRegistered) {
+                // Check if auto login is set.
+                boolean autoJoin = TransportUtils.autoJoinService(transport.getServiceName());
+                if (autoJoin) {
+                    Presence oldPresence = statusBar.getPresence();
+                    Presence presence = new Presence(oldPresence.getType(), oldPresence.getStatus(), oldPresence.getPriority(), oldPresence.getMode());
+                    presence.setTo(transport.getServiceName());
+                    SparkManager.getConnection().sendPacket(presence);
                 }
             }
         };
@@ -106,58 +102,43 @@ public class GatewayButton extends JPanel implements GatewayItem {
 
         // Create action to sign off of transport.
         final JMenuItem signOutMenu = new JMenuItem(Res.getString("menuitem.sign.out"));
-        signOutMenu.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                final Presence offlinePresence = new Presence(Presence.Type.unavailable);
-                offlinePresence.setTo(transport.getServiceName());
-
-                SparkManager.getConnection().sendPacket(offlinePresence);
-            }
+        signOutMenu.addActionListener((ActionEvent actionEvent) -> {
+            final Presence offlinePresence = new Presence(Presence.Type.unavailable);
+            offlinePresence.setTo(transport.getServiceName());
+            
+            SparkManager.getConnection().sendPacket(offlinePresence);
         });
 
         // Create menu to sign in.
         final JMenuItem signInMenu = new JMenuItem(Res.getString("menuitem.sign.in"));
-        signInMenu.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                final Presence onlinePresence = new Presence(Presence.Type.available);
-                onlinePresence.setTo(transport.getServiceName());
-                SparkManager.getConnection().sendPacket(onlinePresence);
-            }
+        signInMenu.addActionListener((ActionEvent actionEvent) -> {
+            final Presence onlinePresence = new Presence(Presence.Type.available);
+            onlinePresence.setTo(transport.getServiceName());
+            SparkManager.getConnection().sendPacket(onlinePresence);
         });
 
         // Create menu item to  toggle signing in at startup.
         final JCheckBoxMenuItem signInAtLoginMenu = new JCheckBoxMenuItem();
         signInAtLoginMenu.setText(Res.getString("menuitem.sign.in.at.login"));
-        signInAtLoginMenu.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                TransportUtils.setAutoJoin(transport.getServiceName(), signInAtLoginMenu.isSelected());
-            }
+        signInAtLoginMenu.addActionListener((ActionEvent actionEvent) -> {
+            TransportUtils.setAutoJoin(transport.getServiceName(), signInAtLoginMenu.isSelected());
         });
 
         final JMenuItem registerMenu = new JMenuItem(Res.getString("menuitem.enter.login.information"));
-        registerMenu.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                TransportRegistrationDialog registrationDialog = new TransportRegistrationDialog(transport.getServiceName());
-                registrationDialog.invoke();
-            }
+        registerMenu.addActionListener((ActionEvent actionEvent) -> {
+            TransportRegistrationDialog registrationDialog = new TransportRegistrationDialog(transport.getServiceName());
+            registrationDialog.invoke();
         });
 
         // Create action to delete login information
         final JMenuItem unregisterMenu = new JMenuItem(Res.getString("menuitem.delete.login.information"));
-        unregisterMenu.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                int confirm = JOptionPane.showConfirmDialog(SparkManager.getMainWindow(), Res.getString("message.disable.transport", transport.getName()), Res.getString("title.disable.transport"), JOptionPane.YES_NO_OPTION);
-                if (confirm == JOptionPane.YES_OPTION) {
-                    try {
-                        TransportUtils.unregister(SparkManager.getConnection(), transport.getServiceName());
-                    } catch (XMPPException e1) {
-                        Log.error(e1);
-                    }
+        unregisterMenu.addActionListener((ActionEvent actionEvent) -> {
+            int confirm = JOptionPane.showConfirmDialog(SparkManager.getMainWindow(), Res.getString("message.disable.transport", transport.getName()), Res.getString("title.disable.transport"), JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                try {
+                    TransportUtils.unregister(SparkManager.getConnection(), transport.getServiceName());
+                } catch (XMPPException e1) {
+                    Log.error(e1);
                 }
             }
         });

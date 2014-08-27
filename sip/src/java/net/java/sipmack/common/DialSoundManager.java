@@ -48,25 +48,22 @@ public class DialSoundManager {
             initializeAudioStream(i);
         }
 
-        playerThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (running) {
-                    try {
-                        if (playQueue.isEmpty()) {
-                            synchronized (playQueue) {
-                                playQueue.wait();
-                            }
-                            continue;
+        playerThread = new Thread(() -> {
+            while (running) {
+                try {
+                    if (playQueue.isEmpty()) {
+                        synchronized (playQueue) {
+                            playQueue.wait();
                         }
-                        play(playQueue.remove(0));
-                        Thread.sleep(40);
-                    } catch (InterruptedException ex) {
-                        if (running == false) {
-                            break;
-                        }
+                        continue;
                     }
-                } // while
+                    play(playQueue.remove(0));
+                    Thread.sleep(40);
+                } catch (InterruptedException ex) {
+                    if (running == false) {
+                        break;
+                    }
+                }
             }
         });
 
@@ -81,13 +78,7 @@ public class DialSoundManager {
             }
             InputStreamEventSource is = new InputStreamEventSource(i,
                     PhoneRes.getURL("DTMF" + i + "_SOUND").openStream());
-            is.addListener(new InputStreamListener() {
-
-                @Override
-                public void handleEndOfStream(int n) {
-                    initializeAudioStream(n);
-                }
-            });
+            is.addListener(this::initializeAudioStream);
             audioStreams[i] = new AudioStream(is);
         } catch (IOException e) {
             e.printStackTrace();
@@ -169,9 +160,9 @@ class InputStreamEventSource extends InputStream {
     }
 
     public void handleEndOfStream() {
-        for (InputStreamListener item : listeners) {
+        listeners.stream().forEach((item) -> {
             item.handleEndOfStream(i);
-        }
+        });
     }
 
     public void addListener(InputStreamListener item) {

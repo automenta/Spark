@@ -239,7 +239,7 @@ public class SipAccountPacket extends IQ {
             while (iter.hasNext()) {
                 DiscoverItems.Item item = iter.next();
                 if ("SIP Controller".equals(item.getName())) {
-                    Log.debug("SIP Controller Found");
+                    if (Log.debugging) Log.debug("SIP Controller Found");
                     return true;
                 }
             }

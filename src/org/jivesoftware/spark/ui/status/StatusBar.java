@@ -122,24 +122,21 @@ public class StatusBar extends JPanel implements VCardListener {
         updatePresence();
 
         //setBorder(BorderFactory.createLineBorder(new Color(197, 213, 230), 1));
-        SparkManager.getSessionManager().addPresenceListener(new PresenceListener() {
-            @Override
-            public void presenceChanged(Presence presence) {
-                presence.setStatus(StringUtils.modifyWildcards(presence.getStatus()));
-                changeAvailability(presence);
-
-                // SPARK-1524: 
-                // after reconnected if we had the 'invisible' presence
-                // we should re-send it 
-                if (PresenceManager.isInvisible(currentPresence)) {
-                    TimerTask task = new SwingTimerTask() {
-                        @Override
-                        public void doRun() {
-                            PrivacyManager.getInstance().goToInvisible();
-                        }
-                    };
-                    TaskEngine.getInstance().schedule(task, 500);
-                }
+        SparkManager.getSessionManager().addPresenceListener((Presence presence) -> {
+            presence.setStatus(StringUtils.modifyWildcards(presence.getStatus()));
+            changeAvailability(presence);
+            
+            // SPARK-1524:
+            // after reconnected if we had the 'invisible' presence
+            // we should re-send it
+            if (PresenceManager.isInvisible(currentPresence)) {
+                TimerTask task = new SwingTimerTask() {
+                    @Override
+                    public void doRun() {
+                        PrivacyManager.getInstance().goToInvisible();
+                    }
+                };
+                TaskEngine.getInstance().schedule(task, 500);
             }
         });
 
@@ -173,12 +170,7 @@ public class StatusBar extends JPanel implements VCardListener {
         };
 
         TaskEngine.getInstance().schedule(task, 3000);
-        changePresenceRunnable = new Runnable() {
-            @Override
-            public void run() {
-                updatePresence();
-            }
-        };
+        changePresenceRunnable = this::updatePresence;
 
     }
 
@@ -227,12 +219,7 @@ public class StatusBar extends JPanel implements VCardListener {
         }
 
         // Sort Custom Messages
-        Collections.sort(custom, new Comparator<CustomStatusItem>() {
-            @Override
-            public int compare(final CustomStatusItem a, final CustomStatusItem b) {
-                return (a.getStatus().compareToIgnoreCase(b.getStatus()));
-            }
-        });
+        Collections.sort(custom, (final CustomStatusItem a, final CustomStatusItem b) -> (a.getStatus().compareToIgnoreCase(b.getStatus())));
 
         // Build menu from StatusList
         for (final StatusItem statusItem : statusList) {
@@ -347,7 +334,7 @@ public class StatusBar extends JPanel implements VCardListener {
             JMenu privMenu = new JMenu(Res.getString("privacy.status.menu.entry"));
             privMenu.setIcon(SparkRes.getImageIcon("PRIVACY_ICON_SMALL"));
 
-            for (SparkPrivacyList plist : pmanager.getPrivacyLists()) {
+            pmanager.getPrivacyLists().stream().forEach((plist) -> {
                 JMenuItem it = new JMenuItem(plist.getListName());
                 privMenu.add(it);
                 if (plist.isActive()) {
@@ -356,23 +343,16 @@ public class StatusBar extends JPanel implements VCardListener {
                     it.setIcon(null);
                 }
                 final SparkPrivacyList finalList = plist;
-                it.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        PrivacyManager.getInstance().setListAsActive(finalList.getListName());
-                    }
+                it.addActionListener((ActionEvent e1) -> {
+                    PrivacyManager.getInstance().setListAsActive(finalList.getListName());
                 });
-            }
+            });
 
             if (pmanager.hasActiveList()) {
                 JMenuItem remMenu = new JMenuItem(Res.getString("privacy.menuitem.deactivate.current.list", pmanager.getActiveList().getListName()),
                         SparkRes.getImageIcon("PRIVACY_DEACTIVATE_LIST"));
-                remMenu.addActionListener(new ActionListener() {
-
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        pmanager.declineActiveList();
-                    }
+                remMenu.addActionListener((ActionEvent e1) -> {
+                    pmanager.declineActiveList();
                 });
                 privMenu.addSeparator();
                 privMenu.add(remMenu);
@@ -386,11 +366,8 @@ public class StatusBar extends JPanel implements VCardListener {
         popup.addSeparator();
 
         popup.add(changeStatusMenu);
-        changeStatusMenu.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                CustomMessages.addCustomMessage();
-            }
+        changeStatusMenu.addActionListener((ActionEvent e1) -> {
+            CustomMessages.addCustomMessage();
         });
 
         Action editMessagesAction = new AbstractAction() {
@@ -437,11 +414,13 @@ public class StatusBar extends JPanel implements VCardListener {
      * Populates the current Dnd List.
      */
     private void buildStatusItemList() {
-        for (Presence presence : PresenceManager.getPresences()) {
+        PresenceManager.getPresences().stream().map((presence) -> {
             Icon icon = PresenceManager.getIconFromPresence(presence);
             StatusItem item = new StatusItem(presence, icon);
+            return item;
+        }).forEach((item) -> {
             statusList.add(item);
-        }
+        });
 
         final Icon availableIcon = PresenceManager.getIconFromPresence(new Presence(Presence.Type.available));
 
@@ -460,12 +439,7 @@ public class StatusBar extends JPanel implements VCardListener {
         }
 
         // Sort Custom Messages
-        Collections.sort(custom, new Comparator<CustomStatusItem>() {
-            @Override
-            public int compare(final CustomStatusItem a, final CustomStatusItem b) {
-                return (a.getStatus().compareToIgnoreCase(b.getStatus()));
-            }
-        });
+        Collections.sort(custom, (final CustomStatusItem a, final CustomStatusItem b) -> (a.getStatus().compareToIgnoreCase(b.getStatus())));
 
         return custom;
     }
@@ -484,66 +458,60 @@ public class StatusBar extends JPanel implements VCardListener {
     }
 
     public void loadVCard() {
-        final Runnable loadVCard = new Runnable() {
-            @Override
-            public void run() {
-                VCard vcard = SparkManager.getVCardManager().getVCard();
-                updateVCardInformation(vcard);
-            }
+        final Runnable loadVCard = () -> {
+            VCard vcard = SparkManager.getVCardManager().getVCard();
+            updateVCardInformation(vcard);
         };
 
         TaskEngine.getInstance().submit(loadVCard);
     }
 
     protected void updateVCardInformation(final VCard vCard) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                if (vCard.getError() == null) {
-                    String firstName = vCard.getFirstName();
-                    String lastName = vCard.getLastName();
-                    String nickname = vCard.getNickName();
-                    if (ModelUtil.hasLength(firstName) && ModelUtil.hasLength(lastName)) {
-                        setNickname(firstName + " " + lastName);
-                    } else if (ModelUtil.hasLength(firstName)) {
-                        setNickname(firstName);
-                    } else if (ModelUtil.hasLength(nickname)) {
-                        setNickname(nickname);
-                    } else {
-                        nickname = SparkManager.getSessionManager().getUsername();
-                        setNickname(nickname);
-                    }
-                } else {
-                    String nickname = SparkManager.getSessionManager().getUsername();
+        SwingUtilities.invokeLater(() -> {
+            if (vCard.getError() == null) {
+                String firstName = vCard.getFirstName();
+                String lastName = vCard.getLastName();
+                String nickname = vCard.getNickName();
+                if (ModelUtil.hasLength(firstName) && ModelUtil.hasLength(lastName)) {
+                    setNickname(firstName + " " + lastName);
+                } else if (ModelUtil.hasLength(firstName)) {
+                    setNickname(firstName);
+                } else if (ModelUtil.hasLength(nickname)) {
                     setNickname(nickname);
-                    return;
-                }
-
-                byte[] avatarBytes = null;
-                try {
-                    avatarBytes = vCard.getAvatar();
-                } catch (Exception e) {
-                    Log.error("Cannot retrieve avatar bytes.", e);
-                }
-
-                if (avatarBytes != null && avatarBytes.length > 0) {
-                    try {
-                        ImageIcon avatarIcon = new ImageIcon(avatarBytes);
-                        avatarIcon = VCardManager.scale(avatarIcon);
-                        setAvatar(avatarIcon);
-                        imageLabel.invalidate();
-                        imageLabel.validate();
-                        imageLabel.repaint();
-                    } catch (Exception e) {
-                        // no issue
-                    }
                 } else {
-                    imageLabel.setIcon(null);
-                    imageLabel.setBorder(null);
+                    nickname = SparkManager.getSessionManager().getUsername();
+                    setNickname(nickname);
+                }
+            } else {
+                String nickname = SparkManager.getSessionManager().getUsername();
+                setNickname(nickname);
+                return;
+            }
+            
+            byte[] avatarBytes = null;
+            try {
+                avatarBytes = vCard.getAvatar();
+            } catch (Exception e) {
+                Log.error("Cannot retrieve avatar bytes.", e);
+            }
+            
+            if (avatarBytes != null && avatarBytes.length > 0) {
+                try {
+                    ImageIcon avatarIcon = new ImageIcon(avatarBytes);
+                    avatarIcon = VCardManager.scale(avatarIcon);
+                    setAvatar(avatarIcon);
                     imageLabel.invalidate();
                     imageLabel.validate();
                     imageLabel.repaint();
+                } catch (Exception e) {
+                    // no issue
                 }
+            } else {
+                imageLabel.setIcon(null);
+                imageLabel.setBorder(null);
+                imageLabel.invalidate();
+                imageLabel.validate();
+                imageLabel.repaint();
             }
         });
 

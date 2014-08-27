@@ -75,13 +75,7 @@ public class ContactListAssistantPlugin implements Plugin {
                     final List<ContactGroup> contactGroups = contactList.getContactGroups();
                     Collections.sort(contactGroups, ContactList.GROUP_COMPARATOR);
 
-                    for (final ContactGroup group : contactGroups) {
-                        if (group.isUnfiledGroup() || group.isOfflineGroup()) {
-                            continue;
-                        }
-                        if (isContactItemInGroup(contactItems, group)) {
-                            continue;
-                        }
+                    contactGroups.stream().filter((group) -> !(group.isUnfiledGroup() || group.isOfflineGroup())).filter((group) -> !(isContactItemInGroup(contactItems, group))).map((group) -> {
                         final Action moveAction = new AbstractAction() {
                             private static final long serialVersionUID = 6542011870221162331L;
 
@@ -90,7 +84,6 @@ public class ContactListAssistantPlugin implements Plugin {
                                 moveItems(contactItems, group.getGroupName());
                             }
                         };
-
                         final Action copyAction = new AbstractAction() {
                             private static final long serialVersionUID = 2232885525630977329L;
 
@@ -99,13 +92,13 @@ public class ContactListAssistantPlugin implements Plugin {
                                 copyItems(contactItems, group.getGroupName());
                             }
                         };
-
                         moveAction.putValue(Action.NAME, group.getGroupName());
                         moveToMenu.add(moveAction);
-
                         copyAction.putValue(Action.NAME, group.getGroupName());
+                        return copyAction;
+                    }).forEach((copyAction) -> {
                         copyToMenu.add(copyAction);
-                    }
+                    });
 
                     popup.addPopupMenuListener(new PopupMenuListener() {
                         @Override
@@ -164,11 +157,8 @@ public class ContactListAssistantPlugin implements Plugin {
 
         updateAvatarsInContactList();
 
-        SettingsManager.addPreferenceListener(new PreferenceListener() {
-            @Override
-            public void preferencesChanged(LocalPreferences preference) {
-                updateAvatarsInContactList();
-            }
+        SettingsManager.addPreferenceListener((LocalPreferences preference) -> {
+            updateAvatarsInContactList();
         });
     }
 
@@ -209,9 +199,9 @@ public class ContactListAssistantPlugin implements Plugin {
      */
     private void copyItems(Collection<ContactItem> contactItems, String groupName) {
         final ContactGroup contactGroup = getContactGroup(groupName);
-        for (ContactItem contactItem : contactItems) {
+        contactItems.stream().forEach((contactItem) -> {
             addContactItem(contactGroup, contactItem, false);
-        }
+        });
     }
 
     @Override
@@ -233,15 +223,11 @@ public class ContactListAssistantPlugin implements Plugin {
 
     private void updateAvatarsInContactList() {
         final ContactList contactList = SparkManager.getContactList();
-        for (ContactGroup contactGroup : contactList.getContactGroups()) {
-            if (contactGroup.isOfflineGroup()) {
-                continue;
-            }
-
-            for (ContactItem contactItem : contactGroup.getContactItems()) {
+        contactList.getContactGroups().stream().filter((contactGroup) -> !(contactGroup.isOfflineGroup())).forEach((contactGroup) -> {
+            contactGroup.getContactItems().stream().forEach((contactItem) -> {
                 updateContactItem(contactItem);
-            }
-        }
+            });
+        });
     }
 
     /**

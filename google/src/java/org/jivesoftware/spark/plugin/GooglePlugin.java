@@ -96,40 +96,35 @@ public class GooglePlugin implements Plugin {
                 JPanel buttonPanel = room.getEditorBar();
                 buttonPanel.add(searchButton);
 
-                searchButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent actionEvent) {
-                        String text = room.getChatInputEditor().getSelectedText();
-                        if (text == null) {
-                            text = room.getTranscriptWindow().getSelectedText();
+                searchButton.addActionListener((ActionEvent actionEvent) -> {
+                    String text = room.getChatInputEditor().getSelectedText();
+                    if (text == null) {
+                        text = room.getTranscriptWindow().getSelectedText();
+                    }
+                    if (ModelUtil.hasLength(text)) {
+                        GoogleSearch search = new GoogleSearch();
+                        List<GoogleSearchResult> list = search.searchText(text, 4);
+                        if (list.isEmpty()) {
+                            return;
                         }
-                        if (ModelUtil.hasLength(text)) {
-                            GoogleSearch search = new GoogleSearch();
-                            List<GoogleSearchResult> list = search.searchText(text, 4);
-                            if (list.isEmpty()) {
-                                return;
-                            }
-
-                            CollapsiblePane pane = new CollapsiblePane("Search Results");
-                            JPanel panel = new JPanel();
-                            pane.setContentPane(panel);
-
-                            panel.setLayout(new VerticalFlowLayout(VerticalFlowLayout.TOP, 0, 0, true, false));
-
-                            for (GoogleSearchResult aList : list) {
-                                GoogleSearchResult result = aList;
-                                GoogleDocument document = new GoogleDocument(room, result);
-                                panel.add(document);
-                            }
-
-                            room.getTranscriptWindow().addComponent(pane);
-                            try {
-                                room.getTranscriptWindow().insertText("\n");
-                            } catch (BadLocationException e) {
-                                Log.error(e);
-                            }
-
+                        
+                        CollapsiblePane pane = new CollapsiblePane("Search Results");
+                        JPanel panel = new JPanel();
+                        pane.setContentPane(panel);
+                        
+                        panel.setLayout(new VerticalFlowLayout(VerticalFlowLayout.TOP, 0, 0, true, false));
+                        
+                        list.stream().map((aList) -> aList).map((result) -> new GoogleDocument(room, result)).forEach((document) -> {
+                            panel.add(document);
+                        });
+                        
+                        room.getTranscriptWindow().addComponent(pane);
+                        try {
+                            room.getTranscriptWindow().insertText("\n");
+                        } catch (BadLocationException e) {
+                            Log.error(e);
                         }
+                        
                     }
                 });
 

@@ -26,9 +26,9 @@ public class HistoryEntry {
         }
         setDate(orig.getDate());
         setName(orig.getName());
-        for (HistoryMessage msg : orig.getMessages()) {
+        orig.getMessages().stream().forEach((msg) -> {
             getMessages().add(new HistoryMessage(msg));
-        }
+        });
     }
 
     /**
@@ -85,9 +85,9 @@ public class HistoryEntry {
 
     public String getHistory() {
         StringBuilder history = new StringBuilder();
-        for (HistoryMessage msg : getMessages()) {
+        getMessages().stream().forEach((msg) -> {
             history.append(msg.getContent());
-        }
+        });
         return history.toString();
     }
 

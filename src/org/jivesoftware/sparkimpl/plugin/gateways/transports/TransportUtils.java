@@ -51,20 +51,16 @@ public class TransportUtils {
     static {
         PrivateDataManager.addPrivateDataProvider(GatewayPrivateData.ELEMENT, GatewayPrivateData.NAMESPACE, new GatewayPrivateData.ConferencePrivateDataProvider());
 
-        final Runnable loadGateways = new Runnable() {
-            @Override
-            public void run() {
-                PrivateDataManager pdm = SparkManager.getSessionManager().getPersonalDataManager();
-                gatewayPreferences = null;
-                //Re: SPARK-1483 comment the loop as it causes Out Of Memory (infinite loop) if preferences not found
-                //If really necessary to try more times, a Thread Pool may be used: java ScheduledThreadPoolExecutor for example            	
-                //while (gatewayPreferences == null){
-                try {
-                    gatewayPreferences = (GatewayPrivateData) pdm.getPrivateData(GatewayPrivateData.ELEMENT, GatewayPrivateData.NAMESPACE);
-                } catch (XMPPException e) {
-                    Log.error("Unable to load private data for Gateways", e);
-                }
-                //}
+        final Runnable loadGateways = () -> {
+            PrivateDataManager pdm = SparkManager.getSessionManager().getPersonalDataManager();
+            gatewayPreferences = null;
+            //Re: SPARK-1483 comment the loop as it causes Out Of Memory (infinite loop) if preferences not found
+            //If really necessary to try more times, a Thread Pool may be used: java ScheduledThreadPoolExecutor for example
+            //while (gatewayPreferences == null){
+            try {
+                gatewayPreferences = (GatewayPrivateData) pdm.getPrivateData(GatewayPrivateData.ELEMENT, GatewayPrivateData.NAMESPACE);
+            } catch (XMPPException e) {
+                Log.error("Unable to load private data for Gateways", e);
             }
         };
 

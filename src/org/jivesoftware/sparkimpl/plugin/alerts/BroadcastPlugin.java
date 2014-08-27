@@ -108,42 +108,36 @@ public class BroadcastPlugin extends SparkTabHandler implements Plugin, PacketLi
         JMenuItem broadcastMenu = new JMenuItem(Res.getString("title.broadcast.message"), SparkRes.getImageIcon(SparkRes.MEGAPHONE_16x16));
         ResourceUtils.resButton(broadcastMenu, Res.getString("title.broadcast.message"));
         actionsMenu.add(broadcastMenu);
-        broadcastMenu.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                broadcastToRoster();
-            }
+        broadcastMenu.addActionListener((ActionEvent e) -> {
+            broadcastToRoster();
         });
 
         // Register with action menu
         JMenuItem startConversationtMenu = new JMenuItem("", SparkRes.getImageIcon(SparkRes.SMALL_MESSAGE_IMAGE));
         ResourceUtils.resButton(startConversationtMenu, Res.getString("menuitem.start.a.chat"));
         actionsMenu.add(startConversationtMenu, 0);
-        startConversationtMenu.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ContactList contactList = SparkManager.getWorkspace().getContactList();
-                Collection<ContactItem> selectedUsers = contactList.getSelectedUsers();
-                String selectedUser = "";
-                Iterator<ContactItem> selectedUsersIterator = selectedUsers.iterator();
-                if (selectedUsersIterator.hasNext()) {
-                    ContactItem contactItem = selectedUsersIterator.next();
-                    selectedUser = contactItem.getJID();
+        startConversationtMenu.addActionListener((ActionEvent e) -> {
+            ContactList contactList = SparkManager.getWorkspace().getContactList();
+            Collection<ContactItem> selectedUsers = contactList.getSelectedUsers();
+            String selectedUser = "";
+            Iterator<ContactItem> selectedUsersIterator = selectedUsers.iterator();
+            if (selectedUsersIterator.hasNext()) {
+                ContactItem contactItem = selectedUsersIterator.next();
+                selectedUser = contactItem.getJID();
+            }
+            
+            String jid = (String) JOptionPane.showInputDialog(SparkManager.getMainWindow(), Res.getString("label.enter.address"), Res.getString("title.start.chat"), JOptionPane.QUESTION_MESSAGE, null, null, selectedUser);
+            if (ModelUtil.hasLength(jid) && ModelUtil.hasLength(StringUtils.parseServer(jid))) {
+                if (ModelUtil.hasLength(jid) && jid.indexOf('@') == -1) {
+                    // Append server address
+                    jid = jid + "@" + SparkManager.getConnection().getServiceName();
                 }
-
-                String jid = (String) JOptionPane.showInputDialog(SparkManager.getMainWindow(), Res.getString("label.enter.address"), Res.getString("title.start.chat"), JOptionPane.QUESTION_MESSAGE, null, null, selectedUser);
-                if (ModelUtil.hasLength(jid) && ModelUtil.hasLength(StringUtils.parseServer(jid))) {
-                    if (ModelUtil.hasLength(jid) && jid.indexOf('@') == -1) {
-                        // Append server address
-                        jid = jid + "@" + SparkManager.getConnection().getServiceName();
-                    }
-
-                    String nickname = SparkManager.getUserManager().getUserNicknameFromJID(jid);
-
-                    jid = UserManager.escapeJID(jid);
-                    ChatRoom chatRoom = SparkManager.getChatManager().createChatRoom(jid, nickname, nickname);
-                    SparkManager.getChatManager().getChatContainer().activateChatRoom(chatRoom);
-                }
+                
+                String nickname = SparkManager.getUserManager().getUserNicknameFromJID(jid);
+                
+                jid = UserManager.escapeJID(jid);
+                ChatRoom chatRoom = SparkManager.getChatManager().createChatRoom(jid, nickname, nickname);
+                SparkManager.getChatManager().getChatContainer().activateChatRoom(chatRoom);
             }
         });
 
@@ -190,11 +184,8 @@ public class BroadcastPlugin extends SparkTabHandler implements Plugin, PacketLi
         statusBar.validate();
         statusBar.repaint();
 
-        broadcastToRosterButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                broadcastToRoster();
-            }
+        broadcastToRosterButton.addActionListener((ActionEvent e) -> {
+            broadcastToRoster();
         });
     }
 
@@ -210,33 +201,30 @@ public class BroadcastPlugin extends SparkTabHandler implements Plugin, PacketLi
 
     @Override
     public void processPacket(final Packet packet) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    final Message message = (Message) packet;
-
-                    // Do not handle errors or offline messages
-                    final DelayInformation offlineInformation = (DelayInformation) message.getExtension("x", "jabber:x:delay");
-                    if (offlineInformation != null || message.getError() != null) {
-                        return;
-                    }
-
-                    boolean broadcast = message.getProperty("broadcast") != null;
-
-                    if ((broadcast || message.getType() == Message.Type.normal
-                            || message.getType() == Message.Type.headline) && message.getBody() != null) {
-                        showAlert((Message) packet);
-                    } else {
-                        String host = SparkManager.getSessionManager().getServerAddress();
-                        String from = packet.getFrom() != null ? packet.getFrom() : "";
-                        if (host.equalsIgnoreCase(from) || !ModelUtil.hasLength(from)) {
-                            showAlert((Message) packet);
-                        }
-                    }
-                } catch (Exception e) {
-                    Log.error(e);
+        SwingUtilities.invokeLater(() -> {
+            try {
+                final Message message = (Message) packet;
+                
+                // Do not handle errors or offline messages
+                final DelayInformation offlineInformation = (DelayInformation) message.getExtension("x", "jabber:x:delay");
+                if (offlineInformation != null || message.getError() != null) {
+                    return;
                 }
+                
+                boolean broadcast = message.getProperty("broadcast") != null;
+                
+                if ((broadcast || message.getType() == Message.Type.normal
+                        || message.getType() == Message.Type.headline) && message.getBody() != null) {
+                    showAlert((Message) packet);
+                } else {
+                    String host = SparkManager.getSessionManager().getServerAddress();
+                    String from = packet.getFrom() != null ? packet.getFrom() : "";
+                    if (host.equalsIgnoreCase(from) || !ModelUtil.hasLength(from)) {
+                        showAlert((Message) packet);
+                    }
+                }
+            } catch (Exception e) {
+                Log.error(e);
             }
         });
 

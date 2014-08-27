@@ -364,21 +364,18 @@ public abstract class ChatRoom extends BackgroundPanel implements ActionListener
         _isAlwaysOnTopActive = SettingsManager.getLocalPreferences().isChatWindowAlwaysOnTop();
         _alwaysOnTopItem = UIComponentRegistry.getButtonFactory().createAlwaysOnTop(_isAlwaysOnTopActive);
 
-        _alwaysOnTopItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                if (!_isAlwaysOnTopActive) {
-                    SettingsManager.getLocalPreferences().setChatWindowAlwaysOnTop(true);
-                    _chatFrame.setWindowAlwaysOnTop(true);
-                    _isAlwaysOnTopActive = true;
-                    _alwaysOnTopItem.setIcon(SparkRes.getImageIcon("FRAME_ALWAYS_ON_TOP_ACTIVE"));
-
-                } else {
-                    SettingsManager.getLocalPreferences().setChatWindowAlwaysOnTop(false);
-                    _chatFrame.setWindowAlwaysOnTop(false);
-                    _isAlwaysOnTopActive = false;
-                    _alwaysOnTopItem.setIcon(SparkRes.getImageIcon("FRAME_ALWAYS_ON_TOP_DEACTIVE"));
-                }
+        _alwaysOnTopItem.addActionListener((ActionEvent actionEvent) -> {
+            if (!_isAlwaysOnTopActive) {
+                SettingsManager.getLocalPreferences().setChatWindowAlwaysOnTop(true);
+                _chatFrame.setWindowAlwaysOnTop(true);
+                _isAlwaysOnTopActive = true;
+                _alwaysOnTopItem.setIcon(SparkRes.getImageIcon("FRAME_ALWAYS_ON_TOP_ACTIVE"));
+                
+            } else {
+                SettingsManager.getLocalPreferences().setChatWindowAlwaysOnTop(false);
+                _chatFrame.setWindowAlwaysOnTop(false);
+                _isAlwaysOnTopActive = false;
+                _alwaysOnTopItem.setIcon(SparkRes.getImageIcon("FRAME_ALWAYS_ON_TOP_DEACTIVE"));
             }
         });
 
@@ -453,7 +450,7 @@ public abstract class ChatRoom extends BackgroundPanel implements ActionListener
             // create Popupmenu creating all other matches
             final JPopupMenu popup = new JPopupMenu();
             final String namefinal = name;
-            for (final String s : namelist) {
+            namelist.stream().forEach((s) -> {
                 JMenuItem temp = new JMenuItem(s);
                 popup.add(temp);
                 temp.addActionListener(new AbstractAction() {
@@ -467,8 +464,7 @@ public abstract class ChatRoom extends BackgroundPanel implements ActionListener
 
                     }
                 });
-
-            }
+            });
             popup.show(SparkManager.getChatManager()
                     .getChatContainer(), getChatInputEditor().getCaret()
                     .getMagicCaretPosition().x, SparkManager.getChatManager()
@@ -598,12 +594,8 @@ public abstract class ChatRoom extends BackgroundPanel implements ActionListener
 
         try {
             final JScrollBar scrollBar = textScroller.getVerticalScrollBar();
-            EventQueue.invokeLater(new Runnable() {
-
-                @Override
-                public void run() {
-                    scrollBar.setValue(scrollBar.getMaximum());
-                }
+            EventQueue.invokeLater(() -> {
+                scrollBar.setValue(scrollBar.getMaximum());
             });
 
         } catch (Exception e) {
@@ -718,9 +710,9 @@ public abstract class ChatRoom extends BackgroundPanel implements ActionListener
      * @param message the message received.
      */
     private void fireMessageReceived(Message message) {
-        for (MessageListener messageListener : messageListeners) {
+        messageListeners.stream().forEach((messageListener) -> {
             messageListener.messageReceived(this, message);
-        }
+        });
     }
 
     /**
@@ -729,9 +721,9 @@ public abstract class ChatRoom extends BackgroundPanel implements ActionListener
      * @param message the message sent.
      */
     protected void fireMessageSent(Message message) {
-        for (MessageListener messageListener : messageListeners) {
+        messageListeners.stream().forEach((messageListener) -> {
             messageListener.messageSent(this, message);
-        }
+        });
     }
 
     /**
@@ -1082,9 +1074,9 @@ public abstract class ChatRoom extends BackgroundPanel implements ActionListener
      * @param files the files dropped.
      */
     public void fireFileDropListeners(Collection<File> files) {
-        for (FileDropListener fileDropListener : fileDropListeners) {
+        fileDropListeners.stream().forEach((fileDropListener) -> {
             fileDropListener.filesDropped(files, this);
-        }
+        });
     }
 
     /**
@@ -1131,10 +1123,12 @@ public abstract class ChatRoom extends BackgroundPanel implements ActionListener
      * closing.
      */
     private void fireClosingListeners() {
-        for (ChatRoomClosingListener chatRoomClosingListener : closingListeners) {
+        closingListeners.stream().map((chatRoomClosingListener) -> {
             chatRoomClosingListener.closing();
+            return chatRoomClosingListener;
+        }).forEach((chatRoomClosingListener) -> {
             removeClosingListener(chatRoomClosingListener);
-        }
+        });
     }
 
     /**
@@ -1318,15 +1312,15 @@ public abstract class ChatRoom extends BackgroundPanel implements ActionListener
     }
 
     public void fireOutgoingMessageSending(Message message) {
-        for (MessageEventListener messageEventListener : new ArrayList<>(messageEventListeners)) {
+        new ArrayList<>(messageEventListeners).stream().forEach((messageEventListener) -> {
             messageEventListener.sendingMessage(message);
-        }
+        });
     }
 
     public void fireReceivingIncomingMessage(Message message) {
-        for (MessageEventListener messageEventListener : new ArrayList<>(messageEventListeners)) {
+        new ArrayList<>(messageEventListeners).stream().forEach((messageEventListener) -> {
             messageEventListener.receivingMessage(message);
-        }
+        });
     }
 
 }

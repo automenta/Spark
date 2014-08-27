@@ -152,19 +152,11 @@ public final class SparkSystemTray implements ActionListener, MainWindowListener
             Logger.getLogger(SparkSystemTray.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        trayIcon.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                showMainWindow();
-            }
+        trayIcon.addActionListener((ActionEvent e) -> {
+            showMainWindow();
         });
 
-        SparkManager.getSessionManager().addPresenceListener(new PresenceListener() {
-            @Override
-            public void presenceChanged(Presence presence) {
-                changePresence(presence);
-            }
-        });
+        SparkManager.getSessionManager().addPresenceListener(this::changePresence);
     }
 
     /**

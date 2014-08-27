@@ -249,11 +249,13 @@ public class ConferenceUtils {
 
     private static void invite(MultiUserChat groupChat, GroupChatRoom room, Collection<String> jids, String message) {
         if (jids != null && message != null) {
-            for (String jid : jids) {
+            jids.stream().map((jid) -> {
                 groupChat.invite(jid, message);
+                return jid;
+            }).forEach((jid) -> {
                 room.getTranscriptWindow().insertNotificationMessage(
                         Res.getString("message.waiting.for.user.to.join", jid), ChatManager.NOTIFICATION_COLOR);
-            }
+            });
         }
     }
 
@@ -420,10 +422,12 @@ public class ConferenceUtils {
             chatManager.getChatContainer().activateChatRoom(room);
         }
 
-        for (String jid : jids) {
+        jids.stream().map((jid) -> {
             multiUserChat.invite(jid, message);
+            return jid;
+        }).forEach((jid) -> {
             room.getTranscriptWindow().insertNotificationMessage(Res.getString("message.waiting.for.user.to.join", jid), ChatManager.NOTIFICATION_COLOR);
-        }
+        });
     }
 
     /**

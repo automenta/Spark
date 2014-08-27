@@ -99,10 +99,10 @@ public class ChatRoomTransferDecorator implements KeyListener, FileDropListener,
         if (component instanceof ChatRoomImpl) {
             ChatRoomImpl roomImpl = (ChatRoomImpl) component;
 
-            for (File file : files) {
+            files.stream().forEach((file) -> {
                 SparkManager.getTransferManager().sendFile(file,
                         roomImpl.getParticipantJID());
-            }
+            });
 
             SparkManager.getChatManager().getChatContainer()
                     .activateChatRoom(roomImpl);

@@ -508,23 +508,14 @@ public class HistoryTranscript extends SwingWorker {
      */
     @Override
     public void finished() {
-        pageLeft.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                pageLeft();
-            }
+        pageLeft.addActionListener((ActionEvent arg0) -> {
+            pageLeft();
         });
-        pageRight.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                pageRight();
-            }
+        pageRight.addActionListener((ActionEvent arg0) -> {
+            pageRight();
         });
-        periodChooser.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                handlePeriodChange(periods.get(periodChooser.getSelectedIndex()));
-            }
+        periodChooser.addActionListener((ActionEvent e) -> {
+            handlePeriodChange(periods.get(periodChooser.getSelectedIndex()));
         });
 
         // add search text input
@@ -544,10 +535,9 @@ public class HistoryTranscript extends SwingWorker {
         // get the default preferences for the search period 
         int index = getPeriodIndex(pref.getSearchPeriod(periods.get(0)));
 
-        for (String period : periods) {
+        periods.stream().forEach((period) -> {
             periodChooser.addItem(Res.getString(period));
-
-        }
+        });
 
         periodChooser.setToolTipText(Res.getString("message.search.page.timeperiod"));
         pageCounter.setToolTipText(Res.getString("message.search.page.counter"));

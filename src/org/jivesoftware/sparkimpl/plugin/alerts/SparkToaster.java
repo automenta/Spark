@@ -192,12 +192,9 @@ public class SparkToaster {
 
             mainPanel.add(titleLabel, new GridBagConstraints(0, 0, 3, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 
-            titleLabel.getCloseButton().addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    setVisible(false);
-                    dispose();
-                }
+            titleLabel.getCloseButton().addActionListener((ActionEvent e) -> {
+                setVisible(false);
+                dispose();
             });
 
             if (border != null) {
@@ -316,11 +313,8 @@ public class SparkToaster {
 
                 toaster.setLocation(posx, screenHeight);
                 try {
-                    EventQueue.invokeAndWait(new Runnable() {
-                        @Override
-                        public void run() {
-                            toaster.setVisible(true);
-                        }
+                    EventQueue.invokeAndWait(() -> {
+                        toaster.setVisible(true);
                     });
                 } catch (InterruptedException | InvocationTargetException e) {
                     Log.error(e);

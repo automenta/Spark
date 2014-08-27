@@ -57,34 +57,25 @@ public class PreferenceDialog implements PropertyChangeListener {
         JButton btn_save = new JButton(Res.getString("save"));
         JButton btn_close = new JButton(Res.getString("close"));
 
-        btn_close.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        btn_close.addActionListener((ActionEvent e) -> {
+            saveLayout();
+            preferenceDialog.setVisible(false);
+            preferenceDialog.dispose();
+        });
+        btn_save.addActionListener((ActionEvent e) -> {
+            boolean okToClose = prefPanel.closing();
+            if (okToClose) {
                 saveLayout();
                 preferenceDialog.setVisible(false);
                 preferenceDialog.dispose();
+            } else {
+                pane.setValue(JOptionPane.UNINITIALIZED_VALUE);
             }
         });
-        btn_save.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                boolean okToClose = prefPanel.closing();
-                if (okToClose) {
-                    saveLayout();
-                    preferenceDialog.setVisible(false);
-                    preferenceDialog.dispose();
-                } else {
-                    pane.setValue(JOptionPane.UNINITIALIZED_VALUE);
-                }
-            }
-        });
-        btn_apply.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                boolean okToClose = prefPanel.closing();
-                if (!okToClose) {
-                    pane.setValue(JOptionPane.UNINITIALIZED_VALUE);
-                }
+        btn_apply.addActionListener((ActionEvent e) -> {
+            boolean okToClose = prefPanel.closing();
+            if (!okToClose) {
+                pane.setValue(JOptionPane.UNINITIALIZED_VALUE);
             }
         });
 
@@ -125,7 +116,6 @@ public class PreferenceDialog implements PropertyChangeListener {
             saveLayout();
             pane.removePropertyChangeListener(this);
             preferenceDialog.dispose();
-            return;
         }
     }
 

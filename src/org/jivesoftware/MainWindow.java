@@ -227,9 +227,9 @@ public final class MainWindow extends ChatFrame implements ActionListener {
      * has been activated.
      */
     private void fireWindowActivated() {
-        for (MainWindowListener listener : listeners) {
+        listeners.stream().forEach((listener) -> {
             listener.mainWindowActivated();
-        }
+        });
 
         if (Spark.isMac()) {
             setJMenuBar(mainWindowBar);
@@ -241,9 +241,9 @@ public final class MainWindow extends ChatFrame implements ActionListener {
      * is shutting down.
      */
     private void fireWindowShutdown() {
-        for (MainWindowListener listener : listeners) {
+        listeners.stream().forEach((listener) -> {
             listener.shutdown();
-        }
+        });
     }
 
     /**
@@ -447,16 +447,13 @@ public final class MainWindow extends ChatFrame implements ActionListener {
 
         alwaysOnTopItem = new JCheckBoxMenuItem();
         ResourceUtils.resButton(alwaysOnTopItem, Res.getString("menuitem.always.on.top"));
-        alwaysOnTopItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                if (alwaysOnTopItem.isSelected()) {
-                    SettingsManager.getLocalPreferences().setMainWindowAlwaysOnTop(true);
-                    MainWindow.getInstance().setAlwaysOnTop(true);
-                } else {
-                    SettingsManager.getLocalPreferences().setMainWindowAlwaysOnTop(false);
-                    MainWindow.getInstance().setAlwaysOnTop(false);
-                }
+        alwaysOnTopItem.addActionListener((ActionEvent actionEvent) -> {
+            if (alwaysOnTopItem.isSelected()) {
+                SettingsManager.getLocalPreferences().setMainWindowAlwaysOnTop(true);
+                MainWindow.getInstance().setAlwaysOnTop(true);
+            } else {
+                SettingsManager.getLocalPreferences().setMainWindowAlwaysOnTop(false);
+                MainWindow.getInstance().setAlwaysOnTop(false);
             }
         });
 
@@ -474,20 +471,14 @@ public final class MainWindow extends ChatFrame implements ActionListener {
         //	public void run() {
         JMenuItem logoutMenuItem = new JMenuItem();
         ResourceUtils.resButton(logoutMenuItem, Res.getString("menuitem.logout.no.status"));
-        logoutMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                logout(false);
-            }
+        logoutMenuItem.addActionListener((ActionEvent e) -> {
+            logout(false);
         });
 
         JMenuItem logoutWithStatus = new JMenuItem();
         ResourceUtils.resButton(logoutWithStatus, Res.getString("menuitem.logout.with.status"));
-        logoutWithStatus.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                logout(true);
-            }
+        logoutWithStatus.addActionListener((ActionEvent e) -> {
+            logout(true);
         });
 
         if ((Spark.isWindows() || Spark.isLinux() || Spark.isMac()) && !Default.getBoolean("DISABLE_EXIT")) {
@@ -502,12 +493,8 @@ public final class MainWindow extends ChatFrame implements ActionListener {
 
         JMenuItem updateMenu = new JMenuItem("", SparkRes.getImageIcon(SparkRes.DOWNLOAD_16x16));
         ResourceUtils.resButton(updateMenu, Res.getString("menuitem.check.for.updates"));
-        updateMenu.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                checkForUpdates(true);
-
-            }
+        updateMenu.addActionListener((ActionEvent e) -> {
+            checkForUpdates(true);
         });
 
         // Add Error Dialog Viewer
@@ -610,12 +597,8 @@ public final class MainWindow extends ChatFrame implements ActionListener {
         if (SettingsManager.getLocalPreferences().isDebuggerEnabled()) {
             JMenuItem rawPackets = new JMenuItem(SparkRes.getImageIcon(SparkRes.TRAY_IMAGE));
             rawPackets.setText("Send Packets");
-            rawPackets.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    new RawPacketSender();
-
-                }
+            rawPackets.addActionListener((ActionEvent e) -> {
+                new RawPacketSender();
             });
 
             connectMenu.add(rawPackets, 2);
@@ -748,12 +731,9 @@ public final class MainWindow extends ChatFrame implements ActionListener {
         final JButton copyButton = new JButton(Res.getString("button.copy.to.clipboard"));
         frame.add(copyButton, BorderLayout.SOUTH);
 
-        copyButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                SparkManager.setClipboard(errorLogs);
-                copyButton.setEnabled(false);
-            }
+        copyButton.addActionListener((ActionEvent e) -> {
+            SparkManager.setClipboard(errorLogs);
+            copyButton.setEnabled(false);
         });
 
         frame.pack();

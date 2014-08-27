@@ -230,21 +230,18 @@ public class SysTrayPlugin implements Plugin, NativeHandler, ChatManagerListener
                     });
 
             SparkManager.getSessionManager().addPresenceListener(
-                    new PresenceListener() {
-                        @Override
-                        public void presenceChanged(Presence presence) {
-                            if (presence.getMode() == Presence.Mode.available) {
-                                trayIcon.setImage(availableIcon.getImage());
-                            } else if (presence.getMode() == Presence.Mode.away
-                            || presence.getMode() == Presence.Mode.xa) {
-                                trayIcon.setImage(awayIcon.getImage());
-                            } else if (presence.getMode() == Presence.Mode.dnd) {
-                                trayIcon.setImage(dndIcon.getImage());
-                            } else {
-                                trayIcon.setImage(availableIcon.getImage());
-                            }
+                    (Presence presence) -> {
+                        if (presence.getMode() == Presence.Mode.available) {
+                            trayIcon.setImage(availableIcon.getImage());
+                        } else if (presence.getMode() == Presence.Mode.away
+                                || presence.getMode() == Presence.Mode.xa) {
+                            trayIcon.setImage(awayIcon.getImage());
+                        } else if (presence.getMode() == Presence.Mode.dnd) {
+                            trayIcon.setImage(dndIcon.getImage());
+                        } else {
+                            trayIcon.setImage(availableIcon.getImage());
                         }
-                    });
+            });
 
             try {
 
@@ -342,9 +339,7 @@ public class SysTrayPlugin implements Plugin, NativeHandler, ChatManagerListener
 
     public void addStatusMessages() {
         StatusBar statusBar = SparkManager.getWorkspace().getStatusBar();
-        for (Object o : statusBar.getStatusList()) {
-            final StatusItem statusItem = (StatusItem) o;
-
+        statusBar.getStatusList().stream().map((o) -> (StatusItem) o).forEach((statusItem) -> {
             final AbstractAction action = new AbstractAction() {
                 private static final long serialVersionUID = 1L;
 
@@ -361,7 +356,6 @@ public class SysTrayPlugin implements Plugin, NativeHandler, ChatManagerListener
             };
             action.putValue(Action.NAME, statusItem.getText());
             action.putValue(Action.SMALL_ICON, statusItem.getIcon());
-
             boolean hasChildren = false;
             for (Object aCustom : SparkManager.getWorkspace().getStatusBar()
                     .getCustomStatusList()) {
@@ -371,14 +365,12 @@ public class SysTrayPlugin implements Plugin, NativeHandler, ChatManagerListener
                     hasChildren = true;
                 }
             }
-
             if (!hasChildren) {
                 JMenuItem status = new JMenuItem(action);
                 statusMenu.add(status);
             } else {
                 final JMenu status = new JMenu(action);
                 statusMenu.add(status);
-
                 status.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent mouseEvent) {
@@ -386,11 +378,9 @@ public class SysTrayPlugin implements Plugin, NativeHandler, ChatManagerListener
                         popupMenu.setVisible(false);
                     }
                 });
-
-                for (Object aCustom : SparkManager.getWorkspace()
-                        .getStatusBar().getCustomStatusList()) {
-                    final CustomStatusItem customItem = (CustomStatusItem) aCustom;
-                    String type = customItem.getType();
+                SparkManager.getWorkspace()
+                        .getStatusBar().getCustomStatusList().stream().map((aCustom) -> (CustomStatusItem) aCustom).forEach((customItem) -> {
+                            String type = customItem.getType();
                     if (type.equals(statusItem.getText())) {
                         AbstractAction customAction = new AbstractAction() {
                             private static final long serialVersionUID = 1L;
@@ -419,10 +409,9 @@ public class SysTrayPlugin implements Plugin, NativeHandler, ChatManagerListener
                         JMenuItem menuItem = new JMenuItem(customAction);
                         status.add(menuItem);
                     }
-                }
-
+                });
             }
-        }
+        });
     }
 
     @Override

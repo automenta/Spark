@@ -417,7 +417,7 @@ public class SparkRes {
         try {
             return getURL(propertyName);
         } catch (Exception ex) {
-            Log.debug(propertyName + " not found.");
+            if (Log.debugging) Log.debug(propertyName + " not found.");
         }
         return null;
     }

@@ -135,6 +135,8 @@ public class Log {
         getInstance().ERROR_LOGGER.log(Level.SEVERE, message);
     }
 
+    static public final boolean debugging = System.getProperty("debug.mode")!=null;
+    
     /**
      * Logs all messages to standard errout for debugging purposes. To use, pass
      * in the VM Parameters debug.mode=true.
@@ -144,7 +146,7 @@ public class Log {
      * @param message the message to print out.
      */
     public static void debug(String message) {
-        if (System.getProperty("debug.mode") != null) {
+        if (debugging) {
             getInstance().ERROR_LOGGER.info(message);
         }
     }

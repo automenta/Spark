@@ -80,22 +80,18 @@ public class ConferenceServiceBrowser {
         mainPanel.add(scrollPane, new GridBagConstraints(0, 3, 3, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 0, 0));
 
         // Add Listener to find button
-        findButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String address = serverAddress.getText();
-                if (ModelUtil.hasLength(address)) {
-                    try {
-                        Collection<String> col = getConferenceServices(address);
-                        for (String aCol : col) {
-                            String service = aCol;
-                            model.addElement(service);
-                        }
-                    } catch (Exception e1) {
-                        Log.error(e1);
-                    }
-
+        findButton.addActionListener((ActionEvent e) -> {
+            String address = serverAddress.getText();
+            if (ModelUtil.hasLength(address)) {
+                try {
+                    Collection<String> col = getConferenceServices(address);
+                    col.stream().map((aCol) -> aCol).forEach((service) -> {
+                        model.addElement(service);
+                    });
+                } catch (Exception e1) {
+                    Log.error(e1);
                 }
+                
             }
         });
 

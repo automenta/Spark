@@ -65,22 +65,16 @@ public class ConfirmDialog extends BackgroundPanel {
         add(yesButton, new GridBagConstraints(3, 1, 1, 1, 1.0, 0.0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0));
         add(noButton, new GridBagConstraints(4, 1, 1, 1, 0.0, 0.0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0));
 
-        yesButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                if (listener != null) {
-                    listener.yesOption();
-                    listener = null;
-                }
-                dialog.dispose();
+        yesButton.addActionListener((ActionEvent actionEvent) -> {
+            if (listener != null) {
+                listener.yesOption();
+                listener = null;
             }
+            dialog.dispose();
         });
 
-        noButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                dialog.dispose();
-            }
+        noButton.addActionListener((ActionEvent actionEvent) -> {
+            dialog.dispose();
         });
 
     }

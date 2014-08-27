@@ -78,12 +78,14 @@ public class EasyX509TrustManager implements X509TrustManager {
     }
 
     public boolean isServerTrusted(X509Certificate[] certificates) {
-        if ((certificates != null) && LOG.isDebugEnabled()) {
-            LOG.debug("Server certificate chain:");
+        /*if ((certificates != null) && LOG.isDebugEnabled()) {
+            
+            //if (Log.debugging) Log.debug("Server certificate chain:");
             for (int i = 0; i < certificates.length; i++) {
-                LOG.debug("X509Certificate[" + i + "]=" + certificates[i]);
+                //if (Log.debugging) Log.debug("X509Certificate[" + i + "]=" + certificates[i]);
             }
-        }
+            
+        }*/
         if ((certificates != null) && (certificates.length == 1)) {
             X509Certificate certificate = certificates[0];
             try {

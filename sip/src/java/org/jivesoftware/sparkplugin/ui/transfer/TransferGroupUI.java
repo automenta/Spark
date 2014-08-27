@@ -74,11 +74,12 @@ public class TransferGroupUI extends JPanel {
 
         Collections.sort(entries, entryComparator);
 
-        for (RosterEntry entry : entries) {
-            final UserEntry userEntry = new UserEntry(entry);
+        entries.stream().map((entry) -> new UserEntry(entry)).map((userEntry) -> {
             userEntries.add(userEntry);
+            return userEntry;
+        }).forEach((userEntry) -> {
             add(userEntry);
-        }
+        });
     }
 
     /**
@@ -159,9 +160,9 @@ public class TransferGroupUI extends JPanel {
                     public void mouseClicked(MouseEvent mouseEvent) {
                         if (actions.size() > 1) {
                             JPopupMenu popupMenu = new JPopupMenu();
-                            for (Action action : actions) {
+                            actions.stream().forEach((action) -> {
                                 popupMenu.add(action);
-                            }
+                            });
                             popupMenu.show(transferButton, mouseEvent.getX(), mouseEvent.getY());
                         } else {
                             Action action = actions.get(0);
@@ -263,22 +264,18 @@ public class TransferGroupUI extends JPanel {
      * Notifies all TransferListeners that a number has been selected.
      */
     public void fireTransferListeners(String number) {
-        for (TransferListener listener : listeners) {
+        listeners.stream().forEach((listener) -> {
             listener.numberSelected(number);
-        }
+        });
     }
 
     /**
      * Sorts RosterEntries
      */
-    final Comparator<RosterEntry> entryComparator = new Comparator<RosterEntry>() {
-        @Override
-        public int compare(RosterEntry one, RosterEntry two) {
-            final RosterEntry entryOne = one;
-            final RosterEntry entryTwo = two;
-            return entryOne.getName().toLowerCase().compareTo(entryTwo.getName().toLowerCase());
-
-        }
+    final Comparator<RosterEntry> entryComparator = (RosterEntry one, RosterEntry two) -> {
+        final RosterEntry entryOne = one;
+        final RosterEntry entryTwo = two;
+        return entryOne.getName().toLowerCase().compareTo(entryTwo.getName().toLowerCase());
     };
 
     public boolean hasTelephoneContacts() {

@@ -84,21 +84,21 @@ public class RosterPickList extends JPanel {
 
         // Populate Invite Panel with Available users.
         final Roster roster = SparkManager.getConnection().getRoster();
-        for (RosterEntry entry : roster.getEntries()) {
+        roster.getEntries().stream().forEach((entry) -> {
             Presence presence = PresenceManager.getPresence(entry.getUser());
             if (presence.isAvailable()) {
                 ContactItem item = UIComponentRegistry.createContactItem(entry.getName(), null, entry.getUser());
                 item.setPresence(presence);
                 userList.add(item);
             }
-        }
+        });
 
         // Sort Users
         Collections.sort(userList, itemComparator);
 
-        for (ContactItem item : userList) {
+        userList.stream().forEach((item) -> {
             model.addElement(item);
-        }
+        });
 
         final JOptionPane pane;
 
@@ -129,18 +129,15 @@ public class RosterPickList extends JPanel {
         dlg.setContentPane(mainPanel);
         dlg.setLocationRelativeTo(parent);
 
-        PropertyChangeListener changeListener = new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent e) {
-                String value = (String) pane.getValue();
-                if (Res.getString("cancel").equals(value)) {
-                    rosterList.clearSelection();
-                    pane.setValue(JOptionPane.UNINITIALIZED_VALUE);
-                    dlg.dispose();
-                } else if (Res.getString("ok").equals(value)) {
-                    pane.setValue(JOptionPane.UNINITIALIZED_VALUE);
-                    dlg.dispose();
-                }
+        PropertyChangeListener changeListener = (PropertyChangeEvent e) -> {
+            String value = (String) pane.getValue();
+            if (Res.getString("cancel").equals(value)) {
+                rosterList.clearSelection();
+                pane.setValue(JOptionPane.UNINITIALIZED_VALUE);
+                dlg.dispose();
+            } else if (Res.getString("ok").equals(value)) {
+                pane.setValue(JOptionPane.UNINITIALIZED_VALUE);
+                dlg.dispose();
             }
         };
 
@@ -169,18 +166,14 @@ public class RosterPickList extends JPanel {
     /**
      * Sorts ContactItems.
      */
-    final Comparator<ContactItem> itemComparator = new Comparator<ContactItem>() {
-        @Override
-        public int compare(ContactItem item1, ContactItem item2) {
-            String nickname1 = item1.getDisplayName();
-            String nickname2 = item2.getDisplayName();
-            if (nickname1 == null || nickname2 == null) {
-                return 0;
-            }
-
-            return nickname1.toLowerCase().compareTo(nickname2.toLowerCase());
-
+    final Comparator<ContactItem> itemComparator = (ContactItem item1, ContactItem item2) -> {
+        String nickname1 = item1.getDisplayName();
+        String nickname2 = item2.getDisplayName();
+        if (nickname1 == null || nickname2 == null) {
+            return 0;
         }
+        
+        return nickname1.toLowerCase().compareTo(nickname2.toLowerCase());
     };
 
 }

@@ -72,8 +72,7 @@ public final class RosterTree extends JPanel {
     }
 
     private void changePresence(String user, Presence presence) {
-        for (Object o : addressMap.keySet()) {
-            final JiveTreeNode node = (JiveTreeNode) o;
+        addressMap.keySet().stream().map((o) -> (JiveTreeNode) o).forEach((node) -> {
             final String nodeUser = addressMap.get(node);
             if (user.startsWith(nodeUser)) {
                 if (!presence.isAvailable()) {
@@ -82,7 +81,7 @@ public final class RosterTree extends JPanel {
                     node.setIcon(SparkRes.getImageIcon(SparkRes.GREEN_BALL));
                 }
             }
-        }
+        });
     }
 
     private void buildFromRoster() {
@@ -112,19 +111,17 @@ public final class RosterTree extends JPanel {
             }
         });
 
-        for (RosterGroup group : roster.getGroups()) {
+        roster.getGroups().stream().forEach((group) -> {
             final JiveTreeNode groupNode = new JiveTreeNode(group.getName(), true);
             groupNode.setAllowsChildren(true);
             if (group.getEntryCount() > 0) {
                 rootNode.add(groupNode);
             }
-
-            for (RosterEntry entry : group.getEntries()) {
+            group.getEntries().stream().map((entry) -> {
                 String name = entry.getName();
                 if (name == null) {
                     name = entry.getUser();
                 }
-
                 final JiveTreeNode entryNode = new JiveTreeNode(name, false);
                 final Presence usersPresence = PresenceManager.getPresence(entry.getUser());
                 addressMap.put(entryNode, entry.getUser());
@@ -133,12 +130,12 @@ public final class RosterTree extends JPanel {
                 } else if (showUnavailableAgents) {
                     groupNode.add(entryNode);
                 }
-
                 changePresence(entry.getUser(), usersPresence);
-                final DefaultTreeModel model = (DefaultTreeModel) rosterTree.getModel();
+                return entry;
+            }).map((_item) -> (DefaultTreeModel) rosterTree.getModel()).forEach((model) -> {
                 model.nodeStructureChanged(groupNode);
-            }
-        }
+            });
+        });
     }
 
     /**

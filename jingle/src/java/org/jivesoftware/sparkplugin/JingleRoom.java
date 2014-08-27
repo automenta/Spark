@@ -194,15 +194,12 @@ public class JingleRoom extends JPanel {
 
         });
 
-        hangUpButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                hangUpButton.setEnabled(false);
-                try {
-                    session.terminate();
-                } catch (XMPPException e) {
-                    e.printStackTrace();
-                }
+        hangUpButton.addActionListener((ActionEvent actionEvent) -> {
+            hangUpButton.setEnabled(false);
+            try {
+                session.terminate();
+            } catch (XMPPException e) {
+                e.printStackTrace();
             }
         });
     }
@@ -289,9 +286,9 @@ public class JingleRoom extends JPanel {
             JingleStateManager.getInstance().addJingleSession(chatRoom, JingleStateManager.JingleRoomState.muted);
         }
 
-        for (JingleMediaManager mediaManager : session.getMediaManagers()) {
+        session.getMediaManagers().stream().forEach((mediaManager) -> {
             session.getMediaSession(mediaManager.getName()).setTrasmit(!transmitting);
-        }
+        });
 
         muteButton.invalidate();
         muteButton.validate();

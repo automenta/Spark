@@ -300,23 +300,17 @@ public class NonRosterPanel extends PhonePanel {
         });
 
         final SoftPhoneManager manager = SoftPhoneManager.getInstance();
-        hangUpButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                manager.getDefaultGuiManager().hangup(activeCall);
-                hangUpButton.setEnabled(false);
-                muteButton.setButtonSelected(false);
-                holdButton.setButtonSelected(false);
-            }
+        hangUpButton.addActionListener((ActionEvent actionEvent) -> {
+            manager.getDefaultGuiManager().hangup(activeCall);
+            hangUpButton.setEnabled(false);
+            muteButton.setButtonSelected(false);
+            holdButton.setButtonSelected(false);
         });
 
-        redialButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                manager.getDefaultGuiManager().dial(activeCall.getCall().getNumber());
-                redialButton.setVisible(false);
-                hangUpButton.setVisible(true);
-            }
+        redialButton.addActionListener((ActionEvent actionEvent) -> {
+            manager.getDefaultGuiManager().dial(activeCall.getCall().getNumber());
+            redialButton.setVisible(false);
+            hangUpButton.setVisible(true);
         });
     }
 

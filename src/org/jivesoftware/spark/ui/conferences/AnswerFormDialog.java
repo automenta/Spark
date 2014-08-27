@@ -106,12 +106,9 @@ public class AnswerFormDialog {
 
         JButton updatebutton = new JButton();
         ResourceUtils.resButton(updatebutton, Res.getString("apply"));
-        updatebutton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dialog.dispose();
-                sendAnswerForm(form.createAnswerForm(), chat);
-            }
+        updatebutton.addActionListener((ActionEvent e) -> {
+            dialog.dispose();
+            sendAnswerForm(form.createAnswerForm(), chat);
         });
 
         bottompanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -146,10 +143,10 @@ public class AnswerFormDialog {
 
         ChatRoom room = SparkManager.getChatManager().getChatRoom(chat.getRoom());
 
-        for (String key : _map.keySet()) {
+        _map.keySet().stream().forEach((key) -> {
             String value = getValueFromComponent(key);
             answer.setAnswer(key, value);
-        }
+        });
         try {
             chat.sendRegistrationForm(answer);
 

@@ -138,11 +138,8 @@ public class RosterMemberPanel extends PhonePanel {
         panel.add(dialPadButton, new GridBagConstraints(1, 0, 1, 3, 1.0, 0.0, GridBagConstraints.NORTHEAST, GridBagConstraints.NONE, new Insets(0, 2, 2, 2), 0, 0));
 
         final PhonePad pad = new PhonePad();
-        dialPadButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                pad.showDialpad(dialPadButton, true);
-            }
+        dialPadButton.addActionListener((ActionEvent actionEvent) -> {
+            pad.showDialpad(dialPadButton, true);
         });
 
         // Add Connected Label
@@ -293,12 +290,9 @@ public class RosterMemberPanel extends PhonePanel {
         });
 
         final SoftPhoneManager manager = SoftPhoneManager.getInstance();
-        hangUpButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                manager.getDefaultGuiManager().hangup(activeCall);
-                hangUpButton.setEnabled(false);
-            }
+        hangUpButton.addActionListener((ActionEvent actionEvent) -> {
+            manager.getDefaultGuiManager().hangup(activeCall);
+            hangUpButton.setEnabled(false);
         });
     }
 

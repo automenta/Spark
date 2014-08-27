@@ -172,12 +172,8 @@ public final class Spark {
         System.setProperty("sun.java2d.noddraw", "true");
         System.setProperty("file.encoding", "UTF-8");
 
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                // Start Application
-                new Spark();
-            }
+        SwingUtilities.invokeLater(() -> {
+            new Spark();
         });
 
         //load plugins before Workspace initialization to avoid any UI delays
@@ -192,12 +188,9 @@ public final class Spark {
         }
 
         try {
-            EventQueue.invokeAndWait(new Runnable() {
-                @Override
-                public void run() {
-                    final LoginDialog dialog = UIComponentRegistry.createLoginDialog();
-                    dialog.invoke(new JFrame());
-                }
+            EventQueue.invokeAndWait(() -> {
+                final LoginDialog dialog = UIComponentRegistry.createLoginDialog();
+                dialog.invoke(new JFrame());
             });
         } catch (InterruptedException | InvocationTargetException ex) {
             ex.printStackTrace();
@@ -231,19 +224,16 @@ public final class Spark {
 
         try {
             if (laf.toLowerCase().contains("substance")) {
-                EventQueue.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            if (Spark.isWindows()) {
-                                JFrame.setDefaultLookAndFeelDecorated(true);
-                                JDialog.setDefaultLookAndFeelDecorated(true);
-                            }
-                            UIManager.setLookAndFeel(laf);
-                        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) {
-                            // dont care
-                            e.printStackTrace();
+                EventQueue.invokeLater(() -> {
+                    try {
+                        if (Spark.isWindows()) {
+                            JFrame.setDefaultLookAndFeelDecorated(true);
+                            JDialog.setDefaultLookAndFeelDecorated(true);
                         }
+                        UIManager.setLookAndFeel(laf);
+                    } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) {
+                        // dont care
+                        e.printStackTrace();
                     }
                 });
             } else {
@@ -445,11 +435,9 @@ public final class Spark {
     public static void setApplicationFont(Font f) {
         UIDefaults defaults = UIManager.getLookAndFeelDefaults();
         synchronized (defaults) {
-            for (Object ui_property : defaults.keySet()) {
-                if (ui_property.toString().endsWith(".font")) {
-                    UIManager.put(ui_property, f);
-                }
-            }
+            defaults.keySet().stream().filter((ui_property) -> (ui_property.toString().endsWith(".font"))).forEach((ui_property) -> {
+                UIManager.put(ui_property, f);
+            });
         }
     }
 
@@ -464,10 +452,10 @@ public final class Spark {
 
         ColorSettings colorsettings = ColorSettingManager.getColorSettings();
 
-        for (String property : colorsettings.getKeys()) {
+        colorsettings.getKeys().stream().forEach((property) -> {
             Color c = colorsettings.getColorFromProperty(property);
             UIManager.put(property, c);
-        }
+        });
 
     }
 

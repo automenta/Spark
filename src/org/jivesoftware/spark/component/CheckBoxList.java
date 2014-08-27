@@ -64,12 +64,9 @@ public class CheckBoxList extends JPanel {
      */
     public List<String> getSelectedValues() {
         List<String> list = new ArrayList<>();
-        for (JCheckBox checkbox : valueMap.keySet()) {
-            if (checkbox.isSelected()) {
-                String value = valueMap.get(checkbox);
-                list.add(value);
-            }
-        }
+        valueMap.keySet().stream().filter((checkbox) -> (checkbox.isSelected())).map((checkbox) -> valueMap.get(checkbox)).forEach((value) -> {
+            list.add(value);
+        });
         return list;
     }
 }

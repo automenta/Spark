@@ -352,11 +352,9 @@ public class EmoticonManager {
             // Load equivilants
             final List<String> equivs = new ArrayList<>();
             final List<?> equivilants = dict.selectNodes("array/string");
-            for (Object equivilant1 : equivilants) {
-                Element equivilant = (Element) equivilant1;
-                String equivilantString = equivilant.getText();
+            equivilants.stream().map((equivilant1) -> (Element) equivilant1).map((equivilant) -> equivilant.getText()).forEach((equivilantString) -> {
                 equivs.add(equivilantString);
-            }
+            });
 
             final Emoticon emoticon = new Emoticon(key, name, equivs,
                     emoticonSet);

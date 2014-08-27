@@ -50,56 +50,49 @@ public class GoogleFileViewer {
 
     public void viewFiles(final Collection<GoogleSearchResult> col, final boolean showFiles) {
 
-        EventQueue.invokeLater(new Runnable() {
-
-            @Override
-            public void run() {
-                table = new DocumentTable();
-                TitlePanel titlePanel = new TitlePanel("Google Search", "Results from your search.", null, true);
-
-                final JPanel mainPanel = new JPanel();
-                mainPanel.setLayout(new BorderLayout());
-                mainPanel.add(titlePanel, BorderLayout.NORTH);
-
-                JScrollPane pane = new JScrollPane(table);
-                pane.getViewport().setBackground(Color.white);
-
-                mainPanel.add(pane, BorderLayout.CENTER);
-
-                // Build Viewer
-                for (GoogleSearchResult aCol : col) {
-                    GoogleSearchResult result = aCol;
-                    Icon icon = result.getIcon();
-                    if (icon.getIconWidth() == -1) {
-                        icon = SparkRes.getImageIcon(SparkRes.SMALL_DOCUMENT_VIEW);
-                    }
-                    JLabel label = new JLabel(icon);
-                    label.setName(result.getCachedURL());
-                    String url = result.getURL();
-
-                    boolean isFile = new File(url).exists();
-
-                    if (isFile && showFiles) {
-                        Object[] obj = {label, result.getSubject(), result.getURL()};
-                        table.getTableModel().addRow(obj);
-                    } else if (!isFile) {
-                        Object[] obj = {label, result.getSubject(), result.getURL()};
-                        table.getTableModel().addRow(obj);
-                    }
-
+        EventQueue.invokeLater(() -> {
+            table = new DocumentTable();
+            TitlePanel titlePanel = new TitlePanel("Google Search", "Results from your search.", null, true);
+            
+            final JPanel mainPanel = new JPanel();
+            mainPanel.setLayout(new BorderLayout());
+            mainPanel.add(titlePanel, BorderLayout.NORTH);
+            
+            JScrollPane pane = new JScrollPane(table);
+            pane.getViewport().setBackground(Color.white);
+            
+            mainPanel.add(pane, BorderLayout.CENTER);
+            
+            col.stream().map((aCol) -> aCol).forEach((result) -> {
+                Icon icon = result.getIcon();
+                if (icon.getIconWidth() == -1) {
+                    icon = SparkRes.getImageIcon(SparkRes.SMALL_DOCUMENT_VIEW);
                 }
-
-                // Create Frame
-                JFrame frame = new JFrame("Google Search");
-
-                frame.setIconImage(SparkRes.getImageIcon(SparkRes.SMALL_DOCUMENT_VIEW).getImage());
-                frame.getContentPane().setLayout(new BorderLayout());
-                frame.getContentPane().add(mainPanel, BorderLayout.CENTER);
-                frame.pack();
-                frame.setSize(600, 400);
-                GraphicUtils.centerWindowOnScreen(frame);
-                frame.setVisible(true);
-            }
+                JLabel label = new JLabel(icon);
+                label.setName(result.getCachedURL());
+                String url = result.getURL();
+                
+                boolean isFile = new File(url).exists();
+                
+                if (isFile && showFiles) {
+                    Object[] obj = {label, result.getSubject(), result.getURL()};
+                    table.getTableModel().addRow(obj);
+                } else if (!isFile) {
+                    Object[] obj = {label, result.getSubject(), result.getURL()};
+                    table.getTableModel().addRow(obj);
+                }
+            });
+            
+            // Create Frame
+            JFrame frame = new JFrame("Google Search");
+            
+            frame.setIconImage(SparkRes.getImageIcon(SparkRes.SMALL_DOCUMENT_VIEW).getImage());
+            frame.getContentPane().setLayout(new BorderLayout());
+            frame.getContentPane().add(mainPanel, BorderLayout.CENTER);
+            frame.pack();
+            frame.setSize(600, 400);
+            GraphicUtils.centerWindowOnScreen(frame);
+            frame.setVisible(true);
         });
 
     }

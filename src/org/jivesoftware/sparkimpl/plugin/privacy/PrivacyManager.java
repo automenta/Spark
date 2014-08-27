@@ -153,10 +153,8 @@ public class PrivacyManager {
      * @return boolean
      */
     public boolean hasActiveList() {
-        for (SparkPrivacyList list : _privacyLists) {
-            if (list.isActive()) {
-                return true;
-            }
+        if (_privacyLists.stream().anyMatch((list) -> (list.isActive()))) {
+            return true;
         }
         return false;
     }
@@ -197,10 +195,8 @@ public class PrivacyManager {
      * @return boolean
      */
     public boolean hasDefaultList() {
-        for (SparkPrivacyList list : _privacyLists) {
-            if (list.isDefault()) {
-                return true;
-            }
+        if (_privacyLists.stream().anyMatch((list) -> (list.isDefault()))) {
+            return true;
         }
         return false;
     }
@@ -261,11 +257,9 @@ public class PrivacyManager {
                 _presenceHandler.removeIconsForList(getActiveList());
             }
             getPrivacyList(listname).setListAsActive(true);
-            for (SparkPrivacyList plist : _privacyLists) {
-                if (!plist.getListName().equals(listname)) {
-                    plist.setListAsActive(false);
-                }
-            }
+            _privacyLists.stream().filter((plist) -> (!plist.getListName().equals(listname))).forEach((plist) -> {
+                plist.setListAsActive(false);
+            });
             _presenceHandler.setIconsForList(getActiveList());
 
         } catch (XMPPException e) {
@@ -280,11 +274,9 @@ public class PrivacyManager {
             privacyManager.setDefaultListName(listname);
             fireListSetAsDefault(listname);
             getPrivacyList(listname).setListIsDefault(true);
-            for (SparkPrivacyList plist : _privacyLists) {
-                if (!plist.getListName().equals(listname)) {
-                    plist.setListIsDefault(false);
-                }
-            }
+            _privacyLists.stream().filter((plist) -> (!plist.getListName().equals(listname))).forEach((plist) -> {
+                plist.setListIsDefault(false);
+            });
         } catch (XMPPException e) {
             Log.warning("Could not set PrivacyList " + listname + " as default");
             e.printStackTrace();
@@ -300,9 +292,9 @@ public class PrivacyManager {
                 fireListDeActivated(getActiveList().getListName());
                 _presenceHandler.removeIconsForList(getActiveList());
             }
-            for (SparkPrivacyList plist : _privacyLists) {
+            _privacyLists.stream().forEach((plist) -> {
                 plist.setListAsActive(false);
-            }
+            });
         } catch (XMPPException e) {
             Log.warning("Could not decline active privacy list");
             e.printStackTrace();
@@ -314,9 +306,9 @@ public class PrivacyManager {
             if (hasDefaultList()) {
                 privacyManager.declineDefaultList();
                 fireListRemovedAsDefault(getDefaultList().getListName());
-                for (SparkPrivacyList plist : _privacyLists) {
+                _privacyLists.stream().forEach((plist) -> {
                     plist.setListIsDefault(false);
-                }
+                });
             }
         } catch (XMPPException e) {
             Log.warning("Could not decline default privacy list");
@@ -337,27 +329,27 @@ public class PrivacyManager {
     }
 
     private void fireListActivated(String listname) {
-        for (SparkPrivacyListListener listener : _listListeners) {
+        _listListeners.stream().forEach((listener) -> {
             listener.listActivated(listname);
-        }
+        });
     }
 
     private void fireListDeActivated(String listname) {
-        for (SparkPrivacyListListener listener : _listListeners) {
+        _listListeners.stream().forEach((listener) -> {
             listener.listDeActivated(listname);
-        }
+        });
     }
 
     private void fireListSetAsDefault(String listname) {
-        for (SparkPrivacyListListener listener : _listListeners) {
+        _listListeners.stream().forEach((listener) -> {
             listener.listSetAsDefault(listname);
-        }
+        });
     }
 
     private void fireListRemovedAsDefault(String listname) {
-        for (SparkPrivacyListListener listener : _listListeners) {
+        _listListeners.stream().forEach((listener) -> {
             listener.listRemovedAsDefault(listname);
-        }
+        });
     }
 
     public void goToInvisible() {
@@ -382,10 +374,10 @@ public class PrivacyManager {
 
             privacyManager.declineActiveList();
             SparkManager.getConnection().sendPacket(PresenceManager.getAvailablePresence());
-            Log.debug("List \"" + INVISIBLE_LIST_NAME + "\" has been disabled ");
+            if (Log.debugging) Log.debug("List \"" + INVISIBLE_LIST_NAME + "\" has been disabled ");
             if (previousActiveList != null) {
                 setListAsActive(previousActiveList.getListName());
-                Log.debug("List \"" + previousActiveList.getListName() + "\" has been activated instead. ");
+                if (Log.debugging) Log.debug("List \"" + previousActiveList.getListName() + "\" has been activated instead. ");
             }
 
         } catch (XMPPException e) {
@@ -407,7 +399,7 @@ public class PrivacyManager {
             previousActiveList = getActiveList();
             privacyManager.setActiveListName(INVISIBLE_LIST_NAME);
             SparkManager.getConnection().sendPacket(PresenceManager.getAvailablePresence());
-            Log.debug("List \"" + INVISIBLE_LIST_NAME + "\" has been activated ");
+            if (Log.debugging) Log.debug("List \"" + INVISIBLE_LIST_NAME + "\" has been activated ");
         } catch (XMPPException e) {
             // e.printStackTrace();
             Log.error("PrivacyManager#activateGloballyInvisibleList: " + e.getMessage());
@@ -448,7 +440,7 @@ public class PrivacyManager {
             }
 
         } catch (XMPPException e1) {
-            Log.debug("PrivacyManager#ensureGloballyInvisibleListExists: Could not find globally invisible list. We need to create one");
+            if (Log.debugging) Log.debug("PrivacyManager#ensureGloballyInvisibleListExists: Could not find globally invisible list. We need to create one");
         }
 
         try {
@@ -458,7 +450,7 @@ public class PrivacyManager {
             List<PrivacyItem> items = Arrays.asList(item);
             privacyManager.createPrivacyList(INVISIBLE_LIST_NAME, items);
             list = privacyManager.getPrivacyList(INVISIBLE_LIST_NAME);
-            Log.debug("List \"" + INVISIBLE_LIST_NAME + "\" has been created ");
+            if (Log.debugging) Log.debug("List \"" + INVISIBLE_LIST_NAME + "\" has been created ");
         } catch (XMPPException e) {
             Log.warning("PrivacyManager#ensureGloballyInvisibleListExists: Could not create PrivacyList " + INVISIBLE_LIST_NAME);
             //e.printStackTrace();

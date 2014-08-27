@@ -75,12 +75,9 @@ public class TransferManager extends JPanel implements TransferListener {
         add(callField, new GridBagConstraints(0, 0, 1, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 0), 0, 0));
         add(callButton, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(5, 5, 5, 0), 0, 0));
 
-        callField.getTextComponent().addCaretListener(new CaretListener() {
-            @Override
-            public void caretUpdate(CaretEvent caretEvent) {
-                callButton.setEnabled(ModelUtil.hasLength(callField.getText()) && callField.isEdited());
-                callField.validateTextField();
-            }
+        callField.getTextComponent().addCaretListener((CaretEvent caretEvent) -> {
+            callButton.setEnabled(ModelUtil.hasLength(callField.getText()) && callField.isEdited());
+            callField.validateTextField();
         });
 
         callField.getTextComponent().addKeyListener(new KeyAdapter() {
@@ -101,18 +98,14 @@ public class TransferManager extends JPanel implements TransferListener {
                     return;
                 }
 
-                // Go through groups and sort. :)
-                for (TransferGroupUI group : groups) {
+                groups.stream().forEach((group) -> {
                     group.sort(callField.getText());
-                }
+                });
             }
         });
 
-        callButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                transferCall();
-            }
+        callButton.addActionListener((ActionEvent e) -> {
+            transferCall();
         });
 
         callButton.setEnabled(false);
@@ -122,25 +115,24 @@ public class TransferManager extends JPanel implements TransferListener {
 
         final List<String> groupNames = new ArrayList<>();
 
-        for (RosterGroup rosterGroup : roster.getGroups()) {
+        roster.getGroups().stream().forEach((rosterGroup) -> {
             groupNames.add(rosterGroup.getName());
-        }
+        });
 
         // Sort to add groups alphabetically.
         Collections.sort(groupNames);
 
-        for (String groupName : groupNames) {
+        groupNames.stream().forEach((groupName) -> {
             TransferGroupUI group = new TransferGroupUI(groupName);
             groups.add(group);
             group.addTransferListener(this);
-
             if (group.hasTelephoneContacts()) {
                 CollapsiblePane pane = new CollapsiblePane(groupName);
 
                 pane.setContentPane(group);
                 groupsPanel.add(pane);
             }
-        }
+        });
 
         // Add Scroll Pane to Panel
         final JScrollPane scrollPane = new JScrollPane(groupsPanel);

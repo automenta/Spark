@@ -65,16 +65,11 @@ public class OTRSession {
         createButton();
 
         // Only initialize the actionListener once
-        _otrButton.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (_engine.getSessionStatus(_mySession).equals(SessionStatus.ENCRYPTED)) {
-                    stopSession();
-                } else {
-                    startSession();
-                }
-
+        _otrButton.addActionListener((ActionEvent e) -> {
+            if (_engine.getSessionStatus(_mySession).equals(SessionStatus.ENCRYPTED)) {
+                stopSession();
+            } else {
+                startSession();
             }
         });
 
@@ -161,40 +156,35 @@ public class OTRSession {
 
             _engine.removeOtrEngineListener(_otrListener);
             _chatRoom.getToolBar().addChatRoomButton(_otrButton);
-            _otrListener = new OtrEngineListener() {
-
-                @Override
-                public void sessionStatusChanged(SessionID arg0) {
-                    if (_engine.getSessionStatus(_mySession).equals(SessionStatus.ENCRYPTED)) {
-                        _conPanel.successfullyCon();
-
-                        String otrkey = _manager.getKeyManager().getRemoteFingerprint(_mySession);
-                        if (otrkey == null) {
-                            PublicKey pubkey = _engine.getRemotePublicKey(_mySession);
-                            _manager.getKeyManager().savePublicKey(_mySession, pubkey);
-                            otrkey = _manager.getKeyManager().getRemoteFingerprint(_mySession);
-                        }
-
-                        if (!OTRManager.getInstance().getKeyManager().isVerified(_mySession)) {
-                            final int n = JOptionPane.showConfirmDialog(_otrButton,
-                                    OTRResources.getString("otr.start.session.with", _remoteJID) + "\n" + OTRResources.getString("otr.key.not.verified.text") + "\n" + otrkey
-                                    + "\n" + OTRResources.getString("otr.question.verify"), OTRResources.getString("otr.key.not.verified.title"),
-                                    JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-
-                            if (n == JOptionPane.YES_OPTION) {
-                                _manager.getKeyManager().verify(_mySession);
-                            }
-
-                        }
-                        _otrButton.setIcon(OTRResources.getIcon("otr_on.png"));
-                    } else if (_engine.getSessionStatus(_mySession).equals(SessionStatus.FINISHED)) {
-                        _otrButton.setIcon(OTRResources.getIcon("otr_off.png"));
-                        stopSession();
-                    } else if (_engine.getSessionStatus(_mySession).equals(SessionStatus.PLAINTEXT)) {
-                        _otrButton.setIcon(OTRResources.getIcon("otr_off.png"));
-                        stopSession();
+            _otrListener = (SessionID arg0) -> {
+                if (_engine.getSessionStatus(_mySession).equals(SessionStatus.ENCRYPTED)) {
+                    _conPanel.successfullyCon();
+                    
+                    String otrkey = _manager.getKeyManager().getRemoteFingerprint(_mySession);
+                    if (otrkey == null) {
+                        PublicKey pubkey = _engine.getRemotePublicKey(_mySession);
+                        _manager.getKeyManager().savePublicKey(_mySession, pubkey);
+                        otrkey = _manager.getKeyManager().getRemoteFingerprint(_mySession);
                     }
+                    
+                    if (!OTRManager.getInstance().getKeyManager().isVerified(_mySession)) {
+                        final int n = JOptionPane.showConfirmDialog(_otrButton,
+                                OTRResources.getString("otr.start.session.with", _remoteJID) + "\n" + OTRResources.getString("otr.key.not.verified.text") + "\n" + otrkey
+                                        + "\n" + OTRResources.getString("otr.question.verify"), OTRResources.getString("otr.key.not.verified.title"),
+                                        JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                        
+                        if (n == JOptionPane.YES_OPTION) {
+                            _manager.getKeyManager().verify(_mySession);
+                        }
 
+                    }
+                    _otrButton.setIcon(OTRResources.getIcon("otr_on.png"));
+                } else if (_engine.getSessionStatus(_mySession).equals(SessionStatus.FINISHED)) {
+                    _otrButton.setIcon(OTRResources.getIcon("otr_off.png"));
+                    stopSession();
+                } else if (_engine.getSessionStatus(_mySession).equals(SessionStatus.PLAINTEXT)) {
+                    _otrButton.setIcon(OTRResources.getIcon("otr_off.png"));
+                    stopSession();
                 }
             };
             _engine.addOtrEngineListener(_otrListener);

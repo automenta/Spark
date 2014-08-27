@@ -91,17 +91,13 @@ final class InvitationDialog extends JPanel {
             roomsField = new JComboBox();
             comboRoomsField = (JComboBox) roomsField;
             comboRoomsField.setEditable(true);
-            comboRoomsField.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // get selected bookmark and persist it:
-                    BookmarkedConference bookmarkedConf = null;
-                    Object bookmarkedConfItem = comboRoomsField.getSelectedItem();
-                    if (bookmarkedConfItem instanceof ConferenceItem) {
-                        bookmarkedConf = ((ConferenceItem) bookmarkedConfItem).getBookmarkedConf();
-                        SettingsManager.getLocalPreferences().setDefaultBookmarkedConf(bookmarkedConf.getJid());
-                        SettingsManager.saveSettings();
-                    }
+            comboRoomsField.addActionListener((ActionEvent e) -> {
+                BookmarkedConference bookmarkedConf = null;
+                Object bookmarkedConfItem = comboRoomsField.getSelectedItem();
+                if (bookmarkedConfItem instanceof ConferenceItem) {
+                    bookmarkedConf = ((ConferenceItem) bookmarkedConfItem).getBookmarkedConf();
+                    SettingsManager.getLocalPreferences().setDefaultBookmarkedConf(bookmarkedConf.getJid());
+                    SettingsManager.saveSettings();
                 }
             });
         }
@@ -126,38 +122,28 @@ final class InvitationDialog extends JPanel {
         add(addJIDButton, new GridBagConstraints(2, 2, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0));
         add(browseButton, new GridBagConstraints(3, 2, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0));
 
-        addJIDButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                String jid = jidField.getText();
-                String server = StringUtils.parseBareAddress(jid);
-                if (server == null || !server.contains("@")) {
-                    JOptionPane.showMessageDialog(dlg, Res.getString("message.enter.valid.jid"), Res.getString("title.error"), JOptionPane.ERROR_MESSAGE);
-                    jidField.setText("");
-                    jidField.requestFocus();
-                } else {
-                    if (!invitedUsers.contains(jid)) {
-                        invitedUsers.addElement(jid);
-                    }
-                    jidField.setText("");
+        addJIDButton.addActionListener((ActionEvent actionEvent) -> {
+            String jid = jidField.getText();
+            String server = StringUtils.parseBareAddress(jid);
+            if (server == null || !server.contains("@")) {
+                JOptionPane.showMessageDialog(dlg, Res.getString("message.enter.valid.jid"), Res.getString("title.error"), JOptionPane.ERROR_MESSAGE);
+                jidField.setText("");
+                jidField.requestFocus();
+            } else {
+                if (!invitedUsers.contains(jid)) {
+                    invitedUsers.addElement(jid);
                 }
+                jidField.setText("");
             }
         });
 
-        browseButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                RosterPickList browser = new RosterPickList();
-                Collection<String> col = browser.showRoster(dlg);
-
-                for (String aCol : col) {
-                    String jid = aCol;
-                    if (!invitedUsers.contains(jid)) {
-                        invitedUsers.addElement(jid);
-                    }
-
-                }
-            }
+        browseButton.addActionListener((ActionEvent actionEvent) -> {
+            RosterPickList browser = new RosterPickList();
+            Collection<String> col = browser.showRoster(dlg);
+            
+            col.stream().map((aCol) -> aCol).filter((jid) -> (!invitedUsers.contains(jid))).forEach((jid) -> {
+                invitedUsers.addElement(jid);
+            });
         });
 
         add(inviteLabel, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 0, 0));
@@ -266,9 +252,9 @@ final class InvitationDialog extends JPanel {
 
         // Add jids to user list
         if (jids != null) {
-            for (Object jid : jids) {
+            jids.stream().forEach((jid) -> {
                 invitedUsers.addElement(jid);
-            }
+            });
         }
 
         final JOptionPane pane;
@@ -300,110 +286,96 @@ final class InvitationDialog extends JPanel {
         dlg.setContentPane(mainPanel);
         dlg.setLocationRelativeTo(parent);
 
-        PropertyChangeListener changeListener = new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent e) {
-                String value = (String) pane.getValue();
-                if (Res.getString("cancel").equals(value)) {
+        PropertyChangeListener changeListener = (PropertyChangeEvent e) -> {
+            String value = (String) pane.getValue();
+            if (Res.getString("cancel").equals(value)) {
+                pane.setValue(JOptionPane.UNINITIALIZED_VALUE);
+                dlg.dispose();
+            } else if (Res.getString("invite").equals(value)) {
+                final String roomTitle = getSelectedRoomName();
+                final BookmarkedConference selectedBookmarkedConf = getSelectedBookmarkedConference();
+                int size = invitedUserList.getModel().getSize();
+                if (size == 0) {
+                    JOptionPane.showMessageDialog(dlg, Res.getString("message.specify.users.to.join.conference"), Res.getString("title.error"), JOptionPane.ERROR_MESSAGE);
                     pane.setValue(JOptionPane.UNINITIALIZED_VALUE);
-                    dlg.dispose();
-                } else if (Res.getString("invite").equals(value)) {
-                    final String roomTitle = getSelectedRoomName();
-                    final BookmarkedConference selectedBookmarkedConf = getSelectedBookmarkedConference();
-                    int size = invitedUserList.getModel().getSize();
-
-                    if (size == 0) {
-                        JOptionPane.showMessageDialog(dlg, Res.getString("message.specify.users.to.join.conference"), Res.getString("title.error"), JOptionPane.ERROR_MESSAGE);
-                        pane.setValue(JOptionPane.UNINITIALIZED_VALUE);
-                        return;
-                    }
-
-                    if (!ModelUtil.hasLength(roomTitle)) {
-                        JOptionPane.showMessageDialog(dlg, Res.getString("message.no.room.to.join.error"), Res.getString("title.error"), JOptionPane.ERROR_MESSAGE);
-                        pane.setValue(JOptionPane.UNINITIALIZED_VALUE);
-                        return;
-                    }
-                    String roomName = "";
-
-                    // Add all rooms the user is in to list.
-                    ChatManager chatManager = SparkManager.getChatManager();
-                    for (ChatRoom chatRoom : chatManager.getChatContainer().getChatRooms()) {
-                        if (chatRoom instanceof GroupChatRoom) {
-                            GroupChatRoom groupRoom = (GroupChatRoom) chatRoom;
-                            if (groupRoom.getRoomname().equals(roomTitle)) {
-                                roomName = groupRoom.getMultiUserChat().getRoom();
-                                break;
-                            }
+                    return;
+                }
+                if (!ModelUtil.hasLength(roomTitle)) {
+                    JOptionPane.showMessageDialog(dlg, Res.getString("message.no.room.to.join.error"), Res.getString("title.error"), JOptionPane.ERROR_MESSAGE);
+                    pane.setValue(JOptionPane.UNINITIALIZED_VALUE);
+                    return;
+                }
+                String roomName = "";
+                ChatManager chatManager = SparkManager.getChatManager();
+                for (ChatRoom chatRoom : chatManager.getChatContainer().getChatRooms()) {
+                    if (chatRoom instanceof GroupChatRoom) {
+                        GroupChatRoom groupRoom = (GroupChatRoom) chatRoom;
+                        if (groupRoom.getRoomname().equals(roomTitle)) {
+                            roomName = groupRoom.getMultiUserChat().getRoom();
+                            break;
                         }
                     }
-                    String message = messageField.getText();
-                    final String messageText = message != null ? message : Res.getString("message.please.join.in.conference");
-
-                    if (invitedUsers.getSize() > 0) {
-                        invitedUserList.setSelectionInterval(0, invitedUsers.getSize() - 1);
-                    }
-
-                    GroupChatRoom chatRoom;
-                    try {
-                        chatRoom = SparkManager.getChatManager().getGroupChat(roomName);
-                    } catch (ChatNotFoundException e1) {
-                        dlg.setVisible(false);
-                        final List<String> jidList = new ArrayList<>();
-                        Object[] jids = invitedUserList.getSelectedValues();
-                        final int no = jids != null ? jids.length : 0;
-                        for (int i = 0; i < no; i++) {
-                            try {
-                                jidList.add((String) jids[i]);
-                            } catch (NullPointerException ee) {
-                                Log.error(ee);
-                            }
-                        }
-
-                        SwingWorker worker = new SwingWorker() {
-                            @Override
-                            public Object construct() {
-                                try {
-                                    Thread.sleep(15);
-                                } catch (InterruptedException e2) {
-                                    Log.error(e2);
-                                }
-                                return "ok";
-                            }
-
-                            @Override
-                            public void finished() {
-                                try {
-                                    if (selectedBookmarkedConf == null) {
-                                        ConferenceUtils.createPrivateConference(serviceName, messageText, roomTitle,
-                                                jidList);
-                                    } else {
-                                        ConferenceUtils.joinConferenceOnSeperateThread(
-                                                selectedBookmarkedConf.getName(), selectedBookmarkedConf.getJid(),
-                                                selectedBookmarkedConf.getPassword(), messageText, jidList);
-                                    }
-                                } catch (XMPPException e2) {
-                                    JOptionPane.showMessageDialog(pane, ConferenceUtils.getReason(e2), Res.getString("title.error"), JOptionPane.ERROR_MESSAGE);
-                                }
-                            }
-                        };
-
-                        worker.start();
-                        pane.setValue(JOptionPane.UNINITIALIZED_VALUE);
-                        return;
-                    }
-
-                    pane.setValue(JOptionPane.UNINITIALIZED_VALUE);
-                    dlg.dispose();
-
-                    Object[] values = invitedUserList.getSelectedValues();
-                    final int no = values != null ? values.length : 0;
+                }
+                String message = messageField.getText();
+                final String messageText = message != null ? message : Res.getString("message.please.join.in.conference");
+                if (invitedUsers.getSize() > 0) {
+                    invitedUserList.setSelectionInterval(0, invitedUsers.getSize() - 1);
+                }
+                GroupChatRoom chatRoom;
+                try {
+                    chatRoom = SparkManager.getChatManager().getGroupChat(roomName);
+                } catch (ChatNotFoundException e1) {
+                    dlg.setVisible(false);
+                    final List<String> jidList = new ArrayList<>();
+                    Object[] jids1 = invitedUserList.getSelectedValues();
+                    final int no = jids1 != null ? jids1.length : 0;
                     for (int i = 0; i < no; i++) {
-                        String jid = (String) values[i];
-                        chatRoom.getMultiUserChat().invite(jid, message != null ? message : Res.getString("message.please.join.in.conference"));
-                        String nickname = SparkManager.getUserManager().getUserNicknameFromJID(jid);
-                        chatRoom.getTranscriptWindow().insertNotificationMessage("Invited " + nickname, ChatManager.NOTIFICATION_COLOR);
+                        try {
+                            jidList.add((String) jids1[i]);
+                        }catch (NullPointerException ee) {
+                            Log.error(ee);
+                        }
                     }
-
+                    SwingWorker worker = new SwingWorker() {
+                        @Override
+                        public Object construct() {
+                            try {
+                                Thread.sleep(15);
+                            } catch (InterruptedException e2) {
+                                Log.error(e2);
+                            }
+                            return "ok";
+                        }
+                        
+                        @Override
+                        public void finished() {
+                            try {
+                                if (selectedBookmarkedConf == null) {
+                                    ConferenceUtils.createPrivateConference(serviceName, messageText, roomTitle,
+                                            jidList);
+                                } else {
+                                    ConferenceUtils.joinConferenceOnSeperateThread(
+                                            selectedBookmarkedConf.getName(), selectedBookmarkedConf.getJid(),
+                                            selectedBookmarkedConf.getPassword(), messageText, jidList);
+                                }
+                            } catch (XMPPException e2) {
+                                JOptionPane.showMessageDialog(pane, ConferenceUtils.getReason(e2), Res.getString("title.error"), JOptionPane.ERROR_MESSAGE);
+                            }
+                        }
+                    };
+                    worker.start();
+                    pane.setValue(JOptionPane.UNINITIALIZED_VALUE);
+                    return;
+                }
+                pane.setValue(JOptionPane.UNINITIALIZED_VALUE);
+                dlg.dispose();
+                Object[] values = invitedUserList.getSelectedValues();
+                final int no = values != null ? values.length : 0;
+                for (int i = 0; i < no; i++) {
+                    String jid = (String) values[i];
+                    chatRoom.getMultiUserChat().invite(jid, message != null ? message : Res.getString("message.please.join.in.conference"));
+                    String nickname = SparkManager.getUserManager().getUserNicknameFromJID(jid);
+                    chatRoom.getTranscriptWindow().insertNotificationMessage("Invited " + nickname, ChatManager.NOTIFICATION_COLOR);
                 }
             }
         };

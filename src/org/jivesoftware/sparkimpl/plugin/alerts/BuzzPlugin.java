@@ -58,23 +58,16 @@ public class BuzzPlugin implements Plugin {
         ProviderManager.getInstance().addExtensionProvider(ELEMENTNAME_OLD,
                 NAMESPACE_OLD, BuzzPacket.class);
 
-        SparkManager.getConnection().addPacketListener(new PacketListener() {
-            @Override
-            public void processPacket(Packet packet) {
-                if (packet instanceof Message) {
-                    final Message message = (Message) packet;
-
-                    boolean buzz = message.getExtension(ELEMENTNAME_OLD,
-                            NAMESPACE_OLD) != null
-                            || message.getExtension(ELEMENTNAME, NAMESPACE) != null;
-                    if (buzz) {
-                        SwingUtilities.invokeLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                shakeWindow(message);
-                            }
-                        });
-                    }
+        SparkManager.getConnection().addPacketListener((Packet packet) -> {
+            if (packet instanceof Message) {
+                final Message message = (Message) packet;
+                boolean buzz = message.getExtension(ELEMENTNAME_OLD,
+                        NAMESPACE_OLD) != null
+                        || message.getExtension(ELEMENTNAME, NAMESPACE) != null;
+                if (buzz) {
+                    SwingUtilities.invokeLater(() -> {
+                        shakeWindow(message);
+                    });
                 }
             }
         }, new PacketTypeFilter(Message.class));

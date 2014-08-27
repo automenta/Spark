@@ -157,7 +157,7 @@ public class SearchService extends JPanel {
 
                 // Show popup
                 final JPopupMenu popup = new JPopupMenu();
-                for (final Searchable searchable : searchables) {
+                searchables.stream().map((searchable) -> {
                     Action action = new AbstractAction() {
                         private static final long serialVersionUID = 1289193809077193703L;
 
@@ -166,11 +166,12 @@ public class SearchService extends JPanel {
                             setActiveSearchService(searchable);
                         }
                     };
-
                     action.putValue(Action.SMALL_ICON, searchable.getIcon());
                     action.putValue(Action.NAME, searchable.getName());
+                    return action;
+                }).forEach((action) -> {
                     popup.add(action);
-                }
+                });
 
                 popup.show(findField, 0, findField.getHeight());
 

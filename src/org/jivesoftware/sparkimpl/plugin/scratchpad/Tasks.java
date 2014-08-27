@@ -84,16 +84,24 @@ public class Tasks implements PrivateData {
         buf.append("<scratchpad xmlns=\"scratchpad:tasks\">");
         buf.append("<tasks showAll=\"").append(ScratchPadPlugin.SHOW_ALL_TASKS).append("\">");
 
-        for (Task task : getTasks()) {
+        getTasks().stream().map((task) -> {
             buf.append("<task>");
             buf.append("<title>").append(task.getTitle()).append("</title>");
+            return task;
+        }).map((task) -> {
             buf.append("<dueDate>").append(task.getDueDate()).append("</dueDate>");
+            return task;
+        }).map((task) -> {
             buf.append("<creationDate>").append(task.getCreatedDate()).append("</creationDate>");
+            return task;
+        }).map((task) -> {
             if (task.isCompleted()) {
                 buf.append("<completed>true</completed>");
             }
+            return task;
+        }).forEach((_item) -> {
             buf.append("</task>");
-        }
+        });
 
         buf.append("</tasks>");
 
@@ -222,10 +230,9 @@ public class Tasks implements PrivateData {
 
         // save Tasks
         Tasks tasks = new Tasks();
-        for (TaskUI ui : taskList) {
-            Task nTask = ui.getTask();
+        taskList.stream().map((ui) -> ui.getTask()).forEach((nTask) -> {
             tasks.addTask(nTask);
-        }
+        });
 
         // update GUI
         ScratchPadPlugin.updateTaskUI(tasks);

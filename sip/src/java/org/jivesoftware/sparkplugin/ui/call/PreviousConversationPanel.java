@@ -200,19 +200,15 @@ public class PreviousConversationPanel extends JPanel {
         oldConversation.setText(formatter.format(startTime) + " - " + end + " (" + durationLabel.getText() + ")");
     }
 
-    final Comparator<HistoryCall> itemComparator = new Comparator<HistoryCall>() {
-        @Override
-        public int compare(HistoryCall contactItemOne, HistoryCall contactItemTwo) {
-            final HistoryCall time1 = contactItemOne;
-            final HistoryCall time2 = contactItemTwo;
-            if (time1.getTime() < time2.getTime()) {
-                return 1;
-            } else if (time1.getTime() > time2.getTime()) {
-                return -1;
-            }
-            return 0;
-
+    final Comparator<HistoryCall> itemComparator = (HistoryCall contactItemOne, HistoryCall contactItemTwo) -> {
+        final HistoryCall time1 = contactItemOne;
+        final HistoryCall time2 = contactItemTwo;
+        if (time1.getTime() < time2.getTime()) {
+            return 1;
+        } else if (time1.getTime() > time2.getTime()) {
+            return -1;
         }
+        return 0;
     };
 
 }

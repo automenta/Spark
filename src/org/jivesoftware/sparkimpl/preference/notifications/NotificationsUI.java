@@ -78,27 +78,21 @@ public class NotificationsUI extends JPanel {
             add(betaCheckBox);
         }
 
-        windowFocusBox.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent ce) {
-                if (shouldWindowPopup()) {
-                    setSystemTrayNotification(false);
-                    setSystemTrayNotificationEnabled(false);
-                } else {
-                    setSystemTrayNotificationEnabled(true);
-                }
+        windowFocusBox.addChangeListener((ChangeEvent ce) -> {
+            if (shouldWindowPopup()) {
+                setSystemTrayNotification(false);
+                setSystemTrayNotificationEnabled(false);
+            } else {
+                setSystemTrayNotificationEnabled(true);
             }
         });
 
-        SystemTrayNotificationBox.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent ce) {
-                if (isSystemTrayNotificationEnabled()) {
-                    setShowWindowPopup(false);
-                    setShowWindowPopupEnabled(false);
-                } else {
-                    setShowWindowPopupEnabled(true);
-                }
+        SystemTrayNotificationBox.addChangeListener((ChangeEvent ce) -> {
+            if (isSystemTrayNotificationEnabled()) {
+                setShowWindowPopup(false);
+                setShowWindowPopupEnabled(false);
+            } else {
+                setShowWindowPopupEnabled(true);
             }
         });
     }

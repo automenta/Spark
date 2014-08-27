@@ -104,65 +104,51 @@ public class PluginViewer extends JPanel implements Plugin {
         _prefs = SettingsManager.getLocalPreferences();
         _deactivatedPlugins = _prefs.getDeactivatedPlugins();
 
-        EventQueue.invokeLater(new Runnable() {
-
-            @Override
-            public void run() {
-
-                tabbedPane = new JTabbedPane();
-                installedPanel = new JPanel();
-                availablePanel = new JPanel();
-                deactivatedPanel = new JPanel();
-                setLayout(new GridBagLayout());
-
-                installedPanel.setLayout(new VerticalFlowLayout(
-                        VerticalFlowLayout.TOP, 0, 0, true, false));
-                installedPanel.setBackground(Color.white);
-
-                availablePanel.setLayout(new VerticalFlowLayout(
-                        VerticalFlowLayout.TOP, 0, 0, true, false));
-                availablePanel.setBackground(Color.white);
-
-                // Add TabbedPane
-                add(tabbedPane, new GridBagConstraints(0, 1, 2, 1, 1.0, 1.0,
-                        GridBagConstraints.WEST, GridBagConstraints.BOTH,
-                        new Insets(5, 5, 5, 5), 0, 0));
-
-                // Add Tabs
-                tabbedPane.addTab(Res.getString("tab.installed.plugins"),
-                        new JScrollPane(installedPanel));
-                if (!Default.getBoolean(Default.INSTALL_PLUGINS_DISABLED)) {
-                    tabbedPane.addTab(Res.getString("tab.available.plugins"),
-                            new JScrollPane(availablePanel));
-                }
-
-                loadInstalledPlugins();
-                loadDeactivatedPlugins();
-
-                tabbedPane.addChangeListener(new ChangeListener() {
-                    @Override
-                    public void stateChanged(ChangeEvent changeEvent) {
-                        if (tabbedPane.getSelectedComponent().equals(
-                                availablePanel.getParent().getParent())) {
-                            loadAvailablePlugins();
-                            loaded = true;
-                        }
-                    }
-                });
+        EventQueue.invokeLater(() -> {
+            tabbedPane = new JTabbedPane();
+            installedPanel = new JPanel();
+            availablePanel = new JPanel();
+            deactivatedPanel = new JPanel();
+            setLayout(new GridBagLayout());
+            installedPanel.setLayout(new VerticalFlowLayout(
+                    VerticalFlowLayout.TOP, 0, 0, true, false));
+            installedPanel.setBackground(Color.white);
+            availablePanel.setLayout(new VerticalFlowLayout(
+                    VerticalFlowLayout.TOP, 0, 0, true, false));
+            availablePanel.setBackground(Color.white);
+            add(tabbedPane, new GridBagConstraints(0, 1, 2, 1, 1.0, 1.0,
+                    GridBagConstraints.WEST, GridBagConstraints.BOTH,
+                    new Insets(5, 5, 5, 5), 0, 0));
+            tabbedPane.addTab(Res.getString("tab.installed.plugins"),
+                    new JScrollPane(installedPanel));
+            if (!Default.getBoolean(Default.INSTALL_PLUGINS_DISABLED)) {
+                tabbedPane.addTab(Res.getString("tab.available.plugins"),
+                        new JScrollPane(availablePanel));
             }
+            loadInstalledPlugins();
+            loadDeactivatedPlugins();
+            tabbedPane.addChangeListener((ChangeEvent changeEvent) -> {
+                if (tabbedPane.getSelectedComponent().equals(
+                        availablePanel.getParent().getParent())) {
+                    loadAvailablePlugins();
+                    loaded = true;
+                }
+            });
         });
     }
 
     private void loadInstalledPlugins() {
         PluginManager pluginManager = PluginManager.getInstance();
         List<PublicPlugin> plugins = pluginManager.getPublicPlugins();
-        for (Object plugin1 : plugins) {
-            PublicPlugin plugin = (PublicPlugin) plugin1;
-            final SparkPlugUI ui = new SparkPlugUI(plugin);
+        plugins.stream().map((plugin1) -> (PublicPlugin) plugin1).map((plugin) -> new SparkPlugUI(plugin)).map((ui) -> {
             ui.useLocalIcon();
+            return ui;
+        }).map((ui) -> {
             installedPanel.add(ui);
+            return ui;
+        }).forEach((ui) -> {
             addSparkPlugUIListener(ui);
-        }
+        });
     }
 
     /**
@@ -174,15 +160,19 @@ public class PluginViewer extends JPanel implements Plugin {
         if (!Default.getBoolean(Default.DEINSTALL_PLUGINS_DISABLED)) {
             tabbedPane.addTab(Res.getString("tab.deactivated.plugins"), new JScrollPane(deactivatedPanel));
         }
-        for (final String s : _deactivatedPlugins) {
+        _deactivatedPlugins.stream().map((s) -> {
             PublicPlugin plg = new PublicPlugin();
             plg.setName(s);
-            final SparkPlugUI ui = new SparkPlugUI(plg);
+            return plg;
+        }).map((plg) -> new SparkPlugUI(plg)).map((ui) -> {
             ui.useLocalIcon();
+            return ui;
+        }).map((ui) -> {
             deactivatedPanel.add(ui);
+            return ui;
+        }).forEach((ui) -> {
             addDeactivatedListener(ui);
-
-        }
+        });
 
     }
 
@@ -375,57 +365,46 @@ public class PluginViewer extends JPanel implements Plugin {
 
             frame.setIconImage(SparkRes.getImageIcon(SparkRes.SMALL_MESSAGE_IMAGE).getImage());
 
-            final Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Thread.sleep(2000);
-                        InputStream stream = post.getResponseBodyAsStream();
-
-                        URL url = new URL(plugin.getDownloadURL());
-                        String name = URLFileSystem.getFileName(url);
-                        String directoryName = URLFileSystem.getName(url);
-
-                        File pluginDownload = new File(PluginManager.PLUGINS_DIRECTORY, name);
-
-                        FileOutputStream out = new FileOutputStream(pluginDownload);
-                        copy(stream, out);
-                        out.close();
-
-                        frame.dispose();
-
-                        // Remove SparkPlugUI
-                        // Clear all selections
-                        Component[] comps = availablePanel.getComponents();
-                        for (Component comp : comps) {
-                            if (comp instanceof SparkPlugUI) {
-                                SparkPlugUI sparkPlug = (SparkPlugUI) comp;
-                                if (sparkPlug.getPlugin().getDownloadURL().equals(plugin.getDownloadURL())) {
-                                    availablePanel.remove(sparkPlug);
-
-                                    _deactivatedPlugins.remove(sparkPlug.getPlugin().getName());
-                                    _prefs.setDeactivatedPlugins(_deactivatedPlugins);
-
-                                    PluginManager.getInstance().addPlugin(sparkPlug.getPlugin());
-
-                                    sparkPlug.showOperationButton();
-                                    installedPanel.add(sparkPlug);
-                                    sparkPlug.getPlugin().setPluginDir(new File(PluginManager.PLUGINS_DIRECTORY, directoryName));
-                                    installedPanel.invalidate();
-                                    installedPanel.repaint();
-                                    availablePanel.invalidate();
-                                    availablePanel.invalidate();
-                                    availablePanel.validate();
-                                    availablePanel.repaint();
-                                }
+            final Thread thread = new Thread(() -> {
+                try {
+                    Thread.sleep(2000);
+                    InputStream stream = post.getResponseBodyAsStream();
+                    URL url = new URL(plugin.getDownloadURL());
+                    String name1 = URLFileSystem.getFileName(url);
+                    String directoryName = URLFileSystem.getName(url);
+                    File pluginDownload = new File(PluginManager.PLUGINS_DIRECTORY, name1);
+                    FileOutputStream out = new FileOutputStream(pluginDownload);
+                    copy(stream, out);
+                    out.close();
+                    frame.dispose();
+                    Component[] comps = availablePanel.getComponents();
+                    for (Component comp : comps) {
+                        if (comp instanceof SparkPlugUI) {
+                            SparkPlugUI sparkPlug = (SparkPlugUI) comp;
+                            if (sparkPlug.getPlugin().getDownloadURL().equals(plugin.getDownloadURL())) {
+                                availablePanel.remove(sparkPlug);
+                                
+                                _deactivatedPlugins.remove(sparkPlug.getPlugin().getName());
+                                _prefs.setDeactivatedPlugins(_deactivatedPlugins);
+                                
+                                PluginManager.getInstance().addPlugin(sparkPlug.getPlugin());
+                                
+                                sparkPlug.showOperationButton();
+                                installedPanel.add(sparkPlug);
+                                sparkPlug.getPlugin().setPluginDir(new File(PluginManager.PLUGINS_DIRECTORY, directoryName));
+                                installedPanel.invalidate();
+                                installedPanel.repaint();
+                                availablePanel.invalidate();
+                                availablePanel.invalidate();
+                                availablePanel.validate();
+                                availablePanel.repaint();
                             }
                         }
-                    } catch (Exception ex) {
-                        // Nothing to do
-                    } finally {
-                        // Release current connection to the connection pool once you are done
-                        post.releaseConnection();
                     }
+                }catch (Exception ex) {
+                    // Nothing to do
+                } finally {
+                    post.releaseConnection();
                 }
             });
 
@@ -567,13 +546,8 @@ public class PluginViewer extends JPanel implements Plugin {
                 out.write(buffer, 0, bytesRead);
                 read += bytesRead;
                 final int readprogr = read;
-                EventQueue.invokeLater(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        progressBar.setValue(readprogr);
-
-                    }
+                EventQueue.invokeLater(() -> {
+                    progressBar.setValue(readprogr);
                 });
             } catch (IOException e) {
                 Log.error(e);
@@ -650,16 +624,12 @@ public class PluginViewer extends JPanel implements Plugin {
             }
         });
 
-        ui.getInstallButton().addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                deactivatedPanel.remove(ui);
-                _deactivatedPlugins.remove(ui.getPlugin().getName());
-                _prefs.setDeactivatedPlugins(_deactivatedPlugins);
-                deactivatedPanel.repaint();
-                deactivatedPanel.revalidate();
-            }
+        ui.getInstallButton().addActionListener((ActionEvent e) -> {
+            deactivatedPanel.remove(ui);
+            _deactivatedPlugins.remove(ui.getPlugin().getName());
+            _prefs.setDeactivatedPlugins(_deactivatedPlugins);
+            deactivatedPanel.repaint();
+            deactivatedPanel.revalidate();
         });
     }
 

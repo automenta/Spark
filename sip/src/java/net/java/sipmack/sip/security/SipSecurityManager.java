@@ -250,7 +250,7 @@ public class SipSecurityManager {
 
             return retryTran;
         } catch (NullPointerException | SecurityException | CommunicationsException e) {
-            Log.debug("ERRO REG: " + e.toString());
+            if (Log.debugging) Log.debug("ERRO REG: " + e.toString());
             return null;
         }
     }

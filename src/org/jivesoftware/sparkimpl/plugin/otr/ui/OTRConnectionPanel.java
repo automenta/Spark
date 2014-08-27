@@ -42,13 +42,8 @@ public class OTRConnectionPanel {
         _transcriptWindow = _chatRoom.getTranscriptWindow();
         _doc = _transcriptWindow.getStyledDocument();
         _retry = new JButton(OTRResources.getString("otr.retry"));
-        _retry.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                OTRManager.getInstance().startOtrWithUser(_chatRoom.getParticipantJID());
-
-            }
+        _retry.addActionListener((ActionEvent e) -> {
+            OTRManager.getInstance().startOtrWithUser(_chatRoom.getParticipantJID());
         });
 
         _retry.setVisible(false);

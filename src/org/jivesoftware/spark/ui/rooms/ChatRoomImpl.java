@@ -468,81 +468,74 @@ public class ChatRoomImpl extends ChatRoom {
      */
     @Override
     public void processPacket(final Packet packet) {
-        final Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                if (packet instanceof Presence) {
-                    presence = (Presence) packet;
-
-                    final Presence presence = (Presence) packet;
-
-                    ContactList list = SparkManager.getWorkspace().getContactList();
-                    ContactItem contactItem = list.getContactItemByJID(getParticipantJID());
-
-                    String time = DateFormat.getTimeInstance(DateFormat.SHORT).format(new Date());
-
-                    if (presence.getType() == Presence.Type.unavailable && contactItem != null) {
-                        if (!isOnline()) {
-                            getTranscriptWindow().insertNotificationMessage("*** " + Res.getString("message.went.offline", participantNickname, time), ChatManager.NOTIFICATION_COLOR);
-                        }
-                    } else if (presence.getType() == Presence.Type.available) {
-                        if (!isOnline()) {
-                            getTranscriptWindow().insertNotificationMessage("*** " + Res.getString("message.came.online", participantNickname, time), ChatManager.NOTIFICATION_COLOR);
+        final Runnable runnable = () -> {
+            if (packet instanceof Presence) {
+                presence = (Presence) packet;
+                final Presence presence1 = (Presence) packet;
+                ContactList list = SparkManager.getWorkspace().getContactList();
+                ContactItem contactItem = list.getContactItemByJID(getParticipantJID());
+                String time = DateFormat.getTimeInstance(DateFormat.SHORT).format(new Date());
+                if (presence1.getType() == Presence.Type.unavailable && contactItem != null) {
+                    if (!isOnline()) {
+                        getTranscriptWindow().insertNotificationMessage("*** " + Res.getString("message.went.offline", participantNickname, time), ChatManager.NOTIFICATION_COLOR);
+                    }
+                } else if (presence1.getType() == Presence.Type.available) {
+                    if (!isOnline()) {
+                        getTranscriptWindow().insertNotificationMessage("*** " + Res.getString("message.came.online", participantNickname, time), ChatManager.NOTIFICATION_COLOR);
+                    }
+                }
+            } else if (packet instanceof Message) {
+                lastActivity = System.currentTimeMillis();
+                
+                // Do something with the incoming packet here.
+                final Message message = (Message) packet;
+                fireReceivingIncomingMessage(message);
+                if (message.getError() != null) {
+                    if (message.getError().getCode() == 404) {
+                        // Check to see if the user is online to recieve this message.
+                        RosterEntry entry = roster.getEntry(participantJID);
+                        if (!presence.isAvailable() && !offlineSent && entry != null) {
+                            getTranscriptWindow().insertNotificationMessage(Res.getString("message.offline.error"), ChatManager.ERROR_COLOR);
+                            offlineSent = true;
                         }
                     }
-                } else if (packet instanceof Message) {
-                    lastActivity = System.currentTimeMillis();
-
-                    // Do something with the incoming packet here.
-                    final Message message = (Message) packet;
-                    fireReceivingIncomingMessage(message);
-                    if (message.getError() != null) {
-                        if (message.getError().getCode() == 404) {
-                            // Check to see if the user is online to recieve this message.
-                            RosterEntry entry = roster.getEntry(participantJID);
-                            if (!presence.isAvailable() && !offlineSent && entry != null) {
-                                getTranscriptWindow().insertNotificationMessage(Res.getString("message.offline.error"), ChatManager.ERROR_COLOR);
-                                offlineSent = true;
-                            }
-                        }
-                        return;
-                    }
-
-                    // Check to see if the user is online to recieve this message.
-                    RosterEntry entry = roster.getEntry(participantJID);
-                    if (!presence.isAvailable() && !offlineSent && entry != null) {
-                        getTranscriptWindow().insertNotificationMessage(Res.getString("message.offline"), ChatManager.ERROR_COLOR);
-                        offlineSent = true;
-                    }
-
+                    return;
+                }
+                
+                // Check to see if the user is online to recieve this message.
+                RosterEntry entry = roster.getEntry(participantJID);
+                if (!presence.isAvailable() && !offlineSent && entry != null) {
+                    getTranscriptWindow().insertNotificationMessage(Res.getString("message.offline"), ChatManager.ERROR_COLOR);
+                    offlineSent = true;
+                }
+                
+                if (threadID == null) {
+                    threadID = message.getThread();
                     if (threadID == null) {
-                        threadID = message.getThread();
-                        if (threadID == null) {
-                            threadID = StringUtils.randomString(6);
-                        }
+                        threadID = StringUtils.randomString(6);
                     }
-
-                    boolean broadcast = message.getProperty("broadcast") != null;
-
-                    // If this is a group chat message, discard
-                    if (message.getType() == Message.Type.groupchat || broadcast || message.getType() == Message.Type.normal
-                            || message.getType() == Message.Type.headline) {
-                        return;
-                    }
-
-                    // Do not accept Administrative messages.
-                    final String host = SparkManager.getSessionManager().getServerAddress();
-                    if (host.equals(message.getFrom())) {
-                        return;
-                    }
-
-                    // If the message is not from the current agent. Append to chat.
-                    if (message.getBody() != null) {
-                        participantJID = message.getFrom();
-                        insertMessage(message);
-
-                        showTyping(false);
-                    }
+                }
+                
+                boolean broadcast = message.getProperty("broadcast") != null;
+                
+                // If this is a group chat message, discard
+                if (message.getType() == Message.Type.groupchat || broadcast || message.getType() == Message.Type.normal
+                        || message.getType() == Message.Type.headline) {
+                    return;
+                }
+                
+                // Do not accept Administrative messages.
+                final String host = SparkManager.getSessionManager().getServerAddress();
+                if (host.equals(message.getFrom())) {
+                    return;
+                }
+                
+                // If the message is not from the current agent. Append to chat.
+                if (message.getBody() != null) {
+                    participantJID = message.getFrom();
+                    insertMessage(message);
+                    
+                    showTyping(false);
                 }
             }
         };
@@ -726,7 +719,7 @@ public class ChatRoomImpl extends ChatRoom {
         final ChatTranscript chatTranscript = ChatTranscripts.getCurrentChatTranscript(getParticipantJID());
         final String personalNickname = SparkManager.getUserManager().getNickname();
 
-        for (HistoryMessage message : chatTranscript.getMessages()) {
+        chatTranscript.getMessages().stream().forEach((message) -> {
             String nickname = SparkManager.getUserManager().getUserNicknameFromJID(message.getFrom());
             String messageBody = message.getBody();
             if (nickname.equals(message.getFrom())) {
@@ -750,7 +743,7 @@ public class ChatRoomImpl extends ChatRoom {
 
             final Date messageDate = message.getDate();
             getTranscriptWindow().insertHistoryMessage(nickname, messageBody, messageDate);
-        }
+        });
         if (0 < chatTranscript.getMessages().size()) { // Check if we have history mesages
             getTranscriptWindow().insertHorizontalLine();
         }

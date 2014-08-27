@@ -170,14 +170,9 @@ public class ChatTranscriptPlugin implements ChatRoomListener {
     }
 
     public void persistConversations() {
-        for (ChatRoom room : SparkManager.getChatManager().getChatContainer().getChatRooms()) {
-            if (room instanceof ChatRoomImpl) {
-                ChatRoomImpl roomImpl = (ChatRoomImpl) room;
-                if (roomImpl.isActive()) {
-                    persistChatRoom(roomImpl);
-                }
-            }
-        }
+        SparkManager.getChatManager().getChatContainer().getChatRooms().stream().filter((room) -> (room instanceof ChatRoomImpl)).map((room) -> (ChatRoomImpl) room).filter((roomImpl) -> (roomImpl.isActive())).forEach((roomImpl) -> {
+            persistChatRoom(roomImpl);
+        });
     }
 
     public boolean canShutDown() {
@@ -280,11 +275,8 @@ public class ChatTranscriptPlugin implements ChatRoomListener {
         JTextArea textArea = new JTextArea(5, 30);
         JButton btn_close = new JButton(Res.getString("button.close"));
 
-        btn_close.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Frame.setVisible(false);
-            }
+        btn_close.addActionListener((ActionEvent e) -> {
+            Frame.setVisible(false);
         });
 
         textArea.setLineWrap(true);
@@ -308,21 +300,16 @@ public class ChatTranscriptPlugin implements ChatRoomListener {
     /**
      * Sort HistoryMessages by date.
      */
-    final Comparator<HistoryMessage> dateComparator = new Comparator<HistoryMessage>() {
-        @Override
-        public int compare(HistoryMessage messageOne, HistoryMessage messageTwo) {
-
-            long time1 = messageOne.getDate().getTime();
-            long time2 = messageTwo.getDate().getTime();
-
-            if (time1 < time2) {
-                return 1;
-            } else if (time1 > time2) {
-                return -1;
-            }
-            return 0;
-
+    final Comparator<HistoryMessage> dateComparator = (HistoryMessage messageOne, HistoryMessage messageTwo) -> {
+        long time1 = messageOne.getDate().getTime();
+        long time2 = messageTwo.getDate().getTime();
+        
+        if (time1 < time2) {
+            return 1;
+        } else if (time1 > time2) {
+            return -1;
         }
+        return 0;
     };
 
     private class ChatRoomDecorator implements ActionListener, ChatRoomClosingListener {

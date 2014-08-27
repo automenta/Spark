@@ -130,14 +130,11 @@ public class PhoneManager implements ChatRoomListener, ContextMenuListener {
             SwingWorker actionWorker = new SwingWorker() {
                 @Override
                 public Object construct() {
-                    for (Phone phone : phones) {
-                        final Collection<Action> phoneActions = phone.getPhoneActions(chatRoomImpl.getParticipantJID());
-                        if (phoneActions != null) {
-                            for (Action action : phoneActions) {
-                                actions.add(action);
-                            }
-                        }
-                    }
+                    phones.stream().map((phone) -> phone.getPhoneActions(chatRoomImpl.getParticipantJID())).filter((phoneActions) -> (phoneActions != null)).forEach((phoneActions) -> {
+                        phoneActions.stream().forEach((action) -> {
+                            actions.add(action);
+                        });
+                    });
                     return actions;
                 }
 
@@ -171,9 +168,9 @@ public class PhoneManager implements ChatRoomListener, ContextMenuListener {
                             if (actions.size() > 0) {
                                 // Display PopupMenu
                                 final JPopupMenu menu = new JPopupMenu();
-                                for (Action action : actions) {
+                                actions.stream().forEach((action) -> {
                                     menu.add(action);
-                                }
+                                });
 
                                 menu.show(dialButton, e.getX(), e.getY());
                             }
@@ -216,12 +213,11 @@ public class PhoneManager implements ChatRoomListener, ContextMenuListener {
                 SwingWorker worker = new SwingWorker() {
                     @Override
                     public Object construct() {
-                        for (Phone phone : phones) {
-                            final Collection<Action> itemActions = phone.getPhoneActions(contactItem.getJID());
-                            for (Action action : itemActions) {
+                        phones.stream().map((phone) -> phone.getPhoneActions(contactItem.getJID())).forEach((itemActions) -> {
+                            itemActions.stream().forEach((action) -> {
                                 actions.add(action);
-                            }
-                        }
+                            });
+                        });
                         return null;
                     }
 
@@ -232,9 +228,9 @@ public class PhoneManager implements ChatRoomListener, ContextMenuListener {
                             final JMenu dialMenu = new JMenu(Res.getString("title.dial.phone"));
                             dialMenu.setIcon(SparkRes.getImageIcon(SparkRes.DIAL_PHONE_IMAGE_16x16));
 
-                            for (Action action : actions) {
+                            actions.stream().forEach((action) -> {
                                 dialMenu.add(action);
-                            }
+                            });
 
                             int count = popup.getComponentCount();
                             if (count > 2) {

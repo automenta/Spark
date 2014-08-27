@@ -102,12 +102,9 @@ public class SubscriptionDialog {
         rosterBox.setText(Res.getString("label.add.to.roster"));
         groupBox.setEditable(true);
 
-        rosterBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                nicknameField.setEnabled(rosterBox.isSelected());
-                groupBox.setEnabled(rosterBox.isSelected());
-            }
+        rosterBox.addActionListener((ActionEvent actionEvent) -> {
+            nicknameField.setEnabled(rosterBox.isSelected());
+            groupBox.setEnabled(rosterBox.isSelected());
         });
 
         rosterBox.setSelected(true);
@@ -137,12 +134,9 @@ public class SubscriptionDialog {
         mainPanel.add(viewInfoButton, new GridBagConstraints(4, 2, 1, 1, 0.0, 0.0, GridBagConstraints.NORTHEAST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 5));
         mainPanel.add(denyButton, new GridBagConstraints(5, 2, 1, 1, 0.0, 1.0, GridBagConstraints.NORTHEAST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 5));
 
-        // Set Group Box
-        for (ContactGroup group : SparkManager.getWorkspace().getContactList().getContactGroups()) {
-            if (!group.isOfflineGroup() && !"Unfiled".equalsIgnoreCase(group.getGroupName()) && !group.isSharedGroup()) {
-                groupBox.addItem(group.getGroupName());
-            }
-        }
+        SparkManager.getWorkspace().getContactList().getContactGroups().stream().filter((group) -> (!group.isOfflineGroup() && !"Unfiled".equalsIgnoreCase(group.getGroupName()) && !group.isSharedGroup())).forEach((group) -> {
+            groupBox.addItem(group.getGroupName());
+        });
 
         groupBox.setEditable(true);
 
@@ -189,41 +183,31 @@ public class SubscriptionDialog {
         usernameLabelValue.setText(UserManager.unescapeJID(jid));
         nicknameField.setText(username);
 
-        acceptButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (!rosterBox.isSelected()) {
-                    Presence response = new Presence(Presence.Type.subscribed);
-                    response.setTo(jid);
-                    SparkManager.getConnection().sendPacket(response);
-                    dialog.dispose();
-                    return;
-                }
-
-                boolean addEntry = addEntry();
-                if (addEntry) {
-                    Presence response = new Presence(Presence.Type.subscribed);
-                    response.setTo(jid);
-                    SparkManager.getConnection().sendPacket(response);
-                } else {
-                    dialog.dispose();
-                }
+        acceptButton.addActionListener((ActionEvent e) -> {
+            if (!rosterBox.isSelected()) {
+                Presence response = new Presence(Presence.Type.subscribed);
+                response.setTo(jid);
+                SparkManager.getConnection().sendPacket(response);
+                dialog.dispose();
+                return;
+            }
+            
+            boolean addEntry = addEntry();
+            if (addEntry) {
+                Presence response = new Presence(Presence.Type.subscribed);
+                response.setTo(jid);
+                SparkManager.getConnection().sendPacket(response);
+            } else {
+                dialog.dispose();
             }
         });
 
-        denyButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Send subscribed
-                unsubscribeAndClose();
-            }
+        denyButton.addActionListener((ActionEvent e) -> {
+            unsubscribeAndClose();
         });
 
-        viewInfoButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                SparkManager.getVCardManager().viewProfile(jid, mainPanel);
-            }
+        viewInfoButton.addActionListener((ActionEvent e) -> {
+            SparkManager.getVCardManager().viewProfile(jid, mainPanel);
         });
 
         dialog = new JFrame(Res.getString("title.subscription.request")) {
@@ -246,13 +230,8 @@ public class SubscriptionDialog {
         });
 
         KeyStroke key = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
-        ActionListener action = new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                unsubscribeAndClose();
-
-            }
+        ActionListener action = (ActionEvent e) -> {
+            unsubscribeAndClose();
         };
         dialog.getRootPane().registerKeyboardAction(action, key, JComponent.WHEN_FOCUSED);
         dialog.setIconImage(SparkManager.getApplicationImage().getImage());

@@ -95,9 +95,9 @@ public class GuiManager implements GuiCallback, DefaultGuiManager {
 
         this.interlocutors.add(interlocutors);
 
-        for (InterlocutorListener interlocutorListener : interlocutorListeners) {
+        interlocutorListeners.stream().forEach((interlocutorListener) -> {
             interlocutorListener.interlocutorAdded(interlocutors);
-        }
+        });
     }
 
     /**
@@ -135,9 +135,9 @@ public class GuiManager implements GuiCallback, DefaultGuiManager {
     @Override
     public synchronized void remove(InterlocutorUI interlocutorUI) {
         interlocutors.remove(interlocutorUI);
-        for (InterlocutorListener interlocutorListener : interlocutorListeners) {
+        interlocutorListeners.stream().forEach((interlocutorListener) -> {
             interlocutorListener.interlocutorRemoved(interlocutorUI);
-        }
+        });
     }
 
     /**
@@ -185,7 +185,7 @@ public class GuiManager implements GuiCallback, DefaultGuiManager {
     @Override
     public boolean answer() {
         if (interlocutors.size() < 1) {
-            Log.debug("answer", "No interlocutors");
+            if (Log.debugging) Log.debug("answer", "No interlocutors");
             return false;
         }
 
@@ -197,11 +197,11 @@ public class GuiManager implements GuiCallback, DefaultGuiManager {
                 continue;
             }
             found = true;
-            for (UserActionListener ual : actionHandlers) {
+            actionHandlers.stream().forEach((ual) -> {
                 ual.handleAnswerRequest(inter);
-            }
+            });
         }
-        Log.debug("answer", "Answered");
+        if (Log.debugging) Log.debug("answer", "Answered");
         return found;
     }
 
@@ -212,16 +212,16 @@ public class GuiManager implements GuiCallback, DefaultGuiManager {
     @Override
     public void holdAll() {
         if (interlocutors.size() < 1) {
-            Log.debug("hold", "No interlocutors");
+            if (Log.debugging) Log.debug("hold", "No interlocutors");
             return;
         }
 
-        for (InterlocutorUI interlocutor : interlocutors) {
+        interlocutors.stream().forEach((interlocutor) -> {
             boolean mic = interlocutor.onHoldMic(), cam = interlocutor.onHoldCam();
-            for (UserActionListener ual : actionHandlers) {
+            actionHandlers.stream().forEach((ual) -> {
                 ual.handleHold(interlocutor, !mic, cam);
-            }
-        }
+            });
+        });
     }
 
     /**
@@ -233,9 +233,9 @@ public class GuiManager implements GuiCallback, DefaultGuiManager {
     @Override
     public void hold(InterlocutorUI interlocutor) {
         boolean mic = interlocutor.onHoldMic(), cam = interlocutor.onHoldCam();
-        for (UserActionListener ual : actionHandlers) {
+        actionHandlers.stream().forEach((ual) -> {
             ual.handleHold(interlocutor, !mic, cam);
-        }
+        });
     }
 
     /**
@@ -244,14 +244,14 @@ public class GuiManager implements GuiCallback, DefaultGuiManager {
     @Override
     public void muteAll(boolean mic) {
         if (interlocutors.size() < 1) {
-            Log.debug("mute", "No interlocutors");
+            if (Log.debugging) Log.debug("mute", "No interlocutors");
             return;
         }
-        for (InterlocutorUI interlocutor : interlocutors) {
-            for (UserActionListener ual : actionHandlers) {
+        interlocutors.stream().forEach((interlocutor) -> {
+            actionHandlers.stream().forEach((ual) -> {
                 ual.handleMute(interlocutor, mic);
-            }
-        }
+            });
+        });
     }
 
     /**
@@ -262,9 +262,9 @@ public class GuiManager implements GuiCallback, DefaultGuiManager {
      */
     @Override
     public void mute(InterlocutorUI interlocutor, boolean mic) {
-        for (UserActionListener ual : actionHandlers) {
+        actionHandlers.stream().forEach((ual) -> {
             ual.handleMute(interlocutor, mic);
-        }
+        });
     }
 
     /**
@@ -275,14 +275,14 @@ public class GuiManager implements GuiCallback, DefaultGuiManager {
     @Override
     public void sendDTMF(String digit) {
         if (interlocutors.size() < 1) {
-            Log.debug("sendDTMF", "No interlocutors");
+            if (Log.debugging) Log.debug("sendDTMF", "No interlocutors");
             return;
         }
         int selectedRow = 0;
         Interlocutor inter = (Interlocutor) interlocutors.get(selectedRow);
-        for (UserActionListener ual : actionHandlers) {
+        actionHandlers.stream().forEach((ual) -> {
             ual.handleDTMF(inter, digit);
-        }
+        });
     }
 
     /**
@@ -292,9 +292,9 @@ public class GuiManager implements GuiCallback, DefaultGuiManager {
      */
     @Override
     public void dial(String callee) {
-        for (UserActionListener ual : actionHandlers) {
+        actionHandlers.stream().forEach((ual) -> {
             ual.handleDialRequest(callee);
-        }
+        });
     }
 
     /**
@@ -303,7 +303,7 @@ public class GuiManager implements GuiCallback, DefaultGuiManager {
     @Override
     public boolean hangupAll() {
         if (interlocutors.size() < 1) {
-            Log.debug("hangup", "No interlocutors");
+            if (Log.debugging) Log.debug("hangup", "No interlocutors");
             return false;
         }
         Interlocutor inter;
@@ -326,7 +326,7 @@ public class GuiManager implements GuiCallback, DefaultGuiManager {
     public boolean hangup(InterlocutorUI interlocutorUI) {
         boolean result = true;
         for (UserActionListener ual : actionHandlers) {
-            result = ual.handleHangupRequest((Interlocutor) interlocutorUI) ? result ? true : false : false;
+            result = ual.handleHangupRequest((Interlocutor) interlocutorUI) ? result : false;
         }
         return result;
     }

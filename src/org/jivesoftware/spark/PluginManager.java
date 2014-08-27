@@ -187,11 +187,11 @@ public class PluginManager implements MainWindowListener {
                                 String oldfile = StringUtils.getMD5Checksum(jarFile.getAbsolutePath());
                                 String newfile = StringUtils.getMD5Checksum(f.getAbsolutePath());
 
-                                Log.debug(f.getAbsolutePath() + "   " + jarFile.getAbsolutePath());
-                                Log.debug(newfile + " " + oldfile + " equal:" + oldfile.equals(newfile));
+                                if (Log.debugging) Log.debug(f.getAbsolutePath() + "   " + jarFile.getAbsolutePath());
+                                if (Log.debugging) Log.debug(newfile + " " + oldfile + " equal:" + oldfile.equals(newfile));
 
                                 if (!oldfile.equals(newfile)) {
-                                    Log.debug("deleting: " + file.getAbsolutePath() + "," + jarFile.getAbsolutePath());
+                                    if (Log.debugging) Log.debug("deleting: " + file.getAbsolutePath() + "," + jarFile.getAbsolutePath());
                                     uninstall(file);
                                     jarFile.delete();
                                 }
@@ -262,7 +262,7 @@ public class PluginManager implements MainWindowListener {
         try {
             pluginXML = saxReader.read(pluginFile);
             List<? extends Node> dependencies = pluginXML.selectNodes("plugin/depends/plugin");
-            return dependencies != null && dependencies.size() > 0 ? true : false;
+            return dependencies != null && dependencies.size() > 0;
         } catch (DocumentException e) {
             Log.error(e);
             return false;
@@ -353,13 +353,14 @@ public class PluginManager implements MainWindowListener {
                 // set dependencies
                 try {
                     List<? extends Node> dependencies = plugin1.selectNodes("depends/plugin");
-                    for (Node depend1 : dependencies) {
-                        Element depend = (Element) depend1;
+                    dependencies.stream().map((depend1) -> (Element) depend1).map((depend) -> {
                         PluginDependency dependency = new PluginDependency();
                         dependency.setVersion(depend.selectSingleNode("version").getText());
                         dependency.setName(depend.selectSingleNode("name").getText());
+                        return dependency;
+                    }).forEach((dependency) -> {
                         publicPlugin.addDependency(dependency);
-                    }
+                    });
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -389,12 +390,12 @@ public class PluginManager implements MainWindowListener {
                     String homePage = plugin1.selectSingleNode("homePage").getText();
                     publicPlugin.setHomePage(homePage);
                 } catch (Exception e) {
-                    Log.debug("We can ignore these.");
+                    if (Log.debugging) Log.debug("We can ignore these.");
                 }
 
                 try {
                     pluginClass = (Plugin) getParentClassLoader().loadClass(clazz).newInstance();
-                    Log.debug(name + " has been loaded.");
+                    if (Log.debugging) Log.debug(name + " has been loaded.");
                     publicPlugin.setPluginDir(pluginDir);
                     publicPlugins.add(publicPlugin);
 
@@ -432,29 +433,22 @@ public class PluginManager implements MainWindowListener {
             Log.error(e);
         }
         List<? extends Node> plugins = pluginXML.selectNodes("/plugins/plugin");
-        for (final Object plugin1 : plugins) {
-
-            EventQueue.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    String clazz = null;
-                    String name;
-                    try {
-                        Element plugin = (Element) plugin1;
-
-                        name = plugin.selectSingleNode("name").getText();
-                        clazz = plugin.selectSingleNode("class").getText();
-                        Plugin pluginClass = (Plugin) Class.forName(clazz).newInstance();
-                        Log.debug(name + " has been loaded. Internal plugin.");
-
-                        registerPlugin(pluginClass);
-                    } catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
-                        Log.error("Unable to load plugin " + clazz + ".", ex);
-                    }
+        plugins.stream().forEach((plugin1) -> {
+            EventQueue.invokeLater(() -> {
+                String clazz = null;
+                String name;
+                try {
+                    Element plugin = (Element) plugin1;
+                    name = plugin.selectSingleNode("name").getText();
+                    clazz = plugin.selectSingleNode("class").getText();
+                    Plugin pluginClass1 = (Plugin) Class.forName(clazz).newInstance();
+                    if (Log.debugging) Log.debug(name + " has been loaded. Internal plugin.");
+                    registerPlugin(pluginClass1);
+                }catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
+                    Log.error("Unable to load plugin " + clazz + ".", ex);
                 }
             });
-
-        }
+        });
     }
 
     private void updateClasspath() {
@@ -471,11 +465,11 @@ public class PluginManager implements MainWindowListener {
         try {
             PropertyResourceBundle prbPlugin = (PropertyResourceBundle) ResourceBundle.getBundle(resourceName,
                     Locale.getDefault(), classLoader);
-            for (String key : prbPlugin.keySet()) {
+            prbPlugin.keySet().stream().forEach((key) -> {
                 PluginRes.putRes(key, prbPlugin.getString(key), type);
-            }
+            });
         } catch (Exception ex) {
-            Log.debug(resourceName + "is not overwritten in plugin ");
+            if (Log.debugging) Log.debug(resourceName + "is not overwritten in plugin ");
         }
     }
 
@@ -631,22 +625,19 @@ public class PluginManager implements MainWindowListener {
                 }
             }
 
-            EventQueue.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    for (Plugin plugin1 : plugins) {
-                        long start = System.currentTimeMillis();
-                        Log.debug("Trying to initialize " + plugin1);
-                        try {
-                            plugin1.initialize();
-                        } catch (Throwable e) {
-                            Log.error(e);
-                        }
-
-                        long end = System.currentTimeMillis();
-                        Log.debug("Took " + (end - start) + " ms. to load " + plugin1);
+            EventQueue.invokeLater(() -> {
+                plugins.stream().forEach((plugin1) -> {
+                    long start = System.currentTimeMillis();
+                    if (Log.debugging) Log.debug("Trying to initialize " + plugin1);
+                    try {
+                        plugin1.initialize();
+                    } catch (Throwable e) {
+                        Log.error(e);
                     }
-                }
+                    
+                    long end = System.currentTimeMillis();
+                    if (Log.debugging) Log.debug("Took " + (end - start) + " ms. to load " + plugin1);
+                });
             });
         } catch (Exception e) {
             e.printStackTrace();
@@ -656,13 +647,13 @@ public class PluginManager implements MainWindowListener {
 
     @Override
     public void shutdown() {
-        for (Plugin plugin1 : plugins) {
+        plugins.stream().forEach((plugin1) -> {
             try {
                 plugin1.shutdown();
             } catch (Exception e) {
                 Log.warning("Exception on shutdown of plugin.", e);
             }
-        }
+        });
     }
 
     @Override
@@ -694,16 +685,13 @@ public class PluginManager implements MainWindowListener {
      * plugin.xml).
      */
     private void expandNewPlugins() {
-        File[] jars = PLUGINS_DIRECTORY.listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                boolean accept = false;
-                String smallName = name.toLowerCase();
-                if (smallName.endsWith(".jar")) {
-                    accept = true;
-                }
-                return accept;
+        File[] jars = PLUGINS_DIRECTORY.listFiles((File dir, String name) -> {
+            boolean accept = false;
+            String smallName = name.toLowerCase();
+            if (smallName.endsWith(".jar")) {
+                accept = true;
             }
+            return accept;
         });
 
         // Do nothing if no jar or zip files were found
@@ -747,12 +735,7 @@ public class PluginManager implements MainWindowListener {
         // First, expand all plugins that have yet to be expanded.
         expandNewPlugins();
 
-        File[] files = PLUGINS_DIRECTORY.listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return dir.isDirectory();
-            }
-        });
+        File[] files = PLUGINS_DIRECTORY.listFiles((File dir, String name) -> dir.isDirectory());
 
         // Do nothing if no jar or zip files were found
         if (files == null) {
@@ -809,13 +792,9 @@ public class PluginManager implements MainWindowListener {
         pluginClass = loadPublicPlugin(pluginDownload);
 
         try {
-            EventQueue.invokeAndWait(new Runnable() {
-                @Override
-                public void run() {
-
-                    Log.debug("Trying to initialize " + pluginClass);
-                    pluginClass.initialize();
-                }
+            EventQueue.invokeAndWait(() -> {
+                if (Log.debugging) Log.debug("Trying to initialize " + pluginClass);
+                pluginClass.initialize();
             });
         } catch (InterruptedException | InvocationTargetException e) {
             Log.error(e);
@@ -902,11 +881,9 @@ public class PluginManager implements MainWindowListener {
      * @param plugin the plugin to uninstall.
      */
     public void removePublicPlugin(PublicPlugin plugin) {
-        for (PublicPlugin publicPlugin : getPublicPlugins()) {
-            if (plugin.getName().equals(publicPlugin.getName())) {
-                publicPlugins.remove(plugin);
-            }
-        }
+        getPublicPlugins().stream().filter((publicPlugin) -> (plugin.getName().equals(publicPlugin.getName()))).forEach((_item) -> {
+            publicPlugins.remove(plugin);
+        });
     }
 
     /**
@@ -916,10 +893,8 @@ public class PluginManager implements MainWindowListener {
      * @return true if installed.
      */
     public boolean isInstalled(PublicPlugin plugin) {
-        for (PublicPlugin publicPlugin : getPublicPlugins()) {
-            if (plugin.getName().equals(publicPlugin.getName())) {
-                return true;
-            }
+        if (getPublicPlugins().stream().anyMatch((publicPlugin) -> (plugin.getName().equals(publicPlugin.getName())))) {
+            return true;
         }
 
         return false;
@@ -953,7 +928,7 @@ public class PluginManager implements MainWindowListener {
                 }
 
                 if (!ok) {
-                    Log.debug("Unable to load plugin " + plugin.selectSingleNode("name").getText() + " due to invalid operating system. Required OS = " + operatingSystem);
+                    if (Log.debugging) Log.debug("Unable to load plugin " + plugin.selectSingleNode("name").getText() + " due to invalid operating system. Required OS = " + operatingSystem);
                     return false;
                 }
             }

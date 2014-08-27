@@ -93,11 +93,8 @@ public class SoundPreference implements Preference {
     public JComponent getGUI() {
         if (soundPanel == null) {
             try {
-                EventQueue.invokeAndWait(new Runnable() {
-                    @Override
-                    public void run() {
-                        soundPanel = new SoundPanel();
-                    }
+                EventQueue.invokeAndWait(() -> {
+                    soundPanel = new SoundPanel();
                 });
             } catch (InterruptedException | InvocationTargetException e) {
                 e.printStackTrace();
@@ -242,32 +239,20 @@ public class SoundPreference implements Preference {
             add(incomingInvitationField, new GridBagConstraints(0, 7, 1, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 5, 5), 0, 0));
             add(incomingInvitationBrowseButton, new GridBagConstraints(1, 7, 1, 1, 0.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0));
 
-            incomingBrowseButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    pickFile(Res.getString("title.choose.incoming.sound"), incomingMessageSound);
-                }
+            incomingBrowseButton.addActionListener((ActionEvent e) -> {
+                pickFile(Res.getString("title.choose.incoming.sound"), incomingMessageSound);
             });
 
-            outgoingBrowseButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    pickFile(Res.getString("title.choose.outgoing.sound"), outgoingMessageSound);
-                }
+            outgoingBrowseButton.addActionListener((ActionEvent e) -> {
+                pickFile(Res.getString("title.choose.outgoing.sound"), outgoingMessageSound);
             });
 
-            offlineBrowseButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    pickFile(Res.getString("title.choose.offline.sound"), userOfflineField);
-                }
+            offlineBrowseButton.addActionListener((ActionEvent e) -> {
+                pickFile(Res.getString("title.choose.offline.sound"), userOfflineField);
             });
 
-            incomingInvitationBrowseButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    pickFile(Res.getString("title.choose.incoming.sound"), incomingInvitationField);
-                }
+            incomingInvitationBrowseButton.addActionListener((ActionEvent e) -> {
+                pickFile(Res.getString("title.choose.incoming.sound"), incomingInvitationField);
             });
 
         }

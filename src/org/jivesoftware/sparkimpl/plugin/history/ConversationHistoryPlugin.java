@@ -229,8 +229,7 @@ public class ConversationHistoryPlugin implements Plugin {
 
         int limit = historyList.size() > 10 ? 10 : historyList.size();
 
-        for (final String user : historyList.subList(0, limit)) {
-
+        historyList.subList(0, limit).stream().forEach((user) -> {
             ContactItem contactItem = contactList.getContactItemByJID(user);
             Icon icon;
             if (contactItem != null) {
@@ -246,7 +245,7 @@ public class ConversationHistoryPlugin implements Plugin {
                 model.addElement(label);
                 jidMap.put(label, user);
             }
-        }
+        });
 
         window.setSize(200, 200);
         GraphicUtils.centerWindowOnComponent(window, SparkManager.getMainWindow());
@@ -292,9 +291,9 @@ public class ConversationHistoryPlugin implements Plugin {
     public void shutdown() {
         final StringBuilder builder = new StringBuilder();
         builder.append("<conversations>");
-        for (String user : historyList) {
+        historyList.stream().forEach((user) -> {
             builder.append("<user>").append(user).append("</user>");
-        }
+        });
         builder.append("</conversations>");
 
         // Write out to file system.

@@ -216,10 +216,9 @@ public class GoogleSearch {
             Log.error(e1);
         }
 
-        for (GoogleSearchResult result : list) {
-            String url = result.getURL();
+        list.stream().map((result) -> result.getURL()).forEach((url) -> {
             System.out.println(url);
-        }
+        });
 
     }
 

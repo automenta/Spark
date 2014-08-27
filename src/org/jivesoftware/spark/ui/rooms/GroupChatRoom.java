@@ -629,23 +629,17 @@ public class GroupChatRoom extends ChatRoom {
     public void processPacket(final Packet packet) {
         super.processPacket(packet);
         if (packet instanceof Presence) {
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    handlePresencePacket(packet);
-                }
+            SwingUtilities.invokeLater(() -> {
+                handlePresencePacket(packet);
             });
 
         }
         if (packet instanceof Message) {
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    handleMessagePacket(packet);
-
-                    // Set last activity
-                    lastActivity = System.currentTimeMillis();
-                }
+            SwingUtilities.invokeLater(() -> {
+                handleMessagePacket(packet);
+                
+                // Set last activity
+                lastActivity = System.currentTimeMillis();
             });
 
         }
@@ -1125,11 +1119,8 @@ public class GroupChatRoom extends ChatRoom {
     public void setSendAndReceiveTypingNotifications(
             boolean sendAndReceiveTypingNotifications) {
         if (sendAndReceiveTypingNotifications) {
-            typingTimer = new Timer(10000, new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    showDefaultTabIcon();
-                }
+            typingTimer = new Timer(10000, (ActionEvent e) -> {
+                showDefaultTabIcon();
             });
             SparkManager.getMessageEventManager()
                     .addMessageEventNotificationListener(messageManager);
@@ -1179,14 +1170,11 @@ public class GroupChatRoom extends ChatRoom {
 
         @Override
         public void composingNotification(final String from, String packetID) {
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    String bareAddress = StringUtils.parseBareAddress(from);
-
-                    if (bareAddress.equals(getRoomname())) {
-                        showUserIsTyping();
-                    }
+            SwingUtilities.invokeLater(() -> {
+                String bareAddress = StringUtils.parseBareAddress(from);
+                
+                if (bareAddress.equals(getRoomname())) {
+                    showUserIsTyping();
                 }
             });
         }
@@ -1306,13 +1294,9 @@ public class GroupChatRoom extends ChatRoom {
         final String roomJID = chat.getRoom();
         final String roomDesc = tabTitle;
         isActive = false;
-        EventQueue.invokeLater(new Runnable() {
-
-            @Override
-            public void run() {
-                ConferenceUtils.joinConferenceOnSeperateThread(roomDesc, roomJID, password);
-                closeChatRoom();
-            }
+        EventQueue.invokeLater(() -> {
+            ConferenceUtils.joinConferenceOnSeperateThread(roomDesc, roomJID, password);
+            closeChatRoom();
         });
     }
 
@@ -1459,21 +1443,18 @@ public class GroupChatRoom extends ChatRoom {
             }
         });
 
-        register.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    Form form = chat.getRegistrationForm();
-                    ChatFrame chatFrame = SparkManager.getChatManager()
-                            .getChatContainer().getChatFrame();
-
-                    new AnswerFormDialog(chatFrame, chat, form);
-
-                } catch (XMPPException xmpe) {
-                    getTranscriptWindow().insertNotificationMessage(
-                            xmpe.getMessage(), ChatManager.ERROR_COLOR);
-                    scrollToBottom();
-                }
+        register.addActionListener((ActionEvent e) -> {
+            try {
+                Form form = chat.getRegistrationForm();
+                ChatFrame chatFrame = SparkManager.getChatManager()
+                        .getChatContainer().getChatFrame();
+                
+                new AnswerFormDialog(chatFrame, chat, form);
+                
+            } catch (XMPPException xmpe) {
+                getTranscriptWindow().insertNotificationMessage(
+                        xmpe.getMessage(), ChatManager.ERROR_COLOR);
+                scrollToBottom();
             }
         });
 

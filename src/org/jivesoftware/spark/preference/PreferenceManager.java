@@ -121,18 +121,17 @@ public class PreferenceManager {
 
     public Iterator<Preference> getPreferences() {
         final List<Preference> returnList = new ArrayList<>();
-        for (String namespace : map.keySet()) {
+        map.keySet().stream().forEach((namespace) -> {
             returnList.add(map.get(namespace));
-        }
+        });
         return returnList.iterator();
 
     }
 
     private void fireShutdown() {
-        for (String namespace : map.keySet()) {
-            final Preference preference = map.get(namespace);
+        map.keySet().stream().map((namespace) -> map.get(namespace)).forEach((preference) -> {
             preference.shutdown();
-        }
+        });
     }
 
     public JDialog getPreferenceDialog() {

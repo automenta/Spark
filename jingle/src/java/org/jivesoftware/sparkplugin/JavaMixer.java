@@ -70,11 +70,12 @@ public class JavaMixer {
         if (portMixers.isEmpty()) {
             System.err.println("No Mixers Found.");
         }
-        for (Mixer mixer : portMixers) {
-            JavaMixer.MixerNode mixerNode = new JavaMixer.MixerNode(mixer);
+        portMixers.stream().map((mixer) -> new JavaMixer.MixerNode(mixer)).map((mixerNode) -> {
             createMixerChildren(mixerNode);
+            return mixerNode;
+        }).forEach((mixerNode) -> {
             root.add(mixerNode);
-        }
+        });
     }
 
     public JTree getTree() {
@@ -366,11 +367,8 @@ public class JavaMixer {
 
         public BooleanControlButtonModel(BooleanControl control) {
             this.control = control;
-            this.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    setSelected(!isSelected());
-                }
+            this.addActionListener((ActionEvent e) -> {
+                setSelected(!isSelected());
             });
         }
 
@@ -429,19 +427,16 @@ public class JavaMixer {
         jf.setVisible(true);
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        sm.getTree().addTreeSelectionListener(new TreeSelectionListener() {
-            @Override
-            public void valueChanged(TreeSelectionEvent e) {
-                TreePath path = e.getPath();
-                if (path.getLastPathComponent() instanceof JavaMixer.ControlNode) {
-                    JavaMixer.ControlNode controlNode = (JavaMixer.ControlNode) path.getLastPathComponent();
-                    if (!(controlNode.getControl() instanceof CompoundControl)) {
-                        if (jp.getComponentCount() > 1) {
-                            jp.remove(1);
-                        }
-                        jp.add(controlNode.getComponent(), 1);
-                        jp.repaint();
+        sm.getTree().addTreeSelectionListener((TreeSelectionEvent e) -> {
+            TreePath path = e.getPath();
+            if (path.getLastPathComponent() instanceof JavaMixer.ControlNode) {
+                JavaMixer.ControlNode controlNode = (JavaMixer.ControlNode) path.getLastPathComponent();
+                if (!(controlNode.getControl() instanceof CompoundControl)) {
+                    if (jp.getComponentCount() > 1) {
+                        jp.remove(1);
                     }
+                    jp.add(controlNode.getComponent(), 1);
+                    jp.repaint();
                 }
             }
         });

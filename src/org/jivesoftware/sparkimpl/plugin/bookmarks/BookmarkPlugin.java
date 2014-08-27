@@ -154,9 +154,7 @@ public class BookmarkPlugin implements Plugin {
                     Collection<BookmarkedConference> bookmarkedConferences = manager.getBookmarkedConferences();
                     final Collection<BookmarkedURL> bookmarkedLinks = manager.getBookmarkedURLs();
 
-                    for (Object bookmarkedLink : bookmarkedLinks) {
-                        final BookmarkedURL link = (BookmarkedURL) bookmarkedLink;
-
+                    bookmarkedLinks.stream().map((bookmarkedLink) -> (BookmarkedURL) bookmarkedLink).map((link) -> {
                         Action urlAction = new AbstractAction() {
 
                             private static final long serialVersionUID = 4246574779205966917L;
@@ -170,15 +168,15 @@ public class BookmarkPlugin implements Plugin {
                                 }
                             }
                         };
-
                         urlAction.putValue(Action.NAME, link.getName());
+                        return urlAction;
+                    }).map((urlAction) -> {
                         urlAction.putValue(Action.SMALL_ICON, SparkRes.getImageIcon(SparkRes.LINK_16x16));
+                        return urlAction;
+                    }).forEach((urlAction) -> {
                         bookmarkMenu.add(urlAction);
-                    }
-
-                    for (Object bookmarkedConference : bookmarkedConferences) {
-                        final BookmarkedConference conferences = (BookmarkedConference) bookmarkedConference;
-
+                    });
+                    bookmarkedConferences.stream().map((bookmarkedConference) -> (BookmarkedConference) bookmarkedConference).map((conferences) -> {
                         Action conferenceAction = new AbstractAction() {
 
                             private static final long serialVersionUID = 5964584172262968704L;
@@ -196,11 +194,14 @@ public class BookmarkPlugin implements Plugin {
                                 TaskEngine.getInstance().schedule(task, 10);
                             }
                         };
-
                         conferenceAction.putValue(Action.NAME, conferences.getName());
+                        return conferenceAction;
+                    }).map((conferenceAction) -> {
                         conferenceAction.putValue(Action.SMALL_ICON, SparkRes.getImageIcon(SparkRes.CONFERENCE_IMAGE_16x16));
+                        return conferenceAction;
+                    }).forEach((conferenceAction) -> {
                         bookmarkMenu.add(conferenceAction);
-                    }
+                    });
                 }
             }
         };

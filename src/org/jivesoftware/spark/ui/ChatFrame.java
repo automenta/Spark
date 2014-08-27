@@ -59,16 +59,13 @@ public class ChatFrame extends JFrame implements WindowFocusListener {
 
         alwaysOnTopItem = new JCheckBox();
         alwaysOnTopItem.setToolTipText(Res.getString("menuitem.always.on.top"));
-        alwaysOnTopItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                if (alwaysOnTopItem.isSelected()) {
-                    SettingsManager.getLocalPreferences().setChatWindowAlwaysOnTop(true);
-                    chatFrame.setAlwaysOnTop(true);
-                } else {
-                    SettingsManager.getLocalPreferences().setChatWindowAlwaysOnTop(false);
-                    chatFrame.setAlwaysOnTop(false);
-                }
+        alwaysOnTopItem.addActionListener((ActionEvent actionEvent) -> {
+            if (alwaysOnTopItem.isSelected()) {
+                SettingsManager.getLocalPreferences().setChatWindowAlwaysOnTop(true);
+                chatFrame.setAlwaysOnTop(true);
+            } else {
+                SettingsManager.getLocalPreferences().setChatWindowAlwaysOnTop(false);
+                chatFrame.setAlwaysOnTop(false);
             }
         });
 
@@ -236,9 +233,9 @@ public class ChatFrame extends JFrame implements WindowFocusListener {
     }
 
     private void fireWindowOnTopListeners(boolean active) {
-        for (ChatFrameToFrontListener fl : _windowToFrontListeners) {
+        _windowToFrontListeners.stream().forEach((fl) -> {
             fl.updateStatus(active);
-        }
+        });
 
     }
 

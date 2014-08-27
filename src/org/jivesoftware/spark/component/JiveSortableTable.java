@@ -157,10 +157,9 @@ public abstract class JiveSortableTable extends Table {
      */
     @Override
     public void add(List<Object> list) {
-        for (Object aList : list) {
-            Object[] newRow = (Object[]) aList;
+        list.stream().map((aList) -> (Object[]) aList).forEach((newRow) -> {
             tableModel.addRow(newRow);
-        }
+        });
     }
 
     /**

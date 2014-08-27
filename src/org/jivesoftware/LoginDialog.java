@@ -146,57 +146,54 @@ public class LoginDialog {
         }
 
         // Construct Dialog
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                loginDialog = new JFrame(Default.getString(Default.APPLICATION_NAME));
-                loginDialog.setIconImage(SparkManager.getApplicationImage().getImage());
-                LoginPanel loginPanel = new LoginPanel();
-                final JPanel mainPanel = new JPanel();
-                final GridBagLayout mainLayout = new GridBagLayout();
-                mainPanel.setLayout(mainLayout);
-
-                final String showPoweredBy = Default.getString(Default.SHOW_POWERED_BY);
-                if (ModelUtil.hasLength(showPoweredBy) && "true".equals(showPoweredBy)) {
-                    // Handle Powered By for custom clients.
-                    final JLabel poweredBy = new JLabel(SparkRes.getImageIcon(SparkRes.POWERED_BY_IMAGE));
-                    mainPanel.add(poweredBy,
-                            new GridBagConstraints(0, 1, 4, 1,
-                                    1.0, 0.0, GridBagConstraints.NORTHEAST, GridBagConstraints.HORIZONTAL,
-                                    new Insets(0, 0, 2, 0), 0, 0));
-
+        EventQueue.invokeLater(() -> {
+            loginDialog = new JFrame(Default.getString(Default.APPLICATION_NAME));
+            loginDialog.setIconImage(SparkManager.getApplicationImage().getImage());
+            LoginPanel loginPanel = new LoginPanel();
+            final JPanel mainPanel = new JPanel();
+            final GridBagLayout mainLayout = new GridBagLayout();
+            mainPanel.setLayout(mainLayout);
+            
+            final String showPoweredBy = Default.getString(Default.SHOW_POWERED_BY);
+            if (ModelUtil.hasLength(showPoweredBy) && "true".equals(showPoweredBy)) {
+                // Handle Powered By for custom clients.
+                final JLabel poweredBy = new JLabel(SparkRes.getImageIcon(SparkRes.POWERED_BY_IMAGE));
+                mainPanel.add(poweredBy,
+                        new GridBagConstraints(0, 1, 4, 1,
+                                1.0, 0.0, GridBagConstraints.NORTHEAST, GridBagConstraints.HORIZONTAL,
+                                new Insets(0, 0, 2, 0), 0, 0));
+                
+            }
+            
+            loginPanel.setOpaque(false);
+            mainPanel.add(loginPanel,
+                    new GridBagConstraints(0, 2, 2, 1,
+                            1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
+                            new Insets(0, 0, 0, 0), 0, 0));
+            
+            loginDialog.setContentPane(mainPanel);
+            loginDialog.setLocationRelativeTo(parentFrame);
+            
+            loginDialog.setResizable(false);
+            loginDialog.pack();
+            
+            // Center dialog on screen
+            GraphicUtils.centerWindowOnScreen(loginDialog);
+            
+            // Show dialog
+            loginDialog.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    quitLogin();
                 }
-
-                loginPanel.setOpaque(false);
-                mainPanel.add(loginPanel,
-                        new GridBagConstraints(0, 2, 2, 1,
-                                1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH,
-                                new Insets(0, 0, 0, 0), 0, 0));
-
-                loginDialog.setContentPane(mainPanel);
-                loginDialog.setLocationRelativeTo(parentFrame);
-
-                loginDialog.setResizable(false);
-                loginDialog.pack();
-
-                // Center dialog on screen
-                GraphicUtils.centerWindowOnScreen(loginDialog);
-
-                // Show dialog
-                loginDialog.addWindowListener(new WindowAdapter() {
-                    @Override
-                    public void windowClosing(WindowEvent e) {
-                        quitLogin();
-                    }
-                });
-                if (loginPanel.getUsername().trim().length() > 0) {
-                    loginPanel.getPasswordField().requestFocus();
-                }
-
-                if (!localPref.isStartedHidden() || !localPref.isAutoLogin()) {
-                    // Make dialog top most.
-                    loginDialog.setVisible(true);
-                }
+            });
+            if (loginPanel.getUsername().trim().length() > 0) {
+                loginPanel.getPasswordField().requestFocus();
+            }
+            
+            if (!localPref.isStartedHidden() || !localPref.isAutoLogin()) {
+                // Make dialog top most.
+                loginDialog.setVisible(true);
             }
         });
 
@@ -667,34 +664,28 @@ public class LoginDialog {
 
         private JPopupMenu getPopup() {
             JPopupMenu popup = new JPopupMenu();
-            for (final String key : _usernames) {
-
+            _usernames.stream().map((key) -> {
                 JMenuItem menu = new JMenuItem(key);
-
                 final String username = key.split("@")[0];
                 final String host = key.split("@")[1];
-                menu.addActionListener(new ActionListener() {
-
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        usernameField.setText(username);
-                        serverField.setText(host);
-
-                        try {
-                            passwordField.setText(localPref.getPasswordForUser(getBareJid()));
-                            if (passwordField.getPassword().length < 1) {
-                                loginButton.setEnabled(false);
-                            } else {
-                                loginButton.setEnabled(true);
-                            }
-                        } catch (Exception e1) {
+                menu.addActionListener((ActionEvent e) -> {
+                    usernameField.setText(username);
+                    serverField.setText(host);
+                    
+                    try {
+                        passwordField.setText(localPref.getPasswordForUser(getBareJid()));
+                        if (passwordField.getPassword().length < 1) {
+                            loginButton.setEnabled(false);
+                        } else {
+                            loginButton.setEnabled(true);
                         }
-
+                    } catch (Exception e1) {
                     }
                 });
-
+                return menu;
+            }).forEach((menu) -> {
                 popup.add(menu);
-            }
+            });
             return popup;
         }
 
@@ -820,16 +811,12 @@ public class LoginDialog {
                         // Show ChangeLog if we need to.
                         // new ChangeLogDialog().showDialog();
                     } else {
-                        EventQueue.invokeLater(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                savePasswordBox.setEnabled(true);
-                                autoLoginBox.setEnabled(true);
-                                loginAsInvisibleBox.setVisible(true);
-                                enableComponents(true);
-                                setProgressBarVisible(false);
-                            }
+                        EventQueue.invokeLater(() -> {
+                            savePasswordBox.setEnabled(true);
+                            autoLoginBox.setEnabled(true);
+                            loginAsInvisibleBox.setVisible(true);
+                            enableComponents(true);
+                            setProgressBarVisible(false);
                         });
 
                     }
@@ -916,7 +903,7 @@ public class LoginDialog {
                         loginButton.setEnabled(true);
                     }
                 } catch (LoginException le) {
-                    Log.debug(le.getMessage());
+                    if (Log.debugging) Log.debug(le.getMessage());
                     accountNameLabel.setText(Res.getString("title.login.no.account"));
                     //useSSO(false);
                 }
@@ -1007,16 +994,11 @@ public class LoginDialog {
                         if (EventQueue.isDispatchThread()) {
                             connection.connect();
                         } else {
-                            EventQueue.invokeAndWait(new Runnable() {
-
-                                @Override
-                                public void run() {
-                                    try {
-                                        connection.connect();
-                                    } catch (XMPPException e) {
-                                        Log.error("connection error", e);
-                                    }
-
+                            EventQueue.invokeAndWait(() -> {
+                                try {
+                                    connection.connect();
+                                } catch (XMPPException e) {
+                                    Log.error("connection error", e);
                                 }
                             });
                         }
@@ -1065,24 +1047,20 @@ public class LoginDialog {
             if (hasErrors) {
 
                 final String finalerrorMessage = errorMessage;
-                EventQueue.invokeLater(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        progressBar.setVisible(false);
-     							//progressBar.setIndeterminate(false);
-
-                        // Show error dialog
-                        if (loginDialog.isVisible()) {
-                            if (!localPref.isSSOEnabled()) {
-                                JOptionPane.showMessageDialog(loginDialog, finalerrorMessage, Res.getString("title.login.error"),
-                                        JOptionPane.ERROR_MESSAGE);
-                            } else {
-                                JOptionPane.showMessageDialog(loginDialog, Res.getString("title.advanced.connection.sso.unable"), Res.getString("title.login.error"),
-                                        JOptionPane.ERROR_MESSAGE);
-                                //useSSO(false);
-                                //localPref.setSSOEnabled(false);
-                            }
+                EventQueue.invokeLater(() -> {
+                    progressBar.setVisible(false);
+                    //progressBar.setIndeterminate(false);
+                    
+                    // Show error dialog
+                    if (loginDialog.isVisible()) {
+                        if (!localPref.isSSOEnabled()) {
+                            JOptionPane.showMessageDialog(loginDialog, finalerrorMessage, Res.getString("title.login.error"),
+                                    JOptionPane.ERROR_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(loginDialog, Res.getString("title.advanced.connection.sso.unable"), Res.getString("title.login.error"),
+                                    JOptionPane.ERROR_MESSAGE);
+                            //useSSO(false);
+                            //localPref.setSSOEnabled(false);
                         }
                     }
                 });
@@ -1150,65 +1128,62 @@ public class LoginDialog {
     private void startSpark() {
         // Invoke the MainWindow.
         try {
-            EventQueue.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    final MainWindow mainWindow = MainWindow.getInstance();
-
-
-                    /*
-                     if (tray != null) {
-                     // Remove trayIcon
-                     tray.removeTrayIcon(trayIcon);
-                     }
-                     */
-                    // Creates the Spark  Workspace and add to MainWindow
-                    Workspace workspace = Workspace.getInstance();
-
-                    LayoutSettings settings = LayoutSettingsManager.getLayoutSettings();
-                    int x = settings.getMainWindowX();
-                    int y = settings.getMainWindowY();
-                    int width = settings.getMainWindowWidth();
-                    int height = settings.getMainWindowHeight();
-
-                    LocalPreferences pref = SettingsManager.getLocalPreferences();
-                    if (pref.isDockingEnabled()) {
-                        JSplitPane splitPane = mainWindow.getSplitPane();
-                        workspace.getCardPanel().setMinimumSize(null);
-                        splitPane.setLeftComponent(workspace.getCardPanel());
-                        SparkManager.getChatManager().getChatContainer().setMinimumSize(null);
-                        splitPane.setRightComponent(SparkManager.getChatManager().getChatContainer());
-                        int dividerLoc = settings.getSplitPaneDividerLocation();
-                        if (dividerLoc != -1) {
-                            mainWindow.getSplitPane().setDividerLocation(dividerLoc);
-                        } else {
-                            mainWindow.getSplitPane().setDividerLocation(240);
-                        }
-
-                        mainWindow.getContentPane().add(splitPane, BorderLayout.CENTER);
-                    } else {
-                        mainWindow.getContentPane().add(workspace.getCardPanel(), BorderLayout.CENTER);
-                    }
-
-                    if (x == 0 && y == 0) {
-                        // Use Default size
-                        mainWindow.setSize(310, 520);
-
-                        // Center Window on Screen
-                        GraphicUtils.centerWindowOnScreen(mainWindow);
-                    } else {
-                        mainWindow.setBounds(x, y, width, height);
-                    }
-
-                    if (loginDialog.isVisible()) {
-                        mainWindow.setVisible(true);
-                    }
-
-                    loginDialog.setVisible(false);
-
-                    // Build the layout in the workspace
-                    workspace.buildLayout();
+            EventQueue.invokeLater(() -> {
+                final MainWindow mainWindow = MainWindow.getInstance();
+                
+                
+                /*
+                if (tray != null) {
+                // Remove trayIcon
+                tray.removeTrayIcon(trayIcon);
                 }
+                */
+                // Creates the Spark  Workspace and add to MainWindow
+                Workspace workspace = Workspace.getInstance();
+                
+                LayoutSettings settings = LayoutSettingsManager.getLayoutSettings();
+                int x = settings.getMainWindowX();
+                int y = settings.getMainWindowY();
+                int width = settings.getMainWindowWidth();
+                int height = settings.getMainWindowHeight();
+                
+                LocalPreferences pref = SettingsManager.getLocalPreferences();
+                if (pref.isDockingEnabled()) {
+                    JSplitPane splitPane = mainWindow.getSplitPane();
+                    workspace.getCardPanel().setMinimumSize(null);
+                    splitPane.setLeftComponent(workspace.getCardPanel());
+                    SparkManager.getChatManager().getChatContainer().setMinimumSize(null);
+                    splitPane.setRightComponent(SparkManager.getChatManager().getChatContainer());
+                    int dividerLoc = settings.getSplitPaneDividerLocation();
+                    if (dividerLoc != -1) {
+                        mainWindow.getSplitPane().setDividerLocation(dividerLoc);
+                    } else {
+                        mainWindow.getSplitPane().setDividerLocation(240);
+                    }
+                    
+                    mainWindow.getContentPane().add(splitPane, BorderLayout.CENTER);
+                } else {
+                    mainWindow.getContentPane().add(workspace.getCardPanel(), BorderLayout.CENTER);
+                }
+                
+                if (x == 0 && y == 0) {
+                    // Use Default size
+                    mainWindow.setSize(310, 520);
+                    
+                    // Center Window on Screen
+                    GraphicUtils.centerWindowOnScreen(mainWindow);
+                } else {
+                    mainWindow.setBounds(x, y, width, height);
+                }
+                
+                if (loginDialog.isVisible()) {
+                    mainWindow.setVisible(true);
+                }
+                
+                loginDialog.setVisible(false);
+                
+                // Build the layout in the workspace
+                workspace.buildLayout();
             });
         } catch (Exception e) {
             e.printStackTrace();

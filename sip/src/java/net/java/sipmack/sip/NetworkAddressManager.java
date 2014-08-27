@@ -98,10 +98,10 @@ public class NetworkAddressManager {
      */
     public static InetAddress getLocalHost(boolean anyAddressIsAccepted) {
 
-        Log.debug("NETWORK DETECTION");
+        if (Log.debugging) Log.debug("NETWORK DETECTION");
 
         if (cachedLocalhost != null) {
-            Log.debug("SELECTED IP: " + cachedLocalhost);
+            if (Log.debugging) Log.debug("SELECTED IP: " + cachedLocalhost);
             return cachedLocalhost;
         }
 

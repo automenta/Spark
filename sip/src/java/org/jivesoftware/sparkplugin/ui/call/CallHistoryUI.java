@@ -101,10 +101,9 @@ public class CallHistoryUI extends JPanel implements ActionListener, ListSelecti
         Collections.sort(calls, itemComparator);
 
         model = new DefaultListModel<>();
-        for (HistoryCall call : calls) {
-            final CallEntry callEntry = new CallEntry(call);
+        calls.stream().map((call) -> new CallEntry(call)).forEach((callEntry) -> {
             model.addElement(callEntry);
-        }
+        });
 
         tabs = new SparkTabbedPane(JTabbedPane.BOTTOM);
 
@@ -371,19 +370,15 @@ public class CallHistoryUI extends JPanel implements ActionListener, ListSelecti
         }
     }
 
-    final Comparator<HistoryCall> itemComparator = new Comparator<HistoryCall>() {
-        @Override
-        public int compare(HistoryCall contactItemOne, HistoryCall contactItemTwo) {
-            final HistoryCall time1 = contactItemOne;
-            final HistoryCall time2 = contactItemTwo;
-            if (time1.getTime() < time2.getTime()) {
-                return 1;
-            } else if (time1.getTime() > time2.getTime()) {
-                return -1;
-            }
-            return 0;
-
+    final Comparator<HistoryCall> itemComparator = (HistoryCall contactItemOne, HistoryCall contactItemTwo) -> {
+        final HistoryCall time1 = contactItemOne;
+        final HistoryCall time2 = contactItemTwo;
+        if (time1.getTime() < time2.getTime()) {
+            return 1;
+        } else if (time1.getTime() > time2.getTime()) {
+            return -1;
         }
+        return 0;
     };
 
     @Override

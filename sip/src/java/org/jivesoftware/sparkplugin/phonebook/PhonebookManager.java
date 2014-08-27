@@ -161,12 +161,16 @@ public class PhonebookManager implements BookManager {
 
         builder.append("<book>");
 
-        for (PhoneNumber m : phonenumbers) {
+        phonenumbers.stream().map((m) -> {
             builder.append("<entry>");
             builder.append("<name>").append(m.getName()).append("</name>");
+            return m;
+        }).map((m) -> {
             builder.append("<number>").append(m.getNumber()).append("</number>");
+            return m;
+        }).forEach((_item) -> {
             builder.append("</entry>");
-        }
+        });
 
         builder.append("</book>");
 

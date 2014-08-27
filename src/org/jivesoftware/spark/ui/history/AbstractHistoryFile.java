@@ -59,8 +59,7 @@ public abstract class AbstractHistoryFile {
             String occurrence) {
 
         List<HistoryEntry> result = new ArrayList<>();
-        for (HistoryEntry historyEntry : entries) {
-
+        entries.stream().forEach((historyEntry) -> {
             if (!historyEntry.hasRecords()) {
 
                 if (hasOccurrence(historyEntry, occurrence)) {
@@ -72,7 +71,7 @@ public abstract class AbstractHistoryFile {
             } else {
                 result.addAll(search(historyEntry.getEntries(), occurrence));
             }
-        }
+        });
         return result;
     }
 
@@ -81,11 +80,8 @@ public abstract class AbstractHistoryFile {
             return false;
         }
 
-        for (HistoryMessage msg : historyEntry.getMessages()) {
-            String body = msg.getBody();
-            if (body.contains(occurrence)) {
-                return true;
-            }
+        if (historyEntry.getMessages().stream().map((msg) -> msg.getBody()).anyMatch((body) -> (body.contains(occurrence)))) {
+            return true;
         }
         return false;
     }
@@ -96,26 +92,20 @@ public abstract class AbstractHistoryFile {
                 .format(new String[]{occurrence});
         String insentiveCase = "(?i)";
 
-        for (HistoryMessage msg : historyEntry.getMessages()) {
+        historyEntry.getMessages().stream().forEach((msg) -> {
             String body = msg.getBody();
             msg.setBody(body
                     .replaceAll(insentiveCase + occurrence, replacement));
-        }
+        });
     }
 
     protected List<HistoryEntry> toList(Map<Date, HistoryEntry> months) {
         List<HistoryEntry> entries = new ArrayList<>();
-        for (Entry<Date, HistoryEntry> historyEntry : months.entrySet()) {
+        months.entrySet().stream().forEach((historyEntry) -> {
             entries.add(historyEntry.getValue());
-        }
-
-        Collections.sort(entries, new Comparator<HistoryEntry>() {
-
-            @Override
-            public int compare(HistoryEntry o1, HistoryEntry o2) {
-                return o2.getDate().compareTo(o1.getDate());
-            }
         });
+
+        Collections.sort(entries, (HistoryEntry o1, HistoryEntry o2) -> o2.getDate().compareTo(o1.getDate()));
 
         return entries;
     }

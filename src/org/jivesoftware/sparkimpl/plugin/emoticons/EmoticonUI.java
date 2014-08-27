@@ -47,27 +47,20 @@ public class EmoticonUI extends JPanel {
 
             setLayout(new GridLayout(rows, 5));
 
-            // Add Emoticons
-            for (Emoticon emoticon : emoticons) {
-                final String text = emoticon.getEquivalants().get(0);
+            emoticons.stream().map((emoticon) -> emoticon.getEquivalants().get(0)).map((text) -> {
                 String name = manager.getActiveEmoticonSetName();
-
                 final Emoticon smileEmoticon = manager.getEmoticon(name, text);
                 URL smileURL = manager.getEmoticonURL(smileEmoticon);
-
-                // Add Emoticon button
                 ImageIcon icon = new ImageIcon(smileURL);
-
                 RolloverButton emotButton = new RolloverButton();
                 emotButton.setIcon(icon);
-                emotButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        listener.emoticonPicked(text);
-                    }
+                emotButton.addActionListener((ActionEvent e) -> {
+                    listener.emoticonPicked(text);
                 });
+                return emotButton;
+            }).forEach((emotButton) -> {
                 add(emotButton);
-            }
+            });
         }
     }
 

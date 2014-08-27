@@ -630,15 +630,11 @@ public class ReceiveFileTransfer extends JPanel {
         cancelButton.setFont(new Font("Dialog", Font.BOLD, 11));
         cancelButton.setIcon(SparkRes.getImageIcon(SparkRes.SMALL_DELETE));
 
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cancelTransfer();
-                acceptButton.setVisible(false);
-                declineButton.setVisible(false);
-                cancelButton.setVisible(false);
-
-            }
+        cancelButton.addActionListener((ActionEvent e) -> {
+            cancelTransfer();
+            acceptButton.setVisible(false);
+            declineButton.setVisible(false);
+            cancelButton.setVisible(false);
         });
 
         cancelButton.addMouseListener(new MouseAdapter() {

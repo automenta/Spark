@@ -119,47 +119,31 @@ public class ContactDialControl extends JPanel implements InterlocutorListener, 
         voiceMailButton.setToolTipText(PhoneRes.getIString("phone.call"));
         callHistoryButton.setToolTipText(PhoneRes.getIString("phone.viewcallhistory"));
 
-        voiceMailButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                final SoftPhoneManager phoneManager = SoftPhoneManager.getInstance();
-                String voiceMailNumber = phoneManager.getSipAccount().getVoiceMailNumber();
-                if (ModelUtil.hasLength(voiceMailNumber)) {
-                    phoneManager.getDefaultGuiManager().dial(voiceMailNumber);
-                }
+        voiceMailButton.addActionListener((ActionEvent actionEvent) -> {
+            final SoftPhoneManager phoneManager = SoftPhoneManager.getInstance();
+            String voiceMailNumber = phoneManager.getSipAccount().getVoiceMailNumber();
+            if (ModelUtil.hasLength(voiceMailNumber)) {
+                phoneManager.getDefaultGuiManager().dial(voiceMailNumber);
             }
         });
 
-        callButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                placeCall();
+        callButton.addActionListener((ActionEvent e) -> {
+            placeCall();
+        });
+
+        phonebookButton.addActionListener((ActionEvent e) -> {
+            try {
+                EventQueue.invokeLater(() -> {
+                    PhonebookUI book = PhonebookUI.getInstance();
+                    book.invoke();
+                });
+            }catch (Exception ex) {
+                Log.error(ex);
             }
         });
 
-        phonebookButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    EventQueue.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            // open the UI
-                            PhonebookUI book = PhonebookUI.getInstance();
-                            book.invoke();
-                        }
-                    });
-                } catch (Exception ex) {
-                    Log.error(ex);
-                }
-            }
-        });
-
-        callHistoryButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                showCallList();
-            }
+        callHistoryButton.addActionListener((ActionEvent e) -> {
+            showCallList();
         });
 
         setOpaque(false);
@@ -174,12 +158,9 @@ public class ContactDialControl extends JPanel implements InterlocutorListener, 
         // Listen for creation of new Interlocutor
         SoftPhoneManager.getInstance().addInterlocutorListener(this);
 
-        callField.getTextComponent().addCaretListener(new CaretListener() {
-            @Override
-            public void caretUpdate(CaretEvent caretEvent) {
-                callButton.setEnabled(ModelUtil.hasLength(callField.getText()) && callField.isEdited());
-                callField.validateTextField();
-            }
+        callField.getTextComponent().addCaretListener((CaretEvent caretEvent) -> {
+            callButton.setEnabled(ModelUtil.hasLength(callField.getText()) && callField.isEdited());
+            callField.validateTextField();
         });
 
         callField.getTextComponent().addKeyListener(new KeyAdapter() {
@@ -279,19 +260,15 @@ public class ContactDialControl extends JPanel implements InterlocutorListener, 
         callHistory.invoke();
     }
 
-    final Comparator<HistoryCall> itemComparator = new Comparator<HistoryCall>() {
-        @Override
-        public int compare(HistoryCall contactItemOne, HistoryCall contactItemTwo) {
-            final HistoryCall time1 = contactItemOne;
-            final HistoryCall time2 = contactItemTwo;
-            if (time1.getTime() < time2.getTime()) {
-                return 1;
-            } else if (time1.getTime() > time2.getTime()) {
-                return -1;
-            }
-            return 0;
-
+    final Comparator<HistoryCall> itemComparator = (HistoryCall contactItemOne, HistoryCall contactItemTwo) -> {
+        final HistoryCall time1 = contactItemOne;
+        final HistoryCall time2 = contactItemTwo;
+        if (time1.getTime() < time2.getTime()) {
+            return 1;
+        } else if (time1.getTime() > time2.getTime()) {
+            return -1;
         }
+        return 0;
     };
 
     /**

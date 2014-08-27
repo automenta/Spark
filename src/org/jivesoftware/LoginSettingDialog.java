@@ -437,11 +437,8 @@ public class LoginSettingDialog implements PropertyChangeListener {
                     GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
                     new Insets(5, 5, 5, 5), 0, 0));
 
-            useProxyBox.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    enableFields(useProxyBox.isSelected());
-                }
+            useProxyBox.addActionListener((ActionEvent e) -> {
+                enableFields(useProxyBox.isSelected());
             });
 
             // Check localSettings
@@ -825,7 +822,7 @@ public class LoginSettingDialog implements PropertyChangeListener {
                 lc = new LoginContext("com.sun.security.jgss.krb5.initiate");
                 lc.login();
             } catch (LoginException le) {
-                Log.debug(le.getMessage());
+                if (Log.debugging) Log.debug(le.getMessage());
                 return null;
             }
 

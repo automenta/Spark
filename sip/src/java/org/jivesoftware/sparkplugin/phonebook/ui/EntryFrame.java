@@ -45,37 +45,31 @@ public class EntryFrame extends JFrame {
         JButton btnOK = new JButton(PhoneRes.getIString("btn.ok"));
         JButton btnCancel = new JButton(PhoneRes.getIString("btn.cancel"));
 
-        btnCancel.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                EntryFrame.this.dispose();
-            }
+        btnCancel.addActionListener((ActionEvent e) -> {
+            EntryFrame.this.dispose();
         });
 
-        btnOK.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (tfName.getText() != null
-                        && !tfName.getText().trim().isEmpty()
-                        && tfNumber.getText() != null
-                        && !tfNumber.getText().trim().isEmpty()) {
-                    // choose between edit or add
-                    if (typ == TYP_EDIT) {
-                        // if there where problems, don't close the dialog
-                        if (!manager.update(manager.getPhonebookEntry(name, number), tfName.getText(), tfNumber.getText())) {
-                            return;
-                        }
-                    } else if (!manager.add(tfName.getText(), tfNumber.getText())) {
-                        JOptionPane.showMessageDialog(EntryFrame.this, PhoneRes.getIString("book.exists"),
-                                PhoneRes.getIString("book.warning"), JOptionPane.WARNING_MESSAGE);
+        btnOK.addActionListener((ActionEvent e) -> {
+            if (tfName.getText() != null
+                    && !tfName.getText().trim().isEmpty()
+                    && tfNumber.getText() != null
+                    && !tfNumber.getText().trim().isEmpty()) {
+                // choose between edit or add
+                if (typ == TYP_EDIT) {
+                    // if there where problems, don't close the dialog
+                    if (!manager.update(manager.getPhonebookEntry(name, number), tfName.getText(), tfNumber.getText())) {
                         return;
                     }
-                    EntryFrame.this.dispose();
-                    parent.loadEntries();
-                } else {
-                    JOptionPane.showMessageDialog(EntryFrame.this, PhoneRes.getIString("book.fillFields"),
+                } else if (!manager.add(tfName.getText(), tfNumber.getText())) {
+                    JOptionPane.showMessageDialog(EntryFrame.this, PhoneRes.getIString("book.exists"),
                             PhoneRes.getIString("book.warning"), JOptionPane.WARNING_MESSAGE);
+                    return;
                 }
+                EntryFrame.this.dispose();
+                parent.loadEntries();
+            } else {
+                JOptionPane.showMessageDialog(EntryFrame.this, PhoneRes.getIString("book.fillFields"),
+                        PhoneRes.getIString("book.warning"), JOptionPane.WARNING_MESSAGE);
             }
         });
 

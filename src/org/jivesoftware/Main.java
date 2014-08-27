@@ -125,12 +125,7 @@ public class Main {
      */
     private void unpackArchives(File libDir, boolean printStatus) {
         // Get a list of all packed files in the lib directory.
-        File[] packedFiles = libDir.listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return name.endsWith(".pack");
-            }
-        });
+        File[] packedFiles = libDir.listFiles((File dir, String name) -> name.endsWith(".pack"));
 
         if (packedFiles == null) {
             // Do nothing since no .pack files were found

@@ -158,19 +158,19 @@ public class JContactItemField extends JPanel {
         String typedItem = textField.getText();
 
         final List<ContactItem> validItems = new ArrayList<>();
-        for (ContactItem contactItem : items) {
+        items.stream().forEach((contactItem) -> {
             String nickname = contactItem.getDisplayName().toLowerCase();
             if (nickname.startsWith(typedItem.toLowerCase())) {
                 validItems.add(contactItem);
             } else if (typedItem.length() > 2 && nickname.contains(typedItem.toLowerCase())) {
                 validItems.add(contactItem);
             }
-        }
+        });
 
         if (validItems.size() > 0) {
-            for (final ContactItem label : validItems) {
+            validItems.stream().forEach((label) -> {
                 model.addElement(label);
-            }
+            });
         }
 
         if (!validItems.isEmpty() && !popup.isVisible()) {

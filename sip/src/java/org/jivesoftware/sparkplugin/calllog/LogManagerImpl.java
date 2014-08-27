@@ -188,15 +188,25 @@ public class LogManagerImpl implements SoftPhoneListener, LogManager {
 
         builder.append("<calls>");
 
-        for (HistoryCall m : calls) {
+        calls.stream().map((m) -> {
             builder.append("<call>");
             builder.append("<callerName>").append(m.getCallerName()).append("</callerName>");
+            return m;
+        }).map((m) -> {
             builder.append("<number>").append(m.getNumber()).append("</number>");
+            return m;
+        }).map((m) -> {
             builder.append("<groupName>").append(m.getGroupName()).append("</groupName>");
+            return m;
+        }).map((m) -> {
             builder.append("<time>").append(m.getTime()).append("</time>");
+            return m;
+        }).map((m) -> {
             builder.append("<callLength>").append(m.getCallLength()).append("</callLength>");
+            return m;
+        }).forEach((_item) -> {
             builder.append("</call>");
-        }
+        });
 
         builder.append("</calls>");
 

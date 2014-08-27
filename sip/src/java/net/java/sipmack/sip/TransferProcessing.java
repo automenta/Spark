@@ -146,7 +146,6 @@ public class TransferProcessing {
             Log.error("transfer", ee);
         }
 
-        return;
 
     }
 

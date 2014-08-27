@@ -244,52 +244,31 @@ public class ConferenceRoomBrowser extends JPanel implements ActionListener,
                 sorter.setRowFilter(af);
             }
         });
-        joinRoomButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                joinSelectedRoom();
-            }
+        joinRoomButton.addActionListener((ActionEvent actionEvent) -> {
+            joinSelectedRoom();
         });
-        addRoomButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                bookmarkRoom(serviceName);
-            }
+        addRoomButton.addActionListener((ActionEvent actionEvent) -> {
+            bookmarkRoom(serviceName);
         });
 
-        refreshButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                refreshRoomList(serviceName);
-            }
+        refreshButton.addActionListener((ActionEvent actionEvent) -> {
+            refreshRoomList(serviceName);
         });
 
-        joinRoomItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                joinSelectedRoom();
-            }
+        joinRoomItem.addActionListener((ActionEvent actionEvent) -> {
+            joinSelectedRoom();
         });
 
-        addRoomItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                bookmarkRoom(serviceName);
-            }
+        addRoomItem.addActionListener((ActionEvent actionEvent) -> {
+            bookmarkRoom(serviceName);
         });
 
-        refreshItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                refreshRoomList(serviceName);
-            }
+        refreshItem.addActionListener((ActionEvent actionEvent) -> {
+            refreshRoomList(serviceName);
         });
 
-        showHiddenButtons.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                popup.show(showHiddenButtons, 0, showHiddenButtons.getHeight());
-            }
+        showHiddenButtons.addActionListener((ActionEvent actionEvent) -> {
+            popup.show(showHiddenButtons, 0, showHiddenButtons.getHeight());
         });
 
         joinRoomButton.setEnabled(false);
@@ -370,11 +349,10 @@ public class ConferenceRoomBrowser extends JPanel implements ActionListener,
                 try {
                     rooms = getRoomList(serviceName);
                     try {
-                        for (HostedRoom aResult : rooms) {
-                            RoomObject room = getRoomsAndInfo(aResult);
+                        rooms.stream().map((aResult) -> getRoomsAndInfo(aResult)).forEach((room) -> {
                             addRoomToTable(room.getRoomJID(), room.getRoomName(),
                                     room.getNumberOfOccupants());
-                        }
+                        });
                         stopLoadingImg();
                     } catch (Exception e) {
                         Log.error("Unable to retrieve room list and info.", e);
@@ -502,35 +480,32 @@ public class ConferenceRoomBrowser extends JPanel implements ActionListener,
 
     private void addTableListener() {
         roomsTable.getSelectionModel().addListSelectionListener(
-                new ListSelectionListener() {
-                    @Override
-                    public void valueChanged(ListSelectionEvent e) {
-                        if (e.getValueIsAdjusting()) {
-                            return;
-                        }
-
-                        int selectedRow = roomsTable.getSelectedRow();
-                        if (selectedRow != -1) {
-                            joinRoomButton.setEnabled(true);
-                            joinRoomItem.setEnabled(true);
-                            String roomJID = roomsTable.getValueAt(selectedRow,
-                                    2) + "@" + serviceName;
-                            addRoomButton.setEnabled(true);
-                            addRoomItem.setEnabled(true);
-                            if (isBookmarked(roomJID)) {
-                                addBookmarkUI(false);
-                            } else {
-                                addBookmarkUI(true);
-                            }
+                (ListSelectionEvent e) -> {
+                    if (e.getValueIsAdjusting()) {
+                        return;
+                    }
+                    
+                    int selectedRow = roomsTable.getSelectedRow();
+                    if (selectedRow != -1) {
+                        joinRoomButton.setEnabled(true);
+                        joinRoomItem.setEnabled(true);
+                        String roomJID = roomsTable.getValueAt(selectedRow,
+                                2) + "@" + serviceName;
+                        addRoomButton.setEnabled(true);
+                        addRoomItem.setEnabled(true);
+                        if (isBookmarked(roomJID)) {
+                            addBookmarkUI(false);
                         } else {
-                            joinRoomButton.setEnabled(false);
-                            addRoomButton.setEnabled(false);
-                            joinRoomItem.setEnabled(false);
-                            addRoomItem.setEnabled(false);
                             addBookmarkUI(true);
                         }
+                    } else {
+                        joinRoomButton.setEnabled(false);
+                        addRoomButton.setEnabled(false);
+                        joinRoomItem.setEnabled(false);
+                        addRoomItem.setEnabled(false);
+                        addBookmarkUI(true);
                     }
-                });
+        });
     }
 
     /**
@@ -556,8 +531,7 @@ public class ConferenceRoomBrowser extends JPanel implements ActionListener,
                         }
                     } else {
                         try {
-                            for (HostedRoom room : rooms) {
-
+                            rooms.stream().forEach((room) -> {
                                 String roomName = room.getName();
                                 String roomJID = room.getJid();
 
@@ -585,7 +559,7 @@ public class ConferenceRoomBrowser extends JPanel implements ActionListener,
                                     }
                                 }
                                 addRoomToTable(roomJID, roomName, numberOfOccupants);
-                            }
+                            });
                         } catch (Exception e) {
                             Log.error("Error setting up GroupChatTable", e);
                         }
@@ -758,25 +732,20 @@ public class ConferenceRoomBrowser extends JPanel implements ActionListener,
                 final String roomName = roomsTable.getValueAt(selectedRow, 1).toString();
                 popupMenu.add(roomInfoAction);
                 final JCheckBoxMenuItem autoJoin = new JCheckBoxMenuItem(Res.getString("menuitem.join.on.startup"));
-                autoJoin.addActionListener(new ActionListener() {
-
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        String roomJID = roomsTable.getValueAt(selectedRow, 2) + "@" + serviceName;
-                        conferences.removeBookmark(roomJID);
-                        conferences.addBookmark(roomName, roomJID, autoJoin.isSelected());
-                    }
+                autoJoin.addActionListener((ActionEvent e1) -> {
+                    String roomJID = roomsTable.getValueAt(selectedRow, 2) + "@" + serviceName;
+                    conferences.removeBookmark(roomJID);
+                    conferences.addBookmark(roomName, roomJID, autoJoin.isSelected());
                 });
 
                 if (selectedRow != -1) {
 
-                    for (BookmarkedConference bookmark : conferences.getBookmarks()) {
-                        if (roomName.equals(bookmark.getName())) {
-                            autoJoin.setSelected(bookmark.isAutoJoin());
-                            popupMenu.add(autoJoin);
-                        }
-
-                    }
+                    conferences.getBookmarks().stream().filter((bookmark) -> (roomName.equals(bookmark.getName()))).map((bookmark) -> {
+                        autoJoin.setSelected(bookmark.isAutoJoin());
+                        return bookmark;
+                    }).forEach((_item) -> {
+                        popupMenu.add(autoJoin);
+                    });
 
                 }
 
@@ -953,12 +922,8 @@ public class ConferenceRoomBrowser extends JPanel implements ActionListener,
      * @return true if the room is bookmarked.
      */
     private boolean isBookmarked(String roomJID) {
-        for (Object o : conferences.getBookmarks()) {
-            BookmarkedConference bk = (BookmarkedConference) o;
-            String jid = bk.getJid();
-            if (jid != null && roomJID.equals(jid)) {
-                return true;
-            }
+        if (conferences.getBookmarks().stream().map((o) -> (BookmarkedConference) o).map((bk) -> bk.getJid()).anyMatch((jid) -> (jid != null && roomJID.equals(jid)))) {
+            return true;
         }
 
         return false;

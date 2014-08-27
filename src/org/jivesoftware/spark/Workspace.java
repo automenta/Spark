@@ -134,11 +134,9 @@ public class Workspace extends JPanel implements PacketListener {
             @Override
             public void shutdown() {
                 final ChatContainer container = SparkManager.getChatManager().getChatContainer();
-                // Close all Chats.
-                for (ChatRoom chatRoom : container.getChatRooms()) {
-                    // Leave ChatRoom
+                container.getChatRooms().stream().forEach((chatRoom) -> {
                     container.leaveChatRoom(chatRoom);
-                }
+                });
 
                 conferences.shutdown();
                 gatewayPlugin.shutdown();
@@ -226,19 +224,16 @@ public class Workspace extends JPanel implements PacketListener {
         SparkManager.getSessionManager().getConnection().addPacketListener(this, workspaceMessageFilter);
 
         // Make presence available to anonymous requests, if from anonymous user in the system.
-        PacketListener workspacePresenceListener = new PacketListener() {
-            @Override
-            public void processPacket(Packet packet) {
-                Presence presence = (Presence) packet;
-                if (presence.getProperty("anonymous") != null) {
-                    boolean isAvailable = statusBox.getPresence().getMode() == Presence.Mode.available;
-                    Presence reply = new Presence(Presence.Type.available);
-                    if (!isAvailable) {
-                        reply.setType(Presence.Type.unavailable);
-                    }
-                    reply.setTo(presence.getFrom());
-                    SparkManager.getSessionManager().getConnection().sendPacket(reply);
+        PacketListener workspacePresenceListener = (Packet packet) -> {
+            Presence presence = (Presence) packet;
+            if (presence.getProperty("anonymous") != null) {
+                boolean isAvailable = statusBox.getPresence().getMode() == Presence.Mode.available;
+                Presence reply = new Presence(Presence.Type.available);
+                if (!isAvailable) {
+                    reply.setType(Presence.Type.unavailable);
                 }
+                reply.setTo(presence.getFrom());
+                SparkManager.getSessionManager().getConnection().sendPacket(reply);
             }
         };
 
@@ -296,11 +291,8 @@ public class Workspace extends JPanel implements PacketListener {
      */
     @Override
     public void processPacket(final Packet packet) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                handleIncomingPacket(packet);
-            }
+        SwingUtilities.invokeLater(() -> {
+            handleIncomingPacket(packet);
         });
     }
 

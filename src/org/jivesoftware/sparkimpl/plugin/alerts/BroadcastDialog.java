@@ -151,11 +151,8 @@ public class BroadcastDialog extends JPanel {
         add(treePane, new GridBagConstraints(1, 0, 1, 3, 0.5, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(2, 5, 2, 5), 0, 0));
         add(OfflineUsers, new GridBagConstraints(1, 3, 1, 0, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(2, 5, 2, 5), 0, 0));
 
-        OfflineUsers.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                hideOfflineUsers();
-            }
+        OfflineUsers.addActionListener((ActionEvent e) -> {
+            hideOfflineUsers();
         });
 
         normalMessageButton.setSelected(true);
@@ -166,23 +163,18 @@ public class BroadcastDialog extends JPanel {
         // if selected users is 1 or less, 
         //    don't per-select in dialog window (see SPARK-1088)
         if (selectedUsers.size() > 1) {
-            // Iterate through selected users.
-            for (ContactItem item : selectedUsers) {
-                for (CheckNode node : nodes) {
-                    if (node.getAssociatedObject().toString().equals(item.getJID())) {
-                        node.setSelected(true);
-                    }
-                }
-            }
+            selectedUsers.stream().forEach((item) -> {
+                nodes.stream().filter((node) -> (node.getAssociatedObject().toString().equals(item.getJID()))).forEach((node) -> {
+                    node.setSelected(true);
+                });
+            });
         }
     }
 
     public void invokeDialog(ContactGroup group) {
-        for (CheckNode node : groupNodes) {
-            if (node.getUserObject().toString().equals(group.getGroupName())) {
-                node.setSelected(true);
-            }
-        }
+        groupNodes.stream().filter((node) -> (node.getUserObject().toString().equals(group.getGroupName()))).forEach((node) -> {
+            node.setSelected(true);
+        });
 
         invokeDialog();
     }
@@ -223,23 +215,14 @@ public class BroadcastDialog extends JPanel {
         dlg.setLocationRelativeTo(SparkManager.getMainWindow());
 
         // Add listener
-        okButton.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (sendBroadcasts(dlg)) {
-                    dlg.setVisible(false);
-                }
-
+        okButton.addActionListener((ActionEvent e) -> {
+            if (sendBroadcasts(dlg)) {
+                dlg.setVisible(false);
             }
         });
 
-        closeButton.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dlg.setVisible(false);
-            }
+        closeButton.addActionListener((ActionEvent e) -> {
+            dlg.setVisible(false);
         });
 
         dlg.setVisible(true);
@@ -321,12 +304,9 @@ public class BroadcastDialog extends JPanel {
     private boolean sendBroadcasts(JDialog dlg) {
         final Set<String> jids = new HashSet<>();
 
-        for (CheckNode node : nodes) {
-            if (node.isSelected()) {
-                String jid = (String) node.getAssociatedObject();
-                jids.add(jid);
-            }
-        }
+        nodes.stream().filter((node) -> (node.isSelected())).map((node) -> (String) node.getAssociatedObject()).forEach((jid) -> {
+            jids.add(jid);
+        });
 
         if (jids.isEmpty()) {
             JOptionPane.showMessageDialog(dlg, Res.getString("message.broadcast.no.user.selected"), Res.getString("title.error"), JOptionPane.ERROR_MESSAGE);
@@ -339,18 +319,23 @@ public class BroadcastDialog extends JPanel {
             return false;
         }
 
-        for (String jid : jids) {
+        jids.stream().map((jid) -> {
             final Message message = new Message();
             message.setTo(jid);
+            return message;
+        }).map((message) -> {
             message.setBody(text);
-
+            return message;
+        }).map((message) -> {
             if (normalMessageButton.isSelected()) {
                 message.setType(Message.Type.normal);
             } else {
                 message.setType(Message.Type.headline);
             }
+            return message;
+        }).forEach((message) -> {
             SparkManager.getConnection().sendPacket(message);
-        }
+        });
 
         return true;
     }

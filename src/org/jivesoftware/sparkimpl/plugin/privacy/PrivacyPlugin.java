@@ -103,39 +103,29 @@ public class PrivacyPlugin implements Plugin {
 
                             if (activeList.isBlockedItem(item.getJID())) {
                                 blockMenu = new JMenuItem(Res.getString("menuitem.unblock.contact"), SparkRes.getImageIcon(SparkRes.UNBLOCK_CONTACT_16x16));
-                                blockMenu.addActionListener(new ActionListener() { // unblock
-                                    // contact
-
-                                    @Override
-                                    public void actionPerformed(ActionEvent ae) {
-                                        if (item != null) {
-                                            activeList.removeItem(item.getJID()); // Add
-                                            // to
-                                            // block
-                                            // list
-                                            activeList.save();
-                                        }
+                                blockMenu.addActionListener((ActionEvent ae) -> {
+                                    if (item != null) {
+                                        activeList.removeItem(item.getJID()); // Add
+                                        // to
+                                        // block
+                                        // list
+                                        activeList.save();
                                     }
                                 });
                             } else {
                                 blockMenu = new JMenuItem(Res.getString("menuitem.block.contact"), SparkRes.getImageIcon(SparkRes.BLOCK_CONTACT_16x16));
-                                blockMenu.addActionListener(new ActionListener() { // Block
-                                    // contact
-
-                                    @Override
-                                    public void actionPerformed(ActionEvent ae) {
-                                        if (item != null) {
-                                            PrivacyItem pItem = new PrivacyItem(Type.jid.toString(), false, activeList.getNewItemOrder());
-                                            pItem.setFilterMessage(true);
-                                            pItem.setFilterPresence_out(true);
-                                            pItem.setValue(item.getJID());
-
-                                            activeList.addItem(pItem); // Add
-                                            // to
-                                            // block
-                                            // list
-                                            activeList.save();
-                                        }
+                                blockMenu.addActionListener((ActionEvent ae) -> {
+                                    if (item != null) {
+                                        PrivacyItem pItem = new PrivacyItem(Type.jid.toString(), false, activeList.getNewItemOrder());
+                                        pItem.setFilterMessage(true);
+                                        pItem.setFilterPresence_out(true);
+                                        pItem.setValue(item.getJID());
+                                        
+                                        activeList.addItem(pItem); // Add
+                                        // to
+                                        // block
+                                        // list
+                                        activeList.save();
                                     }
                                 });
                             }

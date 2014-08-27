@@ -98,7 +98,7 @@ public class SipCommRouter implements Router {
                 int port = uri.getPort();
                 port = (port == -1) ? 5060 : port;
                 String host = uri.getHost();
-                Log.debug("getNextHops", host);
+                if (Log.debugging) Log.debug("getNextHops", host);
                 String transport = uri.getTransportParam();
                 if (transport == null) {
                     transport = "udp";
@@ -166,7 +166,7 @@ public class SipCommRouter implements Router {
                 int port = uri.getPort();
                 port = (port == -1) ? 5060 : port;
                 String host = uri.getHost();
-                Log.debug("getNextHops", host);
+                if (Log.debugging) Log.debug("getNextHops", host);
                 String transport = uri.getTransportParam();
                 if (transport == null) {
                     transport = "udp";

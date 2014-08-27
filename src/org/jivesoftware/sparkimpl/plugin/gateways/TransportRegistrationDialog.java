@@ -134,11 +134,8 @@ public class TransportRegistrationDialog extends JPanel implements ActionListene
         passwordField.addKeyListener(this);
         registerButton.addActionListener(this);
 
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                dialog.dispose();
-            }
+        cancelButton.addActionListener((ActionEvent actionEvent) -> {
+            dialog.dispose();
         });
     }
 

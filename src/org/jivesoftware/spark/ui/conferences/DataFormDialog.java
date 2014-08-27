@@ -170,13 +170,10 @@ public class DataFormDialog extends JPanel {
 
         JButton button = new JButton();
         ResourceUtils.resButton(button, Res.getString("button.update"));
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dialog.dispose();
-                // Now submit all information
-                updateRoomConfiguration(submitForm, chat);
-            }
+        button.addActionListener((ActionEvent e) -> {
+            dialog.dispose();
+            // Now submit all information
+            updateRoomConfiguration(submitForm, chat);
         });
 
         final JScrollPane pane = new JScrollPane(this);
@@ -193,11 +190,8 @@ public class DataFormDialog extends JPanel {
 
         JButton cancelButton = new JButton();
         ResourceUtils.resButton(cancelButton, Res.getString("button.cancel"));
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                dialog.dispose();
-            }
+        cancelButton.addActionListener((ActionEvent actionEvent) -> {
+            dialog.dispose();
         });
 
         bottomPanel.add(cancelButton);
@@ -212,8 +206,7 @@ public class DataFormDialog extends JPanel {
     }
 
     private void updateRoomConfiguration(Form submitForm, MultiUserChat chat) {
-        for (Object o1 : valueMap.keySet()) {
-            String answer = (String) o1;
+        valueMap.keySet().stream().map((o1) -> (String) o1).forEach((answer) -> {
             Object o = valueMap.get(answer);
             if (o instanceof JCheckBox) {
                 boolean isSelected = ((AbstractButton) o).isSelected();
@@ -246,7 +239,7 @@ public class DataFormDialog extends JPanel {
                     submitForm.setAnswer(answer, list);
                 }
             }
-        }
+        });
 
         try {
             chat.sendConfigurationForm(submitForm);

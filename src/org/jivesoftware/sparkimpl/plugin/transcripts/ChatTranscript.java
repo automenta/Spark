@@ -78,12 +78,9 @@ public class ChatTranscript {
             return messages;
         } else {
             List<HistoryMessage> searchResult = new ArrayList<>();
-            for (HistoryMessage message : messages) {
-                // ignore keywords' case
-                if (message.getBody().toLowerCase().contains(text.toLowerCase())) {
-                    searchResult.add(message);
-                }
-            }
+            messages.stream().filter((message) -> (message.getBody().toLowerCase().contains(text.toLowerCase()))).forEach((message) -> {
+                searchResult.add(message);
+            });
             return searchResult;
         }
     }

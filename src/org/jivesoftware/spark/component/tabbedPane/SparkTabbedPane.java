@@ -101,14 +101,11 @@ public class SparkTabbedPane extends JPanel {
 
         setLayout(new BorderLayout());
         add(pane);
-        ChangeListener changeListener = new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent changeEvent) {
-                JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
-                int index = sourceTabbedPane.getSelectedIndex();
-                if (index >= 0) {
-                    fireTabSelected(getTabAt(index), getTabAt(index).getComponent(), index);
-                }
+        ChangeListener changeListener = (ChangeEvent changeEvent) -> {
+            JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
+            int index = sourceTabbedPane.getSelectedIndex();
+            if (index >= 0) {
+                fireTabSelected(getTabAt(index), getTabAt(index).getComponent(), index);
             }
         };
         pane.addChangeListener(changeListener);
@@ -537,18 +534,13 @@ public class SparkTabbedPane extends JPanel {
 
         };
 
-        final DragGestureListener dgl = new DragGestureListener() {
-
-            @Override
-            public void dragGestureRecognized(DragGestureEvent event) {
-                dragTabIndex = pane.indexAtLocation(event.getDragOrigin().x, event.getDragOrigin().y);
-                try {
-                    event.startDrag(DragSource.DefaultMoveDrop, t, dsl);
-                } catch (InvalidDnDOperationException idoe) {
-                    Log.error(idoe);
-                }
+        final DragGestureListener dgl = (DragGestureEvent event) -> {
+            dragTabIndex = pane.indexAtLocation(event.getDragOrigin().x, event.getDragOrigin().y);
+            try {
+                event.startDrag(DragSource.DefaultMoveDrop, t, dsl);
+            } catch (InvalidDnDOperationException idoe) {
+                Log.error(idoe);
             }
-
         };
 
         final DropTargetListener dtl = new DropTargetListener() {

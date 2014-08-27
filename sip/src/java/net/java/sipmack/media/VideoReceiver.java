@@ -128,7 +128,6 @@ public class VideoReceiver implements ReceiveStreamListener, SessionListener,
 
             } catch (IOException | NoPlayerException e) {
                 System.err.println("NewReceiveStreamEvent exception " + e.getMessage());
-                return;
             }
 
         } else if (evt instanceof StreamMappedEvent) {

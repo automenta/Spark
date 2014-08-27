@@ -59,13 +59,13 @@ public class SparkPrivacyList {
     private void loadItems() {
         List<PrivacyItem> itemList = _myPrivacyList.getItems();
 
-        for (PrivacyItem item : itemList) {
+        itemList.stream().forEach((item) -> {
             if (item.getValue() == null || item.getType() == null) {
                 removeItem(item);
             } else {
                 _privacyItems.add(item);
             }
-        }
+        });
     }
 
     /**
@@ -159,11 +159,9 @@ public class SparkPrivacyList {
      */
     public ArrayList<PrivacyItem> searchPrivacyItems(PrivacyItem.Type type, String value) {
         ArrayList<PrivacyItem> items = new ArrayList<>();
-        for (PrivacyItem privacyItem : getPrivacyItems()) {
-            if (privacyItem.getValue().equalsIgnoreCase(value) && privacyItem.getType() == type) {
-                items.add(privacyItem);
-            }
-        }
+        getPrivacyItems().stream().filter((privacyItem) -> (privacyItem.getValue().equalsIgnoreCase(value) && privacyItem.getType() == type)).forEach((privacyItem) -> {
+            items.add(privacyItem);
+        });
         return items; //error
     }
 
@@ -179,12 +177,12 @@ public class SparkPrivacyList {
 
     public void removeItem(String name) {
         List<PrivacyItem> tempList = new ArrayList<>(_privacyItems);
-        for (PrivacyItem item : tempList) {
-            if (item.getValue().equals(name)) {
-                _privacyItems.remove(item);
-                fireItemRemoved(item);
-            }
-        }
+        tempList.stream().filter((item) -> (item.getValue().equals(name))).map((item) -> {
+            _privacyItems.remove(item);
+            return item;
+        }).forEach((item) -> {
+            fireItemRemoved(item);
+        });
     }
 
     /**
@@ -270,9 +268,9 @@ public class SparkPrivacyList {
      * @param item user was added into blockList
      */
     private void fireItemAdded(PrivacyItem item) {
-        for (SparkPrivacyItemListener listener : _listeners) {
+        _listeners.stream().forEach((listener) -> {
             listener.itemAdded(item, _listName);
-        }
+        });
     }
 
     /**
@@ -280,9 +278,9 @@ public class SparkPrivacyList {
      * @param item user removed from blackList
      */
     private void fireItemRemoved(PrivacyItem item) {
-        for (SparkPrivacyItemListener listener : _listeners) {
+        _listeners.stream().forEach((listener) -> {
             listener.itemRemoved(item, _listName);
-        }
+        });
     }
 
     public void addSparkPrivacyListener(SparkPrivacyItemListener listener) {

@@ -57,9 +57,9 @@ public abstract class BrowserViewer extends JPanel {
      * @param document the document that has been downloaded.
      */
     public void fireBrowserListeners(String document) {
-        for (BrowserListener listener : listeners) {
+        listeners.stream().forEach((listener) -> {
             listener.documentLoaded(document);
-        }
+        });
     }
 
     public void documentLoaded(String document) {

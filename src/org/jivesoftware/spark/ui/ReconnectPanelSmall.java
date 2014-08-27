@@ -98,11 +98,8 @@ public class ReconnectPanelSmall extends ContactGroup implements
                             .getImageIcon(SparkRes.SMALL_CHECK));
                     popupmenu.add(reconnect);
 
-                    reconnect.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            reconnect();
-                        }
+                    reconnect.addActionListener((ActionEvent e1) -> {
+                        reconnect();
                     });
 
                     popupmenu.show(thiscomp, x, y);

@@ -107,18 +107,15 @@ final class JoinConferenceRoomDialog extends JPanel {
         dlg.setContentPane(mainPanel);
         dlg.setLocationRelativeTo(SparkManager.getMainWindow());
 
-        PropertyChangeListener changeListener = new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent e) {
-                String value = (String) pane.getValue();
-                if (Res.getString("cancel").equals(value)) {
-                    pane.setValue(JOptionPane.UNINITIALIZED_VALUE);
-                    dlg.dispose();
-                } else if (Res.getString("join").equals(value)) {
-                    pane.setValue(JOptionPane.UNINITIALIZED_VALUE);
-                    dlg.dispose();
-                    ConferenceUtils.joinConferenceOnSeperateThread(roomName, roomJID, null);
-                }
+        PropertyChangeListener changeListener = (PropertyChangeEvent e) -> {
+            String value = (String) pane.getValue();
+            if (Res.getString("cancel").equals(value)) {
+                pane.setValue(JOptionPane.UNINITIALIZED_VALUE);
+                dlg.dispose();
+            } else if (Res.getString("join").equals(value)) {
+                pane.setValue(JOptionPane.UNINITIALIZED_VALUE);
+                dlg.dispose();
+                ConferenceUtils.joinConferenceOnSeperateThread(roomName, roomJID, null);
             }
         };
 

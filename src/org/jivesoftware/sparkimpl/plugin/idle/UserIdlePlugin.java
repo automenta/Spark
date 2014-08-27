@@ -118,7 +118,7 @@ public class UserIdlePlugin extends TimerTask implements Plugin {
                     if (info.getLocation().getX() > 50000000
                             || info.getLocation().getY() > 50000000) {
                         if (!hasChanged) {
-                            Log.debug("Desktop Locked .. ");
+                            if (Log.debugging) Log.debug("Desktop Locked .. ");
                             hasChanged = true;
                             setIdle();
                             y = info.getLocation().getY();
@@ -127,7 +127,7 @@ public class UserIdlePlugin extends TimerTask implements Plugin {
                     }
                 } else {
                     if (!hasChanged) {
-                        Log.debug("Desktop Locked .. ");
+                        if (Log.debugging) Log.debug("Desktop Locked .. ");
                         hasChanged = true;
                         setIdle();
                         y = -1;
@@ -198,48 +198,38 @@ public class UserIdlePlugin extends TimerTask implements Plugin {
 
         public void initKeyHook() {
 
-            thread = new Thread(new Runnable() {
-
-                @Override
-                public void run() {
-                    final User32 lib = User32.INSTANCE;
-                    HMODULE hMod = Kernel32.INSTANCE.GetModuleHandle(null);
-                    keyboardHook = new LowLevelKeyboardProc() {
-                        @Override
-                        public LRESULT callback(int nCode, WPARAM wParam,
-                                KBDLLHOOKSTRUCT info) {
-                            if (nCode >= 0) {
-                                switch (wParam.intValue()) {
-                                    // case WinUser.WM_KEYUP:
-                                    case WinUser.WM_KEYDOWN:
-                                    // case WinUser.WM_SYSKEYUP:
-                                    case WinUser.WM_SYSKEYDOWN:
-                                        // do active
-                                        userActive();
-                                }
-                            }
-                            return lib.CallNextHookEx(hhk, nCode, wParam,
-                                    info.getPointer());
-                        }
-                    };
-                    hhk = lib.SetWindowsHookEx(WinUser.WH_KEYBOARD_LL,
-                            keyboardHook, hMod, 0);
-
-                    // This bit never returns from GetMessage
-                    int result;
-                    MSG msg = new MSG();
-                    while ((result = lib.GetMessage(msg, null, 0, 0)) != 0) {
-                        if (result == -1) {
-                            System.err.println("error in get message");
-                            break;
-                        } else {
-                            System.err.println("got message");
-                            lib.TranslateMessage(msg);
-                            lib.DispatchMessage(msg);
+            thread = new Thread(() -> {
+                final User32 lib = User32.INSTANCE;
+                HMODULE hMod = Kernel32.INSTANCE.GetModuleHandle(null);
+                keyboardHook = (int nCode, WPARAM wParam, KBDLLHOOKSTRUCT info) -> {
+                    if (nCode >= 0) {
+                        switch (wParam.intValue()) {
+                            // case WinUser.WM_KEYUP:
+                            case WinUser.WM_KEYDOWN:
+                                // case WinUser.WM_SYSKEYUP:
+                            case WinUser.WM_SYSKEYDOWN:
+                                // do active
+                                userActive();
                         }
                     }
-                    lib.UnhookWindowsHookEx(hhk);
+                    return lib.CallNextHookEx(hhk, nCode, wParam,
+                            info.getPointer());
+                };
+                hhk = lib.SetWindowsHookEx(WinUser.WH_KEYBOARD_LL,
+                        keyboardHook, hMod, 0);
+                int result;
+                MSG msg = new MSG();
+                while ((result = lib.GetMessage(msg, null, 0, 0)) != 0) {
+                    if (result == -1) {
+                        System.err.println("error in get message");
+                        break;
+                    } else {
+                        System.err.println("got message");
+                        lib.TranslateMessage(msg);
+                        lib.DispatchMessage(msg);
+                    }
                 }
+                lib.UnhookWindowsHookEx(hhk);
             });
             thread.start();
         }

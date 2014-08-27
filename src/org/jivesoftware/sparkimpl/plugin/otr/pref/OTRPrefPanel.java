@@ -74,12 +74,8 @@ public class OTRPrefPanel extends JPanel {
         _enableOTR.setText(OTRResources.getString("otr.enable"));
         _enableOTR.setSelected(_properties.getIsOTREnabled());
 
-        _enableOTR.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                OtrEnableSwitch();
-            }
+        _enableOTR.addActionListener((ActionEvent e) -> {
+            OtrEnableSwitch();
         });
 
         _closeSessionOff = new JCheckBox();
@@ -95,14 +91,10 @@ public class OTRPrefPanel extends JPanel {
 
         _renewPrivateKey = new JButton();
         _renewPrivateKey.setText(OTRResources.getString("renew.current.key"));
-        _renewPrivateKey.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                SessionID mySession = new SessionID(SparkManager.getConnection().getUser(), "no one", "Scytale");
-                _manager.getKeyManager().generateLocalKeyPair(mySession);
-                _privateKey.setText(getCurrentLocalKey());
-            }
+        _renewPrivateKey.addActionListener((ActionEvent e) -> {
+            SessionID mySession = new SessionID(SparkManager.getConnection().getUser(), "no one", "Scytale");
+            _manager.getKeyManager().generateLocalKeyPair(mySession);
+            _privateKey.setText(getCurrentLocalKey());
         });
 
         _privateKey = new JTextField();
@@ -117,31 +109,27 @@ public class OTRPrefPanel extends JPanel {
 
     private void loadRemoteKeys() {
 
-        for (RosterEntry entry : SparkManager.getConnection().getRoster().getEntries()) {
+        SparkManager.getConnection().getRoster().getEntries().stream().forEach((entry) -> {
             SessionID curSession = new SessionID(SparkManager.getConnection().getUser(), entry.getUser(), "Scytale");
             String remoteKey = _keyManager.getRemoteFingerprint(curSession);
             if (remoteKey != null) {
                 boolean isVerified = _keyManager.isVerified(curSession);
                 _keytable.addEntry(entry.getUser(), remoteKey, isVerified);
             }
-        }
+        });
 
-        _keytable.addTableChangeListener(new TableModelListener() {
-
-            @Override
-            public void tableChanged(TableModelEvent e) {
-                int col = e.getColumn();
-                int row = e.getFirstRow();
-
-                if (col == 2) {
-                    boolean selection = (Boolean) _keytable.getValueAt(row, col);
-                    String JID = (String) _keytable.getValueAt(row, 0);
-                    SessionID curSelectedSession = new SessionID(SparkManager.getConnection().getUser(), JID, "Scytale");
-                    if (!selection) {
-                        _keyManager.verify(curSelectedSession);
-                    } else {
-                        _keyManager.unverify(curSelectedSession);
-                    }
+        _keytable.addTableChangeListener((TableModelEvent e) -> {
+            int col = e.getColumn();
+            int row = e.getFirstRow();
+            
+            if (col == 2) {
+                boolean selection = (Boolean) _keytable.getValueAt(row, col);
+                String JID = (String) _keytable.getValueAt(row, 0);
+                SessionID curSelectedSession = new SessionID(SparkManager.getConnection().getUser(), JID, "Scytale");
+                if (!selection) {
+                    _keyManager.verify(curSelectedSession);
+                } else {
+                    _keyManager.unverify(curSelectedSession);
                 }
             }
         });

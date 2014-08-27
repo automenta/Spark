@@ -74,14 +74,11 @@ public class NotificationPlugin implements Plugin, PacketListener {
 
         // Iterate through all online users and add them to the list.
         ContactList contactList = SparkManager.getWorkspace().getContactList();
-        for (ContactGroup contactGroup : contactList.getContactGroups()) {
-            for (ContactItem item : contactGroup.getContactItems()) {
-                if (item != null && item.getJID() != null && item.getPresence().isAvailable()) {
-                    String bareJID = StringUtils.parseBareAddress(item.getJID());
-                    onlineUsers.add(bareJID);
-                }
-            }
-        }
+        contactList.getContactGroups().stream().forEach((contactGroup) -> {
+            contactGroup.getContactItems().stream().filter((item) -> (item != null && item.getJID() != null && item.getPresence().isAvailable())).map((item) -> StringUtils.parseBareAddress(item.getJID())).forEach((bareJID) -> {
+                onlineUsers.add(bareJID);
+            });
+        });
 
         // Add Presence Listener
         SparkManager.getConnection().addPacketListener(this, new PacketTypeFilter(Presence.class));
@@ -143,27 +140,24 @@ public class NotificationPlugin implements Plugin, PacketListener {
      */
     private void notifyUserOnline(final String jid, final Presence presence) {
         try {
-            EventQueue.invokeAndWait(new Runnable() {
-                @Override
-                public void run() {
-                    SparkToaster toaster = new SparkToaster();
-                    toaster.setDisplayTime(5000);
-                    toaster.setBorder(BorderFactory.createBevelBorder(0));
-                    toaster.setCustomAction(new ChatAction(jid));
-                    NotificationAlertUI alertUI = new NotificationAlertUI(jid, true, presence);
-
-                    toaster.setToasterHeight((int) alertUI.getPreferredSize().getHeight() + 40);
-
-                    int width = (int) alertUI.getPreferredSize().getWidth() + 40;
-                    if (width < 300) {
-                        width = 300;
-                    }
-
-                    toaster.setToasterWidth(width);
-
-                    toaster.showToaster("", alertUI);
-                    toaster.hideTitle();
+            EventQueue.invokeAndWait(() -> {
+                SparkToaster toaster = new SparkToaster();
+                toaster.setDisplayTime(5000);
+                toaster.setBorder(BorderFactory.createBevelBorder(0));
+                toaster.setCustomAction(new ChatAction(jid));
+                NotificationAlertUI alertUI = new NotificationAlertUI(jid, true, presence);
+                
+                toaster.setToasterHeight((int) alertUI.getPreferredSize().getHeight() + 40);
+                
+                int width = (int) alertUI.getPreferredSize().getWidth() + 40;
+                if (width < 300) {
+                    width = 300;
                 }
+                
+                toaster.setToasterWidth(width);
+                
+                toaster.showToaster("", alertUI);
+                toaster.hideTitle();
             });
         } catch (InterruptedException | InvocationTargetException ex) {
             Log.error(ex);
@@ -178,28 +172,25 @@ public class NotificationPlugin implements Plugin, PacketListener {
      */
     private void notifyUserOffline(final String jid, final Presence presence) {
         try {
-            EventQueue.invokeAndWait(new Runnable() {
-                @Override
-                public void run() {
-                    SparkToaster toaster = new SparkToaster();
-                    toaster.setCustomAction(new ChatAction(jid));
-                    toaster.setDisplayTime(5000);
-                    toaster.setBorder(BorderFactory.createBevelBorder(0));
-
-                    NotificationAlertUI alertUI = new NotificationAlertUI(jid, false, presence);
-
-                    toaster.setToasterHeight((int) alertUI.getPreferredSize().getHeight() + 40);
-
-                    int width = (int) alertUI.getPreferredSize().getWidth() + 40;
-                    if (width < 300) {
-                        width = 300;
-                    }
-
-                    toaster.setToasterWidth(width);
-
-                    toaster.showToaster("", alertUI);
-                    toaster.hideTitle();
+            EventQueue.invokeAndWait(() -> {
+                SparkToaster toaster = new SparkToaster();
+                toaster.setCustomAction(new ChatAction(jid));
+                toaster.setDisplayTime(5000);
+                toaster.setBorder(BorderFactory.createBevelBorder(0));
+                
+                NotificationAlertUI alertUI = new NotificationAlertUI(jid, false, presence);
+                
+                toaster.setToasterHeight((int) alertUI.getPreferredSize().getHeight() + 40);
+                
+                int width = (int) alertUI.getPreferredSize().getWidth() + 40;
+                if (width < 300) {
+                    width = 300;
                 }
+                
+                toaster.setToasterWidth(width);
+                
+                toaster.showToaster("", alertUI);
+                toaster.hideTitle();
             });
         } catch (InterruptedException | InvocationTargetException ex) {
             Log.error(ex);

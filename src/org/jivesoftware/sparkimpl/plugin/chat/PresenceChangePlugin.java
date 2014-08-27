@@ -69,11 +69,10 @@ public class PresenceChangePlugin implements Plugin {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                for (ContactItem item : contactList.getSelectedUsers()) {
-                    String bareAddress = StringUtils.parseBareAddress(item
-                            .getJID());
-                    sparkContacts.add(bareAddress);
-                }
+                contactList.getSelectedUsers().stream().map((item) -> StringUtils.parseBareAddress(item
+                        .getJID())).forEach((bareAddress) -> {
+                                sparkContacts.add(bareAddress);
+                });
             }
         };
 
@@ -86,11 +85,10 @@ public class PresenceChangePlugin implements Plugin {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                for (ContactItem item : contactList.getSelectedUsers()) {
-                    String bareAddress = StringUtils.parseBareAddress(item
-                            .getJID());
-                    sparkContacts.remove(bareAddress);
-                }
+                contactList.getSelectedUsers().stream().map((item) -> StringUtils.parseBareAddress(item
+                        .getJID())).forEach((bareAddress) -> {
+                                sparkContacts.remove(bareAddress);
+                });
 
             }
         };
@@ -126,79 +124,70 @@ public class PresenceChangePlugin implements Plugin {
         });
 
         // Check presence changes
-        SparkManager.getConnection().addPacketListener(new PacketListener() {
-            @Override
-            public void processPacket(final Packet packet) {
-                try {
-                    EventQueue.invokeAndWait(new Runnable() {
-                        @Override
-                        public void run() {
-                            Presence presence = (Presence) packet;
-                            if (!presence.isAvailable() || presence.isAway()) {
-                                return;
-                            }
-                            String from = presence.getFrom();
-
-                            ArrayList<String> removelater = new ArrayList<>();
-
-                            for (final String jid : sparkContacts) {
-                                if (jid.equals(StringUtils
-                                        .parseBareAddress(from))) {
+        SparkManager.getConnection().addPacketListener((final Packet packet) -> {
+            try {
+                EventQueue.invokeAndWait(() -> {
+                    Presence presence = (Presence) packet;
+                    if (!presence.isAvailable() || presence.isAway()) {
+                        return;
+                    }
+                    String from = presence.getFrom();
+                    
+                    ArrayList<String> removelater = new ArrayList<>();
+                    
+                    sparkContacts.stream().filter((jid) -> (jid.equals(StringUtils
+                            .parseBareAddress(from)))).map((jid) -> {
                                     removelater.add(jid);
-                                    // sparkContacts.remove(jid);
-
-                                    String nickname = SparkManager
-                                            .getUserManager()
-                                            .getUserNicknameFromJID(jid);
-                                    String time = SparkManager.DATE_SECOND_FORMATTER
-                                            .format(new Date());
-                                    String infoText = Res
-                                            .getString(
-                                                    "message.user.now.available.to.chat",
-                                                    nickname, time);
-
-                                    if (localPref.getShowToasterPopup()) {
-                                        SparkToaster toaster = new SparkToaster();
-                                        toaster.setDisplayTime(5000);
-                                        toaster.setBorder(BorderFactory
-                                                .createBevelBorder(0));
-
-                                        toaster.setToasterHeight(150);
-                                        toaster.setToasterWidth(200);
-
-                                        toaster.setTitle(nickname);
-                                        toaster.showToaster(null, infoText);
-
-                                        toaster.setCustomAction(new AbstractAction() {
-                                            private static final long serialVersionUID = 4827542713848133369L;
-
-                                            @Override
-                                            public void actionPerformed(
-                                                    ActionEvent e) {
-                                                SparkManager.getChatManager()
-                                                        .getChatRoom(jid);
-                                            }
-                                        });
-                                    }
-
-                                    ChatRoom room = SparkManager.getChatManager().getChatRoom(jid);
-
-                                    if (localPref.getWindowTakesFocus()) {
-                                        SparkManager.getChatManager().activateChat(jid, nickname);
-                                    }
-
-                                    room.getTranscriptWindow().insertNotificationMessage(infoText, ChatManager.NOTIFICATION_COLOR);
-
+                        return jid;
+                    }).forEach((jid) -> {
+                        String nickname = SparkManager
+                                .getUserManager()
+                                .getUserNicknameFromJID(jid);
+                        String time = SparkManager.DATE_SECOND_FORMATTER
+                                .format(new Date());
+                        String infoText = Res
+                                .getString(
+                                        "message.user.now.available.to.chat",
+                                        nickname, time);
+                        
+                        if (localPref.getShowToasterPopup()) {
+                            SparkToaster toaster = new SparkToaster();
+                            toaster.setDisplayTime(5000);
+                            toaster.setBorder(BorderFactory
+                                    .createBevelBorder(0));
+                            
+                            toaster.setToasterHeight(150);
+                            toaster.setToasterWidth(200);
+                            
+                            toaster.setTitle(nickname);
+                            toaster.showToaster(null, infoText);
+                            
+                            toaster.setCustomAction(new AbstractAction() {
+                                private static final long serialVersionUID = 4827542713848133369L;
+                                
+                                @Override
+                                public void actionPerformed(
+                                        ActionEvent e) {
+                                    SparkManager.getChatManager()
+                                            .getChatRoom(jid);
                                 }
-                            }
-                            for (String s : removelater) {
-                                sparkContacts.remove(s);
-                            }
+                            });
                         }
+                        
+                        ChatRoom room = SparkManager.getChatManager().getChatRoom(jid);
+                        
+                        if (localPref.getWindowTakesFocus()) {
+                            SparkManager.getChatManager().activateChat(jid, nickname);
+                        }
+                        
+                        room.getTranscriptWindow().insertNotificationMessage(infoText, ChatManager.NOTIFICATION_COLOR);
                     });
-                } catch (InterruptedException | InvocationTargetException ex) {
-                    ex.printStackTrace();
-                }
+                    removelater.stream().forEach((s) -> {
+                        sparkContacts.remove(s);
+                    });
+                });
+            }catch (InterruptedException | InvocationTargetException ex) {
+                ex.printStackTrace();
             }
         }, new PacketTypeFilter(Presence.class));
     }

@@ -133,25 +133,22 @@ public class FileTransferSettingsPlugin implements Plugin {
 
         SparkTransferManager transferManager = SparkManager.getTransferManager();
 
-        transferManager.addTransferListener(new FileTransferListener() {
-            @Override
-            public boolean handleTransfer(FileTransferRequest request) {
-                FileTransferSettings settings = (FileTransferSettings) prefManager.getPreferenceData("transferSettings");
-
-                if (requestContainsBannedFile(request, settings)) {
-                    request.reject();
-
-                    String responseMessage = settings.getCannedRejectionMessage();
-                    if (responseMessage != null && responseMessage.length() > 0) {
-                        Message message = new Message();
-                        message.setTo(request.getRequestor());
-                        message.setBody(responseMessage);
-                        SparkManager.getConnection().sendPacket(message);
-                    }
-                    return true;
-                } else {
-                    return false;
+        transferManager.addTransferListener((FileTransferRequest request) -> {
+            FileTransferSettings settings = (FileTransferSettings) prefManager.getPreferenceData("transferSettings");
+            
+            if (requestContainsBannedFile(request, settings)) {
+                request.reject();
+                
+                String responseMessage = settings.getCannedRejectionMessage();
+                if (responseMessage != null && responseMessage.length() > 0) {
+                    Message message = new Message();
+                    message.setTo(request.getRequestor());
+                    message.setBody(responseMessage);
+                    SparkManager.getConnection().sendPacket(message);
                 }
+                return true;
+            } else {
+                return false;
             }
         });
     }

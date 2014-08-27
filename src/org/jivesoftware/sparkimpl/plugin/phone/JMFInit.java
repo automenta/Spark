@@ -194,11 +194,11 @@ public class JMFInit extends Frame implements Runnable {
                     rendList.insertElementAt(dar, 0);
                     PlugInManager.setPlugInList(rendList, plType);
                     PlugInManager.commit();
-                    // Log.debug("registered");
+                    // if (Log.debugging) Log.debug("registered");
                 }
                 rend.close();
             } catch (IOException | ResourceUnavailableException t) {
-                // Log.debug("Error " + t);
+                // if (Log.debugging) Log.debug("Error " + t);
             }
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException tt) {
             // Nothing to do
@@ -248,7 +248,7 @@ public class JMFInit extends Frame implements Runnable {
     }
 
     private void message(String message) {
-        Log.debug(message);
+        if (Log.debugging) Log.debug(message);
     }
 
 //    private void createGUI() {

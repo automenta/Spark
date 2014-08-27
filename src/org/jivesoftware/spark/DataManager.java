@@ -70,8 +70,8 @@ public class DataManager {
     }
 
     public void setMetadataForRoom(ChatRoom room, Map<?, ?> map) {
-        for (MetadataListener listener : metadataListeners) {
+        metadataListeners.stream().forEach((listener) -> {
             listener.metadataAssociatedWithRoom(room, map);
-        }
+        });
     }
 }

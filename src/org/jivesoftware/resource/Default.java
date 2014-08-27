@@ -141,7 +141,7 @@ public class Default {
             cache.put(imageName, icon);
             return icon;
         } catch (Exception ex) {
-            Log.debug(imageName + " not found.");
+            if (Log.debugging) Log.debug(imageName + " not found.");
         }
         return null;
     }
@@ -156,7 +156,7 @@ public class Default {
         try {
             return getURL(propertyName);
         } catch (Exception ex) {
-            Log.debug(propertyName + " not found.");
+            if (Log.debugging) Log.debug(propertyName + " not found.");
         }
         return null;
     }

@@ -70,11 +70,8 @@ public class FileTransferPreferencePanel extends JPanel {
         ResourceUtils.resButton(button, Res.getString("button.browse"));
         add(button, new GridBagConstraints(2, 1, 1, 1, 0.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0));
 
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                pickFile(Res.getString("title.choose.directory"), downloadDirectoryField);
-            }
+        button.addActionListener((ActionEvent e) -> {
+            pickFile(Res.getString("title.choose.directory"), downloadDirectoryField);
         });
 
     }

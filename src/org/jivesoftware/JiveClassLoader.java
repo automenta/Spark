@@ -46,18 +46,15 @@ public class JiveClassLoader extends URLClassLoader {
     public JiveClassLoader(ClassLoader parent, File libDir) throws MalformedURLException {
         super(new URL[]{libDir.toURI().toURL()}, parent);
 
-        File[] jars = libDir.listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                boolean accept = false;
-                String smallName = name.toLowerCase();
-                if (smallName.endsWith(".jar")) {
-                    accept = true;
-                } else if (smallName.endsWith(".zip")) {
-                    accept = true;
-                }
-                return accept;
+        File[] jars = libDir.listFiles((File dir, String name) -> {
+            boolean accept = false;
+            String smallName = name.toLowerCase();
+            if (smallName.endsWith(".jar")) {
+                accept = true;
+            } else if (smallName.endsWith(".zip")) {
+                accept = true;
             }
+            return accept;
         });
 
         // Do nothing if no jar or zip files were found

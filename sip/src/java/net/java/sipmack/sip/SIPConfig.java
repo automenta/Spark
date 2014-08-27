@@ -421,7 +421,7 @@ public class SIPConfig {
         System.setProperty("gov.nist.javax.sip.TRACE_LEVEL", "0");
         System.setProperty("gov.nist.javax.sip.DELIVER_UNSOLICITED_NOTIFY", "true");
         System.setProperty("gov.nist.javax.sip.DELIVER_TERMINATED_EVENT_FOR_ACK", "true");
-        Log.debug("SIP STACK CONFIGURED");
+        if (Log.debugging) Log.debug("SIP STACK CONFIGURED");
 
     }
 

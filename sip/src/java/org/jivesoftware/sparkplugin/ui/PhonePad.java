@@ -131,16 +131,15 @@ public class PhonePad extends BackgroundPanel {
     public void numberEntered(char ch) {
         String number = String.valueOf(ch);
 
-        for (DialButton button : list) {
+        list.stream().forEach((button) -> {
             String name = button.getNumber();
             if (name.equals(number)) {
-                // TH: trying to improve responsiveness of the DTMF playback.
                 button.setBlock(true);
                 dialSoundManager.enqueue(name);
                 button.doClick();
                 button.setBlock(false);
             }
-        }
+        });
     }
 
     /**

@@ -176,55 +176,45 @@ public class GroupChatParticipantList extends JPanel {
 
         chat = groupChatRoom.getMultiUserChat();
 
-        chat.addInvitationRejectionListener(new InvitationRejectionListener() {
-            @Override
-            public void invitationDeclined(String jid, String message) {
-                String nickname = userManager.getUserNicknameFromJID(jid);
-
-                userHasLeft(nickname);
-
-                chatRoom.getTranscriptWindow().insertNotificationMessage(
-                        nickname + " has rejected the invitation.",
-                        ChatManager.NOTIFICATION_COLOR);
-            }
+        chat.addInvitationRejectionListener((String jid, String message) -> {
+            String nickname = userManager.getUserNicknameFromJID(jid);
+            
+            userHasLeft(nickname);
+            
+            chatRoom.getTranscriptWindow().insertNotificationMessage(
+                    nickname + " has rejected the invitation.",
+                    ChatManager.NOTIFICATION_COLOR);
         });
 
-        listener = new PacketListener() {
-            @Override
-            public void processPacket(final Packet packet) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        Presence p = (Presence) packet;
-                        if (p.getError() != null) {
-                            if (p.getError()
-                                    .getCondition()
-                                    .equals(XMPPError.Condition.conflict
-                                            .toString())) {
-                                return;
-                            }
-                        }
-                        final String userid = p.getFrom();
-
-                        String displayName = StringUtils.parseResource(userid);
-                        userMap.put(displayName, userid);
-
-                        if (p.getType() == Presence.Type.available) {
-                            String jid = PresenceManager.getJidFromMUCPresence(p);
-                            //if current user is participant and not owner, then do not display the settings button
-                            //we have to do it here otherwise ownership information retrieval won't be available
-                            if (jid != null && jid.equals(SparkManager.getSessionManager().getBareAddress())) {
-                                groupChatRoom.notifySettingsAccessRight();
-                            }
-                            addParticipant(userid, p, jid);
-                            agentInfoPanel.setVisible(true);
-                        } else {
-                            removeUser(displayName);
-                        }
+        listener = (final Packet packet) -> {
+            SwingUtilities.invokeLater(() -> {
+                Presence p = (Presence) packet;
+                if (p.getError() != null) {
+                    if (p.getError()
+                            .getCondition()
+                            .equals(XMPPError.Condition.conflict
+                                    .toString())) {
+                        return;
                     }
-                });
-
-            }
+                }
+                final String userid = p.getFrom();
+                
+                String displayName = StringUtils.parseResource(userid);
+                userMap.put(displayName, userid);
+                
+                if (p.getType() == Presence.Type.available) {
+                    String jid = PresenceManager.getJidFromMUCPresence(p);
+                    //if current user is participant and not owner, then do not display the settings button
+                    //we have to do it here otherwise ownership information retrieval won't be available
+                    if (jid != null && jid.equals(SparkManager.getSessionManager().getBareAddress())) {
+                        groupChatRoom.notifySettingsAccessRight();
+                    }
+                    addParticipant(userid, p, jid);
+                    agentInfoPanel.setVisible(true);
+                } else {
+                    removeUser(displayName);
+                }
+            });
         };
 
         chat.addParticipantListener(listener);
@@ -234,7 +224,7 @@ public class GroupChatParticipantList extends JPanel {
         try {
             roomInformation = disco.discoverInfo(chat.getRoom());
         } catch (XMPPException e) {
-            Log.debug("Unable to retrieve room information for "
+            if (Log.debugging) Log.debug("Unable to retrieve room information for "
                     + chat.getRoom());
         }
     }
@@ -338,12 +328,9 @@ public class GroupChatParticipantList extends JPanel {
     }
 
     protected void addParticipant(final String participantJID, Presence presence, String userJID) {
-        // Remove reference to invitees
-
-        for (String displayName : invitees.keySet()) {
+        invitees.keySet().stream().forEach((displayName) -> {
             String jid = SparkManager.getUserManager().getJIDFromDisplayName(
                     displayName);
-
             Occupant occ = chat.getOccupant(participantJID);
             if (occ != null) {
                 String actualJID = occ.getJid();
@@ -351,7 +338,7 @@ public class GroupChatParticipantList extends JPanel {
                     removeUser(displayName);
                 }
             }
-        }
+        });
 
         String nickname = StringUtils.parseResource(participantJID);
 
@@ -512,7 +499,7 @@ public class GroupChatParticipantList extends JPanel {
         try {
             chatRoom = chatManager.getChatContainer().getChatRoom(groupJID);
         } catch (ChatRoomNotFoundException e) {
-            Log.debug("Could not find chat room - " + groupJID);
+            if (Log.debugging) Log.debug("Could not find chat room - " + groupJID);
 
             // Create new room
             chatRoom = new ChatRoomImpl(groupJID, nicknameOfUser, roomTitle);

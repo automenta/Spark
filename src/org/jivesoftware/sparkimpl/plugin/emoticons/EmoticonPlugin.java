@@ -90,37 +90,30 @@ public class EmoticonPlugin implements Plugin, ChatRoomListener {
                     final JPopupMenu popup = new JPopupMenu();
                     EmoticonUI emoticonUI = new EmoticonUI();
                     emoticonUI
-                            .setEmoticonPickListener(new EmoticonPickListener() {
-                        @Override
-                                public void emoticonPicked(String emoticon) {
-                                    try {
-                                        popup.setVisible(false);
-                                        final ChatInputEditor editor = room.getChatInputEditor();
-                                        String currentText = editor.getText();
-                                        if (currentText.length() == 0 || currentText.endsWith(" ")) {
-                                            room.getChatInputEditor().insertText(emoticon + " ");
-                                        } else {
-                                            room.getChatInputEditor()
-                                            .insertText(" " + emoticon + " ");
-                                        }
-                                        room.getChatInputEditor().requestFocus();
-                                    } catch (BadLocationException e1) {
-                                        Log.error(e1);
+                            .setEmoticonPickListener((String emoticon) -> {
+                                try {
+                                    popup.setVisible(false);
+                                    final ChatInputEditor editor = room.getChatInputEditor();
+                                    String currentText = editor.getText();
+                                    if (currentText.length() == 0 || currentText.endsWith(" ")) {
+                                        room.getChatInputEditor().insertText(emoticon + " ");
+                                    } else {
+                                        room.getChatInputEditor()
+                                                .insertText(" " + emoticon + " ");
                                     }
-
+                                    room.getChatInputEditor().requestFocus();
+                                } catch (BadLocationException e1) {
+                                    Log.error(e1);
                                 }
-                            });
+                    });
 
                     popup.add(emoticonUI);
                     popup.show(emoticonPicker, e.getX(), e.getY());
                 }
             });
 
-            room.addClosingListener(new ChatRoomClosingListener() {
-                @Override
-                public void closing() {
-                    room.removeEditorComponent(emoticonPicker);
-                }
+            room.addClosingListener(() -> {
+                room.removeEditorComponent(emoticonPicker);
             });
         }
     }

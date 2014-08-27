@@ -181,7 +181,7 @@ public class FrequentContactsPlugin implements Plugin {
 
         final ContactList contactList = SparkManager.getWorkspace().getContactList();
 
-        for (final String user : getFavoriteContacts()) {
+        getFavoriteContacts().stream().forEach((user) -> {
             ContactItem contactItem = contactList.getContactItemByJID(user);
             Icon icon;
             if (contactItem != null) {
@@ -197,7 +197,7 @@ public class FrequentContactsPlugin implements Plugin {
                 model.addElement(label);
                 jidMap.put(label, user);
             }
-        }
+        });
 
         window.setSize(200, 200);
         GraphicUtils.centerWindowOnComponent(window, SparkManager.getMainWindow());
@@ -220,12 +220,7 @@ public class FrequentContactsPlugin implements Plugin {
             return Collections.emptyList();
         }
 
-        final File[] transcriptFiles = transcriptDir.listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return !name.contains("_current") && !name.equals("conversations.xml");
-            }
-        });
+        final File[] transcriptFiles = transcriptDir.listFiles((File dir, String name) -> !name.contains("_current") && !name.equals("conversations.xml"));
         final List<File> files = Arrays.asList(transcriptFiles);
 
         Collections.sort(files, sizeComparator);
@@ -302,26 +297,23 @@ public class FrequentContactsPlugin implements Plugin {
     /**
      * Sorts files by largest to smallest.
      */
-    final Comparator<File> sizeComparator = new Comparator<File>() {
-        @Override
-        public int compare(File item1, File item2) {
-            long int1 = item1.length();
-            long int2 = item2.length();
-
-            if (int1 == int2) {
-                return 0;
-            }
-
-            if (int1 > int2) {
-                return -1;
-            }
-
-            if (int1 < int2) {
-                return 1;
-            }
-
+    final Comparator<File> sizeComparator = (File item1, File item2) -> {
+        long int1 = item1.length();
+        long int2 = item2.length();
+        
+        if (int1 == int2) {
             return 0;
         }
+        
+        if (int1 > int2) {
+            return -1;
+        }
+        
+        if (int1 < int2) {
+            return 1;
+        }
+        
+        return 0;
     };
 
 }

@@ -57,12 +57,9 @@ public class SipPreference implements Preference {
 
     public SipPreference() {
         try {
-            EventQueue.invokeAndWait(new Runnable() {
-                @Override
-                public void run() {
-                    loadFromFile();
-                    panel = new SipPreferencePanel();
-                }
+            EventQueue.invokeAndWait(() -> {
+                loadFromFile();
+                panel = new SipPreferencePanel();
             });
         } catch (InterruptedException | InvocationTargetException e) {
             e.printStackTrace();

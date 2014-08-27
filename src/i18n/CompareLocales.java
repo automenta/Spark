@@ -32,18 +32,12 @@ public class CompareLocales {
         readFile(new File(english), _englishlist);
         readFile(new File(totest), _mylocalelist);
 
-        for (String key : _englishlist.keySet()) {
-            if (!_mylocalelist.containsKey(key)) {
-                System.out.println(key + " = " + _englishlist.get(key));
-            }
-        }
-
-        for (String key : _mylocalelist.keySet()) {
-
-            if (!_englishlist.containsKey(key)) {
-                System.out.println("Not Found in English:   " + key + " = " + _mylocalelist.get(key));
-            }
-        }
+        _englishlist.keySet().stream().filter((key) -> (!_mylocalelist.containsKey(key))).forEach((key) -> {
+            System.out.println(key + " = " + _englishlist.get(key));
+        });
+        _mylocalelist.keySet().stream().filter((key) -> (!_englishlist.containsKey(key))).forEach((key) -> {
+            System.out.println("Not Found in English:   " + key + " = " + _mylocalelist.get(key));
+        });
 
         System.out.println("standardlist has: " + _englishlist.size() + " , my local has " + _mylocalelist.size());
 

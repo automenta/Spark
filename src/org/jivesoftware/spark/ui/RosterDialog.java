@@ -189,11 +189,9 @@ public class RosterDialog implements ActionListener {
 
         accounts.setRenderer(new JPanelRenderer());
 
-        for (ContactGroup group : contactList.getContactGroups()) {
-            if (!group.isOfflineGroup() && !Res.getString("unfiled").equalsIgnoreCase(group.getGroupName()) && !group.isSharedGroup()) {
-                groupModel.add(group.getGroupName());
-            }
-        }
+        contactList.getContactGroups().stream().filter((group) -> (!group.isOfflineGroup() && !Res.getString("unfiled").equalsIgnoreCase(group.getGroupName()) && !group.isSharedGroup())).forEach((group) -> {
+            groupModel.add(group.getGroupName());
+        });
 
         groupBox.setEditable(true);
 
@@ -239,9 +237,9 @@ public class RosterDialog implements ActionListener {
         });
 
         final List<AccountItem> accountCol = getAccounts();
-        for (AccountItem item : accountCol) {
+        accountCol.stream().forEach((item) -> {
             accounts.addItem(item);
-        }
+        });
 
         if (accountCol.size() > 0) {
             accountsLabel.setVisible(true);
@@ -250,11 +248,8 @@ public class RosterDialog implements ActionListener {
             networkPanel.setVisible(true);
         }
 
-        publicBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                accounts.setEnabled(publicBox.isSelected());
-            }
+        publicBox.addActionListener((ActionEvent actionEvent) -> {
+            accounts.setEnabled(publicBox.isSelected());
         });
 
     }
@@ -328,19 +323,13 @@ public class RosterDialog implements ActionListener {
 
         JButton addbutton = new JButton(Res.getString("add"));
 
-        addbutton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                addContactButton();
-            }
+        addbutton.addActionListener((ActionEvent e) -> {
+            addContactButton();
         });
 
         JButton cancelbutton = new JButton(Res.getString("cancel"));
-        cancelbutton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dialog.dispose();
-            }
+        cancelbutton.addActionListener((ActionEvent e) -> {
+            dialog.dispose();
         });
 
         JPanel buttonpanel = new JPanel(new FlowLayout());
@@ -492,13 +481,10 @@ public class RosterDialog implements ActionListener {
                                 .next();
                         final JMenuItem item = new JMenuItem(s);
                         popup.add(item);
-                        item.addActionListener(new ActionListener() {
-                            @Override
-                            public void actionPerformed(ActionEvent e) {
-                                jidField.setText(item.getText());
-                                nicknameField.setText(StringUtils
-                                        .parseName(item.getText()));
-                            }
+                        item.addActionListener((ActionEvent e) -> {
+                            jidField.setText(item.getText());
+                            nicknameField.setText(StringUtils
+                                    .parseName(item.getText()));
                         });
                     }
 
@@ -573,12 +559,9 @@ public class RosterDialog implements ActionListener {
     public List<AccountItem> getAccounts() {
         List<AccountItem> list = new ArrayList<>();
 
-        for (Transport transport : TransportUtils.getTransports()) {
-            if (TransportUtils.isRegistered(SparkManager.getConnection(), transport)) {
-                AccountItem item = new AccountItem(transport.getIcon(), transport.getName(), transport);
-                list.add(item);
-            }
-        }
+        TransportUtils.getTransports().stream().filter((transport) -> (TransportUtils.isRegistered(SparkManager.getConnection(), transport))).map((transport) -> new AccountItem(transport.getIcon(), transport.getName(), transport)).forEach((item) -> {
+            list.add(item);
+        });
 
         return list;
     }
@@ -650,7 +633,6 @@ public class RosterDialog implements ActionListener {
                 && !isSharedGroup) {
             addEntry();
             dialog.setVisible(false);
-            return;
         } else {
 
             JOptionPane.showMessageDialog(dialog, errorMessage,

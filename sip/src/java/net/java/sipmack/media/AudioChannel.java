@@ -180,10 +180,9 @@ public class AudioChannel {
             MediaService mediaService = LibJitsi.getMediaService();
 
             Vector<CaptureDeviceInfo> vectorAudioDevices = CaptureDeviceManager.getDeviceList(new AudioFormat(AudioFormat.LINEAR));
-            for (CaptureDeviceInfo infoCaptureDevice : vectorAudioDevices) {
+            vectorAudioDevices.stream().forEach((infoCaptureDevice) -> {
                 System.out.println(infoCaptureDevice.getLocator());
-
-            }
+            });
 
             localhost = InetAddress.getLocalHost();
 

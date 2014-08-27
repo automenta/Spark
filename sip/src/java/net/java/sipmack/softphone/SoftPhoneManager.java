@@ -169,26 +169,20 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
         this.getLogManager().setRemoteLogging(true);
 
         try {
-            EventQueue.invokeAndWait(new Runnable() {
-                @Override
-                public void run() {
-                    registerMenu = new JCheckBoxMenuItem(PhoneRes.getIString("phone.enabled"));
-                }
+            EventQueue.invokeAndWait(() -> {
+                registerMenu = new JCheckBoxMenuItem(PhoneRes.getIString("phone.enabled"));
             });
         } catch (InterruptedException | InvocationTargetException e) {
             Log.error(e);
         }
 
-        registerMenu.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                if (getStatus() == SipRegisterStatus.Unregistered
-                        || getStatus() == SipRegisterStatus.RegistrationFailed) {
-
-                    register();
-                } else {
-                    handleUnregisterRequest();
-                }
+        registerMenu.addActionListener((ActionEvent actionEvent) -> {
+            if (getStatus() == SipRegisterStatus.Unregistered
+                    || getStatus() == SipRegisterStatus.RegistrationFailed) {
+                
+                register();
+            } else {
+                handleUnregisterRequest();
             }
         });
 
@@ -196,12 +190,8 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
         NetworkAddressManager.start();
 
         try {
-            EventQueue.invokeAndWait(new Runnable() {
-                @Override
-                public void run() {
-                    // Initialize Missed calls
-                    missedCalls = new MissedCalls();
-                }
+            EventQueue.invokeAndWait(() -> {
+                missedCalls = new MissedCalls();
             });
         } catch (InterruptedException | InvocationTargetException e) {
             Log.error(e);
@@ -319,7 +309,7 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
             // put in a seperate thread
             sipManager.start();
             if (sipManager.isStarted()) {
-                Log.debug("createSoftPhone", "SIP STARTED");
+                if (Log.debugging) Log.debug("createSoftPhone", "SIP STARTED");
             }
         } catch (CommunicationsException exc) {
             Log.error("createSoftPhone", exc);
@@ -486,9 +476,9 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
      */
     @Override
     public void messageReceived(MessageEvent evt) {
-        for (SoftPhoneListener sfl : softPhoneListeners) {
+        softPhoneListeners.stream().forEach((sfl) -> {
             sfl.messageReceived(evt);
-        }
+        });
     }
 
     /**
@@ -509,9 +499,9 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
      */
     @Override
     public void callRejectedRemotely(CallRejectedEvent evt) {
-        for (SoftPhoneListener softPhoneListener : softPhoneListeners) {
+        softPhoneListeners.stream().forEach((softPhoneListener) -> {
             softPhoneListener.callRejectedRemotely(evt);
-        }
+        });
     }
 
     /**
@@ -611,9 +601,9 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
     }
 
     private void registerStatusChanged(RegisterEvent evt) {
-        for (SoftPhoneListener sfl : softPhoneListeners) {
+        softPhoneListeners.stream().forEach((sfl) -> {
             sfl.registerStatusChanged(evt);
-        }
+        });
     }
 
     /**
@@ -655,12 +645,12 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
     public void callStateChanged(CallStateEvent evt) {
         try {
 
-            for (SoftPhoneListener sfl : softPhoneListeners) {
+            softPhoneListeners.stream().forEach((sfl) -> {
                 sfl.callStateChanged(evt);
-            }
+            });
 
             Call call = evt.getSourceCall();
-            Log.debug("callStateChanged", evt.getOldState() + " -> "
+            if (Log.debugging) Log.debug("callStateChanged", evt.getOldState() + " -> "
                     + evt.getNewState());
             switch (evt.getNewState()) {
                 case Call.CONNECTED:
@@ -710,14 +700,14 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
                                 }
                             }
                         }       evt.getSourceCall().start();
-                Log.debug("MEDIA STREAMS OPENED");
+                if (Log.debugging) Log.debug("MEDIA STREAMS OPENED");
                         break;
                     }
                 case Call.RINGING:
                     if (call.getRemoteSdpDescription() != null
                             && !call.getRemoteSdpDescription().equals("")) {
                         
-                        Log.debug("STATE", call.getRemoteSdpDescription().toString());
+                        if (Log.debugging) Log.debug("STATE", call.getRemoteSdpDescription().toString());
                         
                         int localPort = ((MediaDescription) (call.getLocalSdpDescription().getMediaDescriptions(true).get(0))).getMedia().getMediaPort();
                         int destPort = ((MediaDescription) (call.getRemoteSdpDescription().getMediaDescriptions(true).get(0))).getMedia().getMediaPort();
@@ -752,9 +742,10 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
                     if (call.getAudioReceiverChannel() != null) {
                         call.getAudioReceiverChannel().stop();
                     }   CallRejectedEvent rejectEvt = new CallRejectedEvent("Disconnected", call.getLastRequest(), call);
-                for (SoftPhoneListener softPhoneListener : softPhoneListeners) {
-                    softPhoneListener.callRejectedRemotely(rejectEvt);
-                }   PhoneManager.setUsingMediaLocator(false);
+                    softPhoneListeners.stream().forEach((softPhoneListener) -> {
+                softPhoneListener.callRejectedRemotely(rejectEvt);
+            });
+PhoneManager.setUsingMediaLocator(false);
                     break;
             }
         } catch (MediaException e) {
@@ -955,24 +946,19 @@ public class SoftPhoneManager implements CommunicationsListener, CallListener, U
      * Register the softPhone with the Spark preferrence settings
      */
     public void register() {
-        Thread registerThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (preferences != null) {
-                    String user = preferences.getUserName();
-                    String authUser = preferences.getAuthUserName();
-                    String server = preferences.getServer();
-                    String pass = preferences.getPassword();
-
-                    try {
-                        createSoftPhone(server);
-                    } catch (MediaException e) {
-                        Log.error("Media Exception", e);
-
-                    }
-
-                    handleRegisterRequest(user, authUser, pass);
+        Thread registerThread = new Thread(() -> {
+            if (preferences != null) {
+                String user = preferences.getUserName();
+                String authUser = preferences.getAuthUserName();
+                String server1 = preferences.getServer();
+                String pass = preferences.getPassword();
+                try {
+                    createSoftPhone(server1);
+                }catch (MediaException e) {
+                    Log.error("Media Exception", e);
+                    
                 }
+                handleRegisterRequest(user, authUser, pass);
             }
         });
 

@@ -56,14 +56,14 @@ public class RecentCallsPanel extends JPanel {
         list.setCellRenderer(new JPanelRenderer());
 
         final LogManager logManager = SoftPhoneManager.getInstance().getLogManager();
-        for (HistoryCall call : logManager.getCallHistory()) {
+        logManager.getCallHistory().stream().forEach((call) -> {
             String number = SoftPhoneManager.getNumbersFromPhone(call.getNumber());
             String newCallNumber = SoftPhoneManager.getNumbersFromPhone(ic.getCall().getNumber());
             if (number.equals(newCallNumber)) {
                 final CallEntry callEntry = new CallEntry(call.getNumber(), new Date(call.getTime()));
                 model.addElement(callEntry);
             }
-        }
+        });
 
     }
 

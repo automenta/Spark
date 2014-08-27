@@ -78,7 +78,7 @@ public final class UIComponentRegistry {
      */
     public static void registerLoginDialog(Class<? extends LoginDialog> clazz) {
         if (loginDialogClass != clazz) {
-            Log.debug("Registering new contract item class: "
+            if (Log.debugging) Log.debug("Registering new contract item class: "
                     + clazz.getName());
             loginDialogClass = clazz;
         } else {
@@ -93,7 +93,7 @@ public final class UIComponentRegistry {
      */
     public static void registerContactItem(Class<? extends ContactItem> clazz) {
         if (contactItemClass != clazz) {
-            Log.debug("Registering new contract item class: "
+            if (Log.debugging) Log.debug("Registering new contract item class: "
                     + clazz.getName());
             contactItemClass = clazz;
         } else {
@@ -109,7 +109,7 @@ public final class UIComponentRegistry {
     public static void registerContactInfoWindow(
             Class<? extends ContactInfoWindow> clazz) {
         if (contactInfoWindowClass != clazz) {
-            Log.debug("Registering new contact info window class: "
+            if (Log.debugging) Log.debug("Registering new contact info window class: "
                     + clazz.getName());
             contactInfoWindowClass = clazz;
         } else {
@@ -124,7 +124,7 @@ public final class UIComponentRegistry {
      */
     public static void registerContactGroup(Class<? extends ContactGroup> clazz) {
         if (contactGroupClass != clazz) {
-            Log.debug("Registering new contact group class: "
+            if (Log.debugging) Log.debug("Registering new contact group class: "
                     + clazz.getName());
             contactGroupClass = clazz;
         } else {
@@ -139,7 +139,7 @@ public final class UIComponentRegistry {
      */
     public static void registerStatusBar(Class<? extends StatusBar> clazz) {
         if (statusBarClass != clazz) {
-            Log.debug("Registering new status bar class: " + clazz.getName());
+            if (Log.debugging) Log.debug("Registering new status bar class: " + clazz.getName());
             statusBarClass = clazz;
         } else {
             Log.warning("Class " + clazz.getName() + " already registered.");
@@ -153,7 +153,7 @@ public final class UIComponentRegistry {
      */
     public static void registerCommandPanel(Class<? extends CommandPanel> clazz) {
         if (commandPanelClass != clazz) {
-            Log.debug("Registering new command panel class: "
+            if (Log.debugging) Log.debug("Registering new command panel class: "
                     + clazz.getName());
             commandPanelClass = clazz;
         } else {
@@ -169,7 +169,7 @@ public final class UIComponentRegistry {
      */
     public static void registerWorkspaceTabPanel(Class<? extends SparkTabbedPane> clazz) {
         if (workspaceTabPaneClass != clazz) {
-            Log.debug("Registering new search panel class: " + clazz.getName());
+            if (Log.debugging) Log.debug("Registering new search panel class: " + clazz.getName());
             workspaceTabPaneClass = clazz;
         } else {
             Log.warning("Class " + clazz.getName() + " already registered.");
@@ -184,7 +184,7 @@ public final class UIComponentRegistry {
      */
     public static void registerContactList(Class<? extends ContactList> clazz) {
         if (contactListClass != clazz) {
-            Log.debug("Registering new contact list class: " + clazz.getName());
+            if (Log.debugging) Log.debug("Registering new contact list class: " + clazz.getName());
             contactListClass = clazz;
         } else {
             Log.warning("Class " + clazz.getName() + " already registered.");
@@ -198,7 +198,7 @@ public final class UIComponentRegistry {
      */
     public static void registerThemePanel(Class<? extends ThemePanel> clazz) {
         if (themePanelClass != clazz) {
-            Log.debug("Registering new theme panel class: " + clazz.getName());
+            if (Log.debugging) Log.debug("Registering new theme panel class: " + clazz.getName());
             themePanelClass = clazz;
         } else {
             Log.warning("Class " + clazz.getName() + " already registered.");
@@ -212,7 +212,7 @@ public final class UIComponentRegistry {
      */
     public static void registerConferenceServices(Class<? extends ConferenceServices> clazz) {
         if (conferenceServicesClass != clazz) {
-            Log.debug("Registering new conference services class: " + clazz.getName());
+            if (Log.debugging) Log.debug("Registering new conference services class: " + clazz.getName());
             conferenceServicesClass = clazz;
         } else {
             Log.warning("Class " + clazz.getName() + " already registered.");
@@ -226,7 +226,7 @@ public final class UIComponentRegistry {
      */
     public static void registerTranscriptWindow(Class<? extends TranscriptWindow> clazz) {
         if (transcriptWindowClass != clazz) {
-            Log.debug("Registering new transcript window class: " + clazz.getName());
+            if (Log.debugging) Log.debug("Registering new transcript window class: " + clazz.getName());
             transcriptWindowClass = clazz;
         } else {
             Log.warning("Class " + clazz.getName() + " already registered.");
@@ -240,7 +240,7 @@ public final class UIComponentRegistry {
      */
     public static void registerChatRoom(Class<? extends ChatRoom> clazz) {
         if (chatRoomClass != clazz) {
-            Log.debug("Registering new chat room class: " + clazz.getName());
+            if (Log.debugging) Log.debug("Registering new chat room class: " + clazz.getName());
             chatRoomClass = clazz;
         } else {
             Log.warning("Class " + clazz.getName() + " already registered.");
@@ -249,7 +249,7 @@ public final class UIComponentRegistry {
 
     public static void registerGroupChatRoom(Class<? extends GroupChatRoom> clazz) {
         if (groupChatRoomClass != clazz) {
-            Log.debug("Registering new group chat room class: " + clazz.getName());
+            if (Log.debugging) Log.debug("Registering new group chat room class: " + clazz.getName());
             groupChatRoomClass = clazz;
         } else {
             Log.warning("Class " + clazz.getName() + " already registered.");
@@ -258,7 +258,7 @@ public final class UIComponentRegistry {
 
     public static void registerGroupChatParticipantList(Class<? extends GroupChatParticipantList> clazz) {
         if (groupChatParticipantListClass != clazz) {
-            Log.debug("Registering new group chat participant list class: " + clazz.getName());
+            if (Log.debugging) Log.debug("Registering new group chat participant list class: " + clazz.getName());
             groupChatParticipantListClass = clazz;
         } else {
             Log.warning("Class " + clazz.getName() + " already registered.");
@@ -272,7 +272,7 @@ public final class UIComponentRegistry {
      */
     public static void registerChatContainer(Class<? extends ChatContainer> clazz) {
         if (chatContainerClass != clazz) {
-            Log.debug("Registering new chat room class: " + clazz.getName());
+            if (Log.debugging) Log.debug("Registering new chat room class: " + clazz.getName());
             chatContainerClass = clazz;
         } else {
             Log.warning("Class " + clazz.getName() + " already registered.");
@@ -286,7 +286,7 @@ public final class UIComponentRegistry {
      */
     public static void registerButtonFactory(Class<? extends ButtonFactory> clazz) {
         if (buttonFactoryClass != clazz) {
-            Log.debug("Registering new button factory class: " + clazz.getName());
+            if (Log.debugging) Log.debug("Registering new button factory class: " + clazz.getName());
             buttonFactoryClass = clazz;
         } else {
             Log.warning("Class " + clazz.getName() + " already registered.");
@@ -486,7 +486,7 @@ public final class UIComponentRegistry {
     private static <T> T instantiate(Class<? extends T> currentClass, Object... args) {
         T instance = null;
 
-        Log.debug("Args: " + Arrays.toString(args));
+        if (Log.debugging) Log.debug("Args: " + Arrays.toString(args));
         try {
             if (args != null) {
                 Class<? extends Object>[] classes = new Class<?>[args.length];

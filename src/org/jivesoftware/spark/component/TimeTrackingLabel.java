@@ -56,37 +56,34 @@ public class TimeTrackingLabel extends JLabel {
         // Set default
         setText("0 sec");
 
-        ActionListener updateTime = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-                Date currentTime = new Date();
-                long diff = currentTime.getTime() - startTime.getTime();
-                //long numDays = diff / MS_IN_A_DAY;
-                diff %= MS_IN_A_DAY;
-                long numHours = diff / MS_IN_AN_HOUR;
-                diff %= MS_IN_AN_HOUR;
-                long numMinutes = diff / MS_IN_A_MINUTE;
-                diff %= MS_IN_A_MINUTE;
-                long numSeconds = diff / MS_IN_A_SECOND;
+        ActionListener updateTime = (ActionEvent evt) -> {
+            Date currentTime = new Date();
+            long diff = currentTime.getTime() - startTime.getTime();
+            //long numDays = diff / MS_IN_A_DAY;
+            diff %= MS_IN_A_DAY;
+            long numHours = diff / MS_IN_AN_HOUR;
+            diff %= MS_IN_AN_HOUR;
+            long numMinutes = diff / MS_IN_A_MINUTE;
+            diff %= MS_IN_A_MINUTE;
+            long numSeconds = diff / MS_IN_A_SECOND;
 //                diff = diff % MS_IN_A_SECOND;
-                //long numMilliseconds = diff;
-
-                StringBuilder buf = new StringBuilder();
-                if (numHours > 0) {
-                    buf.append(numHours).append(" ").append(HOURS).append(", ");
-                }
-
-                if (numMinutes > 0) {
-                    buf.append(numMinutes).append(" ").append(MINUTES).append(", ");
-                }
-
-                buf.append(numSeconds).append(" ").append(SECONDS);
-
-                String result = buf.toString();
-                setText(result);
-                parentComponent.invalidate();
-                parentComponent.repaint();
+            //long numMilliseconds = diff;
+            
+            StringBuilder buf = new StringBuilder();
+            if (numHours > 0) {
+                buf.append(numHours).append(" ").append(HOURS).append(", ");
             }
+            
+            if (numMinutes > 0) {
+                buf.append(numMinutes).append(" ").append(MINUTES).append(", ");
+            }
+            
+            buf.append(numSeconds).append(" ").append(SECONDS);
+            
+            String result = buf.toString();
+            setText(result);
+            parentComponent.invalidate();
+            parentComponent.repaint();
         };
 
         timer = new Timer(1000, updateTime);

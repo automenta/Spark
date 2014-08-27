@@ -288,16 +288,10 @@ public class ChatContainer extends SparkTabbedPane implements MessageListener, C
         AndFilter presenceFilter = new AndFilter(new PacketTypeFilter(Presence.class), new FromContainsFilter(room.getRoomname()));
 
         // Next, create a packet listener. We use an anonymous inner class for brevity.
-        PacketListener myListener = new PacketListener() {
-            @Override
-            public void processPacket(final Packet packet) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        handleRoomPresence((Presence) packet);
-                    }
-                });
-            }
+        PacketListener myListener = (final Packet packet) -> {
+            SwingUtilities.invokeLater(() -> {
+                handleRoomPresence((Presence) packet);
+            });
         };
 
         room.registeredToFrame(chatFrame);
@@ -387,7 +381,7 @@ public class ChatContainer extends SparkTabbedPane implements MessageListener, C
         try {
             chatRoom = getChatRoom(roomname);
         } catch (ChatRoomNotFoundException e1) {
-            Log.debug("Could not locate chat room " + roomname);
+            if (Log.debugging) Log.debug("Could not locate chat room " + roomname);
             return;
         }
 
@@ -568,10 +562,12 @@ public class ChatContainer extends SparkTabbedPane implements MessageListener, C
             return;
         }
 
-        for (ChatRoom chatRoom : new ArrayList<>(chatRoomList)) {
+        new ArrayList<>(chatRoomList).stream().map((chatRoom) -> {
             closeTab(chatRoom);
+            return chatRoom;
+        }).forEach((chatRoom) -> {
             chatRoom.closeChatRoom();
-        }
+        });
 
         for (int i = 0; i < getTabCount(); i++) {
             Component comp = getComponentAt(i);
@@ -725,11 +721,8 @@ public class ChatContainer extends SparkTabbedPane implements MessageListener, C
      * @param customMsgTitle
      */
     public void fireNotifyOnMessage(final ChatRoom chatRoom, final boolean customMsg, final String customMsgText, final String customMsgTitle) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                handleMessageNotification(chatRoom, customMsg, customMsgText, customMsgTitle);
-            }
+        SwingUtilities.invokeLater(() -> {
+            handleMessageNotification(chatRoom, customMsg, customMsgText, customMsgTitle);
         });
     }
 
@@ -840,9 +833,9 @@ public class ChatContainer extends SparkTabbedPane implements MessageListener, C
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
-        for (ChatRoom room : chatRoomList) {
+        chatRoomList.stream().forEach((room) -> {
             buf.append("Roomname=").append(room.getRoomname()).append("\n");
-        }
+        });
         return buf.toString();
     }
 
@@ -883,9 +876,9 @@ public class ChatContainer extends SparkTabbedPane implements MessageListener, C
      * @param room - the <code>ChatRoom</code> that has been opened.
      */
     protected void fireChatRoomOpened(ChatRoom room) {
-        for (ChatRoomListener chatRoomListener : new ArrayList<>(chatRoomListeners)) {
+        new ArrayList<>(chatRoomListeners).stream().forEach((chatRoomListener) -> {
             chatRoomListener.chatRoomOpened(room);
-        }
+        });
     }
 
     /**
@@ -894,9 +887,9 @@ public class ChatContainer extends SparkTabbedPane implements MessageListener, C
      * @param room - the <code>ChatRoom</code> that has been left
      */
     protected void fireChatRoomLeft(ChatRoom room) {
-        for (ChatRoomListener chatRoomListener : new HashSet<>(chatRoomListeners)) {
+        new HashSet<>(chatRoomListeners).stream().forEach((chatRoomListener) -> {
             chatRoomListener.chatRoomLeft(room);
-        }
+        });
     }
 
     /**
@@ -905,9 +898,9 @@ public class ChatContainer extends SparkTabbedPane implements MessageListener, C
      * @param room - the <code>ChatRoom</code> that has been closed.
      */
     protected void fireChatRoomClosed(ChatRoom room) {
-        for (ChatRoomListener chatRoomListener : new HashSet<>(chatRoomListeners)) {
+        new HashSet<>(chatRoomListeners).stream().forEach((chatRoomListener) -> {
             chatRoomListener.chatRoomClosed(room);
-        }
+        });
     }
 
     /**
@@ -916,9 +909,9 @@ public class ChatContainer extends SparkTabbedPane implements MessageListener, C
      * @param room - the <code>ChatRoom</code> that has been activated.
      */
     protected void fireChatRoomActivated(ChatRoom room) {
-        for (ChatRoomListener chatRoomListener : new HashSet<>(chatRoomListeners)) {
+        new HashSet<>(chatRoomListeners).stream().forEach((chatRoomListener) -> {
             chatRoomListener.chatRoomActivated(room);
-        }
+        });
     }
 
     /**
@@ -928,13 +921,10 @@ public class ChatContainer extends SparkTabbedPane implements MessageListener, C
      * @param userid - the userid of the person.
      */
     protected void fireUserHasJoined(final ChatRoom room, final String userid) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                for (ChatRoomListener chatRoomListener : new HashSet<>(chatRoomListeners)) {
-                    chatRoomListener.userHasJoined(room, userid);
-                }
-            }
+        SwingUtilities.invokeLater(() -> {
+            new HashSet<>(chatRoomListeners).stream().forEach((chatRoomListener) -> {
+                chatRoomListener.userHasJoined(room, userid);
+            });
         });
 
     }
@@ -946,13 +936,10 @@ public class ChatContainer extends SparkTabbedPane implements MessageListener, C
      * @param userid - the userid of the person.
      */
     protected void fireUserHasLeft(final ChatRoom room, final String userid) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                for (ChatRoomListener chatRoomListener : new HashSet<>(chatRoomListeners)) {
-                    chatRoomListener.userHasLeft(room, userid);
-                }
-            }
+        SwingUtilities.invokeLater(() -> {
+            new HashSet<>(chatRoomListeners).stream().forEach((chatRoomListener) -> {
+                chatRoomListener.userHasLeft(room, userid);
+            });
         });
 
     }
@@ -966,39 +953,36 @@ public class ChatContainer extends SparkTabbedPane implements MessageListener, C
     public void startFlashing(final Component comp, final boolean customMsg,
             final String customMsgText, final String customMsgTitle) {
 
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    final int index = indexOfComponent(comp);
-                    if (index != -1) {
-                        // Check notifications.
-                        if (SettingsManager.getLocalPreferences().isChatRoomNotificationsOn() || !(comp instanceof GroupChatRoom)) {
-                            if (comp instanceof ChatRoom) {
-                                if (comp instanceof GroupChatRoom) {
-                                    if (((GroupChatRoom) comp).getLastMessage() != null) {
-                                        if (!((GroupChatRoom) comp).isBlocked(((GroupChatRoom) comp).getLastMessage().getFrom())) {
-                                            checkNotificationPreferences((ChatRoom) comp, customMsg, customMsgText, customMsgTitle);
-                                        }
+        SwingUtilities.invokeLater(() -> {
+            try {
+                final int index = indexOfComponent(comp);
+                if (index != -1) {
+                    // Check notifications.
+                    if (SettingsManager.getLocalPreferences().isChatRoomNotificationsOn() || !(comp instanceof GroupChatRoom)) {
+                        if (comp instanceof ChatRoom) {
+                            if (comp instanceof GroupChatRoom) {
+                                if (((GroupChatRoom) comp).getLastMessage() != null) {
+                                    if (!((GroupChatRoom) comp).isBlocked(((GroupChatRoom) comp).getLastMessage().getFrom())) {
+                                        checkNotificationPreferences((ChatRoom) comp, customMsg, customMsgText, customMsgTitle);
                                     }
-                                } else {
-                                    checkNotificationPreferences((ChatRoom) comp, customMsg, customMsgText, customMsgTitle);
                                 }
+                            } else {
+                                checkNotificationPreferences((ChatRoom) comp, customMsg, customMsgText, customMsgTitle);
                             }
                         }
-                        // Notify decorators
-                        SparkManager.getChatManager().notifySparkTabHandlers(comp);
                     }
-
-                    boolean flashAllowed = SettingsManager.getLocalPreferences().isChatRoomNotificationsOn()
-                            || !(comp instanceof GroupChatRoom);
-
-                    if (!chatFrame.isInFocus() && flashAllowed) {
-                        SparkManager.getNativeManager().flashWindow(chatFrame);
-                    }
-                } catch (Exception ex) {
-                    Log.error("Issue in ChatRooms with tab location.", ex);
+                    // Notify decorators
+                    SparkManager.getChatManager().notifySparkTabHandlers(comp);
                 }
+                
+                boolean flashAllowed = SettingsManager.getLocalPreferences().isChatRoomNotificationsOn()
+                        || !(comp instanceof GroupChatRoom);
+                
+                if (!chatFrame.isInFocus() && flashAllowed) {
+                    SparkManager.getNativeManager().flashWindow(chatFrame);
+                }
+            } catch (Exception ex) {
+                Log.error("Issue in ChatRooms with tab location.", ex);
             }
         });
     }
@@ -1016,19 +1000,15 @@ public class ChatContainer extends SparkTabbedPane implements MessageListener, C
      * @param component the component that should be notified.
      */
     public void stopFlashing(final Component component) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    // Stop the flashing
-                    SparkManager.getNativeManager().stopFlashing(chatFrame);
-
-                    // Notify decorators
-                    SparkManager.getChatManager().notifySparkTabHandlers(component);
-                } catch (Exception ex) {
-                    Log.error("Could not stop flashing because " + ex.getMessage(), ex);
-                }
-
+        SwingUtilities.invokeLater(() -> {
+            try {
+                // Stop the flashing
+                SparkManager.getNativeManager().stopFlashing(chatFrame);
+                
+                // Notify decorators
+                SparkManager.getChatManager().notifySparkTabHandlers(component);
+            } catch (Exception ex) {
+                Log.error("Could not stop flashing because " + ex.getMessage(), ex);
             }
         });
     }
@@ -1134,7 +1114,6 @@ public class ChatContainer extends SparkTabbedPane implements MessageListener, C
                     String customMsgTitleS = Res.getString("group.chat.name.notification");
 
                     startFlashing(chatRoom, customMsgS, customMsgTextS, customMsgTitleS);
-                    return;
                 } else {
                     // regular group message
                     boolean customMsgS = true;
@@ -1142,7 +1121,6 @@ public class ChatContainer extends SparkTabbedPane implements MessageListener, C
                     String customMsgTitleS = finalRoomName;
 
                     startFlashing(chatRoom, customMsgS, customMsgTextS, customMsgTitleS);
-                    return;
                 }
             } else {
                 // regular group message
@@ -1151,7 +1129,6 @@ public class ChatContainer extends SparkTabbedPane implements MessageListener, C
                 String customMsgTitleS = finalRoomName;
 
                 startFlashing(chatRoom, customMsgS, customMsgTextS, customMsgTitleS);
-                return;
             }
         } else if (customMsg) {
             // probablt a file transfer request
@@ -1160,7 +1137,6 @@ public class ChatContainer extends SparkTabbedPane implements MessageListener, C
             String customMsgTitleS = customMsgTitle;
 
             startFlashing(chatRoom, customMsgS, customMsgTextS, customMsgTitleS);
-            return;
         } else {
             // normal personal chat
             Message lastChatMessage = null;
@@ -1178,7 +1154,6 @@ public class ChatContainer extends SparkTabbedPane implements MessageListener, C
             }
 
             startFlashing(chatRoom, customMsgS, customMsgTextS, customMsgTitleS);
-            return;
         }
     }
 
@@ -1338,11 +1313,9 @@ public class ChatContainer extends SparkTabbedPane implements MessageListener, C
                 public void actionPerformed(ActionEvent e) {
                     ChatRoom chatRoom = (ChatRoom) getComponentInTab(tab);
                     if (chatRoom != null) {
-                        for (ChatRoom cRoom : getChatRooms()) {
-                            if (chatRoom != cRoom) {
-                                closeTab(cRoom);
-                            }
-                        }
+                        getChatRooms().stream().filter((cRoom) -> (chatRoom != cRoom)).forEach((cRoom) -> {
+                            closeTab(cRoom);
+                        });
                     }
                 }
             };
@@ -1355,9 +1328,9 @@ public class ChatContainer extends SparkTabbedPane implements MessageListener, C
 
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    for (ChatRoom rooms : getStaleChatRooms()) {
+                    getStaleChatRooms().stream().forEach((rooms) -> {
                         closeTab(rooms);
-                    }
+                    });
                 }
             };
             closeOldAction.putValue(Action.NAME, Res.getString("message.close.stale.chats"));
@@ -1376,22 +1349,18 @@ public class ChatContainer extends SparkTabbedPane implements MessageListener, C
      */
     public Collection<ChatRoom> getStaleChatRooms() {
         final List<ChatRoom> staleRooms = new ArrayList<>();
-        for (ChatRoom chatRoom : getChatRooms()) {
+        getChatRooms().stream().forEach((chatRoom) -> {
             long lastActivity = chatRoom.getLastActivity();
             long currentTime = System.currentTimeMillis();
-
             long diff = currentTime - lastActivity;
             int minutes = (int) (diff / (60 * 1000F));
-
             LocalPreferences pref = SettingsManager.getLocalPreferences();
             int timeoutMinutes = pref.getChatLengthDefaultTimeout();
-
             int unreadCount = chatRoom.getUnreadMessageCount();
-
             if (timeoutMinutes <= minutes && unreadCount == 0) {
                 staleRooms.add(chatRoom);
             }
-        }
+        });
 
         return staleRooms;
     }
@@ -1406,10 +1375,9 @@ public class ChatContainer extends SparkTabbedPane implements MessageListener, C
         final TimerTask task = new SwingTimerTask() {
             @Override
             public void doRun() {
-                for (ChatRoom chatRoom : getStaleChatRooms()) {
-                    // Notify decorators
+                getStaleChatRooms().stream().forEach((chatRoom) -> {
                     SparkManager.getChatManager().notifySparkTabHandlers(chatRoom);
-                }
+                });
             }
         };
 
@@ -1467,29 +1435,24 @@ public class ChatContainer extends SparkTabbedPane implements MessageListener, C
      */
     public int getTotalNumberOfUnreadMessages() {
         int messageCount = 0;
-        for (ChatRoom chatRoom : chatRoomList) {
-            messageCount += chatRoom.getUnreadMessageCount();
-        }
+        messageCount = chatRoomList.stream().map((chatRoom) -> chatRoom.getUnreadMessageCount()).reduce(messageCount, Integer::sum);
 
         return messageCount;
     }
 
     public void closeAllGroupChatRooms() {
-        for (ChatRoom chatRoom : new ArrayList<>(chatRoomList)) {
+        new ArrayList<>(chatRoomList).stream().forEach((chatRoom) -> {
             boolean isGroup = chatRoom.getChatType() == Message.Type.groupchat;
             if (isGroup) {
                 closeTab(chatRoom);
                 chatRoom.closeChatRoom();
             }
-        }
+        });
     }
 
     public boolean hasGroupChatRooms() {
-        for (ChatRoom chatRoom : new ArrayList<>(chatRoomList)) {
-            boolean isGroup = chatRoom.getChatType() == Message.Type.groupchat;
-            if (isGroup) {
-                return true;
-            }
+        if (new ArrayList<>(chatRoomList).stream().map((chatRoom) -> chatRoom.getChatType() == Message.Type.groupchat).anyMatch((isGroup) -> (isGroup))) {
+            return true;
         }
         return false;
     }

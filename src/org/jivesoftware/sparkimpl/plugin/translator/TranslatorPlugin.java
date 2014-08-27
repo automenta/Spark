@@ -56,12 +56,8 @@ public class TranslatorPlugin implements Plugin {
                     // Create a new ChatRoomButton.
                     final JComboBox translatorBox = new JComboBox(TranslatorUtil.TranslationType.getTypes());
 
-                    translatorBox.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            // Set the focus back to the message box.
-                            roo.getChatInputEditor().requestFocusInWindow();
-                        }
+                    translatorBox.addActionListener((ActionEvent e) -> {
+                        roo.getChatInputEditor().requestFocusInWindow();
                     });
 
                     roo.addChatRoomComponent(translatorBox);

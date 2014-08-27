@@ -177,8 +177,8 @@ public class SettingsManager {
     }
 
     public static void fireListeners() {
-        for (PreferenceListener listener : listeners) {
+        listeners.stream().forEach((listener) -> {
             listener.preferencesChanged(localPreferences);
-        }
+        });
     }
 }

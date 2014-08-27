@@ -64,32 +64,20 @@ public class SipCodecs extends JPanel {
         JPanel panelAvailable = new JPanel();
 
         // add actionlisteners
-        btnLeft.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                left();
-            }
+        btnLeft.addActionListener((ActionEvent e) -> {
+            left();
         });
 
-        btnRight.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                right();
-            }
+        btnRight.addActionListener((ActionEvent e) -> {
+            right();
         });
 
-        btnUp.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                up();
-            }
+        btnUp.addActionListener((ActionEvent e) -> {
+            up();
         });
 
-        btnDown.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                down();
-            }
+        btnDown.addActionListener((ActionEvent e) -> {
+            down();
         });
 
         // add Components
@@ -239,9 +227,9 @@ public class SipCodecs extends JPanel {
             removelater.add(item);
         }
 
-        for (String item : removelater) {
+        removelater.stream().forEach((item) -> {
             _listSelectedModel.removeElement(item);
-        }
+        });
 
         _listSelected.updateUI();
         _listAvailable.updateUI();
@@ -270,9 +258,9 @@ public class SipCodecs extends JPanel {
             removelater.add(item);
 
         }
-        for (String item : removelater) {
+        removelater.stream().forEach((item) -> {
             _listAvailableModel.removeElement(item);
-        }
+        });
 
         _listAvailable.updateUI();
         _listSelected.updateUI();

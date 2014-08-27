@@ -85,7 +85,7 @@ public class SipCommHop extends Object implements javax.sip.address.Hop {
      */
     public SipCommHop(String hop) throws IllegalArgumentException {
         if (hop == null) {
-            Log.debug("SipCommHop", "Null arg: " + hop);
+            if (Log.debugging) Log.debug("SipCommHop", "Null arg: " + hop);
             throw new IllegalArgumentException("Null arg!");
         }
         StringTokenizer stringTokenizer = new StringTokenizer(hop + "/");

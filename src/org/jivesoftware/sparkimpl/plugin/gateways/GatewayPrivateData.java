@@ -64,13 +64,15 @@ public class GatewayPrivateData implements PrivateData {
         StringBuilder buf = new StringBuilder();
         buf.append("<").append(getElementName()).append(" xmlns=\"").append(getNamespace()).append("\">");
         buf.append("<gateways>");
-        for (String serviceName : loginSettingsMap.keySet()) {
+        loginSettingsMap.keySet().stream().map((serviceName) -> {
             buf.append("<gateway>");
             String autoLogin = loginSettingsMap.get(serviceName);
             buf.append("<serviceName>").append(serviceName).append("</serviceName>");
             buf.append("<autoLogin>").append(autoLogin).append("</autoLogin>");
+            return serviceName;
+        }).forEach((_item) -> {
             buf.append("</gateway>");
-        }
+        });
         buf.append("</gateways>");
 
         buf.append("</").append(getElementName()).append(">");

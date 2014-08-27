@@ -105,10 +105,9 @@ public class VideoChannel {
             JPanel visualComponent = new JPanel(new BorderLayout());
             VideoMediaStream vms = ((VideoMediaStream) mediaStream);
             visualComponent.setBackground(Color.BLACK);
-            for (Component c : vms.getVisualComponents()) {
-                VideoContainer vc = new VideoContainer(c, true);
+            vms.getVisualComponents().stream().map((c) -> new VideoContainer(c, true)).forEach((vc) -> {
                 visualComponent.add(vc);
-            }
+            });
             System.out.println("VMS: " + vms);
             System.out.println("VMS: " + vms.getName());
             frame = new VideoFrame("Frame");
@@ -266,12 +265,14 @@ public class VideoChannel {
             MediaService mediaService = LibJitsi.getMediaService();
             // LOG ALL Devices
             final Vector<CaptureDeviceInfo> vectorDevices = CaptureDeviceManager.getDeviceList(null);
-            for (CaptureDeviceInfo infoCaptureDevice : vectorDevices) {
+            vectorDevices.stream().map((infoCaptureDevice) -> {
                 System.err.println("===========> " + infoCaptureDevice.getName());
+                return infoCaptureDevice;
+            }).forEach((infoCaptureDevice) -> {
                 for (Format format : infoCaptureDevice.getFormats()) {
                     System.err.println(format);
                 }
-            }
+            });
 
             localhost = InetAddress.getLocalHost();
 

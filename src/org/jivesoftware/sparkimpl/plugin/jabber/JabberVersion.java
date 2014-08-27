@@ -49,38 +49,35 @@ public class JabberVersion implements Plugin {
     public void initialize() {
         // Create IQ Filter
         PacketFilter packetFilter = new PacketTypeFilter(IQ.class);
-        SparkManager.getConnection().addPacketListener(new PacketListener() {
-            @Override
-            public void processPacket(Packet packet) {
-                IQ iq = (IQ) packet;
-
-                // Handle Version Request
-                if (iq instanceof Version && iq.getType() == IQ.Type.GET) {
-                    // Send Version
-                    Version version = new Version();
-                    version.setName(JiveInfo.getName());
-
-                    version.setOs(JiveInfo.getOS());
-                    version.setVersion(JiveInfo.getVersion());
-
-                    // Send back as a reply
-                    version.setPacketID(iq.getPacketID());
-                    version.setType(IQ.Type.RESULT);
-                    version.setTo(iq.getFrom());
-                    version.setFrom(iq.getTo());
-                    SparkManager.getConnection().sendPacket(version);
-                } // Send time
-                else if (iq instanceof Time && iq.getType() == IQ.Type.GET) {
-                    Time time = new Time();
-                    time.setPacketID(iq.getPacketID());
-                    time.setFrom(iq.getTo());
-                    time.setTo(iq.getFrom());
-                    time.setTime(new Date());
-                    time.setType(IQ.Type.RESULT);
-
-                    // Send Time
-                    SparkManager.getConnection().sendPacket(time);
-                }
+        SparkManager.getConnection().addPacketListener((Packet packet) -> {
+            IQ iq = (IQ) packet;
+            
+            // Handle Version Request
+            if (iq instanceof Version && iq.getType() == IQ.Type.GET) {
+                // Send Version
+                Version version = new Version();
+                version.setName(JiveInfo.getName());
+                
+                version.setOs(JiveInfo.getOS());
+                version.setVersion(JiveInfo.getVersion());
+                
+                // Send back as a reply
+                version.setPacketID(iq.getPacketID());
+                version.setType(IQ.Type.RESULT);
+                version.setTo(iq.getFrom());
+                version.setFrom(iq.getTo());
+                SparkManager.getConnection().sendPacket(version);
+            } // Send time
+            else if (iq instanceof Time && iq.getType() == IQ.Type.GET) {
+                Time time = new Time();
+                time.setPacketID(iq.getPacketID());
+                time.setFrom(iq.getTo());
+                time.setTo(iq.getFrom());
+                time.setTime(new Date());
+                time.setType(IQ.Type.RESULT);
+                
+                // Send Time
+                SparkManager.getConnection().sendPacket(time);
             }
         }, packetFilter);
 

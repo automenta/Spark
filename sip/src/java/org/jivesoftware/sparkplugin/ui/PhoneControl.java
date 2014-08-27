@@ -118,18 +118,12 @@ public class PhoneControl extends JPanel {
             }
         });
 
-        endCallButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                defaultGuiManager.hangup(interlocutorUI);
-            }
+        endCallButton.addActionListener((ActionEvent e) -> {
+            defaultGuiManager.hangup(interlocutorUI);
         });
 
-        muteButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                defaultGuiManager.mute(interlocutorUI, !muteButton.isSelected());
-            }
+        muteButton.addActionListener((ActionEvent e) -> {
+            defaultGuiManager.mute(interlocutorUI, !muteButton.isSelected());
         });
 
         setOpaque(false);

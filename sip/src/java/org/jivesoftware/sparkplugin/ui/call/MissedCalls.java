@@ -82,18 +82,15 @@ public class MissedCalls implements ActionListener {
             }
         });
 
-        list.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                if (e.getValueIsAdjusting()) {
-                    return;
-                }
-
-                int selectedIndex = list.getSelectedIndex();
-                boolean enabled = selectedIndex != -1;
-                callBackButton.setEnabled(enabled);
-                deleteButton.setEnabled(enabled);
+        list.addListSelectionListener((ListSelectionEvent e) -> {
+            if (e.getValueIsAdjusting()) {
+                return;
             }
+            
+            int selectedIndex = list.getSelectedIndex();
+            boolean enabled = selectedIndex != -1;
+            callBackButton.setEnabled(enabled);
+            deleteButton.setEnabled(enabled);
         });
     }
 
@@ -149,19 +146,16 @@ public class MissedCalls implements ActionListener {
         }
 
         try {
-            EventQueue.invokeAndWait(new Runnable() {
-                @Override
-                public void run() {
-                    final MissedCall missedCall = new MissedCall(callID, new Date(), number);
-                    model.insertElementAt(missedCall, 0);
-
-                    if (toaster == null || !list.isShowing()) {
-                        toaster = new SparkToaster();
-                        toaster.setToasterHeight(230);
-                        toaster.setToasterWidth(300);
-                        toaster.setDisplayTime(500000000);
-                        toaster.showToaster(PhoneRes.getIString("phone.missedcalls"), gui);
-                    }
+            EventQueue.invokeAndWait(() -> {
+                final MissedCall missedCall = new MissedCall(callID, new Date(), number);
+                model.insertElementAt(missedCall, 0);
+                
+                if (toaster == null || !list.isShowing()) {
+                    toaster = new SparkToaster();
+                    toaster.setToasterHeight(230);
+                    toaster.setToasterWidth(300);
+                    toaster.setDisplayTime(500000000);
+                    toaster.showToaster(PhoneRes.getIString("phone.missedcalls"), gui);
                 }
             });
         } catch (InterruptedException | InvocationTargetException e) {

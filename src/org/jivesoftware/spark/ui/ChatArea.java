@@ -504,13 +504,8 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
                                 JPopupMenu popupmenu = new JPopupMenu();
                                 JMenuItem linkcopy = new JMenuItem(
                                         Res.getString("action.copy"));
-                                linkcopy.addActionListener(new ActionListener() {
-
-                                    @Override
-                                    public void actionPerformed(ActionEvent e) {
-                                        SparkManager.setClipboard(url);
-
-                                    }
+                                linkcopy.addActionListener((ActionEvent e1) -> {
+                                    SparkManager.setClipboard(url);
                                 });
                                 linkcopy.setEnabled(true);
                                 popupmenu.add(linkcopy);
@@ -725,9 +720,9 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
     }
 
     private void fireContextMenuListeners() {
-        for (ContextMenuListener listener : new ArrayList<>(contextMenuListener)) {
+        new ArrayList<>(contextMenuListener).stream().forEach((listener) -> {
             listener.poppingUp(this, popup);
-        }
+        });
     }
 
     public void addLinkInterceptor(LinkInterceptor interceptor) {
@@ -739,11 +734,8 @@ public class ChatArea extends JTextPane implements MouseListener, MouseMotionLis
     }
 
     public boolean fireLinkInterceptors(MouseEvent event, String link) {
-        for (LinkInterceptor linkInterceptor : new ArrayList<>(interceptors)) {
-            boolean handled = linkInterceptor.handleLink(event, link);
-            if (handled) {
-                return true;
-            }
+        if (new ArrayList<>(interceptors).stream().map((linkInterceptor) -> linkInterceptor.handleLink(event, link)).anyMatch((handled) -> (handled))) {
+            return true;
         }
 
         return false;

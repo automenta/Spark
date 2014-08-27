@@ -313,17 +313,17 @@ public class Call implements ReceiveStreamListener {
 
     // ====================== EVENTS ===========================
     public void addStateChangeListener(CallListener listener) {
-        Log.debug(listener.getClass().getCanonicalName());
+        if (Log.debugging) Log.debug(listener.getClass().getCanonicalName());
         listeners.add(listener);
     }
 
     public void fireCallStatusChangedEvent(String oldStatus) {
-        Log.debug(this.getState());
+        if (Log.debugging) Log.debug(this.getState());
         CallStateEvent evt = new CallStateEvent(this);
         evt.setOldState(oldStatus);
-        for (CallListener callListener : listeners) {
+        listeners.stream().forEach((callListener) -> {
             callListener.callStateChanged(evt);
-        }
+        });
     }
 
     public AudioMediaSession getAudioMediaSession() {
